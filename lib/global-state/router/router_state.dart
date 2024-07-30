@@ -30,8 +30,7 @@ class Router extends _$Router {
       ],
       redirect: (context, state) {
         // I will get null value here for the token if 1. It doesnt exist or 2. It is expired
-        var (tokenVal, _) =
-            ref.read(authStateProvider.notifier).getAuthTokenSync();
+        var token =  ref.read(authStateProvider.notifier).getAuthToken();
         // print("naviting path is ${state.uri.path}");
 
         // If valid token exists and user tries to login, navigate to home screen
@@ -44,7 +43,7 @@ class Router extends _$Router {
           return null;
         }
 
-        if (tokenVal.isEmpty) {
+        if (token.isEmpty) {
           return AppRoutes.entry;
         }
 
