@@ -1,7 +1,7 @@
-import 'package:blocsol_loan_application/global-state/auth/auth.dart';
-import 'package:blocsol_loan_application/global-state/router/router_state.dart';
-import 'package:blocsol_loan_application/global-state/theme/theme.dart';
-import 'package:blocsol_loan_application/global-state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/global_state/auth/auth.dart';
+import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,8 +42,8 @@ class LoanApplication extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(appThemeStateProvider);
-    final _ = ref.watch(authStateProvider);
+    final theme = ref.watch(appThemeProvider);
+    final _ = ref.watch(authProvider);
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
