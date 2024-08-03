@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -247,7 +248,7 @@ class _ActionButtonState extends ConsumerState<ActionButton> {
 
     if (!mounted) return;
 
-    context.go(InvoiceLoanIndexRouter.dashboard);
+    context.go(InvoiceLoanSignupRouter.account_created);
     return;
   }
 

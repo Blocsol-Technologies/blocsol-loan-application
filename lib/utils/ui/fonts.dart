@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class AppFontSizes {
   static double title = 30;
   static double emphasis = 24;
-  static double h1 = 20;
+  static double h1 = 18;
   static double h2 = 16;
   static double h3 = 14;
-  static double body = 12;
-  static double body2 = 10;
-  static double body3 = 8;
-  static double body4 = 6;
+  static double b1 = 12;
+  static double b2 = 10;
+  static double b3 = 8;
+  static double b4 = 6;
 }
 
 class AppFontWeights {

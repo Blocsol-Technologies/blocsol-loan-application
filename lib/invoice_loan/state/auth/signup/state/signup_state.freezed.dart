@@ -19,17 +19,12 @@ mixin _$SignupStateData {
   String get gstNumber => throw _privateConstructorUsedError;
   String get gstUsername => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  String get emailOtpId => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
-  String get gstOTP => throw _privateConstructorUsedError;
-  String get udyamOTP => throw _privateConstructorUsedError;
-  String get emailOTP => throw _privateConstructorUsedError;
-  String get emailOTPId => throw _privateConstructorUsedError;
-  String get phoneOTP => throw _privateConstructorUsedError;
   String get udyamNumber => throw _privateConstructorUsedError;
   String get companyLegalName => throw _privateConstructorUsedError;
   String get businessLocation => throw _privateConstructorUsedError;
   String get gstRegistrationDate => throw _privateConstructorUsedError;
-  String get accountPassword => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SignupStateDataCopyWith<SignupStateData> get copyWith =>
@@ -46,17 +41,12 @@ abstract class $SignupStateDataCopyWith<$Res> {
       {String gstNumber,
       String gstUsername,
       String email,
+      String emailOtpId,
       String phoneNumber,
-      String gstOTP,
-      String udyamOTP,
-      String emailOTP,
-      String emailOTPId,
-      String phoneOTP,
       String udyamNumber,
       String companyLegalName,
       String businessLocation,
-      String gstRegistrationDate,
-      String accountPassword});
+      String gstRegistrationDate});
 }
 
 /// @nodoc
@@ -75,17 +65,12 @@ class _$SignupStateDataCopyWithImpl<$Res, $Val extends SignupStateData>
     Object? gstNumber = null,
     Object? gstUsername = null,
     Object? email = null,
+    Object? emailOtpId = null,
     Object? phoneNumber = null,
-    Object? gstOTP = null,
-    Object? udyamOTP = null,
-    Object? emailOTP = null,
-    Object? emailOTPId = null,
-    Object? phoneOTP = null,
     Object? udyamNumber = null,
     Object? companyLegalName = null,
     Object? businessLocation = null,
     Object? gstRegistrationDate = null,
-    Object? accountPassword = null,
   }) {
     return _then(_value.copyWith(
       gstNumber: null == gstNumber
@@ -100,29 +85,13 @@ class _$SignupStateDataCopyWithImpl<$Res, $Val extends SignupStateData>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      emailOtpId: null == emailOtpId
+          ? _value.emailOtpId
+          : emailOtpId // ignore: cast_nullable_to_non_nullable
+              as String,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      gstOTP: null == gstOTP
-          ? _value.gstOTP
-          : gstOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      udyamOTP: null == udyamOTP
-          ? _value.udyamOTP
-          : udyamOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      emailOTP: null == emailOTP
-          ? _value.emailOTP
-          : emailOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      emailOTPId: null == emailOTPId
-          ? _value.emailOTPId
-          : emailOTPId // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneOTP: null == phoneOTP
-          ? _value.phoneOTP
-          : phoneOTP // ignore: cast_nullable_to_non_nullable
               as String,
       udyamNumber: null == udyamNumber
           ? _value.udyamNumber
@@ -139,10 +108,6 @@ class _$SignupStateDataCopyWithImpl<$Res, $Val extends SignupStateData>
       gstRegistrationDate: null == gstRegistrationDate
           ? _value.gstRegistrationDate
           : gstRegistrationDate // ignore: cast_nullable_to_non_nullable
-              as String,
-      accountPassword: null == accountPassword
-          ? _value.accountPassword
-          : accountPassword // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -160,17 +125,12 @@ abstract class _$$SignupStateDataImplCopyWith<$Res>
       {String gstNumber,
       String gstUsername,
       String email,
+      String emailOtpId,
       String phoneNumber,
-      String gstOTP,
-      String udyamOTP,
-      String emailOTP,
-      String emailOTPId,
-      String phoneOTP,
       String udyamNumber,
       String companyLegalName,
       String businessLocation,
-      String gstRegistrationDate,
-      String accountPassword});
+      String gstRegistrationDate});
 }
 
 /// @nodoc
@@ -187,17 +147,12 @@ class __$$SignupStateDataImplCopyWithImpl<$Res>
     Object? gstNumber = null,
     Object? gstUsername = null,
     Object? email = null,
+    Object? emailOtpId = null,
     Object? phoneNumber = null,
-    Object? gstOTP = null,
-    Object? udyamOTP = null,
-    Object? emailOTP = null,
-    Object? emailOTPId = null,
-    Object? phoneOTP = null,
     Object? udyamNumber = null,
     Object? companyLegalName = null,
     Object? businessLocation = null,
     Object? gstRegistrationDate = null,
-    Object? accountPassword = null,
   }) {
     return _then(_$SignupStateDataImpl(
       gstNumber: null == gstNumber
@@ -212,29 +167,13 @@ class __$$SignupStateDataImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      emailOtpId: null == emailOtpId
+          ? _value.emailOtpId
+          : emailOtpId // ignore: cast_nullable_to_non_nullable
+              as String,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      gstOTP: null == gstOTP
-          ? _value.gstOTP
-          : gstOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      udyamOTP: null == udyamOTP
-          ? _value.udyamOTP
-          : udyamOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      emailOTP: null == emailOTP
-          ? _value.emailOTP
-          : emailOTP // ignore: cast_nullable_to_non_nullable
-              as String,
-      emailOTPId: null == emailOTPId
-          ? _value.emailOTPId
-          : emailOTPId // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneOTP: null == phoneOTP
-          ? _value.phoneOTP
-          : phoneOTP // ignore: cast_nullable_to_non_nullable
               as String,
       udyamNumber: null == udyamNumber
           ? _value.udyamNumber
@@ -252,10 +191,6 @@ class __$$SignupStateDataImplCopyWithImpl<$Res>
           ? _value.gstRegistrationDate
           : gstRegistrationDate // ignore: cast_nullable_to_non_nullable
               as String,
-      accountPassword: null == accountPassword
-          ? _value.accountPassword
-          : accountPassword // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -267,17 +202,12 @@ class _$SignupStateDataImpl implements _SignupStateData {
       {required this.gstNumber,
       required this.gstUsername,
       required this.email,
+      required this.emailOtpId,
       required this.phoneNumber,
-      required this.gstOTP,
-      required this.udyamOTP,
-      required this.emailOTP,
-      required this.emailOTPId,
-      required this.phoneOTP,
       required this.udyamNumber,
       required this.companyLegalName,
       required this.businessLocation,
-      required this.gstRegistrationDate,
-      required this.accountPassword});
+      required this.gstRegistrationDate});
 
   @override
   final String gstNumber;
@@ -286,17 +216,9 @@ class _$SignupStateDataImpl implements _SignupStateData {
   @override
   final String email;
   @override
+  final String emailOtpId;
+  @override
   final String phoneNumber;
-  @override
-  final String gstOTP;
-  @override
-  final String udyamOTP;
-  @override
-  final String emailOTP;
-  @override
-  final String emailOTPId;
-  @override
-  final String phoneOTP;
   @override
   final String udyamNumber;
   @override
@@ -305,12 +227,10 @@ class _$SignupStateDataImpl implements _SignupStateData {
   final String businessLocation;
   @override
   final String gstRegistrationDate;
-  @override
-  final String accountPassword;
 
   @override
   String toString() {
-    return 'SignupStateData(gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phoneNumber: $phoneNumber, gstOTP: $gstOTP, udyamOTP: $udyamOTP, emailOTP: $emailOTP, emailOTPId: $emailOTPId, phoneOTP: $phoneOTP, udyamNumber: $udyamNumber, companyLegalName: $companyLegalName, businessLocation: $businessLocation, gstRegistrationDate: $gstRegistrationDate, accountPassword: $accountPassword)';
+    return 'SignupStateData(gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, emailOtpId: $emailOtpId, phoneNumber: $phoneNumber, udyamNumber: $udyamNumber, companyLegalName: $companyLegalName, businessLocation: $businessLocation, gstRegistrationDate: $gstRegistrationDate)';
   }
 
   @override
@@ -323,17 +243,10 @@ class _$SignupStateDataImpl implements _SignupStateData {
             (identical(other.gstUsername, gstUsername) ||
                 other.gstUsername == gstUsername) &&
             (identical(other.email, email) || other.email == email) &&
+            (identical(other.emailOtpId, emailOtpId) ||
+                other.emailOtpId == emailOtpId) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.gstOTP, gstOTP) || other.gstOTP == gstOTP) &&
-            (identical(other.udyamOTP, udyamOTP) ||
-                other.udyamOTP == udyamOTP) &&
-            (identical(other.emailOTP, emailOTP) ||
-                other.emailOTP == emailOTP) &&
-            (identical(other.emailOTPId, emailOTPId) ||
-                other.emailOTPId == emailOTPId) &&
-            (identical(other.phoneOTP, phoneOTP) ||
-                other.phoneOTP == phoneOTP) &&
             (identical(other.udyamNumber, udyamNumber) ||
                 other.udyamNumber == udyamNumber) &&
             (identical(other.companyLegalName, companyLegalName) ||
@@ -341,9 +254,7 @@ class _$SignupStateDataImpl implements _SignupStateData {
             (identical(other.businessLocation, businessLocation) ||
                 other.businessLocation == businessLocation) &&
             (identical(other.gstRegistrationDate, gstRegistrationDate) ||
-                other.gstRegistrationDate == gstRegistrationDate) &&
-            (identical(other.accountPassword, accountPassword) ||
-                other.accountPassword == accountPassword));
+                other.gstRegistrationDate == gstRegistrationDate));
   }
 
   @override
@@ -352,17 +263,12 @@ class _$SignupStateDataImpl implements _SignupStateData {
       gstNumber,
       gstUsername,
       email,
+      emailOtpId,
       phoneNumber,
-      gstOTP,
-      udyamOTP,
-      emailOTP,
-      emailOTPId,
-      phoneOTP,
       udyamNumber,
       companyLegalName,
       businessLocation,
-      gstRegistrationDate,
-      accountPassword);
+      gstRegistrationDate);
 
   @JsonKey(ignore: true)
   @override
@@ -377,17 +283,12 @@ abstract class _SignupStateData implements SignupStateData {
       {required final String gstNumber,
       required final String gstUsername,
       required final String email,
+      required final String emailOtpId,
       required final String phoneNumber,
-      required final String gstOTP,
-      required final String udyamOTP,
-      required final String emailOTP,
-      required final String emailOTPId,
-      required final String phoneOTP,
       required final String udyamNumber,
       required final String companyLegalName,
       required final String businessLocation,
-      required final String gstRegistrationDate,
-      required final String accountPassword}) = _$SignupStateDataImpl;
+      required final String gstRegistrationDate}) = _$SignupStateDataImpl;
 
   @override
   String get gstNumber;
@@ -396,17 +297,9 @@ abstract class _SignupStateData implements SignupStateData {
   @override
   String get email;
   @override
+  String get emailOtpId;
+  @override
   String get phoneNumber;
-  @override
-  String get gstOTP;
-  @override
-  String get udyamOTP;
-  @override
-  String get emailOTP;
-  @override
-  String get emailOTPId;
-  @override
-  String get phoneOTP;
   @override
   String get udyamNumber;
   @override
@@ -415,8 +308,6 @@ abstract class _SignupStateData implements SignupStateData {
   String get businessLocation;
   @override
   String get gstRegistrationDate;
-  @override
-  String get accountPassword;
   @override
   @JsonKey(ignore: true)
   _$$SignupStateDataImplCopyWith<_$SignupStateDataImpl> get copyWith =>

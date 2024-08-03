@@ -13,9 +13,9 @@ var defaultThemeVal = ThemeData(
   unselectedWidgetColor: const Color.fromRGBO(35, 35, 40, 1),
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
-    primary: Color.fromRGBO(0, 115, 164, 1),
+    primary: Color.fromRGBO(7, 92, 128, 1),
     onPrimary: Color.fromRGBO(255, 255, 255, 1),
-    secondary: Color.fromRGBO(228, 247, 255, 1),
+    secondary: Color.fromRGBO(3, 145, 155, 1),
     onSecondary: Color.fromRGBO(35, 35, 40, 1),
     tertiary: Color.fromRGBO(233, 233, 250, 1),
     onTertiary: Color.fromRGBO(35, 35, 40, 1),

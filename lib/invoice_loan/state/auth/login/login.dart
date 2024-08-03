@@ -25,9 +25,7 @@ class Login extends _$Login {
   }
 
   // HTTP Requests
-  Future<ServerResponse> validatePassword(
-      String password, CancelToken cancelToken) async {
-    var phoneNumber = state.phoneNumber;
+  Future<ServerResponse> validatePassword(String phoneNumber, String password, CancelToken cancelToken) async {
     var deviceId = state.deviceId;
 
     if (!RegexProvider.phoneRegex.hasMatch(phoneNumber)) {

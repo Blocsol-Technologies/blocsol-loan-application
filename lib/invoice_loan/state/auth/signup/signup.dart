@@ -1,4 +1,3 @@
-
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/http_controller.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/state/signup_state.dart';
@@ -9,7 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'signup.g.dart';
 
-
 @riverpod
 class SignupState extends _$SignupState {
   @override
@@ -18,7 +16,7 @@ class SignupState extends _$SignupState {
     return SignupStateData.initial;
   }
 
-  void dispose () {
+  void dispose() {
     ref.invalidateSelf();
   }
 
@@ -42,26 +40,6 @@ class SignupState extends _$SignupState {
     state = state.copyWith(udyamNumber: udyamNumber);
   }
 
-  void updateGSTOTP(String otp) {
-    state = state.copyWith(gstOTP: otp);
-  }
-
-  void updateEmailOTP(String otp) {
-    state = state.copyWith(emailOTP: otp);
-  }
-
-  void updateEmailOTPID(String otpId) {
-    state = state.copyWith(emailOTPId: otpId);
-  }
-
-  void updateUdyamOTP(String otp) {
-    state = state.copyWith(udyamOTP: otp);
-  }
-
-  void updatePhoneOTP(String otp) {
-    state = state.copyWith(phoneOTP: otp);
-  }
-
   void updateCompanyLegalName(String companyLegalName) {
     state = state.copyWith(companyLegalName: companyLegalName);
   }
@@ -74,10 +52,6 @@ class SignupState extends _$SignupState {
     state = state.copyWith(gstRegistrationDate: gstRegistrationDate);
   }
 
-  void updateAccountPassword(String accountPassword) {
-    state = state.copyWith(accountPassword: accountPassword);
-  }
-
   void reset() {
     state = SignupStateData.initial;
   }
@@ -87,8 +61,6 @@ class SignupState extends _$SignupState {
   /* Send Mobile OTP */
   Future<ServerResponse> sendMobileOTP(
       String phoneNumber, String signature, CancelToken cancelToken) async {
-    String phoneNumber = state.phoneNumber;
-
     if (!RegexProvider.phoneRegex.hasMatch(phoneNumber)) {
       return ServerResponse(
         success: false,
@@ -141,7 +113,7 @@ class SignupState extends _$SignupState {
     var response = await SignupHttpController.sendEmailOtp(email, cancelToken);
 
     if (response.success) {
-      updateEmailOTPID(response.data);
+      state = state.copyWith(email: email, emailOtpId: response.data);
     }
 
     return response;
@@ -151,7 +123,7 @@ class SignupState extends _$SignupState {
   Future<ServerResponse> verifyEmailOTP(
       String otp, CancelToken cancelToken) async {
     String email = state.email;
-    String otpId = state.emailOTPId;
+    String otpId = state.emailOtpId;
 
     if (!RegexProvider.emailRegex.hasMatch(email)) {
       return ServerResponse(
@@ -213,8 +185,8 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response =
-        await SignupHttpController.verifyGstNumber(gst, phoneNumber, cancelToken);
+    var response = await SignupHttpController.verifyGstNumber(
+        gst, phoneNumber, cancelToken);
 
     if (response.success) {
       state = state.copyWith(
@@ -275,7 +247,14 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.sendGstOtp(gst, gstUsername, cancelToken);
+    var response =
+        await SignupHttpController.sendGstOtp(gst, gstUsername, cancelToken);
+
+    if (response.success) {
+      state = state.copyWith(gstUsername: gstUsername);
+    }
+
+    return response;
   }
 
   /* Verify GST OTP */
@@ -305,7 +284,8 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.verifyGstOtp(gst, gstUsername, otp, cancelToken);
+    return SignupHttpController.verifyGstOtp(
+        gst, gstUsername, otp, cancelToken);
   }
 
   /* Poll to check if GST data downloaded */
@@ -347,9 +327,8 @@ class SignupState extends _$SignupState {
   }
 
 /* Set Account Password */
-  Future<ServerResponse> setAccountPassword(CancelToken cancelToken) async {
+  Future<ServerResponse> setAccountPassword(String password, CancelToken cancelToken) async {
     String gst = state.gstNumber;
-    String password = state.accountPassword;
 
     if (!RegexProvider.gstRegex.hasMatch(gst)) {
       return ServerResponse(
@@ -365,8 +344,8 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response =
-        await SignupHttpController.setAccountPassword(gst, password, cancelToken);
+    var response = await SignupHttpController.setAccountPassword(
+        gst, password, cancelToken);
 
     if (response.success) {
       await ref

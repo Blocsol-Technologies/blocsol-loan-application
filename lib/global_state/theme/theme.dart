@@ -41,7 +41,7 @@ class AppTheme extends _$AppTheme {
     }
   }
 
-  Future<void> toggleTheme(ThemeState theme) async {
+  Future<void> setTheme(ThemeState theme) async {
     String themeVal = theme.value;
     await SecureStorage.write('theme', themeVal);
   }

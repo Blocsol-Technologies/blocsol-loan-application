@@ -1,10 +1,10 @@
 name: blocsol_loan_application
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: ">=3.4.4 <4.0.0"
 
 dependencies:
   awesome_snackbar_content: ^0.1.3
@@ -28,6 +28,7 @@ dependencies:
   sentry_flutter: ^8.5.0
   shared_preferences: ^2.2.3
   sleek_circular_slider: ^2.0.1
+  sms_autofill: ^2.4.0
   string_similarity: ^2.0.0
 
 dev_dependencies:
@@ -40,6 +41,44 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Image Assets
+    - assets/images/bank_logos/bank.png
+    - assets/images/bank_logos/sidbi.png
+    - assets/images/bank_logos/icici.png
+    - assets/images/bank_logos/hdfc.png
+    - assets/images/bank_logos/kotak.png
+    - assets/images/bank_logos/axis.png
+    - assets/images/bank_logos/central-bank.png
+    - assets/images/bank_logos/idbi.png
+    - assets/images/bank_logos/idfc.jpeg
+    - assets/images/bank_logos/indusind.png
+    - assets/images/bank_logos/punjab-national.png
+    - assets/images/bank_logos/uco.png
+    - assets/images/bank_logos/union.png
+    - assets/images/bank_logos/dmi.png
+
+    - assets/images/aa_logos/anumati.png
+    - assets/images/aa_logos/finvu.png
+    - assets/images/aa_logos/onemoney.png
+    - assets/images/aa_logos/sahamati.png
+    
+    # Animation Assets
+    - assets/animations/loading_spinner.json
+    - assets/animations/downloading_data.json
+    - assets/animations/submitting_details.json
+    - assets/animations/verified.json
+    - assets/animations/error.json
+    - assets/animations/processing_form.json
+    - assets/animations/money_growth_person.json
+    - assets/animations/invoices.json
+    - assets/animations/create_profile.json
+    - assets/animations/hourglass.json
+    - assets/animations/submitting_invoices.json
+    - assets/animations/filing_invoice_forms.json
+    - assets/animations/clock.json
+    - assets/animations/404.json
+    - assets/animations/searching_data.json
 
   fonts:
     - family: Poppins

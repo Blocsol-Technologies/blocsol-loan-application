@@ -1,515 +1,235 @@
-// import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-// import 'package:blocsol_invoice_based_credit/screens/user/auth/signup/utils/support_click.dart';
-// import 'package:blocsol_invoice_based_credit/state/auth/signup/signup_state.dart';
-// import 'package:blocsol_invoice_based_credit/state/router/router_state.dart';
-// import 'package:blocsol_invoice_based_credit/state/theme/theme.dart';
-// import 'package:blocsol_invoice_based_credit/utils/regex.dart';
-// import 'package:blocsol_invoice_based_credit/utils/ui_utils/misc.dart';
-// import 'package:blocsol_invoice_based_credit/utils/ui_utils/spacer.dart';
-// import 'package:dio/dio.dart';
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:lottie/lottie.dart';
-// import 'dart:math' as math;
-// import 'package:sms_autofill/sms_autofill.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/signup.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 
-// class SignupMobileOtpValidation extends ConsumerStatefulWidget {
-//   const SignupMobileOtpValidation({super.key});
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sms_autofill/sms_autofill.dart';
+import 'package:go_router/go_router.dart';
 
-//   @override
-//   ConsumerState<SignupMobileOtpValidation> createState() =>
-//       _SignupMobileOtpValidationState();
-// }
+class SignupMobileOtpValidation extends ConsumerStatefulWidget {
+  const SignupMobileOtpValidation({super.key});
 
-// class _SignupMobileOtpValidationState
-//     extends ConsumerState<SignupMobileOtpValidation> {
-//   final _otpTextInputController = TextEditingController();
-//   final _otpTextInputFocusNode = FocusNode();
-//   final _cancelToken = CancelToken();
+  @override
+  ConsumerState<SignupMobileOtpValidation> createState() =>
+      _SignupMobileOtpValidationState();
+}
 
-//   bool _otpVerificationError = false;
-//   bool _verifyingOTP = false;
-//   bool _resendingOTP = false;
-//   String _deviceSignature = '';
+class _SignupMobileOtpValidationState
+    extends ConsumerState<SignupMobileOtpValidation> with CodeAutoFill {
+  final _textController = TextEditingController();
+  final _cancelToken = CancelToken();
 
-//   Future<void> _verifyMobileOTP() async {
-//     if (_verifyingOTP) return;
+  bool _otpVerificationError = false;
 
-//     setState(() {
-//       _verifyingOTP = true;
-//     });
+  Future<void> _verifyMobileOTP() async {
+    var response = await ref
+        .read(signupStateProvider.notifier)
+        .verifyMobileOTP(_textController.text, _cancelToken);
 
-//     var response = await ref
-//         .read(signupStateProvider.notifier)
-//         .verifyMobileOTP(_otpTextInputController.text, _cancelToken);
+    if (!mounted) return;
 
-//     setState(() {
-//       _verifyingOTP = false;
-//     });
+    if (response.success) {
+      context.go(InvoiceLoanSignupRouter.email_validation);
+      return;
+    }
 
-//     if (!mounted) return;
+    setState(() {
+      _otpVerificationError = true;
+    });
 
-//     if (response.success) {
-//       context.go(AppRoutes.signup_email_validation);
-//       return;
-//     }
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Error!',
+        message: response.message,
+        contentType: ContentType.failure,
+      ),
+      duration: const Duration(seconds: 5),
+    );
 
-//     setState(() {
-//       _otpVerificationError = true;
-//     });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
 
-//     final snackBar = SnackBar(
-//       elevation: 0,
-//       behavior: SnackBarBehavior.floating,
-//       backgroundColor: Colors.transparent,
-//       content: AwesomeSnackbarContent(
-//         title: 'Error!',
-//         message: response.message,
-//         contentType: ContentType.failure,
-//       ),
-//       duration: const Duration(seconds: 5),
-//     );
+    return;
+  }
 
-//     ScaffoldMessenger.of(context)
-//       ..hideCurrentSnackBar()
-//       ..showSnackBar(snackBar);
+  @override
+  void codeUpdated() {
+    _textController.text = code ?? "";
+  }
 
-//     return;
-//   }
+  @override
+  void initState() {
+    listenForCode();
+    super.initState();
+  }
 
-//   Future<void> _resendMobileOTP() async {
-//     if (_resendingOTP) return;
+  @override
+  void dispose() {
+    _textController.dispose();
+    _cancelToken.cancel();
+    super.dispose();
+  }
 
-//     setState(() {
-//       _resendingOTP = true;
-//     });
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
-//     var response = await ref.read(signupStateProvider.notifier).sendMobileOTP(
-//         ref.read(signupStateProvider).phoneNumber,
-//         _deviceSignature,
-//         _cancelToken);
+    final signupState = ref.read(signupStateProvider);
 
-//     setState(() {
-//       _resendingOTP = false;
-//     });
-
-//     if (!mounted) return;
-
-//     if (!response.success) {
-//       final snackBar = SnackBar(
-//         elevation: 0,
-//         behavior: SnackBarBehavior.floating,
-//         backgroundColor: Colors.transparent,
-//         content: AwesomeSnackbarContent(
-//           title: 'Error!',
-//           message: response.message,
-//           contentType: ContentType.failure,
-//         ),
-//         duration: const Duration(seconds: 5),
-//       );
-
-//       ScaffoldMessenger.of(context)
-//         ..hideCurrentSnackBar()
-//         ..showSnackBar(snackBar);
-
-//       return;
-//     }
-//   }
-
-//   void addSignature() async {
-//     String sign = await SmsAutoFill().getAppSignature;
-//     setState(() {
-//       _deviceSignature = sign;
-//     });
-//   }
-
-//   @override
-//   void initState() {
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       addSignature();
-
-//       _otpTextInputController.addListener(() {
-//         if (RegexProvider.otpRegex.hasMatch(_otpTextInputController.text)) {
-//           _otpTextInputFocusNode.unfocus();
-//         }
-//       });
-//     });
-
-//     super.initState();
-//   }
-
-//   @override
-//   void dispose() {
-//     _otpTextInputController.dispose();
-//     _otpTextInputFocusNode.dispose();
-//     _cancelToken.cancel();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final height = MediaQuery.of(context).size.height;
-//     final width = MediaQuery.of(context).size.width;
-//     return SafeArea(
-//         child: Scaffold(
-//       resizeToAvoidBottomInset: true,
-//       backgroundColor: Theme.of(context).colorScheme.primary,
-//       body: SizedBox(
-//         height: height,
-//         width: width,
-//         child: ClipRRect(
-//           clipBehavior: Clip.antiAlias,
-//           child: Stack(
-//             children: [
-//               Positioned(
-//                 top: RelativeSize.height(68, height),
-//                 right: RelativeSize.width(10, width),
-//                 child: Container(
-//                   width: 40,
-//                   height: 40,
-//                   color: Theme.of(context).colorScheme.onSurface,
-//                 ),
-//               ),
-//               Positioned(
-//                 top: RelativeSize.height(90, height),
-//                 right: RelativeSize.width(31, width),
-//                 child: Container(
-//                   width: 40,
-//                   height: 40,
-//                   color: Theme.of(context).colorScheme.onSurface,
-//                 ),
-//               ),
-//               Positioned(
-//                 top: RelativeSize.height(65, height),
-//                 right: RelativeSize.width(15, width),
-//                 child: Container(
-//                   width: 40,
-//                   height: 40,
-//                   decoration: BoxDecoration(
-//                     border: Border.all(
-//                       color: Theme.of(context).colorScheme.onPrimary,
-//                       width: 1,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Positioned(
-//                 top: RelativeSize.height(85, height),
-//                 right: RelativeSize.width(38, width),
-//                 child: Container(
-//                   width: 40,
-//                   height: 40,
-//                   decoration: BoxDecoration(
-//                     border: Border.all(
-//                       color: Theme.of(context).colorScheme.onPrimary,
-//                       width: 1,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Positioned(
-//                 bottom: -75,
-//                 left: -30,
-//                 child: Transform(
-//                   alignment: Alignment.center,
-//                   transform:
-//                       Matrix4.rotationZ(math.pi / 20), // 30 degrees in radians
-//                   child: Container(
-//                     width: width * 2,
-//                     height: RelativeSize.height(670, height),
-//                     decoration: BoxDecoration(
-//                       border: Border.all(
-//                         color: Theme.of(context).colorScheme.onPrimary,
-//                         width: 1,
-//                       ),
-//                       borderRadius: BorderRadius.circular(40),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Positioned(
-//                 bottom: -80,
-//                 left: -30,
-//                 child: Transform(
-//                   alignment: Alignment.center,
-//                   transform:
-//                       Matrix4.rotationZ(math.pi / 20), // 30 degrees in radians
-//                   child: Container(
-//                     width: width * 2,
-//                     height: RelativeSize.height(670, height),
-//                     decoration: BoxDecoration(
-//                       color: Theme.of(context).colorScheme.onPrimary,
-//                       borderRadius: BorderRadius.circular(40),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Container(
-//                 height: height,
-//                 width: width,
-//                 padding: EdgeInsets.fromLTRB(
-//                     RelativeSize.width(20, width),
-//                     RelativeSize.height(20, height),
-//                     RelativeSize.width(20, width),
-//                     RelativeSize.height(55, height)),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Row(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         IconButton(
-//                           onPressed: () {
-//                             HapticFeedback.mediumImpact();
-//                             context.go(AppRoutes.signup_mobile_validation);
-//                           },
-//                           icon: Icon(
-//                             Icons.arrow_back_rounded,
-//                             size: 25,
-//                             color: Theme.of(context).colorScheme.onPrimary,
-//                           ),
-//                         ),
-//                         const Expanded(
-//                           child: SizedBox(),
-//                         ),
-//                         IconButton(
-//                           onPressed: () {
-//                             HapticFeedback.mediumImpact();
-//                             handleSupportClick(context);
-//                           },
-//                           icon: Icon(
-//                             Icons.support_agent,
-//                             size: 25,
-//                             color: Theme.of(context).colorScheme.onPrimary,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     const SpacerWidget(
-//                       height: 50,
-//                     ),
-//                     Padding(
-//                       padding: EdgeInsets.symmetric(
-//                           horizontal: RelativeSize.width(22, width)),
-//                       child: Text(
-//                         "Verify Mobile Number",
-//                         style: TextStyle(
-//                           fontFamily: fontFamily,
-//                           fontSize: AppFontSizes.h1,
-//                           fontWeight: AppFontWeights.medium,
-//                           color: Theme.of(context).colorScheme.onSurface,
-//                         ),
-//                       ),
-//                     ),
-//                     const SpacerWidget(
-//                       height: 5,
-//                     ),
-//                     Padding(
-//                       padding:
-//                           EdgeInsets.only(left: RelativeSize.width(22, width)),
-//                       child: Text(
-//                         "OTP sent to mobile number ${ref.read(signupStateProvider).phoneNumber.substring(0, 3)}*****${ref.read(signupStateProvider).phoneNumber.substring(8, 10)}",
-//                         style: TextStyle(
-//                           fontFamily: fontFamily,
-//                           fontSize: AppFontSizes.body,
-//                           fontWeight: AppFontWeights.normal,
-//                           color: Theme.of(context).colorScheme.onSurface,
-//                         ),
-//                       ),
-//                     ),
-//                     const SpacerWidget(
-//                       height: 20,
-//                     ),
-//                     Padding(
-//                       padding: EdgeInsets.symmetric(
-//                           horizontal: RelativeSize.width(22, width)),
-//                       child: TextField(
-//                         keyboardType: TextInputType.number,
-//                         textAlign: TextAlign.start,
-//                         maxLength: 6,
-//                         controller: _otpTextInputController,
-//                         onChanged: (val) {
-//                           setState(() {
-//                             _otpVerificationError = false;
-//                           });
-//                         },
-//                         style: TextStyle(
-//                           fontFamily: fontFamily,
-//                           fontSize: AppFontSizes.body,
-//                           fontWeight: AppFontWeights.bold,
-//                           color: Theme.of(context).colorScheme.primary,
-//                         ),
-//                         textDirection: TextDirection.ltr,
-//                         focusNode: _otpTextInputFocusNode,
-//                         inputFormatters: [
-//                           FilteringTextInputFormatter.digitsOnly
-//                         ],
-//                         decoration: InputDecoration(
-//                           counterText: "",
-//                           hintText: 'OTP',
-//                           contentPadding:
-//                               const EdgeInsets.symmetric(horizontal: 15),
-//                           hintStyle: TextStyle(
-//                             fontFamily: fontFamily,
-//                             fontSize: AppFontSizes.body,
-//                             fontWeight: AppFontWeights.normal,
-//                             color: Theme.of(context).colorScheme.scrim,
-//                           ),
-//                           fillColor: Theme.of(context)
-//                               .colorScheme
-//                               .scrim
-//                               .withOpacity(0.1),
-//                           filled: true,
-//                           border: OutlineInputBorder(
-//                             borderRadius: BorderRadius.circular(5),
-//                           ),
-//                           focusedBorder: OutlineInputBorder(
-//                             borderSide: BorderSide(
-//                               color: _otpVerificationError
-//                                   ? Theme.of(context).colorScheme.error
-//                                   : Theme.of(context).colorScheme.primary,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     const SpacerWidget(height: 8),
-//                     Padding(
-//                       padding: EdgeInsets.symmetric(
-//                           horizontal: RelativeSize.width(22, width)),
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                         crossAxisAlignment: CrossAxisAlignment.center,
-//                         children: <Widget>[
-//                           RichText(
-//                             text: TextSpan(
-//                               text: "Didn't receive OTP?",
-//                               style: TextStyle(
-//                                 fontFamily: fontFamily,
-//                                 color:
-//                                     Theme.of(context).colorScheme.onSurface,
-//                                 fontSize: AppFontSizes.body2,
-//                                 fontWeight: AppFontWeights.medium,
-//                               ),
-//                               children: [
-//                                 TextSpan(
-//                                   recognizer: TapGestureRecognizer()
-//                                     ..onTap = () {
-//                                       HapticFeedback.lightImpact();
-//                                       _resendMobileOTP();
-//                                     },
-//                                   text: " Resend OTP",
-//                                   style: TextStyle(
-//                                     fontFamily: fontFamily,
-//                                     color:
-//                                         Theme.of(context).colorScheme.primary,
-//                                     fontSize: AppFontSizes.body2,
-//                                     fontWeight: AppFontWeights.medium,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     _verifyingOTP
-//                         ? Row(
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             children: <Widget>[
-//                               Lottie.asset(
-//                                   'assets/animations/loading_spinner.json',
-//                                   height: 60,
-//                                   width: 60),
-//                               const SpacerWidget(width: 5),
-//                               Text(
-//                                 "Verifying OTP...",
-//                                 style: TextStyle(
-//                                   fontFamily: fontFamily,
-//                                   fontSize: AppFontSizes.body,
-//                                   fontWeight: AppFontWeights.normal,
-//                                   color: Theme.of(context)
-//                                       .colorScheme
-//                                       .onSurface,
-//                                 ),
-//                               ),
-//                             ],
-//                           )
-//                         : const SizedBox(),
-//                     _resendingOTP
-//                         ? Row(
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             children: <Widget>[
-//                               Lottie.asset(
-//                                   'assets/animations/loading_spinner.json',
-//                                   height: 60,
-//                                   width: 60),
-//                               const SpacerWidget(width: 5),
-//                               Text(
-//                                 "Resending OTP...",
-//                                 style: TextStyle(
-//                                   fontFamily: fontFamily,
-//                                   fontSize: AppFontSizes.body,
-//                                   fontWeight: AppFontWeights.normal,
-//                                   color: Theme.of(context)
-//                                       .colorScheme
-//                                       .onSurface,
-//                                 ),
-//                               ),
-//                             ],
-//                           )
-//                         : const SizedBox(),
-//                     const Expanded(child: SizedBox()),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         GestureDetector(
-//                           onTap: () {
-//                             HapticFeedback.heavyImpact();
-
-//                             if (!RegexProvider.otpRegex
-//                                 .hasMatch(_otpTextInputController.text)) return;
-
-//                             _verifyMobileOTP();
-//                           },
-//                           child: Container(
-//                             width: RelativeSize.width(250, width),
-//                             height: RelativeSize.height(40, height),
-//                             decoration: BoxDecoration(
-//                               color: RegexProvider.otpRegex
-//                                       .hasMatch(_otpTextInputController.text)
-//                                   ? Theme.of(context).colorScheme.primary
-//                                   : Theme.of(context).colorScheme.secondary,
-//                               borderRadius: BorderRadius.circular(5),
-//                             ),
-//                             child: Center(
-//                               child: Text(
-//                                 "Verify",
-//                                 style: TextStyle(
-//                                   fontFamily: fontFamily,
-//                                   fontSize: AppFontSizes.body,
-//                                   fontWeight: AppFontWeights.medium,
-//                                   color: RegexProvider.otpRegex.hasMatch(
-//                                           _otpTextInputController.text)
-//                                       ? Theme.of(context).colorScheme.onPrimary
-//                                       : Theme.of(context).colorScheme.scrim,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     ));
-//   }
-// }
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: Stack(
+          children: [
+            Positioned(
+              top: RelativeSize.height(90, height),
+              right: RelativeSize.width(150, width),
+              child: Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 1,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: RelativeSize.height(210, height),
+              left: 0,
+              child: Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 1,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: RelativeSize.height(335, height),
+              right: RelativeSize.width(55, width),
+              child: Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 1,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: height,
+              width: width,
+              padding: EdgeInsets.only(top: RelativeSize.height(48, height)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: "Invoice",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: AppFontSizes.h2,
+                              fontWeight: AppFontWeights.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "Pe",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontSize: AppFontSizes.h2,
+                                  fontWeight: AppFontWeights.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SpacerWidget(
+                    height: 65,
+                  ),
+                  SectionHeading(
+                    subHeading: "Let's Start",
+                    heading: "Enter the OTP sent to ${signupState.phoneNumber}",
+                  ),
+                  const SpacerWidget(
+                    height: 50,
+                  ),
+                  SectionMain(
+                    textController: _textController,
+                    textInputChild: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset('assets/animations/loading_spinner.json',
+                            height: 30, width: 30),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          "Auto reading OTP",
+                          style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontWeight: AppFontWeights.medium,
+                              fontSize: AppFontSizes.b1,
+                              color: const Color.fromRGBO(150, 150, 150, 1)),
+                        ),
+                      ],
+                    ),
+                    maxInputLength: 6,
+                    keyboardType: TextInputType.number,
+                    hintText: "6-DIGIT OTP",
+                    onTextChanged: (val) {},
+                    isObscure: false,
+                    hasErrored: _otpVerificationError,
+                    performAction: () async {
+                      await _verifyMobileOTP();
+                    },
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    gap: 30,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
