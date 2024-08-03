@@ -182,7 +182,11 @@ class _SignupEmailOtpValidationState
                     maxInputLength: 6,
                     keyboardType: TextInputType.number,
                     hintText: "6-DIGIT OTP",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _otpVerificationError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _otpVerificationError,
                     performAction: () async {

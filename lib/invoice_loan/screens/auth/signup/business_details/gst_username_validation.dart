@@ -189,7 +189,11 @@ class _SignupGstUsernameValidationState
                     maxInputLength: 50,
                     keyboardType: TextInputType.text,
                     hintText: "GST Username",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _isError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _isError,
                     performAction: () async {

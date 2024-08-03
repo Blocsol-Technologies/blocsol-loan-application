@@ -190,7 +190,11 @@ class _SignupUdyamValidationState extends ConsumerState<SignupUdyamValidation> {
                     maxInputLength: 20,
                     keyboardType: TextInputType.text,
                     hintText: "UDYAM",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _isError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _isError,
                     performAction: () async {

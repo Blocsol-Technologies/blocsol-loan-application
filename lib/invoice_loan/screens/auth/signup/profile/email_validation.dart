@@ -180,7 +180,11 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
                     maxInputLength: 50,
                     keyboardType: TextInputType.emailAddress,
                     hintText: "OFFICIAL EMAIL",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _emailValidationError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _emailValidationError,
                     performAction: () async {

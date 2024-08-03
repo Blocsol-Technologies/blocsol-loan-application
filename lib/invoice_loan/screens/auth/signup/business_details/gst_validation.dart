@@ -189,7 +189,11 @@ class _SignupGstValidationState extends ConsumerState<SignupGstValidation> {
                     maxInputLength: 15,
                     keyboardType: TextInputType.text,
                     hintText: "15-DIGIT GSTIN",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _isError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _isError,
                     performAction: () async {

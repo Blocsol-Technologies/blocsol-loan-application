@@ -243,6 +243,11 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
                                               TextInputType.visiblePassword,
                                           textAlign: TextAlign.start,
                                           controller: _textEditingController,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              _isError = false;
+                                            });
+                                          },
                                           obscureText: !_showPassword,
                                           style: TextStyle(
                                             fontFamily: fontFamily,

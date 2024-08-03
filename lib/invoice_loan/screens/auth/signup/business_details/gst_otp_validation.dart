@@ -182,7 +182,11 @@ class _SignupGstOtpValidationState
                     maxInputLength: 15,
                     keyboardType: TextInputType.number,
                     hintText: "6-DIGIT OTP",
-                    onTextChanged: (val) {},
+                    onTextChanged: (val) {
+                      setState(() {
+                        _otpVerificationError = false;
+                      });
+                    },
                     isObscure: false,
                     hasErrored: _otpVerificationError,
                     performAction: () async {
