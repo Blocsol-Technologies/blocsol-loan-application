@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 
 class LoginHttpController {
   static Future<ServerResponse> validatePassword(String phoneNumber,
-      String deviceId, String password, CancelToken cancelToken) async {
+      String password, String deviceId, CancelToken cancelToken) async {
     try {
       var httpService = HttpService();
       var response = await httpService.post(
@@ -15,9 +15,9 @@ class LoginHttpController {
 
       if (response.data['success']) {
         return ServerResponse(
-            success: true,
-            message: response.data['message'],
-            data: response.data['data']['phoneNumber']);
+          success: true,
+          message: response.data['message'],
+        );
       } else {
         return ServerResponse(
             success: false, message: response.data['message']);

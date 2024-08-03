@@ -16,10 +16,9 @@ import 'package:sms_autofill/sms_autofill.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginOTPModalBottomSheet extends ConsumerStatefulWidget {
-  final String phoneNumber;
   final String password;
   const LoginOTPModalBottomSheet(
-      {super.key, required this.phoneNumber, required this.password});
+      {super.key, required this.password});
 
   @override
   ConsumerState<LoginOTPModalBottomSheet> createState() =>
@@ -88,7 +87,7 @@ class _LoginOTPModalBottomSheetState
 
     var response = await ref
         .read(loginProvider.notifier)
-        .validatePassword(widget.phoneNumber, widget.password, _cancelToken);
+        .validatePassword(ref.read(loginProvider).phoneNumber, widget.password, _cancelToken);
 
     if (!context.mounted) return;
 
@@ -163,6 +162,7 @@ class _LoginOTPModalBottomSheetState
 
   @override
   Widget build(BuildContext context) {
+    final loginStateRef = ref.watch(loginProvider);
     return Container(
       height: 310,
       width: MediaQuery.of(context).size.width,
@@ -172,7 +172,7 @@ class _LoginOTPModalBottomSheetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "OTP sent to mobile number ${widget.phoneNumber}",
+            "OTP sent to mobile number ${loginStateRef.phoneNumber}",
             style: TextStyle(
               fontFamily: fontFamily,
               fontSize: AppFontSizes.b1,

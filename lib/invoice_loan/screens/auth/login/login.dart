@@ -33,6 +33,30 @@ class _LoginState extends ConsumerState<InvoiceLoanLogin> {
   bool _isPasswordErr = false;
 
   Future<void> _sendOTP() async {
+    if (!RegexProvider.passwordRegex.hasMatch(_passwordController.text)) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error!',
+          message: "invalid password",
+          contentType: ContentType.failure,
+        ),
+        duration: const Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+      setState(() {
+        _isPasswordErr = true;
+      });
+
+      return;
+    }
+
     setState(() {
       _sendingOTP = true;
     });
@@ -85,7 +109,6 @@ class _LoginState extends ConsumerState<InvoiceLoanLogin> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: LoginOTPModalBottomSheet(
               password: _passwordController.text,
-              phoneNumber: response.data,
             ),
           );
         });
@@ -136,6 +159,7 @@ class _LoginState extends ConsumerState<InvoiceLoanLogin> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var _ = ref.watch(loginProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -151,7 +175,7 @@ class _LoginState extends ConsumerState<InvoiceLoanLogin> {
             children: <Widget>[
               const SpacerWidget(height: 65),
               Text(
-                "InvoiceLoanLogin",
+                "Login",
                 style: TextStyle(
                   fontFamily: fontFamily,
                   fontSize: AppFontSizes.h1,
@@ -236,7 +260,7 @@ class _LoginState extends ConsumerState<InvoiceLoanLogin> {
                       child: TextField(
                         keyboardType: TextInputType.text,
                         textAlign: TextAlign.start,
-                        maxLength: 20,
+                        maxLength: 50,
                         obscureText: !_passwordVisible,
                         controller: _passwordController,
                         focusNode: _passwordFocusNode,

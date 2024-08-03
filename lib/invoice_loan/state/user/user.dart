@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user.g.dart';
 
 @riverpod
-class CompanyDetailsState extends _$CompanyDetailsState {
+class UserDetails extends _$UserDetails {
   @override
   UserStateData build() {
     ref.keepAlive();

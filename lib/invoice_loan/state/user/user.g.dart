@@ -6,22 +6,20 @@ part of 'user.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$companyDetailsStateHash() =>
-    r'4eeff00c51083ca2e507ef30f47f3358e3a8ac5b';
+String _$userDetailsHash() => r'cf27151279988efebea18456846c20930ffb43ca';
 
-/// See also [CompanyDetailsState].
-@ProviderFor(CompanyDetailsState)
-final companyDetailsStateProvider =
-    AutoDisposeNotifierProvider<CompanyDetailsState, UserStateData>.internal(
-  CompanyDetailsState.new,
-  name: r'companyDetailsStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$companyDetailsStateHash,
+/// See also [UserDetails].
+@ProviderFor(UserDetails)
+final userDetailsProvider =
+    AutoDisposeNotifierProvider<UserDetails, UserStateData>.internal(
+  UserDetails.new,
+  name: r'userDetailsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$userDetailsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CompanyDetailsState = AutoDisposeNotifier<UserStateData>;
+typedef _$UserDetails = AutoDisposeNotifier<UserStateData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
