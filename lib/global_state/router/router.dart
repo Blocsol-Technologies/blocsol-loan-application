@@ -62,7 +62,7 @@ class Router extends _$Router {
         if (invoiceLoanToken.isEmpty &&
             invoiceLoanProtectedRoutes
                 .any((route) => route.path == state.uri.path)) {
-          return InvoiceLoanLoginRouter.index;
+          return InvoiceLoanLoginRouter.mobile_auth;
         }
 
         if (personalLoanToken.isNotEmpty &&

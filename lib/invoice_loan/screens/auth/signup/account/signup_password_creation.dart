@@ -84,10 +84,6 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
     _animation = CurvedAnimation(
         parent: _animationController, curve: Curves.easeOutExpo);
 
-    _animation.addListener(() {
-      if (_animation.isCompleted) {}
-    });
-
     super.initState();
   }
 

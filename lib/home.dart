@@ -249,7 +249,7 @@ class _ActionButtonState extends ConsumerState<ActionButton> {
 
     if (!mounted) return;
 
-    context.go(InvoiceLoanLoginRouter.index);
+    context.go(InvoiceLoanLoginRouter.mobile_auth);
     return;
   }
 
