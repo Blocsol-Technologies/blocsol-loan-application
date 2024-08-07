@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme.dart';
 import 'package:blocsol_loan_application/home.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
@@ -34,9 +35,21 @@ class Router extends _$Router {
         ),
         ...invoiceLoanRoutes,
       ],
-      redirect: (context, state) {
+      redirect: (context, state) async {
         var (personalLoanToken, invoiceLoanToken) =
             ref.read(authProvider.notifier).getAuthTokens();
+
+        if (invoiceLoanRoutes.any((route) => route.path == state.uri.path)) {
+          await ref
+              .read(appThemeProvider.notifier)
+              .setTheme(ThemeState.invoiceLoanTheme);
+        }
+
+        if (personalLoanRoutes.any((route) => route.path == state.uri.path)) {
+          await ref
+              .read(appThemeProvider.notifier)
+              .setTheme(ThemeState.personalLoanTheme);
+        }
 
         logger.d("navigating to path: ${state.uri.path}");
 
@@ -63,7 +76,6 @@ class Router extends _$Router {
                 .any((route) => route.path == state.uri.path)) {
           return PersonalLoanLoginRouter.index;
         }
-
 
         return null;
       },

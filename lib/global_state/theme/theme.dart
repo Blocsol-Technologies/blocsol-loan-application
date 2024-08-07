@@ -44,5 +44,6 @@ class AppTheme extends _$AppTheme {
   Future<void> setTheme(ThemeState theme) async {
     String themeVal = theme.value;
     await SecureStorage.write('theme', themeVal);
+    ref.invalidateSelf();
   }
 }

@@ -1,22 +1,26 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/state/user_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/user_http_controller.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_http_controller.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/profile_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'user.g.dart';
+part 'profile_details.g.dart';
 
 @riverpod
-class UserDetails extends _$UserDetails {
+class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
   @override
-  UserStateData build() {
+  InvoiceLoanUserProfileData build() {
     ref.keepAlive();
-    return UserStateData.initial;
+    return InvoiceLoanUserProfileData.initial;
   }
 
   void reset() {
     ref.invalidateSelf();
+  }
+
+  void setDataConsentProvided (bool value) {
+    state = state.copyWith(dataConsentProvided: value);
   }
 
   // Http Methods:
@@ -27,7 +31,7 @@ class UserDetails extends _$UserDetails {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await UserDetailsHttpController.getCompanyDetails(
+    var response = await InvoiceLoanUserProfileDetailsHttpController.getCompanyDetails(
         authToken, cancelToken);
 
     state = state.copyWith(fetchingData: false);
@@ -42,6 +46,8 @@ class UserDetails extends _$UserDetails {
         legalName: response.data['legalName'],
         tradeName: response.data['tradeName'],
         udyamNumber: response.data['udyamNumber'],
+        dataConsentProvided: response.data['dataConsentProvided'],
+        accountAggregatorSetup: response.data['accountAggregatorSetup'],
       );
     }
 

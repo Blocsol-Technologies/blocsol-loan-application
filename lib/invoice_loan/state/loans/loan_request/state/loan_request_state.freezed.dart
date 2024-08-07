@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoanRequestStateData {
+  bool get requestingNewLoan => throw _privateConstructorUsedError;
   LoanRequestProgress get currentState => throw _privateConstructorUsedError;
   String get transactionId => throw _privateConstructorUsedError;
   String get gstDataDownloadTime => throw _privateConstructorUsedError;
@@ -73,7 +74,8 @@ abstract class $LoanRequestStateDataCopyWith<$Res> {
       _$LoanRequestStateDataCopyWithImpl<$Res, LoanRequestStateData>;
   @useResult
   $Res call(
-      {LoanRequestProgress currentState,
+      {bool requestingNewLoan,
+      LoanRequestProgress currentState,
       String transactionId,
       String gstDataDownloadTime,
       bool downloadingGSTData,
@@ -129,6 +131,7 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? requestingNewLoan = null,
     Object? currentState = null,
     Object? transactionId = null,
     Object? gstDataDownloadTime = null,
@@ -171,6 +174,10 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
     Object? loanId = null,
   }) {
     return _then(_value.copyWith(
+      requestingNewLoan: null == requestingNewLoan
+          ? _value.requestingNewLoan
+          : requestingNewLoan // ignore: cast_nullable_to_non_nullable
+              as bool,
       currentState: null == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -346,7 +353,8 @@ abstract class _$$LoanRequestStateDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {LoanRequestProgress currentState,
+      {bool requestingNewLoan,
+      LoanRequestProgress currentState,
       String transactionId,
       String gstDataDownloadTime,
       bool downloadingGSTData,
@@ -399,6 +407,7 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? requestingNewLoan = null,
     Object? currentState = null,
     Object? transactionId = null,
     Object? gstDataDownloadTime = null,
@@ -441,6 +450,10 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
     Object? loanId = null,
   }) {
     return _then(_$LoanRequestStateDataImpl(
+      requestingNewLoan: null == requestingNewLoan
+          ? _value.requestingNewLoan
+          : requestingNewLoan // ignore: cast_nullable_to_non_nullable
+              as bool,
       currentState: null == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -611,7 +624,8 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
 
 class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   const _$LoanRequestStateDataImpl(
-      {required this.currentState,
+      {required this.requestingNewLoan,
+      required this.currentState,
       required this.transactionId,
       required this.gstDataDownloadTime,
       required this.downloadingGSTData,
@@ -654,6 +668,8 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
       : _invoices = invoices,
         _invoicesWithOffers = invoicesWithOffers;
 
+  @override
+  final bool requestingNewLoan;
   @override
   final LoanRequestProgress currentState;
   @override
@@ -756,7 +772,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
 
   @override
   String toString() {
-    return 'LoanRequestStateData(currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, loanOfferUpdated: $loanOfferUpdated, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, fetchingUdyamKYCURl: $fetchingUdyamKYCURl, verifyingUdyamKYC: $verifyingUdyamKYC, udyamKYCFailure: $udyamKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
+    return 'LoanRequestStateData(requestingNewLoan: $requestingNewLoan, currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, loanOfferUpdated: $loanOfferUpdated, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, fetchingUdyamKYCURl: $fetchingUdyamKYCURl, verifyingUdyamKYC: $verifyingUdyamKYC, udyamKYCFailure: $udyamKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
   }
 
   @override
@@ -764,6 +780,8 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoanRequestStateDataImpl &&
+            (identical(other.requestingNewLoan, requestingNewLoan) ||
+                other.requestingNewLoan == requestingNewLoan) &&
             (identical(other.currentState, currentState) ||
                 other.currentState == currentState) &&
             (identical(other.transactionId, transactionId) ||
@@ -838,6 +856,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
+        requestingNewLoan,
         currentState,
         transactionId,
         gstDataDownloadTime,
@@ -891,7 +910,8 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
 
 abstract class _LoanRequestStateData implements LoanRequestStateData {
   const factory _LoanRequestStateData(
-      {required final LoanRequestProgress currentState,
+      {required final bool requestingNewLoan,
+      required final LoanRequestProgress currentState,
       required final String transactionId,
       required final String gstDataDownloadTime,
       required final bool downloadingGSTData,
@@ -932,6 +952,8 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
       required final bool monitoringConsentError,
       required final String loanId}) = _$LoanRequestStateDataImpl;
 
+  @override
+  bool get requestingNewLoan;
   @override
   LoanRequestProgress get currentState;
   @override

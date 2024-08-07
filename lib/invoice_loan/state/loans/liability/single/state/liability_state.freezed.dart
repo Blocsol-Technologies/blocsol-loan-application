@@ -15,8 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LiabilitiesState {
-  List<LoanDetails> get liabilities => throw _privateConstructorUsedError;
+mixin _$LiabilityState {
   LoanDetails get selectedLiability => throw _privateConstructorUsedError;
   bool get fetchingLiabilitiess => throw _privateConstructorUsedError;
   int get liabilitiessFetchTime => throw _privateConstructorUsedError;
@@ -32,19 +31,18 @@ mixin _$LiabilitiesState {
   String get missedEmiPaymentId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $LiabilitiesStateCopyWith<LiabilitiesState> get copyWith =>
+  $LiabilityStateCopyWith<LiabilityState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LiabilitiesStateCopyWith<$Res> {
-  factory $LiabilitiesStateCopyWith(
-          LiabilitiesState value, $Res Function(LiabilitiesState) then) =
-      _$LiabilitiesStateCopyWithImpl<$Res, LiabilitiesState>;
+abstract class $LiabilityStateCopyWith<$Res> {
+  factory $LiabilityStateCopyWith(
+          LiabilityState value, $Res Function(LiabilityState) then) =
+      _$LiabilityStateCopyWithImpl<$Res, LiabilityState>;
   @useResult
   $Res call(
-      {List<LoanDetails> liabilities,
-      LoanDetails selectedLiability,
+      {LoanDetails selectedLiability,
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
@@ -59,9 +57,9 @@ abstract class $LiabilitiesStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LiabilitiesStateCopyWithImpl<$Res, $Val extends LiabilitiesState>
-    implements $LiabilitiesStateCopyWith<$Res> {
-  _$LiabilitiesStateCopyWithImpl(this._value, this._then);
+class _$LiabilityStateCopyWithImpl<$Res, $Val extends LiabilityState>
+    implements $LiabilityStateCopyWith<$Res> {
+  _$LiabilityStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -71,7 +69,6 @@ class _$LiabilitiesStateCopyWithImpl<$Res, $Val extends LiabilitiesState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? liabilities = null,
     Object? selectedLiability = null,
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
@@ -86,10 +83,6 @@ class _$LiabilitiesStateCopyWithImpl<$Res, $Val extends LiabilitiesState>
     Object? missedEmiPaymentId = null,
   }) {
     return _then(_value.copyWith(
-      liabilities: null == liabilities
-          ? _value.liabilities
-          : liabilities // ignore: cast_nullable_to_non_nullable
-              as List<LoanDetails>,
       selectedLiability: null == selectedLiability
           ? _value.selectedLiability
           : selectedLiability // ignore: cast_nullable_to_non_nullable
@@ -143,16 +136,15 @@ class _$LiabilitiesStateCopyWithImpl<$Res, $Val extends LiabilitiesState>
 }
 
 /// @nodoc
-abstract class _$$LiabilitiesStateImplCopyWith<$Res>
-    implements $LiabilitiesStateCopyWith<$Res> {
-  factory _$$LiabilitiesStateImplCopyWith(_$LiabilitiesStateImpl value,
-          $Res Function(_$LiabilitiesStateImpl) then) =
-      __$$LiabilitiesStateImplCopyWithImpl<$Res>;
+abstract class _$$LiabilityStateImplCopyWith<$Res>
+    implements $LiabilityStateCopyWith<$Res> {
+  factory _$$LiabilityStateImplCopyWith(_$LiabilityStateImpl value,
+          $Res Function(_$LiabilityStateImpl) then) =
+      __$$LiabilityStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {List<LoanDetails> liabilities,
-      LoanDetails selectedLiability,
+      {LoanDetails selectedLiability,
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
@@ -167,17 +159,16 @@ abstract class _$$LiabilitiesStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LiabilitiesStateImplCopyWithImpl<$Res>
-    extends _$LiabilitiesStateCopyWithImpl<$Res, _$LiabilitiesStateImpl>
-    implements _$$LiabilitiesStateImplCopyWith<$Res> {
-  __$$LiabilitiesStateImplCopyWithImpl(_$LiabilitiesStateImpl _value,
-      $Res Function(_$LiabilitiesStateImpl) _then)
+class __$$LiabilityStateImplCopyWithImpl<$Res>
+    extends _$LiabilityStateCopyWithImpl<$Res, _$LiabilityStateImpl>
+    implements _$$LiabilityStateImplCopyWith<$Res> {
+  __$$LiabilityStateImplCopyWithImpl(
+      _$LiabilityStateImpl _value, $Res Function(_$LiabilityStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? liabilities = null,
     Object? selectedLiability = null,
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
@@ -191,11 +182,7 @@ class __$$LiabilitiesStateImplCopyWithImpl<$Res>
     Object? initiatingMissedEmiPayment = null,
     Object? missedEmiPaymentId = null,
   }) {
-    return _then(_$LiabilitiesStateImpl(
-      liabilities: null == liabilities
-          ? _value._liabilities
-          : liabilities // ignore: cast_nullable_to_non_nullable
-              as List<LoanDetails>,
+    return _then(_$LiabilityStateImpl(
       selectedLiability: null == selectedLiability
           ? _value.selectedLiability
           : selectedLiability // ignore: cast_nullable_to_non_nullable
@@ -250,10 +237,9 @@ class __$$LiabilitiesStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LiabilitiesStateImpl implements _LiabilitiesState {
-  const _$LiabilitiesStateImpl(
-      {required final List<LoanDetails> liabilities,
-      required this.selectedLiability,
+class _$LiabilityStateImpl implements _LiabilityState {
+  const _$LiabilityStateImpl(
+      {required this.selectedLiability,
       required this.fetchingLiabilitiess,
       required this.liabilitiessFetchTime,
       required this.fetchingSingleLiabilityDetails,
@@ -264,16 +250,7 @@ class _$LiabilitiesStateImpl implements _LiabilitiesState {
       required this.prepaymentId,
       required this.missedEmiPaymentFailed,
       required this.initiatingMissedEmiPayment,
-      required this.missedEmiPaymentId})
-      : _liabilities = liabilities;
-
-  final List<LoanDetails> _liabilities;
-  @override
-  List<LoanDetails> get liabilities {
-    if (_liabilities is EqualUnmodifiableListView) return _liabilities;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_liabilities);
-  }
+      required this.missedEmiPaymentId});
 
   @override
   final LoanDetails selectedLiability;
@@ -303,16 +280,14 @@ class _$LiabilitiesStateImpl implements _LiabilitiesState {
 
   @override
   String toString() {
-    return 'LiabilitiesState(liabilities: $liabilities, selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, loanForeclosureFailed: $loanForeclosureFailed, initiatingForeclosure: $initiatingForeclosure, prepaymentFailed: $prepaymentFailed, initiatingPrepayment: $initiatingPrepayment, prepaymentId: $prepaymentId, missedEmiPaymentFailed: $missedEmiPaymentFailed, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, missedEmiPaymentId: $missedEmiPaymentId)';
+    return 'LiabilityState(selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, loanForeclosureFailed: $loanForeclosureFailed, initiatingForeclosure: $initiatingForeclosure, prepaymentFailed: $prepaymentFailed, initiatingPrepayment: $initiatingPrepayment, prepaymentId: $prepaymentId, missedEmiPaymentFailed: $missedEmiPaymentFailed, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, missedEmiPaymentId: $missedEmiPaymentId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LiabilitiesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._liabilities, _liabilities) &&
+            other is _$LiabilityStateImpl &&
             (identical(other.selectedLiability, selectedLiability) ||
                 other.selectedLiability == selectedLiability) &&
             (identical(other.fetchingLiabilitiess, fetchingLiabilitiess) ||
@@ -346,7 +321,6 @@ class _$LiabilitiesStateImpl implements _LiabilitiesState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_liabilities),
       selectedLiability,
       fetchingLiabilitiess,
       liabilitiessFetchTime,
@@ -363,15 +337,14 @@ class _$LiabilitiesStateImpl implements _LiabilitiesState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LiabilitiesStateImplCopyWith<_$LiabilitiesStateImpl> get copyWith =>
-      __$$LiabilitiesStateImplCopyWithImpl<_$LiabilitiesStateImpl>(
+  _$$LiabilityStateImplCopyWith<_$LiabilityStateImpl> get copyWith =>
+      __$$LiabilityStateImplCopyWithImpl<_$LiabilityStateImpl>(
           this, _$identity);
 }
 
-abstract class _LiabilitiesState implements LiabilitiesState {
-  const factory _LiabilitiesState(
-      {required final List<LoanDetails> liabilities,
-      required final LoanDetails selectedLiability,
+abstract class _LiabilityState implements LiabilityState {
+  const factory _LiabilityState(
+      {required final LoanDetails selectedLiability,
       required final bool fetchingLiabilitiess,
       required final int liabilitiessFetchTime,
       required final bool fetchingSingleLiabilityDetails,
@@ -382,10 +355,8 @@ abstract class _LiabilitiesState implements LiabilitiesState {
       required final String prepaymentId,
       required final bool missedEmiPaymentFailed,
       required final bool initiatingMissedEmiPayment,
-      required final String missedEmiPaymentId}) = _$LiabilitiesStateImpl;
+      required final String missedEmiPaymentId}) = _$LiabilityStateImpl;
 
-  @override
-  List<LoanDetails> get liabilities;
   @override
   LoanDetails get selectedLiability;
   @override
@@ -412,6 +383,6 @@ abstract class _LiabilitiesState implements LiabilitiesState {
   String get missedEmiPaymentId;
   @override
   @JsonKey(ignore: true)
-  _$$LiabilitiesStateImplCopyWith<_$LiabilitiesStateImpl> get copyWith =>
+  _$$LiabilityStateImplCopyWith<_$LiabilityStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

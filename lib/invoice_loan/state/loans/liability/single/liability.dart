@@ -1,19 +1,19 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/http_controller.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/state/liability_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/http_controller.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/state/liability_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'liabilities.g.dart';
+part 'liability.g.dart';
 
 @riverpod
-class Liabilities extends _$Liabilities {
+class InvoiceLoanLiability extends _$InvoiceLoanLiability {
   @override
-  LiabilitiesState build() {
+  LiabilityState build() {
     ref.keepAlive();
-    return LiabilitiesState.initial;
+    return LiabilityState.initial;
   }
 
   void reset() {
@@ -28,39 +28,6 @@ class Liabilities extends _$Liabilities {
     state = state.copyWith(missedEmiPaymentId: id);
   }
 
-  Future<ServerResponse> fetchLiabilities(CancelToken cancelToken) async {
-    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
-
-    if (state.liabilities.isEmpty) {
-      state = state.copyWith(fetchingLiabilitiess: true);
-    }
-    var response = await LiabilitiesHttpController.fetchLiabilities(
-        authToken, cancelToken);
-
-    state = state.copyWith(
-        fetchingLiabilitiess: false,
-        liabilitiessFetchTime: DateTime.now().millisecondsSinceEpoch ~/ 1000);
-
-    if (response.success) {
-      state = state.copyWith(
-        liabilities: response.data,
-      );
-
-      if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-              state.liabilitiessFetchTime >
-          900) {
-        state = state.copyWith(
-            liabilities: response.data,
-            liabilitiessFetchTime:
-                DateTime.now().millisecondsSinceEpoch ~/ 1000);
-      } else {
-        state = state.copyWith(
-          liabilities: response.data,
-        );
-      }
-    }
-    return response;
-  }
 
   Future<ServerResponse> fetchSingleLiabilityDetails(
       CancelToken cancelToken) async {

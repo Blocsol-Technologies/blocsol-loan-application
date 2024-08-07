@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 String fontFamily = "Poppins";
 
-var personLoanTheme = ThemeData(
+var personLoanThemeVal = ThemeData(
   fontFamily: fontFamily,
   unselectedWidgetColor: const Color.fromRGBO(35, 35, 40, 1),
   colorScheme: const ColorScheme(

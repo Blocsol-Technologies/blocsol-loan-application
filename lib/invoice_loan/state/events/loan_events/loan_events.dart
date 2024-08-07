@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 // import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/liabilities.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
@@ -32,12 +32,12 @@ class LoanEvents extends _$LoanEvents {
 
     if (transactionId == "" || providerId == "") {
       transactionId = ref
-          .read(liabilitiesProvider)
+          .read(invoiceLoanLiabilityProvider)
           .selectedLiability
           .offerDetails
           .transactionId;
       providerId = ref
-          .read(liabilitiesProvider)
+          .read(invoiceLoanLiabilityProvider)
           .selectedLiability
           .offerDetails
           .offerProviderId;

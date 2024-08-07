@@ -6,7 +6,7 @@ part of 'loan_request.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loanRequestHash() => r'1407417a4d8aa53ee4de1d0238123eb66a436ca1';
+String _$loanRequestHash() => r'7856d37298303eea51485517afafc296f42c653c';
 
 /// See also [LoanRequest].
 @ProviderFor(LoanRequest)

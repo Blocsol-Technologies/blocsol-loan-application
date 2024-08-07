@@ -1,4 +1,3 @@
-
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/http_controller/account.dart';
@@ -123,14 +122,11 @@ class LoanRequest extends _$LoanRequest {
     state = state.copyWith(monitoringConsentError: error);
   }
 
-
-
   // Http Methods
 
   /* Provide GST Consent */
   Future<ServerResponse> provideGstConsent(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await LoanRequestAccountHttpController.provideGstConsent(
         authToken, cancelToken);
@@ -145,11 +141,10 @@ class LoanRequest extends _$LoanRequest {
 
   /* Send GST OTP */
   Future<ServerResponse> sendGstOtp(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response =
-        await LoanRequestAccountHttpController.sendGstOtp(authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController.sendGstOtp(
+        authToken, cancelToken);
 
     return response;
   }
@@ -164,8 +159,7 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await LoanRequestAccountHttpController.verifyGstOtp(
         otp, authToken, cancelToken);
@@ -179,11 +173,10 @@ class LoanRequest extends _$LoanRequest {
 
   /* Download GST Data */
   Future<ServerResponse> downloadGstData(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response =
-        await LoanRequestAccountHttpController.downloadGstData(authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController.downloadGstData(
+        authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(gstDataDownloadTime: response.data);
@@ -196,8 +189,7 @@ class LoanRequest extends _$LoanRequest {
   Future<ServerResponse> fetchGstInvoices(CancelToken cancelToken) async {
     state = state.copyWith(loadingInvoices: true);
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await LoanRequestAccountHttpController.fetchGstInvoices(
         authToken, cancelToken);
@@ -216,10 +208,11 @@ class LoanRequest extends _$LoanRequest {
   // Search --------------
   Future<ServerResponse> performGeneralSearch(
       bool foreceNew, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     reset();
+
+    state = state.copyWith(requestingNewLoan: true);
 
     var response = await LoanRequestSearchHttpController.performGeneralSearch(
         foreceNew, authToken, cancelToken);
@@ -237,21 +230,21 @@ class LoanRequest extends _$LoanRequest {
       }
     }
 
+    state = state.copyWith(requestingNewLoan: false);
+
     return response;
   }
 
   // Submit Forms
   Future<ServerResponse> submitForms(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     return await LoanRequestSearchHttpController.submitForms(
         state.transactionId, authToken, cancelToken);
   }
 
   Future<ServerResponse> generateAAURL(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var aaId = state.selectedAA.aaId;
@@ -272,8 +265,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> checkConsentSuccess(
       String ecres, String resdate, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var key = state.selectedAA.key;
@@ -292,8 +284,7 @@ class LoanRequest extends _$LoanRequest {
 
   // Fetch Invoices with Offers
   Future<ServerResponse> fetchLoanOffers(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     state = state.copyWith(fetchingInvoiceWithOffers: true);
 
@@ -324,8 +315,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> fetchLoanOffersBackground(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await LoanRequestSearchHttpController.fetchLoanOffers(
         state.transactionId, authToken, cancelToken);
@@ -351,8 +341,7 @@ class LoanRequest extends _$LoanRequest {
   // Select --------------
   Future<ServerResponse> refetchSelectedOfferDetails(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -366,8 +355,9 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    var response = await LoanRequestSelectHttpController.refetchSelectedOfferDetails(
-        transactionId, offerId, providerId, authToken, cancelToken);
+    var response =
+        await LoanRequestSelectHttpController.refetchSelectedOfferDetails(
+            transactionId, offerId, providerId, authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(selectedOffer: response.data);
@@ -378,8 +368,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> selectOffer(String transactionId, String providerId,
       String offerId, String invoiceId, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     if (transactionId.isEmpty ||
         providerId.isEmpty ||
@@ -406,8 +395,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> submitLoanUpdateForm(
       String amount, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -442,8 +430,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> fetchAadharKycUrl(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -461,8 +448,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> refetchAadharKycUrl(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -482,8 +468,7 @@ class LoanRequest extends _$LoanRequest {
   Future<ServerResponse> checkAadharKycSuccess(CancelToken cancelToken) async {
     state = state.copyWith(verifyingAadharKYC: true);
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -505,8 +490,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> fetchUdyamKycForm(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -524,8 +508,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> refetchUdyamKycForm(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -546,8 +529,7 @@ class LoanRequest extends _$LoanRequest {
       CancelToken cancelToken) async {
     state = state.copyWith(verifyingUdyamKYC: true);
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -571,8 +553,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> fetchBankAccountFormDetails(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -590,8 +571,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> submitBankAccountDetails(
       bool skipBankVerification, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var bankAccountNumber = state.bankAccountNumber;
     var bankIFSC = state.bankIFSC;
@@ -623,8 +603,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> fetchRepaymentSetupUrl(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -652,8 +631,7 @@ class LoanRequest extends _$LoanRequest {
       CancelToken cancelToken) async {
     state = state.copyWith(checkingRepaymentSetupSuccess: true);
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -666,8 +644,9 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    var response = await LoanRequestInitHttpController.checkRepaymentSetupSuccess(
-        transactionId, providerId, authToken, cancelToken);
+    var response =
+        await LoanRequestInitHttpController.checkRepaymentSetupSuccess(
+            transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(checkingRepaymentSetupSuccess: false);
 
@@ -676,8 +655,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> refetchRepaymentSetupForm(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -695,8 +673,7 @@ class LoanRequest extends _$LoanRequest {
   }
 
   Future<ServerResponse> fetchLoanAgreementUrl(CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -714,8 +691,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> submitLoanAgreementForm(
       String otp, CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -742,8 +718,7 @@ class LoanRequest extends _$LoanRequest {
       CancelToken cancelToken) async {
     state = state.copyWith(verifyingLoanAgreementSuccess: true);
 
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -756,8 +731,9 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    var response = await LoanRequestInitHttpController.checkLoanAgreementSuccess(
-        transactionId, providerId, authToken, cancelToken);
+    var response =
+        await LoanRequestInitHttpController.checkLoanAgreementSuccess(
+            transactionId, providerId, authToken, cancelToken);
     state = state.copyWith(verifyingLoanAgreementSuccess: false);
 
     return response;
@@ -765,8 +741,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> refetchLoanAgreementForm(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -785,8 +760,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> checkMonitoringConsentRequirement(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -798,14 +772,14 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    return await LoanRequestConfirmHttpController.checkMonitoringConsentRequirement(
-        transactionId, providerId, authToken, cancelToken);
+    return await LoanRequestConfirmHttpController
+        .checkMonitoringConsentRequirement(
+            transactionId, providerId, authToken, cancelToken);
   }
 
   Future<ServerResponse> generateLoanMonitoringConsentRequest(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -835,8 +809,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> checkLoanMonitoringConsentSuccess(
       CancelToken cancelToken, String ecres, String resdate) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var offerProviderId = state.selectedOffer.offerProviderId;
@@ -876,8 +849,7 @@ class LoanRequest extends _$LoanRequest {
 
   Future<ServerResponse> checkLoanDisbursementSuccess(
       CancelToken cancelToken) async {
-    var (_, authToken) =
-        ref.read(authProvider.notifier).getAuthTokens();
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
@@ -890,8 +862,9 @@ class LoanRequest extends _$LoanRequest {
       );
     }
 
-    var response = await LoanRequestConfirmHttpController.checkLoanDisbursementSuccess(
-        transactionId, providerId, authToken, cancelToken);
+    var response =
+        await LoanRequestConfirmHttpController.checkLoanDisbursementSuccess(
+            transactionId, providerId, authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(loanId: transactionId);

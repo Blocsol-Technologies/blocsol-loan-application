@@ -1,9 +1,11 @@
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
 import 'package:flutter/material.dart';
 
 class AppThemeData {
   static final ThemeData defaultTheme = defaultThemeVal; 
-  static final ThemeData invoiceLoanTheme = invoiceLoanTheme;
-  static final ThemeData personalLoanTheme = personalLoanTheme;
+  static final ThemeData invoiceLoanTheme = invoiceLoanThemeVal;
+  static final ThemeData personalLoanTheme = personLoanThemeVal;
 }
 
 String fontFamily = "Poppins";

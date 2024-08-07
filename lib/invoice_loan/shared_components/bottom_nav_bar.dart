@@ -33,122 +33,86 @@ class InvoiceLoanBottomNavBar extends ConsumerWidget {
       },
       type: BottomNavigationBarType.fixed,
       backgroundColor: Theme.of(context).colorScheme.surface,
+      elevation: 0,
       selectedLabelStyle: TextStyle(
-        fontFamily: fontFamily,
-        fontSize: AppFontSizes.b2,
-        fontWeight: AppFontWeights.bold,
-      ),
+          fontFamily: fontFamily,
+          fontSize: AppFontSizes.b2,
+          fontWeight: AppFontWeights.bold,
+          color: Theme.of(context).colorScheme.secondary),
       unselectedLabelStyle: TextStyle(
-        fontFamily: fontFamily,
-        fontSize: AppFontSizes.b2,
-        fontWeight: AppFontWeights.bold,
-      ),
+          fontFamily: fontFamily,
+          fontSize: AppFontSizes.b2,
+          fontWeight: AppFontWeights.normal,
+          color: const Color.fromRGBO(78, 78, 78, 1)),
       iconSize: 70,
-      selectedItemColor: Theme.of(context).colorScheme.onSurface,
+      selectedItemColor: Theme.of(context).colorScheme.secondary,
       unselectedItemColor:
           Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          activeIcon: const SizedBox(
-            height: 30,
-            width: 40,
-            child: ActiveNavigationItem(
-              key: Key("msme_home_bottom_nav_item"),
-              icon: Icon(
-                Icons.home_outlined,
-                size: 30,
-              ),
-              label: "Home",
+          activeIcon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/home_active.png",
+              fit: BoxFit.cover,
             ),
           ),
-          icon: SizedBox(
-            height: 30,
-            width: 40,
-            child: Icon(
-              Icons.home,
-              size: 30,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+          icon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/home_inactive.png",
+              fit: BoxFit.cover,
             ),
           ),
           label: "Home",
         ),
         BottomNavigationBarItem(
-          activeIcon: const SizedBox(
-            height: 30,
-            width: 40,
-            child: ActiveNavigationItem(
-              key: Key("msme_loans_bottom_nav_item"),
-              icon: Icon(
-                Icons.wallet_travel_sharp,
-                size: 30,
-              ),
-              label: "Loans",
+          activeIcon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/loans_active.png",
+              fit: BoxFit.cover,
             ),
           ),
-          icon: SizedBox(
-            height: 30,
-            width: 40,
-            child: Icon(
-              Icons.wallet_travel_sharp,
-              size: 30,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+          icon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/loans_inactive.png",
+              fit: BoxFit.cover,
             ),
           ),
           label: "Loans",
         ),
         BottomNavigationBarItem(
-          activeIcon: const SizedBox(
-            height: 30,
-            width: 40,
-            child: ActiveNavigationItem(
-              key: Key("msme_support_bottom_nav_item"),
-              icon: Icon(
-                Icons.support_agent_rounded,
-                size: 30,
-              ),
-              label: "Support",
+          activeIcon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/invoices_active.png",
+              fit: BoxFit.cover,
             ),
           ),
-          icon: SizedBox(
-            height: 30,
-            width: 40,
-            child: Icon(
-              Icons.support_agent_rounded,
-              size: 30,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+          icon: Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            height: 25,
+            width: 25,
+            child: Image.asset(
+              "assets/images/invoice_loan/bottom_nav_bar/invoices_inactive.png",
+              fit: BoxFit.cover,
             ),
           ),
-          label: "Support",
+          label: "Invoices",
         ),
       ],
-    );
-  }
-}
-
-class ActiveNavigationItem extends StatelessWidget {
-  final Widget icon;
-  final String label;
-
-  const ActiveNavigationItem(
-      {super.key, required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      blendMode: BlendMode.srcATop,
-      shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          stops: const [
-            0,
-            1,
-          ],
-          colors: bottomNavBarIconsGradientColors[0],
-          tileMode: TileMode.repeated,
-        ).createShader(bounds);
-      },
-      child: icon,
     );
   }
 }

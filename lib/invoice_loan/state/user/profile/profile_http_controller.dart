@@ -1,10 +1,9 @@
-
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 
 import 'package:dio/dio.dart';
 
-class UserDetailsHttpController {
+class InvoiceLoanUserProfileDetailsHttpController {
   static Future<ServerResponse> getCompanyDetails(
       String authToken, CancelToken cancelToken) async {
     try {
@@ -26,6 +25,10 @@ class UserDetailsHttpController {
               "legalName": response.data['data']?['legalName'] ?? "",
               "tradeName": response.data['data']?['tradeName'] ?? "",
               "udyamNumber": response.data['data']?['udyamNumber'] ?? "",
+              "dataConsentProvided":
+                  response.data['data']?['dataConsentProvided'] ?? false,
+              "accountAggregatorSetup":
+                  response.data['data']?['accountAggregatorSetup'] ?? false,
             });
       } else {
         return ServerResponse(

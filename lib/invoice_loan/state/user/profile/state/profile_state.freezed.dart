@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_state.dart';
+part of 'profile_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,8 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$UserStateData {
+mixin _$InvoiceLoanUserProfileData {
+  bool get dataConsentProvided => throw _privateConstructorUsedError;
   String get gstNumber => throw _privateConstructorUsedError;
   String get gstUsername => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
@@ -24,21 +25,24 @@ mixin _$UserStateData {
   String get legalName => throw _privateConstructorUsedError;
   String get tradeName => throw _privateConstructorUsedError;
   String get businessLocation => throw _privateConstructorUsedError;
+  bool get accountAggregatorSetup => throw _privateConstructorUsedError;
   bool get fetchingData => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UserStateDataCopyWith<UserStateData> get copyWith =>
-      throw _privateConstructorUsedError;
+  $InvoiceLoanUserProfileDataCopyWith<InvoiceLoanUserProfileData>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserStateDataCopyWith<$Res> {
-  factory $UserStateDataCopyWith(
-          UserStateData value, $Res Function(UserStateData) then) =
-      _$UserStateDataCopyWithImpl<$Res, UserStateData>;
+abstract class $InvoiceLoanUserProfileDataCopyWith<$Res> {
+  factory $InvoiceLoanUserProfileDataCopyWith(InvoiceLoanUserProfileData value,
+          $Res Function(InvoiceLoanUserProfileData) then) =
+      _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
+          InvoiceLoanUserProfileData>;
   @useResult
   $Res call(
-      {String gstNumber,
+      {bool dataConsentProvided,
+      String gstNumber,
       String gstUsername,
       String email,
       String phone,
@@ -46,13 +50,15 @@ abstract class $UserStateDataCopyWith<$Res> {
       String legalName,
       String tradeName,
       String businessLocation,
+      bool accountAggregatorSetup,
       bool fetchingData});
 }
 
 /// @nodoc
-class _$UserStateDataCopyWithImpl<$Res, $Val extends UserStateData>
-    implements $UserStateDataCopyWith<$Res> {
-  _$UserStateDataCopyWithImpl(this._value, this._then);
+class _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
+        $Val extends InvoiceLoanUserProfileData>
+    implements $InvoiceLoanUserProfileDataCopyWith<$Res> {
+  _$InvoiceLoanUserProfileDataCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -62,6 +68,7 @@ class _$UserStateDataCopyWithImpl<$Res, $Val extends UserStateData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? dataConsentProvided = null,
     Object? gstNumber = null,
     Object? gstUsername = null,
     Object? email = null,
@@ -70,9 +77,14 @@ class _$UserStateDataCopyWithImpl<$Res, $Val extends UserStateData>
     Object? legalName = null,
     Object? tradeName = null,
     Object? businessLocation = null,
+    Object? accountAggregatorSetup = null,
     Object? fetchingData = null,
   }) {
     return _then(_value.copyWith(
+      dataConsentProvided: null == dataConsentProvided
+          ? _value.dataConsentProvided
+          : dataConsentProvided // ignore: cast_nullable_to_non_nullable
+              as bool,
       gstNumber: null == gstNumber
           ? _value.gstNumber
           : gstNumber // ignore: cast_nullable_to_non_nullable
@@ -105,6 +117,10 @@ class _$UserStateDataCopyWithImpl<$Res, $Val extends UserStateData>
           ? _value.businessLocation
           : businessLocation // ignore: cast_nullable_to_non_nullable
               as String,
+      accountAggregatorSetup: null == accountAggregatorSetup
+          ? _value.accountAggregatorSetup
+          : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -114,15 +130,17 @@ class _$UserStateDataCopyWithImpl<$Res, $Val extends UserStateData>
 }
 
 /// @nodoc
-abstract class _$$UserStateDataImplCopyWith<$Res>
-    implements $UserStateDataCopyWith<$Res> {
-  factory _$$UserStateDataImplCopyWith(
-          _$UserStateDataImpl value, $Res Function(_$UserStateDataImpl) then) =
-      __$$UserStateDataImplCopyWithImpl<$Res>;
+abstract class _$$InvoiceLoanUserProfileDataImplCopyWith<$Res>
+    implements $InvoiceLoanUserProfileDataCopyWith<$Res> {
+  factory _$$InvoiceLoanUserProfileDataImplCopyWith(
+          _$InvoiceLoanUserProfileDataImpl value,
+          $Res Function(_$InvoiceLoanUserProfileDataImpl) then) =
+      __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String gstNumber,
+      {bool dataConsentProvided,
+      String gstNumber,
       String gstUsername,
       String email,
       String phone,
@@ -130,20 +148,24 @@ abstract class _$$UserStateDataImplCopyWith<$Res>
       String legalName,
       String tradeName,
       String businessLocation,
+      bool accountAggregatorSetup,
       bool fetchingData});
 }
 
 /// @nodoc
-class __$$UserStateDataImplCopyWithImpl<$Res>
-    extends _$UserStateDataCopyWithImpl<$Res, _$UserStateDataImpl>
-    implements _$$UserStateDataImplCopyWith<$Res> {
-  __$$UserStateDataImplCopyWithImpl(
-      _$UserStateDataImpl _value, $Res Function(_$UserStateDataImpl) _then)
+class __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>
+    extends _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
+        _$InvoiceLoanUserProfileDataImpl>
+    implements _$$InvoiceLoanUserProfileDataImplCopyWith<$Res> {
+  __$$InvoiceLoanUserProfileDataImplCopyWithImpl(
+      _$InvoiceLoanUserProfileDataImpl _value,
+      $Res Function(_$InvoiceLoanUserProfileDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? dataConsentProvided = null,
     Object? gstNumber = null,
     Object? gstUsername = null,
     Object? email = null,
@@ -152,9 +174,14 @@ class __$$UserStateDataImplCopyWithImpl<$Res>
     Object? legalName = null,
     Object? tradeName = null,
     Object? businessLocation = null,
+    Object? accountAggregatorSetup = null,
     Object? fetchingData = null,
   }) {
-    return _then(_$UserStateDataImpl(
+    return _then(_$InvoiceLoanUserProfileDataImpl(
+      dataConsentProvided: null == dataConsentProvided
+          ? _value.dataConsentProvided
+          : dataConsentProvided // ignore: cast_nullable_to_non_nullable
+              as bool,
       gstNumber: null == gstNumber
           ? _value.gstNumber
           : gstNumber // ignore: cast_nullable_to_non_nullable
@@ -187,6 +214,10 @@ class __$$UserStateDataImplCopyWithImpl<$Res>
           ? _value.businessLocation
           : businessLocation // ignore: cast_nullable_to_non_nullable
               as String,
+      accountAggregatorSetup: null == accountAggregatorSetup
+          ? _value.accountAggregatorSetup
+          : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -197,9 +228,10 @@ class __$$UserStateDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UserStateDataImpl implements _UserStateData {
-  const _$UserStateDataImpl(
-      {required this.gstNumber,
+class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
+  const _$InvoiceLoanUserProfileDataImpl(
+      {required this.dataConsentProvided,
+      required this.gstNumber,
       required this.gstUsername,
       required this.email,
       required this.phone,
@@ -207,8 +239,11 @@ class _$UserStateDataImpl implements _UserStateData {
       required this.legalName,
       required this.tradeName,
       required this.businessLocation,
+      required this.accountAggregatorSetup,
       required this.fetchingData});
 
+  @override
+  final bool dataConsentProvided;
   @override
   final String gstNumber;
   @override
@@ -226,18 +261,22 @@ class _$UserStateDataImpl implements _UserStateData {
   @override
   final String businessLocation;
   @override
+  final bool accountAggregatorSetup;
+  @override
   final bool fetchingData;
 
   @override
   String toString() {
-    return 'UserStateData(gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, fetchingData: $fetchingData)';
+    return 'InvoiceLoanUserProfileData(dataConsentProvided: $dataConsentProvided, gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, accountAggregatorSetup: $accountAggregatorSetup, fetchingData: $fetchingData)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserStateDataImpl &&
+            other is _$InvoiceLoanUserProfileDataImpl &&
+            (identical(other.dataConsentProvided, dataConsentProvided) ||
+                other.dataConsentProvided == dataConsentProvided) &&
             (identical(other.gstNumber, gstNumber) ||
                 other.gstNumber == gstNumber) &&
             (identical(other.gstUsername, gstUsername) ||
@@ -252,24 +291,40 @@ class _$UserStateDataImpl implements _UserStateData {
                 other.tradeName == tradeName) &&
             (identical(other.businessLocation, businessLocation) ||
                 other.businessLocation == businessLocation) &&
+            (identical(other.accountAggregatorSetup, accountAggregatorSetup) ||
+                other.accountAggregatorSetup == accountAggregatorSetup) &&
             (identical(other.fetchingData, fetchingData) ||
                 other.fetchingData == fetchingData));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, gstNumber, gstUsername, email,
-      phone, udyamNumber, legalName, tradeName, businessLocation, fetchingData);
+  int get hashCode => Object.hash(
+      runtimeType,
+      dataConsentProvided,
+      gstNumber,
+      gstUsername,
+      email,
+      phone,
+      udyamNumber,
+      legalName,
+      tradeName,
+      businessLocation,
+      accountAggregatorSetup,
+      fetchingData);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserStateDataImplCopyWith<_$UserStateDataImpl> get copyWith =>
-      __$$UserStateDataImplCopyWithImpl<_$UserStateDataImpl>(this, _$identity);
+  _$$InvoiceLoanUserProfileDataImplCopyWith<_$InvoiceLoanUserProfileDataImpl>
+      get copyWith => __$$InvoiceLoanUserProfileDataImplCopyWithImpl<
+          _$InvoiceLoanUserProfileDataImpl>(this, _$identity);
 }
 
-abstract class _UserStateData implements UserStateData {
-  const factory _UserStateData(
-      {required final String gstNumber,
+abstract class _InvoiceLoanUserProfileData
+    implements InvoiceLoanUserProfileData {
+  const factory _InvoiceLoanUserProfileData(
+      {required final bool dataConsentProvided,
+      required final String gstNumber,
       required final String gstUsername,
       required final String email,
       required final String phone,
@@ -277,8 +332,11 @@ abstract class _UserStateData implements UserStateData {
       required final String legalName,
       required final String tradeName,
       required final String businessLocation,
-      required final bool fetchingData}) = _$UserStateDataImpl;
+      required final bool accountAggregatorSetup,
+      required final bool fetchingData}) = _$InvoiceLoanUserProfileDataImpl;
 
+  @override
+  bool get dataConsentProvided;
   @override
   String get gstNumber;
   @override
@@ -296,9 +354,11 @@ abstract class _UserStateData implements UserStateData {
   @override
   String get businessLocation;
   @override
+  bool get accountAggregatorSetup;
+  @override
   bool get fetchingData;
   @override
   @JsonKey(ignore: true)
-  _$$UserStateDataImplCopyWith<_$UserStateDataImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$InvoiceLoanUserProfileDataImplCopyWith<_$InvoiceLoanUserProfileDataImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

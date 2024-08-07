@@ -93,56 +93,56 @@ class LenderDetails {
 List<LenderDetails> lenderDetailsList = [
   LenderDetails(
       name: "SIDBI",
-      assetPath: "assets/images/bank_logos/sidbi.png",
+      assetPath: "assets/images/lender_logos/sidbi.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "DMI FINANCE PRIVATE LIMITED",
-      assetPath: "assets/images/bank_logos/dmi.png",
+      assetPath: "assets/images/lender_logos/dmi.png",
       connectedAA: accountAggregatorInfoList,
       show: false),
   LenderDetails(
       name: "ICICI Bank",
-      assetPath: "assets/images/bank_logos/icici.png",
+      assetPath: "assets/images/lender_logos/icici.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "HDFC Bank",
-      assetPath: "assets/images/bank_logos/hdfc.png",
+      assetPath: "assets/images/lender_logos/hdfc.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "Central Bank",
-      assetPath: "assets/images/bank_logos/central-bank.png",
+      assetPath: "assets/images/lender_logos/central-bank.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "Punjab National Bank",
-      assetPath: "assets/images/bank_logos/punjab-national.png",
+      assetPath: "assets/images/lender_logos/punjab-national.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "UCO Bank",
-      assetPath: "assets/images/bank_logos/uco.png",
+      assetPath: "assets/images/lender_logos/uco.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "Kotak Mahindra Bank",
-      assetPath: "assets/images/bank_logos/kotak.png",
+      assetPath: "assets/images/lender_logos/kotak.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "Axis Bank",
-      assetPath: "assets/images/bank_logos/axis.png",
+      assetPath: "assets/images/lender_logos/axis.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "IDFC Bank",
-      assetPath: "assets/images/bank_logos/idfc.jpeg",
+      assetPath: "assets/images/lender_logos/idfc.jpeg",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "IDBI Bank",
-      assetPath: "assets/images/bank_logos/idbi.png",
+      assetPath: "assets/images/lender_logos/idbi.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "IndusInd Bank",
-      assetPath: "assets/images/bank_logos/indusind.png",
+      assetPath: "assets/images/lender_logos/indusind.png",
       connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "Union Bank",
-      assetPath: "assets/images/bank_logos/union.png",
+      assetPath: "assets/images/lender_logos/union.png",
       connectedAA: accountAggregatorInfoList),
 ];
 
@@ -169,7 +169,7 @@ Widget getLenderDetailsAssetURL(String bankName, String imageUrl) {
     fit: BoxFit.contain,
     errorBuilder:
         (BuildContext context, Object exception, StackTrace? stackTrace) {
-      return Image.asset("assets/images/bank_logos/bank.png");
+      return Image.asset("assets/images/lender_logos/bank.png");
     },
   );
 }

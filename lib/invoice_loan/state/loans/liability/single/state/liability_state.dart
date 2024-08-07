@@ -4,9 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'liability_state.freezed.dart';
 
 @freezed
-class LiabilitiesState with _$LiabilitiesState {
-  const factory LiabilitiesState({
-    required List<LoanDetails> liabilities,
+class LiabilityState with _$LiabilityState {
+  const factory LiabilityState({
     required LoanDetails selectedLiability,
     required bool fetchingLiabilitiess,
     required int liabilitiessFetchTime,
@@ -20,10 +19,9 @@ class LiabilitiesState with _$LiabilitiesState {
     required bool missedEmiPaymentFailed,
     required bool initiatingMissedEmiPayment,
     required String missedEmiPaymentId,
-  }) = _LiabilitiesState;
+  }) = _LiabilityState;
 
-  static var initial = LiabilitiesState(
-    liabilities: [],
+  static var initial = LiabilityState(
     selectedLiability: LoanDetails.demo(),
     fetchingLiabilitiess: false,
     liabilitiessFetchTime: 0,

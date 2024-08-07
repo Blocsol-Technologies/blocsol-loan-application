@@ -22,6 +22,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   logger: ^2.4.0
   lottie: ^3.1.2
+  percent_indicator: ^4.2.3
   permission_handler: ^11.3.1
   riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
@@ -43,25 +44,37 @@ flutter:
   uses-material-design: true
   assets:
     # Image Assets
-    - assets/images/bank_logos/bank.png
-    - assets/images/bank_logos/sidbi.png
-    - assets/images/bank_logos/icici.png
-    - assets/images/bank_logos/hdfc.png
-    - assets/images/bank_logos/kotak.png
-    - assets/images/bank_logos/axis.png
-    - assets/images/bank_logos/central-bank.png
-    - assets/images/bank_logos/idbi.png
-    - assets/images/bank_logos/idfc.jpeg
-    - assets/images/bank_logos/indusind.png
-    - assets/images/bank_logos/punjab-national.png
-    - assets/images/bank_logos/uco.png
-    - assets/images/bank_logos/union.png
-    - assets/images/bank_logos/dmi.png
+    - assets/images/lender_logos/bank.png
+    - assets/images/lender_logos/sidbi.png
+    - assets/images/lender_logos/icici.png
+    - assets/images/lender_logos/hdfc.png
+    - assets/images/lender_logos/kotak.png
+    - assets/images/lender_logos/axis.png
+    - assets/images/lender_logos/central-bank.png
+    - assets/images/lender_logos/idbi.png
+    - assets/images/lender_logos/idfc.jpeg
+    - assets/images/lender_logos/indusind.png
+    - assets/images/lender_logos/punjab-national.png
+    - assets/images/lender_logos/uco.png
+    - assets/images/lender_logos/union.png
+    - assets/images/lender_logos/dmi.png
 
     - assets/images/aa_logos/anumati.png
     - assets/images/aa_logos/finvu.png
     - assets/images/aa_logos/onemoney.png
     - assets/images/aa_logos/sahamati.png
+
+    - assets/images/invoice_loan/bottom_nav_bar/home_active.png
+    - assets/images/invoice_loan/bottom_nav_bar/home_inactive.png
+    - assets/images/invoice_loan/bottom_nav_bar/invoices_active.png
+    - assets/images/invoice_loan/bottom_nav_bar/invoices_inactive.png
+    - assets/images/invoice_loan/bottom_nav_bar/loans_active.png
+    - assets/images/invoice_loan/bottom_nav_bar/loans_inactive.png
+    - assets/images/invoice_loan/bottom_nav_bar/profile_active.png
+    - assets/images/invoice_loan/bottom_nav_bar/profile_inactive.png
+
+    # Dashboard
+    - assets/images/invoice_loan/dashboard/header/user_icon.png
     
     # Animation Assets
     - assets/animations/loading_spinner.json

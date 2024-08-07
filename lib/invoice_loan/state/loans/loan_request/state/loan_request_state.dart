@@ -21,6 +21,9 @@ enum LoanRequestProgress {
 @freezed
 class LoanRequestStateData with _$LoanRequestStateData {
   const factory LoanRequestStateData({
+
+    required bool requestingNewLoan,
+
     required LoanRequestProgress currentState,
     required String transactionId,
     required String gstDataDownloadTime,
@@ -70,6 +73,8 @@ class LoanRequestStateData with _$LoanRequestStateData {
   }) = _LoanRequestStateData;
 
   static var initial = LoanRequestStateData(
+    requestingNewLoan: false,
+    
     currentState: LoanRequestProgress.started,
     transactionId: '',
     gstDataDownloadTime: '',
