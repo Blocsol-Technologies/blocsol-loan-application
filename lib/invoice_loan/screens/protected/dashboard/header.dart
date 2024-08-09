@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/liability_details/liability_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
@@ -9,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class DashboardHeader extends ConsumerStatefulWidget {
   const DashboardHeader({super.key});
@@ -108,9 +110,10 @@ class _DashboardHeaderState extends ConsumerState<DashboardHeader> {
               IconButton(
                 onPressed: () {
                   HapticFeedback.mediumImpact();
+                  context.go(InvoiceLoanIndexRouter.profile);
                 },
                 icon: Icon(
-                  Icons.settings,
+                  Icons.person_4_rounded,
                   color: Theme.of(context).colorScheme.onSurface,
                   size: 25,
                 ),

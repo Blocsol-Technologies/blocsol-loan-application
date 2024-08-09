@@ -13,6 +13,7 @@ dependencies:
   eventflux: ^2.1.0
   flutter:
     sdk: flutter
+  flutter_advanced_switch: ^3.1.0
   flutter_inappwebview: ^6.0.0
   flutter_riverpod: ^2.5.1
   flutter_secure_storage: ^9.2.2
@@ -75,6 +76,10 @@ flutter:
 
     # Dashboard
     - assets/images/invoice_loan/dashboard/header/user_icon.png
+
+    # Profile
+    - assets/images/invoice_loan/profile/office.png
+    - assets/images/invoice_loan/profile/settings.png
     
     # Animation Assets
     - assets/animations/loading_spinner.json

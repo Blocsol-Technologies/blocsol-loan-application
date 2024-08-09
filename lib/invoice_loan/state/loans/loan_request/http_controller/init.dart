@@ -185,7 +185,6 @@ class LoanRequestInitHttpController {
   }
 
   static Future<ServerResponse> submitBankAccountDetails(
-      bool skipBankValidation,
       String bankAccountNumber,
       String bankIfsc,
       String transactionId,
@@ -194,21 +193,6 @@ class LoanRequestInitHttpController {
       CancelToken cancelToken) async {
     try {
       var httpService = HttpService();
-
-      if (!skipBankValidation) {
-        var response = await httpService
-            .post("/ondc/validate-bank-details", authToken, cancelToken, {
-          "account_number": bankAccountNumber,
-          "ifsc_code": bankIfsc,
-        });
-
-        if (!response.data['success']) {
-          return ServerResponse(
-            success: false,
-            message: response.data['message'],
-          );
-        }
-      }
 
       var submitResponse = await httpService
           .post("/ondc/submit-form-05", authToken, cancelToken, {

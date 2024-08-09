@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/login/login.dart';
@@ -144,7 +145,22 @@ class _LoginMobileValidationState extends ConsumerState<LoginMobileValidation> {
                   ),
                   SectionMain(
                       textController: _textController,
-                      textInputChild: const SizedBox(),
+                      textInputChild: GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          context.go(InvoiceLoanSignupRouter.mobile_validation);
+                        },
+                        child: Text(
+                          "Want to create an account? Signup!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b2,
+                            fontWeight: AppFontWeights.medium,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
                       maxInputLength: 10,
                       keyboardType: TextInputType.number,
                       hintText: "MOBILE NUMBER",

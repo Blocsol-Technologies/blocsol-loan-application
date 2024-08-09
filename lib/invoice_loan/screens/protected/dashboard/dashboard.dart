@@ -5,7 +5,6 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboar
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/request_new_loan.dart';
 import 'package:blocsol_loan_application/invoice_loan/shared_components/bottom_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -47,9 +46,6 @@ class _InvoiceLoanDashboardState extends ConsumerState<InvoiceLoanDashboard> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final profileDetailsRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
-
-    logger.i(
-        "data conset provided: ${profileDetailsRef.dataConsentProvided}, company name: ${profileDetailsRef.legalName}");
 
     return SafeArea(
       child: Scaffold(

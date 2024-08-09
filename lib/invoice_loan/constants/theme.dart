@@ -24,7 +24,7 @@ var invoiceLoanThemeVal = ThemeData(
     onPrimary: Color.fromRGBO(255, 255, 255, 1),
     secondary: Color.fromRGBO(14, 97, 242, 1),
     onSecondary: Color.fromRGBO(255, 255, 255, 1),
-    tertiary: Color.fromRGBO(233, 233, 250, 1),
+    tertiary: Color.fromRGBO(243, 251, 255, 1),
     onTertiary: Color.fromRGBO(35, 35, 40, 1),
     primaryContainer: Color.fromRGBO(39, 188, 92, 1),
     onPrimaryContainer: Color.fromRGBO(255, 255, 255, 1),

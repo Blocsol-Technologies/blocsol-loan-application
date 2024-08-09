@@ -339,7 +339,7 @@ class _LoginPasswordValidationState
                             ),
                           ),
                           const SpacerWidget(
-                            height: 30,
+                            height: 70,
                           ),
                           _animationComplete
                               ? Expanded(

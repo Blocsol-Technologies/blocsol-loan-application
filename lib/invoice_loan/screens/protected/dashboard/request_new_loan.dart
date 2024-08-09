@@ -261,8 +261,14 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.heavyImpact();
-                              context.go(InvoiceLoanProfileRouter
-                                  .accountAggregatorSetupBankSelect);
+                              context.go(
+                                  InvoiceLoanProfileRouter
+                                      .accountAggregatorSelect,
+                                  extra: ref
+                                      .read(
+                                          invoiceLoanUserProfileDetailsProvider)
+                                      .primaryBankAccount
+                                      .bankName);
                               return;
                             },
                             child: Container(

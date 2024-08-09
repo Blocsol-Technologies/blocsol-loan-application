@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_http_controller.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/bank_account.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/profile_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
@@ -19,7 +20,30 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
     ref.invalidateSelf();
   }
 
-  void setDataConsentProvided (bool value) {
+  void addBankAccount(BankAccountDetails bankAccount) {
+    var accountNumber = bankAccount.accountNumber;
+    var bankAccounts =
+        List.from(state.bankAccounts) as List<BankAccountDetails>;
+
+    var accountIndex = bankAccounts
+        .indexWhere((element) => element.accountNumber == accountNumber);
+
+    if (accountIndex == -1) {
+      return;
+    }
+
+    bankAccounts[accountIndex] = bankAccount;
+
+    state = state.copyWith(bankAccounts: bankAccounts);
+  }
+
+  void setPrimaryBankAccount(BankAccountDetails bankAccount) {
+    addBankAccount(bankAccount);
+
+    state = state.copyWith(primaryBankAccount: bankAccount);
+  }
+
+  void setDataConsentProvided(bool value) {
     state = state.copyWith(dataConsentProvided: value);
   }
 
@@ -31,8 +55,9 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await InvoiceLoanUserProfileDetailsHttpController.getCompanyDetails(
-        authToken, cancelToken);
+    var response =
+        await InvoiceLoanUserProfileDetailsHttpController.getCompanyDetails(
+            authToken, cancelToken);
 
     state = state.copyWith(fetchingData: false);
 
@@ -48,8 +73,71 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
         udyamNumber: response.data['udyamNumber'],
         dataConsentProvided: response.data['dataConsentProvided'],
         accountAggregatorSetup: response.data['accountAggregatorSetup'],
+        bankAccounts: response.data['bankAccounts'],
+        primaryBankAccount: response.data['primaryBankAccount'],
+        accountAggregatorId: response.data['accountAggregatorId'],
       );
     }
+
+    return response;
+  }
+
+  Future<ServerResponse> updateCompanyBankAccountDetails(String accountNumber,
+      String ifscCode, bool setPrimary, CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    var response = await InvoiceLoanUserProfileDetailsHttpController
+        .updateBankAccountDetails(
+            accountNumber, ifscCode, setPrimary, authToken, cancelToken);
+
+    if (response.success) {
+      if (setPrimary) {
+        var bankAccount = BankAccountDetails(
+          bankName: response.data['bankName'],
+          accountNumber: response.data['accountNumber'],
+          ifscCode: response.data['ifscCode'],
+          accountHolderName: response.data['accountHolderName'],
+        );
+
+        setPrimaryBankAccount(bankAccount);
+      } else {
+        var bankAccount = BankAccountDetails(
+          bankName: response.data['bankName'],
+          accountNumber: response.data['accountNumber'],
+          ifscCode: response.data['ifscCode'],
+          accountHolderName: response.data['accountHolderName'],
+        );
+
+        addBankAccount(bankAccount);
+      }
+    }
+
+    return response;
+  }
+
+  Future<ServerResponse> updateAccountAggregator(
+      String accountAggregatorName, CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    var response = await InvoiceLoanUserProfileDetailsHttpController
+        .updateAccountAggregator(accountAggregatorName, authToken, cancelToken);
+
+    if (response.success) {
+      String aaId = "${state.phone}@$accountAggregatorName";
+
+      state = state.copyWith(accountAggregatorId: aaId);
+    }
+
+    return response;
+  }
+
+  Future<ServerResponse> changeAccountPassword(
+      String oldPassword, String newPassword, CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    var response =
+        await InvoiceLoanUserProfileDetailsHttpController.changeAccountPassword(
+            oldPassword, newPassword, authToken, cancelToken);
 
     return response;
   }

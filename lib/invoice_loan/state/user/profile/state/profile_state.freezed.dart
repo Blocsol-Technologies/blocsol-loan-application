@@ -26,6 +26,11 @@ mixin _$InvoiceLoanUserProfileData {
   String get tradeName => throw _privateConstructorUsedError;
   String get businessLocation => throw _privateConstructorUsedError;
   bool get accountAggregatorSetup => throw _privateConstructorUsedError;
+  String get accountAggregatorId => throw _privateConstructorUsedError;
+  List<BankAccountDetails> get bankAccounts =>
+      throw _privateConstructorUsedError;
+  BankAccountDetails get primaryBankAccount =>
+      throw _privateConstructorUsedError;
   bool get fetchingData => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -51,6 +56,9 @@ abstract class $InvoiceLoanUserProfileDataCopyWith<$Res> {
       String tradeName,
       String businessLocation,
       bool accountAggregatorSetup,
+      String accountAggregatorId,
+      List<BankAccountDetails> bankAccounts,
+      BankAccountDetails primaryBankAccount,
       bool fetchingData});
 }
 
@@ -78,6 +86,9 @@ class _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
     Object? tradeName = null,
     Object? businessLocation = null,
     Object? accountAggregatorSetup = null,
+    Object? accountAggregatorId = null,
+    Object? bankAccounts = null,
+    Object? primaryBankAccount = null,
     Object? fetchingData = null,
   }) {
     return _then(_value.copyWith(
@@ -121,6 +132,18 @@ class _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
           ? _value.accountAggregatorSetup
           : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
               as bool,
+      accountAggregatorId: null == accountAggregatorId
+          ? _value.accountAggregatorId
+          : accountAggregatorId // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccounts: null == bankAccounts
+          ? _value.bankAccounts
+          : bankAccounts // ignore: cast_nullable_to_non_nullable
+              as List<BankAccountDetails>,
+      primaryBankAccount: null == primaryBankAccount
+          ? _value.primaryBankAccount
+          : primaryBankAccount // ignore: cast_nullable_to_non_nullable
+              as BankAccountDetails,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -149,6 +172,9 @@ abstract class _$$InvoiceLoanUserProfileDataImplCopyWith<$Res>
       String tradeName,
       String businessLocation,
       bool accountAggregatorSetup,
+      String accountAggregatorId,
+      List<BankAccountDetails> bankAccounts,
+      BankAccountDetails primaryBankAccount,
       bool fetchingData});
 }
 
@@ -175,6 +201,9 @@ class __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>
     Object? tradeName = null,
     Object? businessLocation = null,
     Object? accountAggregatorSetup = null,
+    Object? accountAggregatorId = null,
+    Object? bankAccounts = null,
+    Object? primaryBankAccount = null,
     Object? fetchingData = null,
   }) {
     return _then(_$InvoiceLoanUserProfileDataImpl(
@@ -218,6 +247,18 @@ class __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>
           ? _value.accountAggregatorSetup
           : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
               as bool,
+      accountAggregatorId: null == accountAggregatorId
+          ? _value.accountAggregatorId
+          : accountAggregatorId // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccounts: null == bankAccounts
+          ? _value._bankAccounts
+          : bankAccounts // ignore: cast_nullable_to_non_nullable
+              as List<BankAccountDetails>,
+      primaryBankAccount: null == primaryBankAccount
+          ? _value.primaryBankAccount
+          : primaryBankAccount // ignore: cast_nullable_to_non_nullable
+              as BankAccountDetails,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -240,7 +281,11 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
       required this.tradeName,
       required this.businessLocation,
       required this.accountAggregatorSetup,
-      required this.fetchingData});
+      required this.accountAggregatorId,
+      required final List<BankAccountDetails> bankAccounts,
+      required this.primaryBankAccount,
+      required this.fetchingData})
+      : _bankAccounts = bankAccounts;
 
   @override
   final bool dataConsentProvided;
@@ -263,11 +308,23 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
   @override
   final bool accountAggregatorSetup;
   @override
+  final String accountAggregatorId;
+  final List<BankAccountDetails> _bankAccounts;
+  @override
+  List<BankAccountDetails> get bankAccounts {
+    if (_bankAccounts is EqualUnmodifiableListView) return _bankAccounts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_bankAccounts);
+  }
+
+  @override
+  final BankAccountDetails primaryBankAccount;
+  @override
   final bool fetchingData;
 
   @override
   String toString() {
-    return 'InvoiceLoanUserProfileData(dataConsentProvided: $dataConsentProvided, gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, accountAggregatorSetup: $accountAggregatorSetup, fetchingData: $fetchingData)';
+    return 'InvoiceLoanUserProfileData(dataConsentProvided: $dataConsentProvided, gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, accountAggregatorSetup: $accountAggregatorSetup, accountAggregatorId: $accountAggregatorId, bankAccounts: $bankAccounts, primaryBankAccount: $primaryBankAccount, fetchingData: $fetchingData)';
   }
 
   @override
@@ -293,6 +350,12 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
                 other.businessLocation == businessLocation) &&
             (identical(other.accountAggregatorSetup, accountAggregatorSetup) ||
                 other.accountAggregatorSetup == accountAggregatorSetup) &&
+            (identical(other.accountAggregatorId, accountAggregatorId) ||
+                other.accountAggregatorId == accountAggregatorId) &&
+            const DeepCollectionEquality()
+                .equals(other._bankAccounts, _bankAccounts) &&
+            (identical(other.primaryBankAccount, primaryBankAccount) ||
+                other.primaryBankAccount == primaryBankAccount) &&
             (identical(other.fetchingData, fetchingData) ||
                 other.fetchingData == fetchingData));
   }
@@ -310,6 +373,9 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
       tradeName,
       businessLocation,
       accountAggregatorSetup,
+      accountAggregatorId,
+      const DeepCollectionEquality().hash(_bankAccounts),
+      primaryBankAccount,
       fetchingData);
 
   @JsonKey(ignore: true)
@@ -333,6 +399,9 @@ abstract class _InvoiceLoanUserProfileData
       required final String tradeName,
       required final String businessLocation,
       required final bool accountAggregatorSetup,
+      required final String accountAggregatorId,
+      required final List<BankAccountDetails> bankAccounts,
+      required final BankAccountDetails primaryBankAccount,
       required final bool fetchingData}) = _$InvoiceLoanUserProfileDataImpl;
 
   @override
@@ -355,6 +424,12 @@ abstract class _InvoiceLoanUserProfileData
   String get businessLocation;
   @override
   bool get accountAggregatorSetup;
+  @override
+  String get accountAggregatorId;
+  @override
+  List<BankAccountDetails> get bankAccounts;
+  @override
+  BankAccountDetails get primaryBankAccount;
   @override
   bool get fetchingData;
   @override

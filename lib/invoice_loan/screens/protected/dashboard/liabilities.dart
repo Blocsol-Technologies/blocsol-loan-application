@@ -22,22 +22,22 @@ class DashboardLiabilities extends ConsumerStatefulWidget {
 class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
   final _cancelToken = CancelToken();
 
-  late Timer _timer;
-
   Future<void> _fetchLiabilities() async {
     await ref
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllLiabilities(_cancelToken);
+
+    await Future.delayed(const Duration(seconds: 5));
+
+    if (mounted && context.mounted) {
+      await _fetchLiabilities();
+    }
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-        if (mounted) {
-          await _fetchLiabilities();
-        }
-      });
+      _fetchLiabilities();
     });
     super.initState();
   }
@@ -45,7 +45,6 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
   @override
   void dispose() {
     _cancelToken.cancel();
-    _timer.cancel();
     super.dispose();
   }
 
@@ -92,7 +91,7 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
                     itemCount: liabilitiesRef.liabilities.length,
                     itemBuilder: (ctx, idx) {
                       return Container(
-                         height: RelativeSize.height(200, height),
+                        height: RelativeSize.height(200, height),
                         margin: const EdgeInsets.only(right: 30),
                         child: LiabilityCard(
                           oldLoanDetails: liabilitiesRef.liabilities[idx],

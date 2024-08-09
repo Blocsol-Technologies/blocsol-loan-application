@@ -6,11 +6,13 @@ class AccountAggregatorInfo {
   final String assetPath;
   final String url;
   final String key;
+  final int playStoreRating;
   String aaId = "";
 
   AccountAggregatorInfo({
     required this.name,
     required this.assetPath,
+    required this.playStoreRating,
     this.url = "",
     required this.key,
   });
@@ -18,6 +20,7 @@ class AccountAggregatorInfo {
   static AccountAggregatorInfo demo() {
     return AccountAggregatorInfo(
         name: "Sahamati",
+        playStoreRating: 5,
         assetPath: "assets/images/aa_logos/sahamati.png",
         key: "SAHAMATI");
   }
@@ -34,16 +37,19 @@ class AccountAggregatorInfo {
 List<AccountAggregatorInfo> accountAggregatorInfoList = [
   AccountAggregatorInfo(
       name: "Anumati",
+      playStoreRating: 3,
       assetPath: "assets/images/aa_logos/anumati.png",
       key: "ANUMATI",
       url: "https://google.com"),
   AccountAggregatorInfo(
       name: "Finvu",
+      playStoreRating: 4,
       assetPath: "assets/images/aa_logos/finvu.png",
       key: "FINVU",
       url: "https://reactjssdk.finvu.in/"),
   AccountAggregatorInfo(
       name: "Onemoney",
+      playStoreRating: 2,
       assetPath: "assets/images/aa_logos/onemoney.png",
       key: "ONEMONEY",
       url: "https://webrd.onemoney.in/uat/v1/"),
@@ -52,6 +58,7 @@ List<AccountAggregatorInfo> accountAggregatorInfoList = [
 AccountAggregatorInfo getAccountAggregatorInfo(String accountAggregatorName) {
   AccountAggregatorInfo accountAggregatorInfo = AccountAggregatorInfo(
       name: "Sahamati",
+      playStoreRating: 5,
       assetPath: "assets/images/aa_logos/sahamati.png",
       key: "SAHAMATI",
       url: "");
@@ -68,6 +75,7 @@ AccountAggregatorInfo getAccountAggregatorInfo(String accountAggregatorName) {
   if (maxSimilarity < 0.6) {
     return AccountAggregatorInfo(
         name: "Sahamati",
+        playStoreRating: 5,
         assetPath: "assets/images/aa_logos/sahamati.png",
         key: "SAHAMATI",
         url: "");
@@ -172,4 +180,19 @@ Widget getLenderDetailsAssetURL(String bankName, String imageUrl) {
       return Image.asset("assets/images/lender_logos/bank.png");
     },
   );
+}
+
+List<AccountAggregatorInfo> getLenderConnectedAA(String bankName) {
+  List<AccountAggregatorInfo> connectedAA = [];
+  double maxSimilarity = 0.0;
+
+  for (var lenderDetails in lenderDetailsList) {
+    double similarity = bankName.similarityTo(lenderDetails.name);
+    if (similarity > maxSimilarity) {
+      maxSimilarity = similarity;
+      connectedAA = lenderDetails.connectedAA;
+    }
+  }
+
+  return connectedAA;
 }

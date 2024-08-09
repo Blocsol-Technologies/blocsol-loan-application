@@ -7,7 +7,7 @@ const String serverUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
 const String baseUrl =
-    "https://87ae-2401-4900-1c6f-8edb-2dbf-9dab-46da-b61b.ngrok-free.app/financial-services/invoice-based-credit";
+    "https://f7b8-2401-4900-1c2a-7517-c183-6462-fc38-3a99.ngrok-free.app/financial-services/invoice-based-credit";
 
 class HttpService {
   late Dio _dio;
@@ -21,6 +21,9 @@ class HttpService {
       CancelToken cancelToken, Map<String, String> queryParams) async {
     Response response = Response(requestOptions: RequestOptions());
     try {
+      logger.d(
+          "Sending GET Request to enpoint: $endpoint \n Query Params: $queryParams");
+
       response = await _dio.get(
         endpoint,
         options: Options(
@@ -49,6 +52,9 @@ class HttpService {
   ) async {
     Response response = Response(requestOptions: RequestOptions());
     try {
+      logger.d(
+          "Sending POST Request to enpoint: $endpoint \n Query Params: $data");
+
       response = await _dio.post(
         endpoint,
         data: jsonEncode(data),

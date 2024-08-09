@@ -593,7 +593,6 @@ class LoanRequest extends _$LoanRequest {
     }
 
     return await LoanRequestInitHttpController.submitBankAccountDetails(
-        skipBankVerification,
         bankAccountNumber,
         bankIFSC,
         transactionId,
