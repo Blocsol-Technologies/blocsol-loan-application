@@ -10,4 +10,7 @@ enum LoanServiceErrorCodes {
   init_04_failed,
   loan_agreement_failed,
   confirm_01_failed,
+  on_update_01_failed,
+  generate_monitoring_consent_failed,
+  monitoring_consent_verification_failed,
 }

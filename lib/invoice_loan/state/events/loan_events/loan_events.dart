@@ -387,6 +387,21 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           }
         }
 
+        if (stepNumber == 2) {
+          if (success) {
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.generate_monitoring_consent);
+
+            break;
+          } else {
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.on_update_01_failed);
+            break;
+          }
+        }
+
         // Loan Sanctioned
         if (stepNumber == 3 || stepNumber == 4) {
           if (success) {
@@ -394,9 +409,9 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.loanStepsCompleted);
 
-            ref
-                .read(routerProvider)
-                .go(InvoiceNewLoanRequestRouter.dashboard);
+            await ref.read(invoiceNewLoanRequestProvider.notifier).refetchSelectedOfferDetails(cancelToken);
+
+            ref.read(routerProvider).go(InvoiceNewLoanRequestRouter.dashboard);
 
             break;
           } else {
@@ -409,9 +424,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         break;
       case "payments":
-        if (stepNumber == 1) {
-
-        }
+        if (stepNumber == 1) {}
       default:
         logger.d("No context found");
         break;

@@ -854,14 +854,24 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestConfirmHttpController.generateMonitoringConsentUrl(
-        aaId,
-        aaURL,
-        state.selectedAA.key,
-        transactionId,
-        providerId,
-        authToken,
-        cancelToken);
+    state = state.copyWith(
+        generatingMonitoringConsent: true, monitoringConsentError: false);
+
+    var response =
+        await LoanRequestConfirmHttpController.generateMonitoringConsentUrl(
+            aaId,
+            aaURL,
+            state.selectedAA.key,
+            transactionId,
+            providerId,
+            authToken,
+            cancelToken);
+
+    state = state.copyWith(
+      generatingMonitoringConsent: true,
+    );
+
+    return response;
   }
 
   Future<ServerResponse> checkLoanMonitoringConsentSuccess(
@@ -889,6 +899,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
+    state = state.copyWith(validatingMonitoringConsentSuccess: true, monitoringConsentError: false);
+
     var response =
         await LoanRequestConfirmHttpController.checkMonitoringConsentSuccess(
             ecres,
@@ -899,7 +911,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
             authToken,
             cancelToken);
 
-    state = state.copyWith(loanId: response.data);
+    state = state.copyWith(loanId: response.data, validatingMonitoringConsentSuccess: false);
 
     return response;
   }

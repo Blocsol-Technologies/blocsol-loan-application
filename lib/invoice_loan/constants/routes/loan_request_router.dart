@@ -1,3 +1,7 @@
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/loan_flow_completion.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/monitoring_consent/generating_monitoring_consent.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/monitoring_consent/monitoring_consent_webview.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/new_loan_processing.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/bank_account_details/new_loan_bank_account_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/entity_kyc/entity_kyc.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/loan_agreement/new_loan_agreement.dart';
@@ -64,6 +68,8 @@ class InvoiceNewLoanRequestRouter {
   // Confirm
   static const final_processing =
       "/invoice-loan/new-loan-request/final-processing";
+  static const generate_monitoring_consent =
+      "/invoice-loan/new-loan-request/generate-monitoring-consent";
   static const monitoring_consent_webview =
       "/invoice-loan/new-loan-request/monitoring-consent-webview";
   static const final_details = "/invoice-loan/new-loan-request/final-details";
@@ -155,26 +161,54 @@ List<GoRoute> invoiceLoanRequestRoutes = [
     builder: (context, state) => const InvoiceNewLoanEntityKyc(),
   ),
 
-    GoRoute(
+  GoRoute(
     path: InvoiceNewLoanRequestRouter.bank_account_details,
     builder: (context, state) => const InvoiceNewLoanBankAccountDetails(),
   ),
 
-    GoRoute(
+  GoRoute(
     path: InvoiceNewLoanRequestRouter.repayment_setup,
     builder: (context, state) => const InvoiceNewLoanRepaymentSetup(),
   ),
 
-   GoRoute(
+  GoRoute(
     path: InvoiceNewLoanRequestRouter.loan_agreement,
     builder: (context, state) => const InvoiceNewLoanAgreement(),
   ),
-   GoRoute(
+
+  GoRoute(
     path: InvoiceNewLoanRequestRouter.loan_agreement_webview,
     builder: (context, state) {
       String url = state.extra as String;
 
       return InvoiceNewLoanAgreementWebview(url: url);
     },
+  ),
+
+  // Confirm
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.final_processing,
+    builder: (context, state) => const InvoiceNewLoanProcessing(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.generate_monitoring_consent,
+    builder: (context, state) =>
+        const InvoiceNewLoanGenerateMonitroingConsent(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.monitoring_consent_webview,
+    builder: (context, state) {
+      String url = state.extra as String;
+
+      return InvoiceNewLoanMonitoringConsentWebview(url: url);
+    },
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.final_details,
+    builder: (context, state) =>
+        const InvoiceNewLoanFlowCompletion(),
   ),
 ];
