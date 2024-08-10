@@ -531,8 +531,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     if (transactionId.isEmpty || providerId.isEmpty) {
       return ServerResponse(
         success: false,
-        message:
-            "Transaction ID or Provider ID is empty. Restart the process!",
+        message: "Transaction ID or Provider ID is empty. Restart the process!",
       );
     }
 
@@ -682,8 +681,6 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
   Future<ServerResponse> checkRepaymentSetupSuccess(
       CancelToken cancelToken) async {
-
-
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
@@ -764,30 +761,36 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.submitLoanAgreementForm(
+    state = state.copyWith(verifyingLoanAgreementSuccess: true);
+
+    var response = await LoanRequestInitHttpController.submitLoanAgreementForm(
         otp, transactionId, providerId, authToken, cancelToken);
+
+    state = state.copyWith(verifyingLoanAgreementSuccess: false);
+
+    return response;
   }
 
   Future<ServerResponse> checkLoanAgreementSuccess(
       CancelToken cancelToken) async {
-    state = state.copyWith(verifyingLoanAgreementSuccess: true);
-
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
 
     if (transactionId.isEmpty || providerId.isEmpty) {
-      state = state.copyWith(verifyingLoanAgreementSuccess: false);
       return ServerResponse(
         success: false,
         message: "Transaction ID or Provider ID is empty. Restart the process!",
       );
     }
 
+    state = state.copyWith(verifyingLoanAgreementSuccess: true);
+
     var response =
         await LoanRequestInitHttpController.checkLoanAgreementSuccess(
             transactionId, providerId, authToken, cancelToken);
+
     state = state.copyWith(verifyingLoanAgreementSuccess: false);
 
     return response;

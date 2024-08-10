@@ -1,3 +1,8 @@
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/bank_account_details/new_loan_bank_account_details.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/entity_kyc/entity_kyc.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/loan_agreement/new_loan_agreement.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/loan_agreement/new_loan_agreement_webview.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/repayment_setup/new_loan_repayment_setup.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/new_loan_process.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/account_aggregator/account_aggregator_webview.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/account_aggregator/submitting_invoices_for_offers.dart';
@@ -6,6 +11,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_invoices.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_otp.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/single_invoice_details.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/aadhar_kyc/aadhar_kyc.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/independent_key_fact_sheet.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/key_fact_sheet.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/loan_offers_home.dart';
@@ -132,8 +138,43 @@ List<GoRoute> invoiceLoanRequestRoutes = [
     path: InvoiceNewLoanRequestRouter.loan_key_fact_sheet,
     builder: (context, state) => const InvoiceLoanKeyFactSheet(),
   ),
-    GoRoute(
+
+  GoRoute(
     path: InvoiceNewLoanRequestRouter.update_loan_amount,
     builder: (context, state) => const InvoiceNewLoanUpdateOffer(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.aadhar_kyc,
+    builder: (context, state) => const InvoiceNewLoanAadharKyc(),
+  ),
+
+  // Init
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.entity_kyc,
+    builder: (context, state) => const InvoiceNewLoanEntityKyc(),
+  ),
+
+    GoRoute(
+    path: InvoiceNewLoanRequestRouter.bank_account_details,
+    builder: (context, state) => const InvoiceNewLoanBankAccountDetails(),
+  ),
+
+    GoRoute(
+    path: InvoiceNewLoanRequestRouter.repayment_setup,
+    builder: (context, state) => const InvoiceNewLoanRepaymentSetup(),
+  ),
+
+   GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_agreement,
+    builder: (context, state) => const InvoiceNewLoanAgreement(),
+  ),
+   GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_agreement_webview,
+    builder: (context, state) {
+      String url = state.extra as String;
+
+      return InvoiceNewLoanAgreementWebview(url: url);
+    },
   ),
 ];
