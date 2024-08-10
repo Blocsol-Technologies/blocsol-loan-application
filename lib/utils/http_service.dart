@@ -7,7 +7,7 @@ const String serverUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
 const String baseUrl =
-    "https://f7b8-2401-4900-1c2a-7517-c183-6462-fc38-3a99.ngrok-free.app/financial-services/invoice-based-credit";
+    "https://6b1b-2401-4900-1c2b-a9e-6c1a-394e-9ef7-6da1.ngrok-free.app/financial-services/invoice-based-credit";
 
 class HttpService {
   late Dio _dio;
@@ -41,6 +41,9 @@ class HttpService {
 
       rethrow;
     }
+
+     logger.f(
+          "Reponse for the GET Request to enpoint: $endpoint \n Query Params: $queryParams \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
     return response;
   }
 
@@ -53,7 +56,7 @@ class HttpService {
     Response response = Response(requestOptions: RequestOptions());
     try {
       logger.d(
-          "Sending POST Request to enpoint: $endpoint \n Query Params: $data");
+          "Sending POST Request to enpoint: $endpoint \n Body Params: $data");
 
       response = await _dio.post(
         endpoint,
@@ -72,6 +75,9 @@ class HttpService {
 
       rethrow;
     }
+
+    logger.f(
+          "Reponse for the POST Request to enpoint: $endpoint \n Body Params: $data \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
     return response;
   }
 }

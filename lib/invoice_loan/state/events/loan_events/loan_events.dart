@@ -15,7 +15,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'loan_events.g.dart';
 
 @riverpod
-class LoanEvents extends _$LoanEvents {
+class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   @override
   Future<LoanEventsState> build() async {
     ref.keepAlive();
@@ -26,9 +26,9 @@ class LoanEvents extends _$LoanEvents {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var transactionId = ref.read(loanRequestProvider).transactionId;
+    var transactionId = ref.read(invoiceNewLoanRequestProvider).transactionId;
     var providerId =
-        ref.read(loanRequestProvider).selectedOffer.offerProviderId;
+        ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
 
     if (transactionId == "" || providerId == "") {
       transactionId = ref
@@ -128,7 +128,7 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .refetchSelectedOfferDetails(cancelToken);
 
             if (!response.success) {
@@ -145,7 +145,7 @@ class LoanEvents extends _$LoanEvents {
 
             // if (message == "update_form_not_submitted") {
             //   var response = await ref
-            //       .read(loanRequestProvider.notifier)
+            //       .read(invoiceNewLoanRequestProvider.notifier)
             //       .refetchSelectedOfferDetails(cancelToken);
 
             //   if (!response.success) {
@@ -178,7 +178,7 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .refetchSelectedOfferDetails(cancelToken);
 
             // TODO: Mechanism to refetch aadhar kyc url again
@@ -198,17 +198,17 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .checkAadharKycSuccess(cancelToken);
 
             if (!response.success) {
-              ref.read(loanRequestProvider.notifier).setAadharKYCFailure(true);
+              ref.read(invoiceNewLoanRequestProvider.notifier).setAadharKYCFailure(true);
               return;
             }
 
             return;
           } else {
-            ref.read(loanRequestProvider.notifier).setAadharKYCFailure(true);
+            ref.read(invoiceNewLoanRequestProvider.notifier).setAadharKYCFailure(true);
             return;
           }
         }
@@ -220,8 +220,8 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             ref
-                .read(loanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.aadharKYC);
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.aadharKycCompleted);
             // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
             return;
           } else {
@@ -237,7 +237,7 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .checkUdyamKycFormSuccess(cancelToken);
 
             if (!response.success) {
@@ -262,8 +262,8 @@ class LoanEvents extends _$LoanEvents {
 
           if (success) {
             ref
-                .read(loanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.udyamKYC);
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.entityKycCompleted);
             // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
             return;
           } else {
@@ -279,8 +279,8 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             ref
-                .read(loanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.bankAccountDetails);
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.bankAccountDetailsProvided);
             // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
             return;
           } else {
@@ -295,12 +295,12 @@ class LoanEvents extends _$LoanEvents {
         if (stepNumber == 6) {
           await setEventConsumed(event.messageId);
           if (success) {
-            if (ref.read(loanRequestProvider).checkingRepaymentSetupSuccess) {
+            if (ref.read(invoiceNewLoanRequestProvider).checkingRepaymentSetupSuccess) {
               return;
             }
 
             var response = await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .checkRepaymentSetupSuccess(cancelToken);
 
             if (!response.success) {
@@ -324,8 +324,8 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             ref
-                .read(loanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.repaymentSetup);
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.repaymentSetupCompleted);
             // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
             return;
           } else {
@@ -341,7 +341,7 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
-                .read(loanRequestProvider.notifier)
+                .read(invoiceNewLoanRequestProvider.notifier)
                 .checkLoanAgreementSuccess(cancelToken);
 
             if (!response.success) {
@@ -367,8 +367,8 @@ class LoanEvents extends _$LoanEvents {
           await setEventConsumed(event.messageId);
           if (success) {
             ref
-                .read(loanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.loanAgreement);
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.loanAgreementCompleted);
             // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
             return;
           } else {
@@ -392,9 +392,9 @@ class LoanEvents extends _$LoanEvents {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var transactionId = ref.read(loanRequestProvider).transactionId;
+    var transactionId = ref.read(invoiceNewLoanRequestProvider).transactionId;
     var providerId =
-        ref.read(loanRequestProvider).selectedOffer.offerProviderId;
+        ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
 
     if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
       return;

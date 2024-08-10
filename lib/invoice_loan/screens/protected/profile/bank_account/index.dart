@@ -113,7 +113,48 @@ class InvoiceLoanProfileBankAccount extends ConsumerWidget {
                           )
                         ],
                       ),
-                    )
+                    ),
+                    profileRef.accountAggregatorId.isEmpty &&
+                            profileRef
+                                .primaryBankAccount.accountNumber.isNotEmpty
+                        ? GestureDetector(
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+                              ref.read(routerProvider).push(
+                                  InvoiceLoanProfileRouter
+                                      .accountAggregatorSelect,
+                                  extra: ref
+                                      .read(
+                                          invoiceLoanUserProfileDetailsProvider)
+                                      .primaryBankAccount
+                                      .bankName);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.data_exploration_sharp,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 25,
+                                ),
+                                const SpacerWidget(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Setup Account Aggregator?",
+                                  style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.medium,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                )
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               ),

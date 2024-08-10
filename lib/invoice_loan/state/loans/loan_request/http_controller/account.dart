@@ -191,7 +191,10 @@ class LoanRequestAccountHttpController {
         return ServerResponse(
             success: true,
             message: response.data['message'],
-            data: formattedInvoices);
+            data: {
+              "formattedInvoices": formattedInvoices,
+              "refetchData": response.data['data']?['refetchData'] ?? false
+            });
       } else {
         return ServerResponse(
           success: false,

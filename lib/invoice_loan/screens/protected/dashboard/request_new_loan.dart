@@ -30,7 +30,7 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
     await HapticFeedback.heavyImpact();
 
     var response = await ref
-        .read(loanRequestProvider.notifier)
+        .read(invoiceNewLoanRequestProvider.notifier)
         .performGeneralSearch(false, cancelToken);
 
     if (!mounted) return;
@@ -339,7 +339,7 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    final newLoanRequestRef = ref.watch(loanRequestProvider);
+    final newLoanRequestRef = ref.watch(invoiceNewLoanRequestProvider);
 
     return Padding(
       padding: EdgeInsets.symmetric(

@@ -11,7 +11,7 @@ import 'dart:convert';
 part 'sse.g.dart';
 
 @riverpod
-class ServerSentEvents extends _$ServerSentEvents {
+class InvoiceLoanServerSentEvents extends _$InvoiceLoanServerSentEvents {
   @override
   void build() {
     ref.keepAlive();
@@ -30,7 +30,7 @@ class ServerSentEvents extends _$ServerSentEvents {
 
           LoanEvent loanEvent = LoanEvent.fromJson(jsonData);
 
-          ref.read(loanEventsProvider.notifier).consumeEvent(loanEvent);
+          ref.read(invoiceLoanEventsProvider.notifier).consumeEvent(loanEvent);
         });
       },
       onError: (e) {

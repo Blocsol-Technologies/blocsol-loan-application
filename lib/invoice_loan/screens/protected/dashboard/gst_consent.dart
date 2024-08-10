@@ -38,21 +38,11 @@ class _GstConsentSheetState extends ConsumerState<GstConsentSheet> {
       return;
     }
 
-    if (_acceptingConsent) return;
-
-    setState(() {
-      _acceptingConsent = true;
-    });
-
     var response = await ref
-        .read(loanRequestProvider.notifier)
+        .read(invoiceNewLoanRequestProvider.notifier)
         .provideGstConsent(_cancelToken);
 
     if (!mounted) return;
-
-    setState(() {
-      _acceptingConsent = false;
-    });
 
     if (response.success) {
       ref
@@ -281,9 +271,22 @@ class _GstConsentSheetState extends ConsumerState<GstConsentSheet> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             HapticFeedback.heavyImpact();
-                            _provideGstConsent();
+
+                            if (_acceptingConsent) return;
+
+                            setState(() {
+                              _acceptingConsent = true;
+                            });
+
+                            await _provideGstConsent();
+
+                            if (!mounted) return;
+
+                            setState(() {
+                              _acceptingConsent = false;
+                            });
                           },
                           child: Container(
                             height: 40,

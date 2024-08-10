@@ -6,20 +6,22 @@ part of 'loan_request.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loanRequestHash() => r'6dcae70becc39c82fc2cf3ad9c50393bb694c8bd';
+String _$invoiceNewLoanRequestHash() =>
+    r'4e859590c1e55216f8be77d972b4f60043aeffb2';
 
-/// See also [LoanRequest].
-@ProviderFor(LoanRequest)
-final loanRequestProvider =
-    AutoDisposeNotifierProvider<LoanRequest, LoanRequestStateData>.internal(
-  LoanRequest.new,
-  name: r'loanRequestProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$loanRequestHash,
+/// See also [InvoiceNewLoanRequest].
+@ProviderFor(InvoiceNewLoanRequest)
+final invoiceNewLoanRequestProvider = AutoDisposeNotifierProvider<
+    InvoiceNewLoanRequest, LoanRequestStateData>.internal(
+  InvoiceNewLoanRequest.new,
+  name: r'invoiceNewLoanRequestProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$invoiceNewLoanRequestHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LoanRequest = AutoDisposeNotifier<LoanRequestStateData>;
+typedef _$InvoiceNewLoanRequest = AutoDisposeNotifier<LoanRequestStateData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

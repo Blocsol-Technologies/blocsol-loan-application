@@ -6,6 +6,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/h
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/http_controller/search.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/http_controller/select.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
@@ -15,7 +16,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'loan_request.g.dart';
 
 @riverpod
-class LoanRequest extends _$LoanRequest {
+class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   @override
   LoanRequestStateData build() {
     ref.keepAlive();
@@ -175,8 +176,12 @@ class LoanRequest extends _$LoanRequest {
   Future<ServerResponse> downloadGstData(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
+    state = state.copyWith(downloadingGSTData: true);
+
     var response = await LoanRequestAccountHttpController.downloadGstData(
         authToken, cancelToken);
+
+    state = state.copyWith(downloadingGSTData: false);
 
     if (response.success) {
       state = state.copyWith(gstDataDownloadTime: response.data);
@@ -197,7 +202,7 @@ class LoanRequest extends _$LoanRequest {
     state = state.copyWith(loadingInvoices: false);
 
     if (response.success) {
-      state = state.copyWith(invoices: response.data);
+      state = state.copyWith(invoices: response.data['formattedInvoices']);
     }
 
     return response;
@@ -239,17 +244,38 @@ class LoanRequest extends _$LoanRequest {
   Future<ServerResponse> submitForms(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    return await LoanRequestSearchHttpController.submitForms(
+    state = state.copyWith(submittingInvoicesForOffers: true);
+
+    var response = await LoanRequestSearchHttpController.submitForms(
         state.transactionId, authToken, cancelToken);
+
+    var accountAggregatorId =
+        ref.read(invoiceLoanUserProfileDetailsProvider).accountAggregatorId;
+
+    var accountAggregatorName = accountAggregatorId.split("@").elementAt(1);
+
+    var selectedAA = getAccountAggregatorInfo(accountAggregatorName);
+
+    selectedAA.setId(ref.read(invoiceLoanUserProfileDetailsProvider).phone);
+
+    print("selected AA: ${selectedAA.name}");
+
+    state = state.copyWith(
+        submittingInvoicesForOffers: false, selectedAA: selectedAA);
+
+    return response;
   }
 
   Future<ServerResponse> generateAAURL(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
+
     var aaId = state.selectedAA.aaId;
     var aaURL = state.selectedAA.url;
     var key = state.selectedAA.key;
+
+    print("transaction is $transactionId, aaId is $aaId, aaURL is $aaURL, key is $key");
 
     if (transactionId.isEmpty || aaId.isEmpty || aaURL.isEmpty || key.isEmpty) {
       return ServerResponse(

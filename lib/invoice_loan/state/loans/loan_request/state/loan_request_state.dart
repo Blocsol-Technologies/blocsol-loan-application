@@ -7,14 +7,14 @@ part 'loan_request_state.freezed.dart';
 enum LoanRequestProgress {
   started,
   invoiceSelect,
-  bankConsent,
-  loanOfferSelect,
-  aadharKYC,
-  udyamKYC,
-  bankAccountDetails,
-  repaymentSetup,
-  loanAgreement,
-  monitoringConsent,
+  customerDetailsProvided,
+  loanOfferSelected,
+  aadharKycCompleted,
+  entityKycCompleted,
+  bankAccountDetailsProvided,
+  repaymentSetupCompleted,
+  loanAgreementCompleted,
+  loanStepsCompleted,
   disbursed,
 }
 
