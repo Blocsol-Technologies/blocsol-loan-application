@@ -6,6 +6,11 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_invoices.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_otp.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/single_invoice_details.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/independent_key_fact_sheet.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/key_fact_sheet.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/loan_offers_home.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/select_offer_screen.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/update_loan_offer_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +34,11 @@ class InvoiceNewLoanRequestRouter {
 
   // Select
   static const loan_offer_select = "/invoice-loan/new-loan-request/loan-offer";
+  static const single_bank_offer_select =
+      "/invoice-loan/new-loan-request/single-bank-offer";
+
+  static const loan_independent_key_fact_sheet =
+      "/invoice-loan/new-loan-request/loan-independent-key-fact-sheet";
   static const loan_key_fact_sheet =
       "/invoice-loan/new-loan-request/loan-key-fact-sheet";
   static const update_loan_amount =
@@ -63,6 +73,8 @@ List<GoRoute> invoiceLoanRequestRoutes = [
     path: InvoiceNewLoanRequestRouter.dashboard,
     builder: (context, state) => const InvoiceNewLoanRequestDashboard(),
   ),
+
+  // Search
   GoRoute(
     path: InvoiceNewLoanRequestRouter.fetching_gst_invoices,
     builder: (context, state) => const InvoicesFetchingScreen(),
@@ -98,5 +110,30 @@ List<GoRoute> invoiceLoanRequestRoutes = [
 
       return AccountAggregatorWebview(url: url);
     },
+  ),
+
+  // Select
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_offer_select,
+    builder: (context, state) => const InvoiceNewLoanOffersSelect(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.single_bank_offer_select,
+    builder: (context, state) => const InvoiceNewLoanOfferDetails(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_independent_key_fact_sheet,
+    builder: (context, state) => const InvoiceNewLoanIndependedtKeyFactSheet(),
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_key_fact_sheet,
+    builder: (context, state) => const InvoiceLoanKeyFactSheet(),
+  ),
+    GoRoute(
+    path: InvoiceNewLoanRequestRouter.update_loan_amount,
+    builder: (context, state) => const InvoiceNewLoanUpdateOffer(),
   ),
 ];

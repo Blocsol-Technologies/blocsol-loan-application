@@ -124,14 +124,9 @@ class LoanRequestSelectHttpController {
 
       if (response.data['success']) {
         return ServerResponse(
-            success: true,
-            message: response.data['message'],
-            data: {
-              "multiple-submissions":
-                  response.data['data']?['multiple-submissions'] ?? false,
-              "navigateToAadharKYC":
-                  response.data['data']?['navigateToAadharKYC'] ?? false,
-            });
+          success: true,
+          message: response.data['message'],
+        );
       } else {
         return ServerResponse(
           success: false,

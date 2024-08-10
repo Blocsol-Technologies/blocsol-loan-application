@@ -51,6 +51,14 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     state = state.copyWith(selectedOffer: offer);
   }
 
+  void setUpdateMultipleSubmissionsEnabled(bool multiple) {
+    state = state.copyWith(multipleSubmissionsForOfferUpdateForm: multiple);
+  }
+
+  void setSkipAadharKyc(bool skip) {
+    state = state.copyWith(skipAadharKyc: skip);
+  }
+
   void setFetchingAadharKYCUrl(bool fetching) {
     state = state.copyWith(fetchingAadharKYCURl: fetching);
   }
@@ -63,16 +71,20 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     state = state.copyWith(aadharKYCFailure: failure);
   }
 
-  void setFetchingUdyamKYCUrl(bool fetching) {
-    state = state.copyWith(fetchingUdyamKYCURl: fetching);
+  void setSkipEntityKyc(bool skip) {
+    state = state.copyWith(skipEntityKyc: skip);
   }
 
-  void setVerifyingUdyamKYC(bool verifying) {
-    state = state.copyWith(verifyingUdyamKYC: verifying);
+  void setFetchingEntityKYCUrl(bool fetching) {
+    state = state.copyWith(fetchingEntityKYCURl: fetching);
   }
 
-  void setUdyamKYCFailure(bool failure) {
-    state = state.copyWith(udyamKYCFailure: failure);
+  void setVerifyingEntityKYC(bool verifying) {
+    state = state.copyWith(verifyingEntityKYC: verifying);
+  }
+
+  void setEntityKYCFailure(bool failure) {
+    state = state.copyWith(entityKYCFailure: failure);
   }
 
   void updateBankAccountNumber(String bankAccountNumber) {
@@ -258,8 +270,6 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     selectedAA.setId(ref.read(invoiceLoanUserProfileDetailsProvider).phone);
 
-    print("selected AA: ${selectedAA.name}");
-
     state = state.copyWith(
         submittingInvoicesForOffers: false, selectedAA: selectedAA);
 
@@ -274,8 +284,6 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     var aaId = state.selectedAA.aaId;
     var aaURL = state.selectedAA.url;
     var key = state.selectedAA.key;
-
-    print("transaction is $transactionId, aaId is $aaId, aaURL is $aaURL, key is $key");
 
     if (transactionId.isEmpty || aaId.isEmpty || aaURL.isEmpty || key.isEmpty) {
       return ServerResponse(
@@ -411,7 +419,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
         transactionId, offerId, invoiceId, providerId, authToken, cancelToken);
 
     if (response.success) {
-      state = state.copyWith(offerSelected: true);
+      state =
+          state.copyWith(offerSelected: true, loanUpdateFormSubmitted: false);
     }
 
     return response;
@@ -447,9 +456,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     if (response.success) {
       state = state.copyWith(
-          loanOfferUpdated: true,
-          multipleSubmissionsForOfferUpdateForm:
-              response.data['multiple-submissions'] ?? false);
+        loanUpdateFormSubmitted: true,
+      );
     }
 
     return response;
@@ -492,21 +500,20 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   }
 
   Future<ServerResponse> checkAadharKycSuccess(CancelToken cancelToken) async {
-    state = state.copyWith(verifyingAadharKYC: true);
-
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
 
     if (transactionId.isEmpty || providerId.isEmpty) {
-      state = state.copyWith(verifyingAadharKYC: false);
       return ServerResponse(
         success: false,
         message:
             "Transaction ID or Provider ID  is empty. Restart the process!",
       );
     }
+
+    state = state.copyWith(verifyingAadharKYC: true);
 
     var response = await LoanRequestSelectHttpController.checkAadharKycSuccess(
         transactionId, providerId, authToken, cancelToken);
@@ -515,7 +522,28 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     return response;
   }
 
-  Future<ServerResponse> fetchUdyamKycForm(CancelToken cancelToken) async {
+  Future<ServerResponse> performInitRequest(CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    var transactionId = state.transactionId;
+    var providerId = state.selectedOffer.offerProviderId;
+
+    if (transactionId.isEmpty || providerId.isEmpty) {
+      return ServerResponse(
+        success: false,
+        message:
+            "Transaction ID or Provider ID is empty. Restart the process!",
+      );
+    }
+
+    var response = await LoanRequestInitHttpController.performInitRequest(
+        transactionId, providerId, authToken, cancelToken);
+    state = state.copyWith(verifyingAadharKYC: false);
+
+    return response;
+  }
+
+  Future<ServerResponse> fetchEntityKycForm(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
@@ -529,11 +557,11 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.fetchUdyamKycForm(
+    return await LoanRequestInitHttpController.fetchEntityKycForm(
         transactionId, providerId, authToken, cancelToken);
   }
 
-  Future<ServerResponse> refetchUdyamKycForm(CancelToken cancelToken) async {
+  Future<ServerResponse> refetchEntityKycForm(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
@@ -547,21 +575,18 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.refetchUdyamKycForm(
+    return await LoanRequestInitHttpController.refetchEntityKycForm(
         transactionId, providerId, authToken, cancelToken);
   }
 
-  Future<ServerResponse> checkUdyamKycFormSuccess(
+  Future<ServerResponse> checkEntityKycFormSuccess(
       CancelToken cancelToken) async {
-    state = state.copyWith(verifyingUdyamKYC: true);
-
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var transactionId = state.transactionId;
     var providerId = state.selectedOffer.offerProviderId;
 
     if (transactionId.isEmpty || providerId.isEmpty) {
-      state = state.copyWith(verifyingUdyamKYC: false);
       return ServerResponse(
         success: false,
         message:
@@ -569,10 +594,13 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response = await LoanRequestInitHttpController.checkUdyamKycFormSuccess(
-        transactionId, providerId, authToken, cancelToken);
+    state = state.copyWith(verifyingEntityKYC: true);
 
-    state = state.copyWith(verifyingUdyamKYC: false);
+    var response =
+        await LoanRequestInitHttpController.checkEntityKycFormSuccess(
+            transactionId, providerId, authToken, cancelToken);
+
+    state = state.copyWith(verifyingEntityKYC: false);
 
     return response;
   }
@@ -654,7 +682,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
   Future<ServerResponse> checkRepaymentSetupSuccess(
       CancelToken cancelToken) async {
-    state = state.copyWith(checkingRepaymentSetupSuccess: true);
+
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
@@ -662,12 +690,13 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     var providerId = state.selectedOffer.offerProviderId;
 
     if (transactionId.isEmpty || providerId.isEmpty) {
-      state = state.copyWith(checkingRepaymentSetupSuccess: false);
       return ServerResponse(
         success: false,
         message: "Transaction ID or Provider ID is empty. Restart the process!",
       );
     }
+
+    state = state.copyWith(checkingRepaymentSetupSuccess: true);
 
     var response =
         await LoanRequestInitHttpController.checkRepaymentSetupSuccess(

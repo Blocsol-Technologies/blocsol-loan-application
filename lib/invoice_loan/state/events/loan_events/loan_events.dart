@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
-// import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
@@ -103,7 +105,8 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     bool success = event.success;
     String message = event.message;
 
-    logger.d("Message received from the server: $message \n, Step number received from the server: $stepNumber \n, Success received from the server: $success");
+    logger.d(
+        "Message received from the server: $message \n, Step number received from the server: $stepNumber \n, Success received from the server: $success");
 
     if (state.hasValue) {
       var prevEvent = state.value!.latestEvent;
@@ -125,91 +128,96 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       case "select":
         // on_select_01
         if (stepNumber == 1) {
-          await setEventConsumed(event.messageId);
           if (success) {
-            var response = await ref
+            ref
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .setUpdateMultipleSubmissionsEnabled(event.nextStepNumber == 1);
+
+            await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .refetchSelectedOfferDetails(cancelToken);
 
-            if (!response.success) {
-              // ref.read(routerProvider).go(
-              //     AppRoutes.msme_new_loan_process_error,
-              //     extra: response.message);
+            ref.read(routerProvider).pushReplacement(
+                InvoiceNewLoanRequestRouter.loan_key_fact_sheet);
 
-              return;
-            }
-
-            // ref
-            //     .read(routerProvider)
-            //     .go(AppRoutes.msme_new_loan_single_loan_offer_details);
-
-            // if (message == "update_form_not_submitted") {
-            //   var response = await ref
-            //       .read(invoiceNewLoanRequestProvider.notifier)
-            //       .refetchSelectedOfferDetails(cancelToken);
-
-            //   if (!response.success) {
-            //     ref.read(routerProvider).go(
-            //         AppRoutes.msme_new_loan_process_error,
-            //         extra: response.message);
-
-            //     return;
-            //   }
-
-            //   ref
-            //       .read(routerProvider)
-            //       .go(AppRoutes.msme_new_loan_single_loan_offer_details);
-            // } else {
-            //   ref
-            //       .read(routerProvider)
-            //       .go(AppRoutes.msme_new_loan_update_offer_details);
-            // }
-            return;
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Unable to select the offer from the lender");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.unable_to_select_offer);
+            break;
           }
         }
 
         // on_select_02
         if (stepNumber == 2) {
-          await setEventConsumed(event.messageId);
           if (success) {
             await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .refetchSelectedOfferDetails(cancelToken);
 
-            // TODO: Mechanism to refetch aadhar kyc url again
+            if (ref
+                .read(invoiceNewLoanRequestProvider)
+                .multipleSubmissionsForOfferUpdateForm) {
+              ref
+                  .read(invoiceNewLoanRequestProvider.notifier)
+                  .setSkipAadharKyc(event.nextStepNumber == 4);
 
-            return;
+              ref.read(routerProvider).pushReplacement(
+                  InvoiceNewLoanRequestRouter.loan_key_fact_sheet);
+
+              break;
+            }
+
+            if (event.nextStepNumber == 3) {
+              ref
+                  .read(invoiceNewLoanRequestProvider.notifier)
+                  .setSkipAadharKyc(false);
+              ref
+                  .read(routerProvider)
+                  .pushReplacement(InvoiceNewLoanRequestRouter.aadhar_kyc);
+              break;
+            }
+
+            if (event.nextStepNumber == 4) {
+              final cancelToken = CancelToken();
+
+              ref
+                  .read(invoiceNewLoanRequestProvider.notifier)
+                  .performInitRequest(cancelToken);
+
+              break;
+            }
+
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_select_02");
-
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.select_02_error);
+            break;
           }
         }
 
-        // details regarding the KYC form success
+        // kyc form response
         if (stepNumber == 3) {
-          await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .checkAadharKycSuccess(cancelToken);
 
             if (!response.success) {
-              ref.read(invoiceNewLoanRequestProvider.notifier).setAadharKYCFailure(true);
-              return;
+              ref.read(routerProvider).push(
+                  InvoiceNewLoanRequestRouter.loan_service_error,
+                  extra: LoanServiceErrorCodes.aadhar_kyc_failed);
+              break;
             }
 
-            return;
+            break;
           } else {
-            ref.read(invoiceNewLoanRequestProvider.notifier).setAadharKYCFailure(true);
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.aadhar_kyc_failed);
+            break;
           }
         }
 
@@ -217,146 +225,143 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       case "init":
         // on_init_01 response
         if (stepNumber == 1) {
-          await setEventConsumed(event.messageId);
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.aadharKycCompleted);
-            // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
-            return;
+
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.entity_kyc);
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_init_02");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.init_01_error);
+            break;
           }
         }
 
-        // udyam kyc response
+        // entity kyc response
         if (stepNumber == 2) {
-          await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
-                .checkUdyamKycFormSuccess(cancelToken);
+                .checkEntityKycFormSuccess(cancelToken);
 
             if (!response.success) {
-              // ref.read(routerProvider).go(
-              //     AppRoutes.msme_new_loan_process_error,
-              //     extra:
-              //         "Error when checking form 04 success ${response.message}");
-              return;
+              ref.read(routerProvider).push(
+                  InvoiceNewLoanRequestRouter.loan_service_error,
+                  extra: LoanServiceErrorCodes.entity_kyc_error);
+              break;
             }
             return;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the udyam kyc status check");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.entity_kyc_error);
+            break;
           }
         }
 
         // on_init_02 response
         if (stepNumber == 3) {
-          await setEventConsumed(event.messageId);
-
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.entityKycCompleted);
-            // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
-            return;
+
+            ref.read(routerProvider).pushReplacement(
+                InvoiceNewLoanRequestRouter.bank_account_details);
+
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_init_02");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.init_02_failed);
+            break;
           }
         }
 
         // on_init_03 response
         if (stepNumber == 5) {
-          await setEventConsumed(event.messageId);
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.bankAccountDetailsProvided);
-            // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
-            return;
+
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.repayment_setup);
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_init_03");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.init_03_failed);
+            break;
           }
         }
 
         // repayment setup response
         if (stepNumber == 6) {
-          await setEventConsumed(event.messageId);
           if (success) {
-            if (ref.read(invoiceNewLoanRequestProvider).checkingRepaymentSetupSuccess) {
-              return;
-            }
-
             var response = await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .checkRepaymentSetupSuccess(cancelToken);
 
             if (!response.success) {
-              // ref.read(routerProvider).go(
-              //     AppRoutes.msme_new_loan_process_error,
-              //     extra:
-              //         "Error when checking form06 success ${response.message}");
-              return;
+              ref.read(routerProvider).push(
+                  InvoiceNewLoanRequestRouter.loan_service_error,
+                  extra: LoanServiceErrorCodes.repayment_setup_failed);
+              break;
             }
-            return;
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the repayment status check");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.repayment_setup_failed);
+            break;
           }
         }
 
         // on_init_04 response
         if (stepNumber == 7) {
-          await setEventConsumed(event.messageId);
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.repaymentSetupCompleted);
-            // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
-            return;
+
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.loan_agreement);
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_init_04");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.init_04_failed);
+            break;
           }
         }
 
         // loan agreement response
         if (stepNumber == 8) {
-          await setEventConsumed(event.messageId);
           if (success) {
             var response = await ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .checkLoanAgreementSuccess(cancelToken);
 
             if (!response.success) {
-              // ref.read(routerProvider).go(
-              //     AppRoutes.msme_new_loan_process_error,
-              //     extra:
-              //         "Error when checking form07 submission ${response.message}");
-              return;
+              ref.read(routerProvider).push(
+                  InvoiceNewLoanRequestRouter.loan_service_error,
+                  extra: LoanServiceErrorCodes.loan_agreement_failed);
+              break;
             }
             return;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the loan agreement status check");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.loan_agreement_failed);
+            break;
           }
         }
 
@@ -364,26 +369,55 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       case "confirm":
         // on_confirm_01 response
         if (stepNumber == 1) {
-          await setEventConsumed(event.messageId);
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.loanAgreementCompleted);
-            // ref.read(routerProvider).go(AppRoutes.msme_new_loan_process);
-            return;
+
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.final_processing);
+
+            break;
           } else {
-            // ref.read(routerProvider).go(
-            //     AppRoutes.msme_new_loan_process_error,
-            //     extra: "Error on the on_confirm_01");
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.confirm_01_failed);
+            break;
           }
         }
+
+        // Loan Sanctioned
+        if (stepNumber == 3 || stepNumber == 4) {
+          if (success) {
+            ref
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.loanStepsCompleted);
+
+            ref
+                .read(routerProvider)
+                .go(InvoiceNewLoanRequestRouter.dashboard);
+
+            break;
+          } else {
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.loan_service_error,
+                extra: LoanServiceErrorCodes.confirm_01_failed);
+            break;
+          }
+        }
+
         break;
+      case "payments":
+        if (stepNumber == 1) {
+
+        }
       default:
         logger.d("No context found");
         break;
     }
 
+    await setEventConsumed(event.messageId);
     return;
   }
 

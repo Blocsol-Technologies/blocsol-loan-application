@@ -21,9 +21,7 @@ enum LoanRequestProgress {
 @freezed
 class LoanRequestStateData with _$LoanRequestStateData {
   const factory LoanRequestStateData({
-
     required bool requestingNewLoan,
-
     required LoanRequestProgress currentState,
     required String transactionId,
     required String gstDataDownloadTime,
@@ -35,22 +33,24 @@ class LoanRequestStateData with _$LoanRequestStateData {
     required List<Invoice> invoices,
     required bool loadingInvoices,
     required bool submittingInvoicesForOffers,
-    required bool multipleSubmissionsForOfferUpdateForm,
     //
     required LoanDetails selectedInvoice,
     required OfferDetails selectedOffer,
     required bool fetchingInvoiceWithOffers,
     required bool offerSelected,
-    required bool loanOfferUpdated,
     required List<LoanDetails> invoicesWithOffers,
     required int invoiceWithOffersFetchTime,
+    required bool loanUpdateFormSubmitted,
+    required bool multipleSubmissionsForOfferUpdateForm,
     //
+    required bool skipAadharKyc,
     required bool fetchingAadharKYCURl,
     required bool verifyingAadharKYC,
     required bool aadharKYCFailure,
-    required bool fetchingUdyamKYCURl,
-    required bool verifyingUdyamKYC,
-    required bool udyamKYCFailure,
+    required bool skipEntityKyc,
+    required bool fetchingEntityKYCURl,
+    required bool verifyingEntityKYC,
+    required bool entityKYCFailure,
     //
     required String bankName,
     required String bankAccountNumber,
@@ -74,7 +74,7 @@ class LoanRequestStateData with _$LoanRequestStateData {
 
   static var initial = LoanRequestStateData(
     requestingNewLoan: false,
-    
+
     currentState: LoanRequestProgress.started,
     transactionId: '',
     gstDataDownloadTime: '',
@@ -90,18 +90,20 @@ class LoanRequestStateData with _$LoanRequestStateData {
     selectedInvoice: LoanDetails.demo(),
     selectedOffer: OfferDetails.demo(),
     offerSelected: false,
-    loanOfferUpdated: false,
     fetchingInvoiceWithOffers: false,
     invoicesWithOffers: [],
     invoiceWithOffersFetchTime: 0,
+    loanUpdateFormSubmitted: false,
     multipleSubmissionsForOfferUpdateForm: false,
     //
+    skipAadharKyc: false,
     fetchingAadharKYCURl: false,
     verifyingAadharKYC: false,
     aadharKYCFailure: false,
-    fetchingUdyamKYCURl: false,
-    verifyingUdyamKYC: false,
-    udyamKYCFailure: false,
+    skipEntityKyc: false,
+    fetchingEntityKYCURl: false,
+    verifyingEntityKYC: false,
+    entityKYCFailure: false,
     //
     bankName: '',
     bankAccountNumber: '',

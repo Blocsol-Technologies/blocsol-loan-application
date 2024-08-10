@@ -3,7 +3,50 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestInitHttpController {
-  static Future<ServerResponse> fetchUdyamKycForm(String transactionId,
+  static Future<ServerResponse> performInitRequest(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
+    try {
+      var httpService = HttpService();
+      var response = await httpService
+          .post("/ondc/perform-init-request", authToken, cancelToken, {
+        "transaction_id": transactionId,
+        "provider_id": providerId,
+      });
+
+      if (response.data['success']) {
+        return ServerResponse(
+          success: true,
+          message: response.data['message'],
+        );
+      } else {
+        return ServerResponse(
+          success: false,
+          message: response.data['message'],
+        );
+      }
+    } catch (e, stackTrace) {
+      ErrorInstance(
+        message:
+            "Error occured when making the init request! Contact Support...",
+        exception: e,
+        trace: stackTrace,
+      ).reportError();
+
+      if (e is DioException) {
+        return ServerResponse(
+          success: false,
+          message: e.response?.data['message'],
+        );
+      }
+
+      return ServerResponse(
+          success: false,
+          message:
+              "Error occured when making the init request! Contact Support...");
+    }
+  }
+
+  static Future<ServerResponse> fetchEntityKycForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
       var httpService = HttpService();
@@ -46,7 +89,7 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> refetchUdyamKycForm(String transactionId,
+  static Future<ServerResponse> refetchEntityKycForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
       var httpService = HttpService();
@@ -88,7 +131,7 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> checkUdyamKycFormSuccess(String transactionId,
+  static Future<ServerResponse> checkEntityKycFormSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
       var httpService = HttpService();

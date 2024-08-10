@@ -26,23 +26,25 @@ mixin _$LoanRequestStateData {
   bool get aaConsentSuccess => throw _privateConstructorUsedError;
   List<Invoice> get invoices => throw _privateConstructorUsedError;
   bool get loadingInvoices => throw _privateConstructorUsedError;
-  bool get submittingInvoicesForOffers => throw _privateConstructorUsedError;
-  bool get multipleSubmissionsForOfferUpdateForm =>
-      throw _privateConstructorUsedError; //
+  bool get submittingInvoicesForOffers => throw _privateConstructorUsedError; //
   LoanDetails get selectedInvoice => throw _privateConstructorUsedError;
   OfferDetails get selectedOffer => throw _privateConstructorUsedError;
   bool get fetchingInvoiceWithOffers => throw _privateConstructorUsedError;
   bool get offerSelected => throw _privateConstructorUsedError;
-  bool get loanOfferUpdated => throw _privateConstructorUsedError;
   List<LoanDetails> get invoicesWithOffers =>
       throw _privateConstructorUsedError;
-  int get invoiceWithOffersFetchTime => throw _privateConstructorUsedError; //
+  int get invoiceWithOffersFetchTime => throw _privateConstructorUsedError;
+  bool get loanUpdateFormSubmitted => throw _privateConstructorUsedError;
+  bool get multipleSubmissionsForOfferUpdateForm =>
+      throw _privateConstructorUsedError; //
+  bool get skipAadharKyc => throw _privateConstructorUsedError;
   bool get fetchingAadharKYCURl => throw _privateConstructorUsedError;
   bool get verifyingAadharKYC => throw _privateConstructorUsedError;
   bool get aadharKYCFailure => throw _privateConstructorUsedError;
-  bool get fetchingUdyamKYCURl => throw _privateConstructorUsedError;
-  bool get verifyingUdyamKYC => throw _privateConstructorUsedError;
-  bool get udyamKYCFailure => throw _privateConstructorUsedError; //
+  bool get skipEntityKyc => throw _privateConstructorUsedError;
+  bool get fetchingEntityKYCURl => throw _privateConstructorUsedError;
+  bool get verifyingEntityKYC => throw _privateConstructorUsedError;
+  bool get entityKYCFailure => throw _privateConstructorUsedError; //
   String get bankName => throw _privateConstructorUsedError;
   String get bankAccountNumber => throw _privateConstructorUsedError;
   String get bankIFSC => throw _privateConstructorUsedError;
@@ -85,20 +87,22 @@ abstract class $LoanRequestStateDataCopyWith<$Res> {
       List<Invoice> invoices,
       bool loadingInvoices,
       bool submittingInvoicesForOffers,
-      bool multipleSubmissionsForOfferUpdateForm,
       LoanDetails selectedInvoice,
       OfferDetails selectedOffer,
       bool fetchingInvoiceWithOffers,
       bool offerSelected,
-      bool loanOfferUpdated,
       List<LoanDetails> invoicesWithOffers,
       int invoiceWithOffersFetchTime,
+      bool loanUpdateFormSubmitted,
+      bool multipleSubmissionsForOfferUpdateForm,
+      bool skipAadharKyc,
       bool fetchingAadharKYCURl,
       bool verifyingAadharKYC,
       bool aadharKYCFailure,
-      bool fetchingUdyamKYCURl,
-      bool verifyingUdyamKYC,
-      bool udyamKYCFailure,
+      bool skipEntityKyc,
+      bool fetchingEntityKYCURl,
+      bool verifyingEntityKYC,
+      bool entityKYCFailure,
       String bankName,
       String bankAccountNumber,
       String bankIFSC,
@@ -142,20 +146,22 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
     Object? invoices = null,
     Object? loadingInvoices = null,
     Object? submittingInvoicesForOffers = null,
-    Object? multipleSubmissionsForOfferUpdateForm = null,
     Object? selectedInvoice = null,
     Object? selectedOffer = null,
     Object? fetchingInvoiceWithOffers = null,
     Object? offerSelected = null,
-    Object? loanOfferUpdated = null,
     Object? invoicesWithOffers = null,
     Object? invoiceWithOffersFetchTime = null,
+    Object? loanUpdateFormSubmitted = null,
+    Object? multipleSubmissionsForOfferUpdateForm = null,
+    Object? skipAadharKyc = null,
     Object? fetchingAadharKYCURl = null,
     Object? verifyingAadharKYC = null,
     Object? aadharKYCFailure = null,
-    Object? fetchingUdyamKYCURl = null,
-    Object? verifyingUdyamKYC = null,
-    Object? udyamKYCFailure = null,
+    Object? skipEntityKyc = null,
+    Object? fetchingEntityKYCURl = null,
+    Object? verifyingEntityKYC = null,
+    Object? entityKYCFailure = null,
     Object? bankName = null,
     Object? bankAccountNumber = null,
     Object? bankIFSC = null,
@@ -218,11 +224,6 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
           ? _value.submittingInvoicesForOffers
           : submittingInvoicesForOffers // ignore: cast_nullable_to_non_nullable
               as bool,
-      multipleSubmissionsForOfferUpdateForm: null ==
-              multipleSubmissionsForOfferUpdateForm
-          ? _value.multipleSubmissionsForOfferUpdateForm
-          : multipleSubmissionsForOfferUpdateForm // ignore: cast_nullable_to_non_nullable
-              as bool,
       selectedInvoice: null == selectedInvoice
           ? _value.selectedInvoice
           : selectedInvoice // ignore: cast_nullable_to_non_nullable
@@ -239,10 +240,6 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
           ? _value.offerSelected
           : offerSelected // ignore: cast_nullable_to_non_nullable
               as bool,
-      loanOfferUpdated: null == loanOfferUpdated
-          ? _value.loanOfferUpdated
-          : loanOfferUpdated // ignore: cast_nullable_to_non_nullable
-              as bool,
       invoicesWithOffers: null == invoicesWithOffers
           ? _value.invoicesWithOffers
           : invoicesWithOffers // ignore: cast_nullable_to_non_nullable
@@ -251,6 +248,19 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
           ? _value.invoiceWithOffersFetchTime
           : invoiceWithOffersFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
+      loanUpdateFormSubmitted: null == loanUpdateFormSubmitted
+          ? _value.loanUpdateFormSubmitted
+          : loanUpdateFormSubmitted // ignore: cast_nullable_to_non_nullable
+              as bool,
+      multipleSubmissionsForOfferUpdateForm: null ==
+              multipleSubmissionsForOfferUpdateForm
+          ? _value.multipleSubmissionsForOfferUpdateForm
+          : multipleSubmissionsForOfferUpdateForm // ignore: cast_nullable_to_non_nullable
+              as bool,
+      skipAadharKyc: null == skipAadharKyc
+          ? _value.skipAadharKyc
+          : skipAadharKyc // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingAadharKYCURl: null == fetchingAadharKYCURl
           ? _value.fetchingAadharKYCURl
           : fetchingAadharKYCURl // ignore: cast_nullable_to_non_nullable
@@ -263,17 +273,21 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
           ? _value.aadharKYCFailure
           : aadharKYCFailure // ignore: cast_nullable_to_non_nullable
               as bool,
-      fetchingUdyamKYCURl: null == fetchingUdyamKYCURl
-          ? _value.fetchingUdyamKYCURl
-          : fetchingUdyamKYCURl // ignore: cast_nullable_to_non_nullable
+      skipEntityKyc: null == skipEntityKyc
+          ? _value.skipEntityKyc
+          : skipEntityKyc // ignore: cast_nullable_to_non_nullable
               as bool,
-      verifyingUdyamKYC: null == verifyingUdyamKYC
-          ? _value.verifyingUdyamKYC
-          : verifyingUdyamKYC // ignore: cast_nullable_to_non_nullable
+      fetchingEntityKYCURl: null == fetchingEntityKYCURl
+          ? _value.fetchingEntityKYCURl
+          : fetchingEntityKYCURl // ignore: cast_nullable_to_non_nullable
               as bool,
-      udyamKYCFailure: null == udyamKYCFailure
-          ? _value.udyamKYCFailure
-          : udyamKYCFailure // ignore: cast_nullable_to_non_nullable
+      verifyingEntityKYC: null == verifyingEntityKYC
+          ? _value.verifyingEntityKYC
+          : verifyingEntityKYC // ignore: cast_nullable_to_non_nullable
+              as bool,
+      entityKYCFailure: null == entityKYCFailure
+          ? _value.entityKYCFailure
+          : entityKYCFailure // ignore: cast_nullable_to_non_nullable
               as bool,
       bankName: null == bankName
           ? _value.bankName
@@ -364,20 +378,22 @@ abstract class _$$LoanRequestStateDataImplCopyWith<$Res>
       List<Invoice> invoices,
       bool loadingInvoices,
       bool submittingInvoicesForOffers,
-      bool multipleSubmissionsForOfferUpdateForm,
       LoanDetails selectedInvoice,
       OfferDetails selectedOffer,
       bool fetchingInvoiceWithOffers,
       bool offerSelected,
-      bool loanOfferUpdated,
       List<LoanDetails> invoicesWithOffers,
       int invoiceWithOffersFetchTime,
+      bool loanUpdateFormSubmitted,
+      bool multipleSubmissionsForOfferUpdateForm,
+      bool skipAadharKyc,
       bool fetchingAadharKYCURl,
       bool verifyingAadharKYC,
       bool aadharKYCFailure,
-      bool fetchingUdyamKYCURl,
-      bool verifyingUdyamKYC,
-      bool udyamKYCFailure,
+      bool skipEntityKyc,
+      bool fetchingEntityKYCURl,
+      bool verifyingEntityKYC,
+      bool entityKYCFailure,
       String bankName,
       String bankAccountNumber,
       String bankIFSC,
@@ -418,20 +434,22 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
     Object? invoices = null,
     Object? loadingInvoices = null,
     Object? submittingInvoicesForOffers = null,
-    Object? multipleSubmissionsForOfferUpdateForm = null,
     Object? selectedInvoice = null,
     Object? selectedOffer = null,
     Object? fetchingInvoiceWithOffers = null,
     Object? offerSelected = null,
-    Object? loanOfferUpdated = null,
     Object? invoicesWithOffers = null,
     Object? invoiceWithOffersFetchTime = null,
+    Object? loanUpdateFormSubmitted = null,
+    Object? multipleSubmissionsForOfferUpdateForm = null,
+    Object? skipAadharKyc = null,
     Object? fetchingAadharKYCURl = null,
     Object? verifyingAadharKYC = null,
     Object? aadharKYCFailure = null,
-    Object? fetchingUdyamKYCURl = null,
-    Object? verifyingUdyamKYC = null,
-    Object? udyamKYCFailure = null,
+    Object? skipEntityKyc = null,
+    Object? fetchingEntityKYCURl = null,
+    Object? verifyingEntityKYC = null,
+    Object? entityKYCFailure = null,
     Object? bankName = null,
     Object? bankAccountNumber = null,
     Object? bankIFSC = null,
@@ -494,11 +512,6 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
           ? _value.submittingInvoicesForOffers
           : submittingInvoicesForOffers // ignore: cast_nullable_to_non_nullable
               as bool,
-      multipleSubmissionsForOfferUpdateForm: null ==
-              multipleSubmissionsForOfferUpdateForm
-          ? _value.multipleSubmissionsForOfferUpdateForm
-          : multipleSubmissionsForOfferUpdateForm // ignore: cast_nullable_to_non_nullable
-              as bool,
       selectedInvoice: null == selectedInvoice
           ? _value.selectedInvoice
           : selectedInvoice // ignore: cast_nullable_to_non_nullable
@@ -515,10 +528,6 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
           ? _value.offerSelected
           : offerSelected // ignore: cast_nullable_to_non_nullable
               as bool,
-      loanOfferUpdated: null == loanOfferUpdated
-          ? _value.loanOfferUpdated
-          : loanOfferUpdated // ignore: cast_nullable_to_non_nullable
-              as bool,
       invoicesWithOffers: null == invoicesWithOffers
           ? _value._invoicesWithOffers
           : invoicesWithOffers // ignore: cast_nullable_to_non_nullable
@@ -527,6 +536,19 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
           ? _value.invoiceWithOffersFetchTime
           : invoiceWithOffersFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
+      loanUpdateFormSubmitted: null == loanUpdateFormSubmitted
+          ? _value.loanUpdateFormSubmitted
+          : loanUpdateFormSubmitted // ignore: cast_nullable_to_non_nullable
+              as bool,
+      multipleSubmissionsForOfferUpdateForm: null ==
+              multipleSubmissionsForOfferUpdateForm
+          ? _value.multipleSubmissionsForOfferUpdateForm
+          : multipleSubmissionsForOfferUpdateForm // ignore: cast_nullable_to_non_nullable
+              as bool,
+      skipAadharKyc: null == skipAadharKyc
+          ? _value.skipAadharKyc
+          : skipAadharKyc // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingAadharKYCURl: null == fetchingAadharKYCURl
           ? _value.fetchingAadharKYCURl
           : fetchingAadharKYCURl // ignore: cast_nullable_to_non_nullable
@@ -539,17 +561,21 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
           ? _value.aadharKYCFailure
           : aadharKYCFailure // ignore: cast_nullable_to_non_nullable
               as bool,
-      fetchingUdyamKYCURl: null == fetchingUdyamKYCURl
-          ? _value.fetchingUdyamKYCURl
-          : fetchingUdyamKYCURl // ignore: cast_nullable_to_non_nullable
+      skipEntityKyc: null == skipEntityKyc
+          ? _value.skipEntityKyc
+          : skipEntityKyc // ignore: cast_nullable_to_non_nullable
               as bool,
-      verifyingUdyamKYC: null == verifyingUdyamKYC
-          ? _value.verifyingUdyamKYC
-          : verifyingUdyamKYC // ignore: cast_nullable_to_non_nullable
+      fetchingEntityKYCURl: null == fetchingEntityKYCURl
+          ? _value.fetchingEntityKYCURl
+          : fetchingEntityKYCURl // ignore: cast_nullable_to_non_nullable
               as bool,
-      udyamKYCFailure: null == udyamKYCFailure
-          ? _value.udyamKYCFailure
-          : udyamKYCFailure // ignore: cast_nullable_to_non_nullable
+      verifyingEntityKYC: null == verifyingEntityKYC
+          ? _value.verifyingEntityKYC
+          : verifyingEntityKYC // ignore: cast_nullable_to_non_nullable
+              as bool,
+      entityKYCFailure: null == entityKYCFailure
+          ? _value.entityKYCFailure
+          : entityKYCFailure // ignore: cast_nullable_to_non_nullable
               as bool,
       bankName: null == bankName
           ? _value.bankName
@@ -635,20 +661,22 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
       required final List<Invoice> invoices,
       required this.loadingInvoices,
       required this.submittingInvoicesForOffers,
-      required this.multipleSubmissionsForOfferUpdateForm,
       required this.selectedInvoice,
       required this.selectedOffer,
       required this.fetchingInvoiceWithOffers,
       required this.offerSelected,
-      required this.loanOfferUpdated,
       required final List<LoanDetails> invoicesWithOffers,
       required this.invoiceWithOffersFetchTime,
+      required this.loanUpdateFormSubmitted,
+      required this.multipleSubmissionsForOfferUpdateForm,
+      required this.skipAadharKyc,
       required this.fetchingAadharKYCURl,
       required this.verifyingAadharKYC,
       required this.aadharKYCFailure,
-      required this.fetchingUdyamKYCURl,
-      required this.verifyingUdyamKYC,
-      required this.udyamKYCFailure,
+      required this.skipEntityKyc,
+      required this.fetchingEntityKYCURl,
+      required this.verifyingEntityKYC,
+      required this.entityKYCFailure,
       required this.bankName,
       required this.bankAccountNumber,
       required this.bankIFSC,
@@ -697,8 +725,6 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   final bool loadingInvoices;
   @override
   final bool submittingInvoicesForOffers;
-  @override
-  final bool multipleSubmissionsForOfferUpdateForm;
 //
   @override
   final LoanDetails selectedInvoice;
@@ -708,8 +734,6 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   final bool fetchingInvoiceWithOffers;
   @override
   final bool offerSelected;
-  @override
-  final bool loanOfferUpdated;
   final List<LoanDetails> _invoicesWithOffers;
   @override
   List<LoanDetails> get invoicesWithOffers {
@@ -721,7 +745,13 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
 
   @override
   final int invoiceWithOffersFetchTime;
+  @override
+  final bool loanUpdateFormSubmitted;
+  @override
+  final bool multipleSubmissionsForOfferUpdateForm;
 //
+  @override
+  final bool skipAadharKyc;
   @override
   final bool fetchingAadharKYCURl;
   @override
@@ -729,11 +759,13 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   @override
   final bool aadharKYCFailure;
   @override
-  final bool fetchingUdyamKYCURl;
+  final bool skipEntityKyc;
   @override
-  final bool verifyingUdyamKYC;
+  final bool fetchingEntityKYCURl;
   @override
-  final bool udyamKYCFailure;
+  final bool verifyingEntityKYC;
+  @override
+  final bool entityKYCFailure;
 //
   @override
   final String bankName;
@@ -772,7 +804,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
 
   @override
   String toString() {
-    return 'LoanRequestStateData(requestingNewLoan: $requestingNewLoan, currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, loanOfferUpdated: $loanOfferUpdated, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, fetchingUdyamKYCURl: $fetchingUdyamKYCURl, verifyingUdyamKYC: $verifyingUdyamKYC, udyamKYCFailure: $udyamKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
+    return 'LoanRequestStateData(requestingNewLoan: $requestingNewLoan, currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, loanUpdateFormSubmitted: $loanUpdateFormSubmitted, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, skipAadharKyc: $skipAadharKyc, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, skipEntityKyc: $skipEntityKyc, fetchingEntityKYCURl: $fetchingEntityKYCURl, verifyingEntityKYC: $verifyingEntityKYC, entityKYCFailure: $entityKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
   }
 
   @override
@@ -802,9 +834,6 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
             (identical(other.submittingInvoicesForOffers, submittingInvoicesForOffers) ||
                 other.submittingInvoicesForOffers ==
                     submittingInvoicesForOffers) &&
-            (identical(other.multipleSubmissionsForOfferUpdateForm, multipleSubmissionsForOfferUpdateForm) ||
-                other.multipleSubmissionsForOfferUpdateForm ==
-                    multipleSubmissionsForOfferUpdateForm) &&
             (identical(other.selectedInvoice, selectedInvoice) ||
                 other.selectedInvoice == selectedInvoice) &&
             (identical(other.selectedOffer, selectedOffer) ||
@@ -813,31 +842,36 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
                 other.fetchingInvoiceWithOffers == fetchingInvoiceWithOffers) &&
             (identical(other.offerSelected, offerSelected) ||
                 other.offerSelected == offerSelected) &&
-            (identical(other.loanOfferUpdated, loanOfferUpdated) ||
-                other.loanOfferUpdated == loanOfferUpdated) &&
             const DeepCollectionEquality()
                 .equals(other._invoicesWithOffers, _invoicesWithOffers) &&
             (identical(other.invoiceWithOffersFetchTime, invoiceWithOffersFetchTime) ||
                 other.invoiceWithOffersFetchTime ==
                     invoiceWithOffersFetchTime) &&
+            (identical(other.loanUpdateFormSubmitted, loanUpdateFormSubmitted) ||
+                other.loanUpdateFormSubmitted == loanUpdateFormSubmitted) &&
+            (identical(other.multipleSubmissionsForOfferUpdateForm, multipleSubmissionsForOfferUpdateForm) ||
+                other.multipleSubmissionsForOfferUpdateForm ==
+                    multipleSubmissionsForOfferUpdateForm) &&
+            (identical(other.skipAadharKyc, skipAadharKyc) ||
+                other.skipAadharKyc == skipAadharKyc) &&
             (identical(other.fetchingAadharKYCURl, fetchingAadharKYCURl) ||
                 other.fetchingAadharKYCURl == fetchingAadharKYCURl) &&
             (identical(other.verifyingAadharKYC, verifyingAadharKYC) ||
                 other.verifyingAadharKYC == verifyingAadharKYC) &&
             (identical(other.aadharKYCFailure, aadharKYCFailure) ||
                 other.aadharKYCFailure == aadharKYCFailure) &&
-            (identical(other.fetchingUdyamKYCURl, fetchingUdyamKYCURl) ||
-                other.fetchingUdyamKYCURl == fetchingUdyamKYCURl) &&
-            (identical(other.verifyingUdyamKYC, verifyingUdyamKYC) ||
-                other.verifyingUdyamKYC == verifyingUdyamKYC) &&
-            (identical(other.udyamKYCFailure, udyamKYCFailure) ||
-                other.udyamKYCFailure == udyamKYCFailure) &&
+            (identical(other.skipEntityKyc, skipEntityKyc) ||
+                other.skipEntityKyc == skipEntityKyc) &&
+            (identical(other.fetchingEntityKYCURl, fetchingEntityKYCURl) ||
+                other.fetchingEntityKYCURl == fetchingEntityKYCURl) &&
+            (identical(other.verifyingEntityKYC, verifyingEntityKYC) ||
+                other.verifyingEntityKYC == verifyingEntityKYC) &&
+            (identical(other.entityKYCFailure, entityKYCFailure) ||
+                other.entityKYCFailure == entityKYCFailure) &&
             (identical(other.bankName, bankName) ||
                 other.bankName == bankName) &&
-            (identical(other.bankAccountNumber, bankAccountNumber) ||
-                other.bankAccountNumber == bankAccountNumber) &&
-            (identical(other.bankIFSC, bankIFSC) ||
-                other.bankIFSC == bankIFSC) &&
+            (identical(other.bankAccountNumber, bankAccountNumber) || other.bankAccountNumber == bankAccountNumber) &&
+            (identical(other.bankIFSC, bankIFSC) || other.bankIFSC == bankIFSC) &&
             (identical(other.submittingBankAccountDetails, submittingBankAccountDetails) || other.submittingBankAccountDetails == submittingBankAccountDetails) &&
             (identical(other.disbursedCancellationFee, disbursedCancellationFee) || other.disbursedCancellationFee == disbursedCancellationFee) &&
             (identical(other.sanctionedCancellationFee, sanctionedCancellationFee) || other.sanctionedCancellationFee == sanctionedCancellationFee) &&
@@ -867,20 +901,22 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
         const DeepCollectionEquality().hash(_invoices),
         loadingInvoices,
         submittingInvoicesForOffers,
-        multipleSubmissionsForOfferUpdateForm,
         selectedInvoice,
         selectedOffer,
         fetchingInvoiceWithOffers,
         offerSelected,
-        loanOfferUpdated,
         const DeepCollectionEquality().hash(_invoicesWithOffers),
         invoiceWithOffersFetchTime,
+        loanUpdateFormSubmitted,
+        multipleSubmissionsForOfferUpdateForm,
+        skipAadharKyc,
         fetchingAadharKYCURl,
         verifyingAadharKYC,
         aadharKYCFailure,
-        fetchingUdyamKYCURl,
-        verifyingUdyamKYC,
-        udyamKYCFailure,
+        skipEntityKyc,
+        fetchingEntityKYCURl,
+        verifyingEntityKYC,
+        entityKYCFailure,
         bankName,
         bankAccountNumber,
         bankIFSC,
@@ -921,20 +957,22 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
       required final List<Invoice> invoices,
       required final bool loadingInvoices,
       required final bool submittingInvoicesForOffers,
-      required final bool multipleSubmissionsForOfferUpdateForm,
       required final LoanDetails selectedInvoice,
       required final OfferDetails selectedOffer,
       required final bool fetchingInvoiceWithOffers,
       required final bool offerSelected,
-      required final bool loanOfferUpdated,
       required final List<LoanDetails> invoicesWithOffers,
       required final int invoiceWithOffersFetchTime,
+      required final bool loanUpdateFormSubmitted,
+      required final bool multipleSubmissionsForOfferUpdateForm,
+      required final bool skipAadharKyc,
       required final bool fetchingAadharKYCURl,
       required final bool verifyingAadharKYC,
       required final bool aadharKYCFailure,
-      required final bool fetchingUdyamKYCURl,
-      required final bool verifyingUdyamKYC,
-      required final bool udyamKYCFailure,
+      required final bool skipEntityKyc,
+      required final bool fetchingEntityKYCURl,
+      required final bool verifyingEntityKYC,
+      required final bool entityKYCFailure,
       required final String bankName,
       required final String bankAccountNumber,
       required final String bankIFSC,
@@ -974,8 +1012,6 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
   bool get loadingInvoices;
   @override
   bool get submittingInvoicesForOffers;
-  @override
-  bool get multipleSubmissionsForOfferUpdateForm;
   @override //
   LoanDetails get selectedInvoice;
   @override
@@ -985,23 +1021,29 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
   @override
   bool get offerSelected;
   @override
-  bool get loanOfferUpdated;
-  @override
   List<LoanDetails> get invoicesWithOffers;
   @override
   int get invoiceWithOffersFetchTime;
+  @override
+  bool get loanUpdateFormSubmitted;
+  @override
+  bool get multipleSubmissionsForOfferUpdateForm;
   @override //
+  bool get skipAadharKyc;
+  @override
   bool get fetchingAadharKYCURl;
   @override
   bool get verifyingAadharKYC;
   @override
   bool get aadharKYCFailure;
   @override
-  bool get fetchingUdyamKYCURl;
+  bool get skipEntityKyc;
   @override
-  bool get verifyingUdyamKYC;
+  bool get fetchingEntityKYCURl;
   @override
-  bool get udyamKYCFailure;
+  bool get verifyingEntityKYC;
+  @override
+  bool get entityKYCFailure;
   @override //
   String get bankName;
   @override
