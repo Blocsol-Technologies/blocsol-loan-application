@@ -59,6 +59,7 @@ class _InvoiceLoanKeyFactSheetState
       canPop: false,
       child: SafeArea(
         child: Scaffold(
+          extendBody: true,
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: const ScreenActions(),
           body: SingleChildScrollView(
@@ -272,7 +273,7 @@ class _InvoiceLoanKeyFactSheetState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                   child: Row(
                     children: <Widget>[
@@ -387,7 +388,7 @@ class _InvoiceLoanKeyFactSheetState
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Colors.green.shade600,
                               shape: BoxShape.circle,
                             ),
                             height: 15,
@@ -425,7 +426,7 @@ class _InvoiceLoanKeyFactSheetState
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Colors.green.shade600,
                               shape: BoxShape.circle,
                             ),
                             height: 15,

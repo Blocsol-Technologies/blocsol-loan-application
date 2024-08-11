@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
@@ -19,46 +17,34 @@ part 'loan_events.g.dart';
 @riverpod
 class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   @override
-  Future<LoanEventsState> build() async {
+  LoanEvent build() {
     ref.keepAlive();
 
-    logger.d("refetching the latest event");
-
-    final cancelToken = CancelToken();
-
-    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
-
-    var transactionId = ref.read(invoiceNewLoanRequestProvider).transactionId;
-    var providerId =
-        ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
-
-    if (transactionId == "" || providerId == "") {
-      transactionId = ref
-          .read(invoiceLoanLiabilityProvider)
-          .selectedLiability
-          .offerDetails
-          .transactionId;
-      providerId = ref
-          .read(invoiceLoanLiabilityProvider)
-          .selectedLiability
-          .offerDetails
-          .offerProviderId;
-    }
-
-    logger.d(
-        "transactionId: $transactionId, providerId: $providerId, authToken: $authToken");
-
-    if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
-      return LoanEventsState.initial;
-    }
-
-    Timer(const Duration(seconds: 5), () {
-      logger.d("invalidating loan event state");
-      ref.invalidateSelf();
+    var timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await fetchLatestEventForConsumption();
     });
 
+    ref.onDispose(() {
+      timer.cancel();
+    });
+
+    return LoanEvent.demo();
+  }
+
+  Future<void> fetchLatestEventForConsumption() async {
     try {
-      logger.d("making request to server for the latest event");
+      final cancelToken = CancelToken();
+
+      var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+      var transactionId = ref.read(invoiceNewLoanRequestProvider).transactionId;
+      var providerId =
+          ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
+
+      if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
+        return;
+      }
+
       var httpService = HttpService();
       var response = await httpService
           .get("/ondc/get-latest-event", authToken, cancelToken, {
@@ -67,20 +53,14 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       });
 
       if (!response.data['success']) {
-        if (state.hasValue) {
-          return state.value!;
-        } else {
-          return LoanEventsState.initial;
-        }
+        return;
       }
 
       var latestEvent = LoanEvent.fromJson(response.data['data']['event']);
 
       await consumeEvent(latestEvent);
 
-      return LoanEventsState(
-        latestEvent: latestEvent,
-      );
+      return;
     } catch (e, stackTrace) {
       ErrorInstance(
         message:
@@ -88,12 +68,6 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         exception: e,
         trace: stackTrace,
       ).reportError();
-
-      if (state.hasValue) {
-        return state.value!;
-      } else {
-        return LoanEventsState.initial;
-      }
     }
   }
 
@@ -105,23 +79,25 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     bool success = event.success;
     String message = event.message;
 
-    logger.d(
-        "Message received from the server: $message \n, Step number received from the server: $stepNumber \n, Success received from the server: $success");
+    logger.w(
+        "Message received from the server: $message \n, Step number received from the server: $stepNumber \n, Success received from the server: $success, Consumed ${event.consumed}");
 
-    if (state.hasValue) {
-      var prevEvent = state.value!.latestEvent;
+    if (event.consumed) {
+      return;
+    }
 
-      if (prevEvent.messageId == event.messageId && prevEvent.consumed) {
-        return;
-      }
+    var prevEvent = state;
 
-      if (prevEvent.timeStamp > event.timeStamp) {
-        return;
-      }
+    if (prevEvent.messageId == event.messageId && prevEvent.consumed) {
+      return;
+    }
 
-      if (prevEvent.priority > event.priority) {
-        return;
-      }
+    if (prevEvent.timeStamp > event.timeStamp) {
+      return;
+    }
+
+    if (prevEvent.priority > event.priority) {
+      return;
     }
 
     switch (context) {
@@ -389,9 +365,8 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         if (stepNumber == 2) {
           if (success) {
-            ref
-                .read(routerProvider)
-                .pushReplacement(InvoiceNewLoanRequestRouter.generate_monitoring_consent);
+            ref.read(routerProvider).pushReplacement(
+                InvoiceNewLoanRequestRouter.generate_monitoring_consent);
 
             break;
           } else {
@@ -409,7 +384,9 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
                 .read(invoiceNewLoanRequestProvider.notifier)
                 .updateState(LoanRequestProgress.loanStepsCompleted);
 
-            await ref.read(invoiceNewLoanRequestProvider.notifier).refetchSelectedOfferDetails(cancelToken);
+            await ref
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .refetchSelectedOfferDetails(cancelToken);
 
             ref.read(routerProvider).go(InvoiceNewLoanRequestRouter.dashboard);
 
@@ -429,6 +406,20 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         logger.d("No context found");
         break;
     }
+
+    state = LoanEvent(
+        messageId: event.messageId,
+        transactionId: event.transactionId,
+        providerId: event.providerId,
+        gst: event.gst,
+        message: message,
+        success: success,
+        context: context,
+        stepNumber: stepNumber,
+        nextStepNumber: event.nextStepNumber,
+        consumed: true,
+        timeStamp: event.timeStamp,
+        priority: event.priority);
 
     await setEventConsumed(event.messageId);
     return;
@@ -450,22 +441,11 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     try {
       var httpService = HttpService();
 
-      var response = await httpService
-          .post("/ondc/consume-event", authToken, cancelToken, {
+      await httpService.post("/ondc/consume-event", authToken, cancelToken, {
         "transaction_id": transactionId,
         "provider_id": providerId,
         "message_id": messageId,
       });
-
-      if (response.data['success'] && state.hasValue) {
-        var currentValue = state.value!.latestEvent;
-
-        currentValue.updateConsumed(true);
-
-        state = state.copyWithPrevious(
-          AsyncValue.data(LoanEventsState(latestEvent: currentValue)),
-        );
-      }
 
       return;
     } catch (e, stackTrace) {

@@ -26,9 +26,6 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
   final _cancelToken = CancelToken();
 
   void fetchMonitoringConsentHandler() async {
-    if (ref.read(invoiceNewLoanRequestProvider).generatingMonitoringConsent) {
-      return;
-    }
 
     var generateConsentResponse = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
@@ -174,17 +171,23 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
                         width: 300,
                       ),
                       const SizedBox(height: 20),
-                      Text(
-                        "Generating Consent Details...",
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h1,
-                          fontWeight: AppFontWeights.bold,
-                          letterSpacing: 0.4,
-                          color: Theme.of(context).colorScheme.primary,
+                      GestureDetector(
+                        onTap: () {
+                            HapticFeedback.mediumImpact();
+                          fetchMonitoringConsentHandler();
+                        },
+                        child: Text(
+                          "Generating Consent Details...",
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.h1,
+                            fontWeight: AppFontWeights.bold,
+                            letterSpacing: 0.4,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          softWrap: true,
+                          textAlign: TextAlign.center,
                         ),
-                        softWrap: true,
-                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 40),
                       Text(

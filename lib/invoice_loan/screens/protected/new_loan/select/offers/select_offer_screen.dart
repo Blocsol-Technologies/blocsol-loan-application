@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
@@ -29,21 +30,43 @@ class InvoiceNewLoanOfferDetails extends ConsumerStatefulWidget {
 
 class _InvoiceNewLoanOfferDetailsState
     extends ConsumerState<InvoiceNewLoanOfferDetails> {
+  bool _descindingOrder = false;
+  List<OfferDetails> _offerDetailsList = [];
   int _endTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900;
+
+  void _sortOffers() {
+    if (_descindingOrder) {
+      _offerDetailsList.sort((a, b) => a.deposit.compareTo(b.deposit));
+    } else {
+      _offerDetailsList.sort((a, b) => b.deposit.compareTo(a.deposit));
+    }
+
+    setState(() {
+      _descindingOrder = !_descindingOrder;
+    });
+  }
 
   @override
   void initState() {
-    int properEndTime = max(
-        900 -
-            (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-                ref
-                    .read(invoiceNewLoanRequestProvider)
-                    .invoiceWithOffersFetchTime),
-        0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      int properEndTime = max(
+          900 -
+              (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
+                  ref
+                      .read(invoiceNewLoanRequestProvider)
+                      .invoiceWithOffersFetchTime),
+          0);
 
-    setState(() {
-      _endTime = DateTime.now().millisecondsSinceEpoch + (properEndTime) * 1000;
+      setState(() {
+        _offerDetailsList = ref
+            .read(invoiceNewLoanRequestProvider)
+            .selectedInvoice
+            .offerDetailsList;
+        _endTime =
+            DateTime.now().millisecondsSinceEpoch + (properEndTime) * 1000;
+      });
     });
+
     super.initState();
   }
 
@@ -92,35 +115,43 @@ class _InvoiceNewLoanOfferDetailsState
                     Expanded(
                       child: Container(),
                     ),
-                    Container(
-                      height: 25,
-                      width: 65,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.75),
-                          width: 1,
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        ref
+                            .read(routerProvider)
+                            .push(InvoiceLoanSupportRouter.raise_new_ticket);
+                      },
+                      child: Container(
+                        height: 25,
+                        width: 65,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.75),
+                            width: 1,
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Help?",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.b1,
-                            fontWeight: AppFontWeights.extraBold,
-                            color: Theme.of(context).colorScheme.primary,
+                        child: Center(
+                          child: Text(
+                            "Help?",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.extraBold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SpacerWidget(height: 36),
+                const SpacerWidget(height: 30),
                 Container(
                   width: 180,
                   padding: const EdgeInsets.symmetric(
@@ -173,7 +204,7 @@ class _InvoiceNewLoanOfferDetailsState
                   style: TextStyle(
                     fontFamily: fontFamily,
                     fontSize: AppFontSizes.h1,
-                    fontWeight: AppFontWeights.bold,
+                    fontWeight: AppFontWeights.extraBold,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   softWrap: true,
@@ -195,8 +226,8 @@ class _InvoiceNewLoanOfferDetailsState
                       TextSpan(
                         text: selectedInvoiceOffer.inum,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: AppFontSizes.h2,
+                          color: const Color.fromRGBO(80, 80, 80, 1),
+                          fontSize: AppFontSizes.h3,
                           fontWeight: AppFontWeights.bold,
                           letterSpacing: 0.14,
                           fontFamily: fontFamily,
@@ -219,8 +250,8 @@ class _InvoiceNewLoanOfferDetailsState
                       TextSpan(
                         text: "₹ ${selectedInvoiceOffer.amount}",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: AppFontSizes.h2,
+                          color: const Color.fromRGBO(80, 80, 80, 1),
+                          fontSize: AppFontSizes.h3,
                           fontWeight: AppFontWeights.bold,
                           letterSpacing: 0.14,
                           fontFamily: fontFamily,
@@ -232,12 +263,68 @@ class _InvoiceNewLoanOfferDetailsState
                 const SpacerWidget(
                   height: 45,
                 ),
-                ...selectedInvoiceOffer.offerDetailsList.map((offer) {
-                  return InvoiceOfferWidget(
-                    invoiceNumber: selectedInvoiceOffer.inum,
-                    offer: offer,
-                  );
-                }),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        _sortOffers();
+                      },
+                      child: Container(
+                        height: 35,
+                        width: 85,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color.fromRGBO(76, 76, 76, 0.4),
+                          ),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AnimatedRotation(
+                              turns: _descindingOrder ? 1 : 0.5,
+                              duration: const Duration(milliseconds: 300),
+                              child: Icon(
+                                Icons.sort_rounded,
+                                size: 25,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SpacerWidget(
+                              width: 5,
+                            ),
+                            Text(
+                              "Sort",
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SpacerWidget(
+                  height: 20,
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _offerDetailsList.length,
+                    itemBuilder: (ctx, idx) {
+                      return InvoiceOfferWidget(
+                        invoiceNumber: selectedInvoiceOffer.inum,
+                        offer: _offerDetailsList[idx],
+                      );
+                    })
               ],
             ),
           ),
@@ -277,12 +364,21 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
 
     var response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
-        .selectOffer(widget.offer.transactionId, widget.offer.offerProviderId,
-            widget.offer.offerId, widget.invoiceNumber, _cancelToken);
+        .selectOffer(
+            widget.offer.transactionId,
+            widget.offer.offerProviderId,
+            widget.offer.offerId,
+            widget.invoiceNumber,
+            widget.offer.parentItemId,
+            _cancelToken);
 
     if (!mounted) return;
 
     if (!response.success) {
+      ref
+          .read(invoiceNewLoanRequestProvider.notifier)
+          .setOfferSelected(OfferDetails.demo());
+
       setState(() {
         _selectingOffer = false;
       });
@@ -306,7 +402,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
       return;
     }
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 15));
 
     if (ref
             .read(invoiceNewLoanRequestProvider)
@@ -348,7 +444,9 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
       return;
     }
 
-    ref.read(routerProvider).push(InvoiceNewLoanRequestRouter.loan_key_fact_sheet);
+    ref
+        .read(routerProvider)
+        .push(InvoiceNewLoanRequestRouter.loan_key_fact_sheet);
   }
 
   @override
@@ -368,7 +466,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
@@ -431,7 +529,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                   Expanded(
                     flex: 1,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           "Loan",
@@ -466,7 +564,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                   Expanded(
                     flex: 1,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           "Interest",
@@ -503,7 +601,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                   Expanded(
                     flex: 1,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           "Fee",

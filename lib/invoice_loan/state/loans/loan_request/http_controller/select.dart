@@ -61,6 +61,7 @@ class LoanRequestSelectHttpController {
       String offerId,
       String invoiceId,
       String providerId,
+      String parentItemId,
       String authToken,
       CancelToken cancelToken) async {
     try {
@@ -71,6 +72,7 @@ class LoanRequestSelectHttpController {
         "offer_id": offerId,
         "invoice_id": invoiceId,
         "provider_id": providerId,
+        "parent_item_id": parentItemId,
       });
 
       if (response.data['success']) {

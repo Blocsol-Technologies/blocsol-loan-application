@@ -267,7 +267,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                   child: Row(
                     children: <Widget>[

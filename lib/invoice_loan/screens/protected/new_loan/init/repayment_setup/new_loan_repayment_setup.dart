@@ -403,7 +403,7 @@ class _InvoiceNewLoanRepaymentSetupState
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.tertiary,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Column(
@@ -552,8 +552,7 @@ class _InvoiceNewLoanRepaymentSetupState
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
-                                .onSurface
-                                .withOpacity(0.4),
+                                .onSurface,
                             fontSize: AppFontSizes.h3,
                             fontWeight: AppFontWeights.medium,
                             fontFamily: fontFamily,
@@ -567,7 +566,7 @@ class _InvoiceNewLoanRepaymentSetupState
                             Text(
                               newLoanStateRef.bankAccountNumber,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(145, 145, 145, 1),
                                 fontSize: AppFontSizes.h3,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -615,8 +614,7 @@ class _InvoiceNewLoanRepaymentSetupState
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
-                                .onSurface
-                                .withOpacity(0.4),
+                                .onSurface,
                             fontSize: AppFontSizes.h3,
                             fontWeight: AppFontWeights.medium,
                             fontFamily: fontFamily,
@@ -630,7 +628,7 @@ class _InvoiceNewLoanRepaymentSetupState
                             Text(
                               msmeBasicDetailsRef.legalName,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(145, 145, 145, 1),
                                 fontSize: AppFontSizes.h3,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,

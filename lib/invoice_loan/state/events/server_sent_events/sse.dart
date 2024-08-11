@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 
 import 'package:eventflux/eventflux.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,11 +19,16 @@ class InvoiceLoanServerSentEvents extends _$InvoiceLoanServerSentEvents {
 
     var (_, token) = ref.read(authProvider.notifier).getAuthTokens();
 
+    logger.w("Starting SSE Connection");
+
     EventFlux.instance.connect(
       EventFluxConnectionType.get,
       '$serverUrl/ondc/events',
       header: {"Authorization": token, "Keep-Alive": "true"},
       onSuccessCallback: (EventFluxResponse? response) {
+
+        logger.w("SSE Connection established");
+
         response?.stream?.listen((data) async {
           var serverSentData = data.data;
 
@@ -40,8 +46,10 @@ class InvoiceLoanServerSentEvents extends _$InvoiceLoanServerSentEvents {
           trace: StackTrace.current,
         ).reportError();
       },
+      reconnectConfig: ReconnectConfig(mode: ReconnectMode.linear, interval: const Duration(seconds: 5), maxAttempts: 5),
       autoReconnect: true,
     );
+
     return;
   }
 }

@@ -608,6 +608,7 @@ class LSPContactInfo {
 class OfferDetails {
   final String offerId;
   final String offerProviderId;
+  final String parentItemId;
   final String bankName;
   final String bankLogoURL;
   final String transactionId;
@@ -653,6 +654,7 @@ class OfferDetails {
     this.disbursementErr = false,
     this.state = "",
     this.totalRepayment = "",
+      this.parentItemId = "",
     this.netDisbursedAmount = "",
     this.annualPercentageRate = "",
     this.insuranceCharges = "",
@@ -715,6 +717,7 @@ class OfferDetails {
         state: state,
         offerId: json['offerId'],
         offerProviderId: json['offerProviderId'],
+        parentItemId: json['parentItemId'],
         bankName: json['bankName'],
         bankLogoURL: json['bankLogoURL'],
         transactionId: json['transactionId'],

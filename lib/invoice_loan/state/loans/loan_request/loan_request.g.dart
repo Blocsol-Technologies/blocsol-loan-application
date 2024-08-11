@@ -7,7 +7,7 @@ part of 'loan_request.dart';
 // **************************************************************************
 
 String _$invoiceNewLoanRequestHash() =>
-    r'd5e90ea01751206f14d97b0e0531331c3c29c78d';
+    r'78c00c245ffeded4dbe0713d5284ec03eed9c536';
 
 /// See also [InvoiceNewLoanRequest].
 @ProviderFor(InvoiceNewLoanRequest)

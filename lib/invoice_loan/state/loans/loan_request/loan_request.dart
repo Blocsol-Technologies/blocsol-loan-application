@@ -401,7 +401,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   }
 
   Future<ServerResponse> selectOffer(String transactionId, String providerId,
-      String offerId, String invoiceId, CancelToken cancelToken) async {
+      String offerId, String invoiceId, String parentItemId, CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     if (transactionId.isEmpty ||
@@ -416,7 +416,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     }
 
     var response = await LoanRequestSelectHttpController.selectOffer(
-        transactionId, offerId, invoiceId, providerId, authToken, cancelToken);
+        transactionId, offerId, invoiceId, providerId, parentItemId, authToken, cancelToken);
 
     if (response.success) {
       state =

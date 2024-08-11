@@ -84,7 +84,7 @@ flutter:
 
     # Invoice New Loan Request
     - assets/images/invoice_loan/new_loan_request/invoice.png
-    
+
     # Animation Assets
     - assets/animations/loading_spinner.json
     - assets/animations/downloading_data.json
