@@ -19,6 +19,9 @@ mixin _$AllLiabilitiesState {
   List<LoanDetails> get liabilities => throw _privateConstructorUsedError;
   bool get fetchingLiabilitiess => throw _privateConstructorUsedError;
   int get liabilitiessFetchTime => throw _privateConstructorUsedError;
+  List<LoanDetails> get closedLiabilities => throw _privateConstructorUsedError;
+  bool get fetchingClosedLiabilities => throw _privateConstructorUsedError;
+  int get closedLiabilitiessFetchTime => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AllLiabilitiesStateCopyWith<AllLiabilitiesState> get copyWith =>
@@ -34,7 +37,10 @@ abstract class $AllLiabilitiesStateCopyWith<$Res> {
   $Res call(
       {List<LoanDetails> liabilities,
       bool fetchingLiabilitiess,
-      int liabilitiessFetchTime});
+      int liabilitiessFetchTime,
+      List<LoanDetails> closedLiabilities,
+      bool fetchingClosedLiabilities,
+      int closedLiabilitiessFetchTime});
 }
 
 /// @nodoc
@@ -53,6 +59,9 @@ class _$AllLiabilitiesStateCopyWithImpl<$Res, $Val extends AllLiabilitiesState>
     Object? liabilities = null,
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
+    Object? closedLiabilities = null,
+    Object? fetchingClosedLiabilities = null,
+    Object? closedLiabilitiessFetchTime = null,
   }) {
     return _then(_value.copyWith(
       liabilities: null == liabilities
@@ -66,6 +75,18 @@ class _$AllLiabilitiesStateCopyWithImpl<$Res, $Val extends AllLiabilitiesState>
       liabilitiessFetchTime: null == liabilitiessFetchTime
           ? _value.liabilitiessFetchTime
           : liabilitiessFetchTime // ignore: cast_nullable_to_non_nullable
+              as int,
+      closedLiabilities: null == closedLiabilities
+          ? _value.closedLiabilities
+          : closedLiabilities // ignore: cast_nullable_to_non_nullable
+              as List<LoanDetails>,
+      fetchingClosedLiabilities: null == fetchingClosedLiabilities
+          ? _value.fetchingClosedLiabilities
+          : fetchingClosedLiabilities // ignore: cast_nullable_to_non_nullable
+              as bool,
+      closedLiabilitiessFetchTime: null == closedLiabilitiessFetchTime
+          ? _value.closedLiabilitiessFetchTime
+          : closedLiabilitiessFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -82,7 +103,10 @@ abstract class _$$AllLiabilitiesStateImplCopyWith<$Res>
   $Res call(
       {List<LoanDetails> liabilities,
       bool fetchingLiabilitiess,
-      int liabilitiessFetchTime});
+      int liabilitiessFetchTime,
+      List<LoanDetails> closedLiabilities,
+      bool fetchingClosedLiabilities,
+      int closedLiabilitiessFetchTime});
 }
 
 /// @nodoc
@@ -99,6 +123,9 @@ class __$$AllLiabilitiesStateImplCopyWithImpl<$Res>
     Object? liabilities = null,
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
+    Object? closedLiabilities = null,
+    Object? fetchingClosedLiabilities = null,
+    Object? closedLiabilitiessFetchTime = null,
   }) {
     return _then(_$AllLiabilitiesStateImpl(
       liabilities: null == liabilities
@@ -113,6 +140,18 @@ class __$$AllLiabilitiesStateImplCopyWithImpl<$Res>
           ? _value.liabilitiessFetchTime
           : liabilitiessFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
+      closedLiabilities: null == closedLiabilities
+          ? _value._closedLiabilities
+          : closedLiabilities // ignore: cast_nullable_to_non_nullable
+              as List<LoanDetails>,
+      fetchingClosedLiabilities: null == fetchingClosedLiabilities
+          ? _value.fetchingClosedLiabilities
+          : fetchingClosedLiabilities // ignore: cast_nullable_to_non_nullable
+              as bool,
+      closedLiabilitiessFetchTime: null == closedLiabilitiessFetchTime
+          ? _value.closedLiabilitiessFetchTime
+          : closedLiabilitiessFetchTime // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -123,8 +162,12 @@ class _$AllLiabilitiesStateImpl implements _AllLiabilitiesState {
   const _$AllLiabilitiesStateImpl(
       {required final List<LoanDetails> liabilities,
       required this.fetchingLiabilitiess,
-      required this.liabilitiessFetchTime})
-      : _liabilities = liabilities;
+      required this.liabilitiessFetchTime,
+      required final List<LoanDetails> closedLiabilities,
+      required this.fetchingClosedLiabilities,
+      required this.closedLiabilitiessFetchTime})
+      : _liabilities = liabilities,
+        _closedLiabilities = closedLiabilities;
 
   final List<LoanDetails> _liabilities;
   @override
@@ -138,10 +181,23 @@ class _$AllLiabilitiesStateImpl implements _AllLiabilitiesState {
   final bool fetchingLiabilitiess;
   @override
   final int liabilitiessFetchTime;
+  final List<LoanDetails> _closedLiabilities;
+  @override
+  List<LoanDetails> get closedLiabilities {
+    if (_closedLiabilities is EqualUnmodifiableListView)
+      return _closedLiabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_closedLiabilities);
+  }
+
+  @override
+  final bool fetchingClosedLiabilities;
+  @override
+  final int closedLiabilitiessFetchTime;
 
   @override
   String toString() {
-    return 'AllLiabilitiesState(liabilities: $liabilities, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime)';
+    return 'AllLiabilitiesState(liabilities: $liabilities, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, closedLiabilities: $closedLiabilities, fetchingClosedLiabilities: $fetchingClosedLiabilities, closedLiabilitiessFetchTime: $closedLiabilitiessFetchTime)';
   }
 
   @override
@@ -154,7 +210,16 @@ class _$AllLiabilitiesStateImpl implements _AllLiabilitiesState {
             (identical(other.fetchingLiabilitiess, fetchingLiabilitiess) ||
                 other.fetchingLiabilitiess == fetchingLiabilitiess) &&
             (identical(other.liabilitiessFetchTime, liabilitiessFetchTime) ||
-                other.liabilitiessFetchTime == liabilitiessFetchTime));
+                other.liabilitiessFetchTime == liabilitiessFetchTime) &&
+            const DeepCollectionEquality()
+                .equals(other._closedLiabilities, _closedLiabilities) &&
+            (identical(other.fetchingClosedLiabilities,
+                    fetchingClosedLiabilities) ||
+                other.fetchingClosedLiabilities == fetchingClosedLiabilities) &&
+            (identical(other.closedLiabilitiessFetchTime,
+                    closedLiabilitiessFetchTime) ||
+                other.closedLiabilitiessFetchTime ==
+                    closedLiabilitiessFetchTime));
   }
 
   @override
@@ -162,7 +227,10 @@ class _$AllLiabilitiesStateImpl implements _AllLiabilitiesState {
       runtimeType,
       const DeepCollectionEquality().hash(_liabilities),
       fetchingLiabilitiess,
-      liabilitiessFetchTime);
+      liabilitiessFetchTime,
+      const DeepCollectionEquality().hash(_closedLiabilities),
+      fetchingClosedLiabilities,
+      closedLiabilitiessFetchTime);
 
   @JsonKey(ignore: true)
   @override
@@ -174,9 +242,13 @@ class _$AllLiabilitiesStateImpl implements _AllLiabilitiesState {
 
 abstract class _AllLiabilitiesState implements AllLiabilitiesState {
   const factory _AllLiabilitiesState(
-      {required final List<LoanDetails> liabilities,
-      required final bool fetchingLiabilitiess,
-      required final int liabilitiessFetchTime}) = _$AllLiabilitiesStateImpl;
+          {required final List<LoanDetails> liabilities,
+          required final bool fetchingLiabilitiess,
+          required final int liabilitiessFetchTime,
+          required final List<LoanDetails> closedLiabilities,
+          required final bool fetchingClosedLiabilities,
+          required final int closedLiabilitiessFetchTime}) =
+      _$AllLiabilitiesStateImpl;
 
   @override
   List<LoanDetails> get liabilities;
@@ -184,6 +256,12 @@ abstract class _AllLiabilitiesState implements AllLiabilitiesState {
   bool get fetchingLiabilitiess;
   @override
   int get liabilitiessFetchTime;
+  @override
+  List<LoanDetails> get closedLiabilities;
+  @override
+  bool get fetchingClosedLiabilities;
+  @override
+  int get closedLiabilitiessFetchTime;
   @override
   @JsonKey(ignore: true)
   _$$AllLiabilitiesStateImplCopyWith<_$AllLiabilitiesStateImpl> get copyWith =>

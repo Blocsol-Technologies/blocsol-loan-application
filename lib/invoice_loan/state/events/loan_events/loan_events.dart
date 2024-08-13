@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
@@ -41,7 +43,24 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       var providerId =
           ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
 
-      if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
+      if (authToken.isEmpty) {
+        return;
+      }
+
+      if (transactionId.isEmpty || providerId.isEmpty) {
+        transactionId = ref
+            .read(invoiceLoanLiabilityProvider)
+            .selectedLiability
+            .offerDetails
+            .transactionId;
+        providerId = ref
+            .read(invoiceLoanLiabilityProvider)
+            .selectedLiability
+            .offerDetails
+            .offerProviderId;
+      }
+
+      if (transactionId.isEmpty || providerId.isEmpty) {
         return;
       }
 
@@ -401,7 +420,20 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         break;
       case "payments":
-        if (stepNumber == 1) {}
+        if (stepNumber == 2) {}
+        {
+          if (success) {
+            await ref
+                .read(invoiceLoanLiabilityProvider.notifier)
+                .fetchSingleLiabilityDetails(cancelToken);
+            ref
+                .read(routerProvider)
+                .go(InvoiceLoanLiabilitiesRouter.singleLiabilityDetails);
+          } else {
+            ref.read(routerProvider).pushReplacement(
+                InvoiceLoanLiabilitiesRouter.payment_error_page);
+          }
+        }
       default:
         logger.d("No context found");
         break;

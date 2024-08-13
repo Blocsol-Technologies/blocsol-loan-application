@@ -31,9 +31,6 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
         liabilitiessFetchTime: DateTime.now().millisecondsSinceEpoch ~/ 1000);
 
     if (response.success) {
-      state = state.copyWith(
-        liabilities: response.data,
-      );
 
       if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
               state.liabilitiessFetchTime >
@@ -45,6 +42,39 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
       } else {
         state = state.copyWith(
           liabilities: response.data,
+        );
+      }
+    }
+
+    return response;
+  }
+
+  Future<ServerResponse> fetchAllClosedLiabilities(CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    if (state.liabilities.isEmpty) {
+      state = state.copyWith(fetchingClosedLiabilities: true);
+    }
+
+    var response =
+        await InvoiceLoanAllLiabilitiesHttpController.fetchAllClosedLiabilities(
+            authToken, cancelToken);
+
+    state = state.copyWith(
+        fetchingClosedLiabilities: false,
+        closedLiabilitiessFetchTime: DateTime.now().millisecondsSinceEpoch ~/ 1000);
+
+    if (response.success) {
+      if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
+              state.liabilitiessFetchTime >
+          900) {
+        state = state.copyWith(
+            closedLiabilities: response.data,
+            closedLiabilitiessFetchTime:
+                DateTime.now().millisecondsSinceEpoch ~/ 1000);
+      } else {
+        state = state.copyWith(
+          closedLiabilities: response.data,
         );
       }
     }

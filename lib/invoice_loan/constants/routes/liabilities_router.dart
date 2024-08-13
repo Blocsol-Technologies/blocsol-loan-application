@@ -18,6 +18,8 @@ class InvoiceLoanLiabilitiesRouter {
   static const String general_webview =
       'invoice-loan/liabilities/general-webview';  
 
+  static const String payment_error_page = 'invoice-loan/liabilities/error-page';
+
   // Foreclosure
   static const String liability_foreclosure_webview =
       'invoice-loan/liabilities/liability-foreclosure-webview';
