@@ -3,11 +3,9 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/loan_agreement/otp_modal_bottom_sheet.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -19,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class InvoiceNewLoanAgreement extends ConsumerStatefulWidget {
@@ -36,47 +33,6 @@ class _InvoiceNewLoanAgreementState
   final GlobalKey _agreementWebviewKey = GlobalKey();
 
   InAppWebViewController? _webViewController;
-
-  Future<void> _iAgreeClickHandler(BuildContext context) async {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        context: context,
-        builder: (context) {
-          return Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: InvoiceLoanAgreementOTPModalBottomSheet(
-              onSubmit: (String otp) {
-                _submitAndVerifyLoanAgreementSuccess(otp);
-              },
-            ),
-          );
-        });
-  }
-
-  void _submitAndVerifyLoanAgreementSuccess(String otp) async {
-    if (ref.read(invoiceNewLoanRequestProvider).verifyingAadharKYC) {
-      return;
-    }
-
-    var submitForm07Response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .submitLoanAgreementForm(otp, _cancelToken);
-
-    if (!mounted) return;
-
-    if (!submitForm07Response.success) {
-      context.go(InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.loan_agreement_failed);
-      return;
-    }
-  }
 
   void _fetchLoanAgreementURL() async {
     var response = await ref
@@ -179,7 +135,9 @@ class _InvoiceNewLoanAgreementState
                       GestureDetector(
                         onTap: () {
                           HapticFeedback.mediumImpact();
-                          ref.read(routerProvider).push(InvoiceLoanSupportRouter.raise_new_ticket);
+                          ref
+                              .read(routerProvider)
+                              .push(InvoiceLoanSupportRouter.raise_new_ticket);
                         },
                         child: Container(
                           height: 25,
@@ -317,51 +275,6 @@ class _InvoiceNewLoanAgreementState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () async {
-                            HapticFeedback.mediumImpact();
-                            // TODO: Implement loan agreement download functionality
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.download,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 25,
-                                ),
-                                const SpacerWidget(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "Download",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: AppFontSizes.h2,
-                                    fontWeight: AppFontWeights.extraBold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SpacerWidget(
-                          height: 25,
-                        ),
                         Expanded(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,

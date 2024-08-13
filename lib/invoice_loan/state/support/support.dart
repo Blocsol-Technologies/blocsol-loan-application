@@ -9,7 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'support.g.dart';
 
 @riverpod
-class Support extends _$Support {
+class InvoiceLoanSupport extends _$InvoiceLoanSupport {
   @override
   SupportStateData build() {
     ref.keepAlive();

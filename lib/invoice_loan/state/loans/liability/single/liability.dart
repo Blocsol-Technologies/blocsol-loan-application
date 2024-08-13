@@ -115,14 +115,12 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    state = state.copyWith(loanForeclosureFailed: false);
+    state = state.copyWith(loanForeclosureFailed: false, verifyingForeclosure: true);
 
     var response = await LiabilitiesHttpController.checkForeclosureSuccess(
         transactionId, providerId, authToken, cancelToken);
 
-    if (!response.success) {
-      state = state.copyWith(loanForeclosureFailed: true);
-    }
+    state = state.copyWith(verifyingForeclosure: false);
 
     return response;
   }
@@ -232,7 +230,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    state = state.copyWith(missedEmiPaymentFailed: false);
+    state = state.copyWith(missedEmiPaymentFailed: false, verifyingMissedEmiPaymentSuccess: true);
 
     var response =
         await LiabilitiesHttpController.checkMissedEmiRepaymentSuccess(
@@ -242,10 +240,8 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
             authToken,
             cancelToken);
 
-    if (!response.success) {
-      state = state.copyWith(missedEmiPaymentFailed: true);
-    }
-
+    state = state.copyWith(verifyingMissedEmiPaymentSuccess: false);
+    
     return response;
   }
 }

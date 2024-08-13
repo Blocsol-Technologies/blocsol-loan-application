@@ -10,15 +10,25 @@ class LiabilityState with _$LiabilityState {
     required bool fetchingLiabilitiess,
     required int liabilitiessFetchTime,
     required bool fetchingSingleLiabilityDetails,
+
     // Actions
-    required bool loanForeclosureFailed,
+
+    // Foreclosure
     required bool initiatingForeclosure,
-    required bool prepaymentFailed,
-    required bool initiatingPrepayment,
+    required bool verifyingForeclosure,
+    required bool loanForeclosureFailed,
+
+    // Prepayment
     required String prepaymentId,
-    required bool missedEmiPaymentFailed,
-    required bool initiatingMissedEmiPayment,
+    required bool initiatingPrepayment,
+    required bool verifyingPrepaymentSuccess,
+    required bool prepaymentFailed,
+
+    // Missed EMI Payment
     required String missedEmiPaymentId,
+    required bool initiatingMissedEmiPayment,
+    required bool verifyingMissedEmiPaymentSuccess,
+    required bool missedEmiPaymentFailed,
   }) = _LiabilityState;
 
   static var initial = LiabilityState(
@@ -27,13 +37,23 @@ class LiabilityState with _$LiabilityState {
     liabilitiessFetchTime: 0,
     fetchingSingleLiabilityDetails: false,
     // Actions
-    loanForeclosureFailed: false,
+
+    // Foreclosure
     initiatingForeclosure: false,
-    prepaymentFailed: false,
-    initiatingPrepayment: false,
+    verifyingForeclosure: false,
+    loanForeclosureFailed: false,
+
+    // Prepayment
     prepaymentId: "",
+    initiatingPrepayment: false,
+    verifyingPrepaymentSuccess: false,
+    prepaymentFailed: false,
+
+    // Missed EMI Payment
+
     missedEmiPaymentFailed: false,
     initiatingMissedEmiPayment: false,
+    verifyingMissedEmiPaymentSuccess: false,
     missedEmiPaymentId: "",
   );
 }

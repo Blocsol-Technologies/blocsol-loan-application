@@ -21,14 +21,21 @@ mixin _$LiabilityState {
   int get liabilitiessFetchTime => throw _privateConstructorUsedError;
   bool get fetchingSingleLiabilityDetails =>
       throw _privateConstructorUsedError; // Actions
-  bool get loanForeclosureFailed => throw _privateConstructorUsedError;
+// Foreclosure
   bool get initiatingForeclosure => throw _privateConstructorUsedError;
-  bool get prepaymentFailed => throw _privateConstructorUsedError;
-  bool get initiatingPrepayment => throw _privateConstructorUsedError;
+  bool get verifyingForeclosure => throw _privateConstructorUsedError;
+  bool get loanForeclosureFailed =>
+      throw _privateConstructorUsedError; // Prepayment
   String get prepaymentId => throw _privateConstructorUsedError;
-  bool get missedEmiPaymentFailed => throw _privateConstructorUsedError;
-  bool get initiatingMissedEmiPayment => throw _privateConstructorUsedError;
+  bool get initiatingPrepayment => throw _privateConstructorUsedError;
+  bool get verifyingPrepaymentSuccess => throw _privateConstructorUsedError;
+  bool get prepaymentFailed =>
+      throw _privateConstructorUsedError; // Missed EMI Payment
   String get missedEmiPaymentId => throw _privateConstructorUsedError;
+  bool get initiatingMissedEmiPayment => throw _privateConstructorUsedError;
+  bool get verifyingMissedEmiPaymentSuccess =>
+      throw _privateConstructorUsedError;
+  bool get missedEmiPaymentFailed => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LiabilityStateCopyWith<LiabilityState> get copyWith =>
@@ -46,14 +53,17 @@ abstract class $LiabilityStateCopyWith<$Res> {
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
-      bool loanForeclosureFailed,
       bool initiatingForeclosure,
-      bool prepaymentFailed,
-      bool initiatingPrepayment,
+      bool verifyingForeclosure,
+      bool loanForeclosureFailed,
       String prepaymentId,
-      bool missedEmiPaymentFailed,
+      bool initiatingPrepayment,
+      bool verifyingPrepaymentSuccess,
+      bool prepaymentFailed,
+      String missedEmiPaymentId,
       bool initiatingMissedEmiPayment,
-      String missedEmiPaymentId});
+      bool verifyingMissedEmiPaymentSuccess,
+      bool missedEmiPaymentFailed});
 }
 
 /// @nodoc
@@ -73,14 +83,17 @@ class _$LiabilityStateCopyWithImpl<$Res, $Val extends LiabilityState>
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
     Object? fetchingSingleLiabilityDetails = null,
-    Object? loanForeclosureFailed = null,
     Object? initiatingForeclosure = null,
-    Object? prepaymentFailed = null,
-    Object? initiatingPrepayment = null,
+    Object? verifyingForeclosure = null,
+    Object? loanForeclosureFailed = null,
     Object? prepaymentId = null,
-    Object? missedEmiPaymentFailed = null,
-    Object? initiatingMissedEmiPayment = null,
+    Object? initiatingPrepayment = null,
+    Object? verifyingPrepaymentSuccess = null,
+    Object? prepaymentFailed = null,
     Object? missedEmiPaymentId = null,
+    Object? initiatingMissedEmiPayment = null,
+    Object? verifyingMissedEmiPaymentSuccess = null,
+    Object? missedEmiPaymentFailed = null,
   }) {
     return _then(_value.copyWith(
       selectedLiability: null == selectedLiability
@@ -99,38 +112,50 @@ class _$LiabilityStateCopyWithImpl<$Res, $Val extends LiabilityState>
           ? _value.fetchingSingleLiabilityDetails
           : fetchingSingleLiabilityDetails // ignore: cast_nullable_to_non_nullable
               as bool,
-      loanForeclosureFailed: null == loanForeclosureFailed
-          ? _value.loanForeclosureFailed
-          : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
-              as bool,
       initiatingForeclosure: null == initiatingForeclosure
           ? _value.initiatingForeclosure
           : initiatingForeclosure // ignore: cast_nullable_to_non_nullable
               as bool,
-      prepaymentFailed: null == prepaymentFailed
-          ? _value.prepaymentFailed
-          : prepaymentFailed // ignore: cast_nullable_to_non_nullable
+      verifyingForeclosure: null == verifyingForeclosure
+          ? _value.verifyingForeclosure
+          : verifyingForeclosure // ignore: cast_nullable_to_non_nullable
               as bool,
-      initiatingPrepayment: null == initiatingPrepayment
-          ? _value.initiatingPrepayment
-          : initiatingPrepayment // ignore: cast_nullable_to_non_nullable
+      loanForeclosureFailed: null == loanForeclosureFailed
+          ? _value.loanForeclosureFailed
+          : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
               as bool,
       prepaymentId: null == prepaymentId
           ? _value.prepaymentId
           : prepaymentId // ignore: cast_nullable_to_non_nullable
               as String,
-      missedEmiPaymentFailed: null == missedEmiPaymentFailed
-          ? _value.missedEmiPaymentFailed
-          : missedEmiPaymentFailed // ignore: cast_nullable_to_non_nullable
+      initiatingPrepayment: null == initiatingPrepayment
+          ? _value.initiatingPrepayment
+          : initiatingPrepayment // ignore: cast_nullable_to_non_nullable
               as bool,
-      initiatingMissedEmiPayment: null == initiatingMissedEmiPayment
-          ? _value.initiatingMissedEmiPayment
-          : initiatingMissedEmiPayment // ignore: cast_nullable_to_non_nullable
+      verifyingPrepaymentSuccess: null == verifyingPrepaymentSuccess
+          ? _value.verifyingPrepaymentSuccess
+          : verifyingPrepaymentSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      prepaymentFailed: null == prepaymentFailed
+          ? _value.prepaymentFailed
+          : prepaymentFailed // ignore: cast_nullable_to_non_nullable
               as bool,
       missedEmiPaymentId: null == missedEmiPaymentId
           ? _value.missedEmiPaymentId
           : missedEmiPaymentId // ignore: cast_nullable_to_non_nullable
               as String,
+      initiatingMissedEmiPayment: null == initiatingMissedEmiPayment
+          ? _value.initiatingMissedEmiPayment
+          : initiatingMissedEmiPayment // ignore: cast_nullable_to_non_nullable
+              as bool,
+      verifyingMissedEmiPaymentSuccess: null == verifyingMissedEmiPaymentSuccess
+          ? _value.verifyingMissedEmiPaymentSuccess
+          : verifyingMissedEmiPaymentSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      missedEmiPaymentFailed: null == missedEmiPaymentFailed
+          ? _value.missedEmiPaymentFailed
+          : missedEmiPaymentFailed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -148,14 +173,17 @@ abstract class _$$LiabilityStateImplCopyWith<$Res>
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
-      bool loanForeclosureFailed,
       bool initiatingForeclosure,
-      bool prepaymentFailed,
-      bool initiatingPrepayment,
+      bool verifyingForeclosure,
+      bool loanForeclosureFailed,
       String prepaymentId,
-      bool missedEmiPaymentFailed,
+      bool initiatingPrepayment,
+      bool verifyingPrepaymentSuccess,
+      bool prepaymentFailed,
+      String missedEmiPaymentId,
       bool initiatingMissedEmiPayment,
-      String missedEmiPaymentId});
+      bool verifyingMissedEmiPaymentSuccess,
+      bool missedEmiPaymentFailed});
 }
 
 /// @nodoc
@@ -173,14 +201,17 @@ class __$$LiabilityStateImplCopyWithImpl<$Res>
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
     Object? fetchingSingleLiabilityDetails = null,
-    Object? loanForeclosureFailed = null,
     Object? initiatingForeclosure = null,
-    Object? prepaymentFailed = null,
-    Object? initiatingPrepayment = null,
+    Object? verifyingForeclosure = null,
+    Object? loanForeclosureFailed = null,
     Object? prepaymentId = null,
-    Object? missedEmiPaymentFailed = null,
-    Object? initiatingMissedEmiPayment = null,
+    Object? initiatingPrepayment = null,
+    Object? verifyingPrepaymentSuccess = null,
+    Object? prepaymentFailed = null,
     Object? missedEmiPaymentId = null,
+    Object? initiatingMissedEmiPayment = null,
+    Object? verifyingMissedEmiPaymentSuccess = null,
+    Object? missedEmiPaymentFailed = null,
   }) {
     return _then(_$LiabilityStateImpl(
       selectedLiability: null == selectedLiability
@@ -199,38 +230,50 @@ class __$$LiabilityStateImplCopyWithImpl<$Res>
           ? _value.fetchingSingleLiabilityDetails
           : fetchingSingleLiabilityDetails // ignore: cast_nullable_to_non_nullable
               as bool,
-      loanForeclosureFailed: null == loanForeclosureFailed
-          ? _value.loanForeclosureFailed
-          : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
-              as bool,
       initiatingForeclosure: null == initiatingForeclosure
           ? _value.initiatingForeclosure
           : initiatingForeclosure // ignore: cast_nullable_to_non_nullable
               as bool,
-      prepaymentFailed: null == prepaymentFailed
-          ? _value.prepaymentFailed
-          : prepaymentFailed // ignore: cast_nullable_to_non_nullable
+      verifyingForeclosure: null == verifyingForeclosure
+          ? _value.verifyingForeclosure
+          : verifyingForeclosure // ignore: cast_nullable_to_non_nullable
               as bool,
-      initiatingPrepayment: null == initiatingPrepayment
-          ? _value.initiatingPrepayment
-          : initiatingPrepayment // ignore: cast_nullable_to_non_nullable
+      loanForeclosureFailed: null == loanForeclosureFailed
+          ? _value.loanForeclosureFailed
+          : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
               as bool,
       prepaymentId: null == prepaymentId
           ? _value.prepaymentId
           : prepaymentId // ignore: cast_nullable_to_non_nullable
               as String,
-      missedEmiPaymentFailed: null == missedEmiPaymentFailed
-          ? _value.missedEmiPaymentFailed
-          : missedEmiPaymentFailed // ignore: cast_nullable_to_non_nullable
+      initiatingPrepayment: null == initiatingPrepayment
+          ? _value.initiatingPrepayment
+          : initiatingPrepayment // ignore: cast_nullable_to_non_nullable
               as bool,
-      initiatingMissedEmiPayment: null == initiatingMissedEmiPayment
-          ? _value.initiatingMissedEmiPayment
-          : initiatingMissedEmiPayment // ignore: cast_nullable_to_non_nullable
+      verifyingPrepaymentSuccess: null == verifyingPrepaymentSuccess
+          ? _value.verifyingPrepaymentSuccess
+          : verifyingPrepaymentSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      prepaymentFailed: null == prepaymentFailed
+          ? _value.prepaymentFailed
+          : prepaymentFailed // ignore: cast_nullable_to_non_nullable
               as bool,
       missedEmiPaymentId: null == missedEmiPaymentId
           ? _value.missedEmiPaymentId
           : missedEmiPaymentId // ignore: cast_nullable_to_non_nullable
               as String,
+      initiatingMissedEmiPayment: null == initiatingMissedEmiPayment
+          ? _value.initiatingMissedEmiPayment
+          : initiatingMissedEmiPayment // ignore: cast_nullable_to_non_nullable
+              as bool,
+      verifyingMissedEmiPaymentSuccess: null == verifyingMissedEmiPaymentSuccess
+          ? _value.verifyingMissedEmiPaymentSuccess
+          : verifyingMissedEmiPaymentSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      missedEmiPaymentFailed: null == missedEmiPaymentFailed
+          ? _value.missedEmiPaymentFailed
+          : missedEmiPaymentFailed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -243,14 +286,17 @@ class _$LiabilityStateImpl implements _LiabilityState {
       required this.fetchingLiabilitiess,
       required this.liabilitiessFetchTime,
       required this.fetchingSingleLiabilityDetails,
-      required this.loanForeclosureFailed,
       required this.initiatingForeclosure,
-      required this.prepaymentFailed,
-      required this.initiatingPrepayment,
+      required this.verifyingForeclosure,
+      required this.loanForeclosureFailed,
       required this.prepaymentId,
-      required this.missedEmiPaymentFailed,
+      required this.initiatingPrepayment,
+      required this.verifyingPrepaymentSuccess,
+      required this.prepaymentFailed,
+      required this.missedEmiPaymentId,
       required this.initiatingMissedEmiPayment,
-      required this.missedEmiPaymentId});
+      required this.verifyingMissedEmiPaymentSuccess,
+      required this.missedEmiPaymentFailed});
 
   @override
   final LoanDetails selectedLiability;
@@ -261,26 +307,35 @@ class _$LiabilityStateImpl implements _LiabilityState {
   @override
   final bool fetchingSingleLiabilityDetails;
 // Actions
-  @override
-  final bool loanForeclosureFailed;
+// Foreclosure
   @override
   final bool initiatingForeclosure;
   @override
-  final bool prepaymentFailed;
+  final bool verifyingForeclosure;
   @override
-  final bool initiatingPrepayment;
+  final bool loanForeclosureFailed;
+// Prepayment
   @override
   final String prepaymentId;
   @override
-  final bool missedEmiPaymentFailed;
+  final bool initiatingPrepayment;
+  @override
+  final bool verifyingPrepaymentSuccess;
+  @override
+  final bool prepaymentFailed;
+// Missed EMI Payment
+  @override
+  final String missedEmiPaymentId;
   @override
   final bool initiatingMissedEmiPayment;
   @override
-  final String missedEmiPaymentId;
+  final bool verifyingMissedEmiPaymentSuccess;
+  @override
+  final bool missedEmiPaymentFailed;
 
   @override
   String toString() {
-    return 'LiabilityState(selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, loanForeclosureFailed: $loanForeclosureFailed, initiatingForeclosure: $initiatingForeclosure, prepaymentFailed: $prepaymentFailed, initiatingPrepayment: $initiatingPrepayment, prepaymentId: $prepaymentId, missedEmiPaymentFailed: $missedEmiPaymentFailed, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, missedEmiPaymentId: $missedEmiPaymentId)';
+    return 'LiabilityState(selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, initiatingForeclosure: $initiatingForeclosure, verifyingForeclosure: $verifyingForeclosure, loanForeclosureFailed: $loanForeclosureFailed, prepaymentId: $prepaymentId, initiatingPrepayment: $initiatingPrepayment, verifyingPrepaymentSuccess: $verifyingPrepaymentSuccess, prepaymentFailed: $prepaymentFailed, missedEmiPaymentId: $missedEmiPaymentId, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, verifyingMissedEmiPaymentSuccess: $verifyingMissedEmiPaymentSuccess, missedEmiPaymentFailed: $missedEmiPaymentFailed)';
   }
 
   @override
@@ -298,24 +353,34 @@ class _$LiabilityStateImpl implements _LiabilityState {
                     fetchingSingleLiabilityDetails) ||
                 other.fetchingSingleLiabilityDetails ==
                     fetchingSingleLiabilityDetails) &&
-            (identical(other.loanForeclosureFailed, loanForeclosureFailed) ||
-                other.loanForeclosureFailed == loanForeclosureFailed) &&
             (identical(other.initiatingForeclosure, initiatingForeclosure) ||
                 other.initiatingForeclosure == initiatingForeclosure) &&
-            (identical(other.prepaymentFailed, prepaymentFailed) ||
-                other.prepaymentFailed == prepaymentFailed) &&
-            (identical(other.initiatingPrepayment, initiatingPrepayment) ||
-                other.initiatingPrepayment == initiatingPrepayment) &&
+            (identical(other.verifyingForeclosure, verifyingForeclosure) ||
+                other.verifyingForeclosure == verifyingForeclosure) &&
+            (identical(other.loanForeclosureFailed, loanForeclosureFailed) ||
+                other.loanForeclosureFailed == loanForeclosureFailed) &&
             (identical(other.prepaymentId, prepaymentId) ||
                 other.prepaymentId == prepaymentId) &&
-            (identical(other.missedEmiPaymentFailed, missedEmiPaymentFailed) ||
-                other.missedEmiPaymentFailed == missedEmiPaymentFailed) &&
+            (identical(other.initiatingPrepayment, initiatingPrepayment) ||
+                other.initiatingPrepayment == initiatingPrepayment) &&
+            (identical(other.verifyingPrepaymentSuccess,
+                    verifyingPrepaymentSuccess) ||
+                other.verifyingPrepaymentSuccess ==
+                    verifyingPrepaymentSuccess) &&
+            (identical(other.prepaymentFailed, prepaymentFailed) ||
+                other.prepaymentFailed == prepaymentFailed) &&
+            (identical(other.missedEmiPaymentId, missedEmiPaymentId) ||
+                other.missedEmiPaymentId == missedEmiPaymentId) &&
             (identical(other.initiatingMissedEmiPayment,
                     initiatingMissedEmiPayment) ||
                 other.initiatingMissedEmiPayment ==
                     initiatingMissedEmiPayment) &&
-            (identical(other.missedEmiPaymentId, missedEmiPaymentId) ||
-                other.missedEmiPaymentId == missedEmiPaymentId));
+            (identical(other.verifyingMissedEmiPaymentSuccess,
+                    verifyingMissedEmiPaymentSuccess) ||
+                other.verifyingMissedEmiPaymentSuccess ==
+                    verifyingMissedEmiPaymentSuccess) &&
+            (identical(other.missedEmiPaymentFailed, missedEmiPaymentFailed) ||
+                other.missedEmiPaymentFailed == missedEmiPaymentFailed));
   }
 
   @override
@@ -325,14 +390,17 @@ class _$LiabilityStateImpl implements _LiabilityState {
       fetchingLiabilitiess,
       liabilitiessFetchTime,
       fetchingSingleLiabilityDetails,
-      loanForeclosureFailed,
       initiatingForeclosure,
-      prepaymentFailed,
-      initiatingPrepayment,
+      verifyingForeclosure,
+      loanForeclosureFailed,
       prepaymentId,
-      missedEmiPaymentFailed,
+      initiatingPrepayment,
+      verifyingPrepaymentSuccess,
+      prepaymentFailed,
+      missedEmiPaymentId,
       initiatingMissedEmiPayment,
-      missedEmiPaymentId);
+      verifyingMissedEmiPaymentSuccess,
+      missedEmiPaymentFailed);
 
   @JsonKey(ignore: true)
   @override
@@ -348,14 +416,17 @@ abstract class _LiabilityState implements LiabilityState {
       required final bool fetchingLiabilitiess,
       required final int liabilitiessFetchTime,
       required final bool fetchingSingleLiabilityDetails,
-      required final bool loanForeclosureFailed,
       required final bool initiatingForeclosure,
-      required final bool prepaymentFailed,
-      required final bool initiatingPrepayment,
+      required final bool verifyingForeclosure,
+      required final bool loanForeclosureFailed,
       required final String prepaymentId,
-      required final bool missedEmiPaymentFailed,
+      required final bool initiatingPrepayment,
+      required final bool verifyingPrepaymentSuccess,
+      required final bool prepaymentFailed,
+      required final String missedEmiPaymentId,
       required final bool initiatingMissedEmiPayment,
-      required final String missedEmiPaymentId}) = _$LiabilityStateImpl;
+      required final bool verifyingMissedEmiPaymentSuccess,
+      required final bool missedEmiPaymentFailed}) = _$LiabilityStateImpl;
 
   @override
   LoanDetails get selectedLiability;
@@ -366,21 +437,28 @@ abstract class _LiabilityState implements LiabilityState {
   @override
   bool get fetchingSingleLiabilityDetails;
   @override // Actions
-  bool get loanForeclosureFailed;
-  @override
+// Foreclosure
   bool get initiatingForeclosure;
   @override
-  bool get prepaymentFailed;
+  bool get verifyingForeclosure;
+  @override
+  bool get loanForeclosureFailed;
+  @override // Prepayment
+  String get prepaymentId;
   @override
   bool get initiatingPrepayment;
   @override
-  String get prepaymentId;
+  bool get verifyingPrepaymentSuccess;
   @override
-  bool get missedEmiPaymentFailed;
+  bool get prepaymentFailed;
+  @override // Missed EMI Payment
+  String get missedEmiPaymentId;
   @override
   bool get initiatingMissedEmiPayment;
   @override
-  String get missedEmiPaymentId;
+  bool get verifyingMissedEmiPaymentSuccess;
+  @override
+  bool get missedEmiPaymentFailed;
   @override
   @JsonKey(ignore: true)
   _$$LiabilityStateImplCopyWith<_$LiabilityStateImpl> get copyWith =>

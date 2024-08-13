@@ -51,7 +51,6 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     final liabilitiesRef = ref.watch(invoiceLoanLiabilitiesProvider);
 
     return Container(
@@ -75,31 +74,27 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
           const SpacerWidget(
             height: 10,
           ),
-          SizedBox(
-            width: width,
-            height: RelativeSize.height(200, height),
-            child: liabilitiesRef.liabilities.isEmpty
-                ? Center(
-                    child: Lottie.asset(
-                        "assets/animations/loading_spinner.json",
-                        height: 50,
-                        width: 50),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: liabilitiesRef.liabilities.length,
-                    itemBuilder: (ctx, idx) {
-                      return Container(
-                        height: RelativeSize.height(200, height),
-                        margin: const EdgeInsets.only(right: 30),
-                        child: LiabilityCard(
-                          oldLoanDetails: liabilitiesRef.liabilities[idx],
-                        ),
-                      );
-                    },
-                  ),
-          )
+          liabilitiesRef.liabilities.isEmpty
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Lottie.asset("assets/animations/loading_spinner.json",
+                        height: 50, width: 50),
+                  ],
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: liabilitiesRef.liabilities.length > 5
+                      ? 5
+                      : liabilitiesRef.liabilities.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (ctx, idx) {
+                    return LiabilityCard(
+                      oldLoanDetails: liabilitiesRef.liabilities[idx],
+                    );
+                  },
+                )
         ],
       ),
     );
