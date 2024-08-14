@@ -13,6 +13,7 @@ enum BottomNavItems {
 class BottomNavState extends _$BottomNavState {
   @override
   BottomNavItems build() {
+    ref.keepAlive();
     return BottomNavItems.home;
   }
 

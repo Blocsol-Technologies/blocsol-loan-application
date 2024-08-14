@@ -64,11 +64,11 @@ class _InvoiceLoanDashboardState extends ConsumerState<InvoiceLoanDashboard> {
               const Column(
                 children: [
                   SpacerWidget(
-                    height: 40,
+                    height: 35,
                   ),
                   DashboardHeader(),
                   SpacerWidget(
-                    height: 27,
+                    height: 20,
                   ),
                   LendersOnBoard(),
                   RequestNewLoanButton(),

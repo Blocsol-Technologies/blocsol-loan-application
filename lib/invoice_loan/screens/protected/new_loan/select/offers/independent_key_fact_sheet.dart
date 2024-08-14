@@ -1,16 +1,16 @@
-import 'dart:math';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -24,24 +24,6 @@ class InvoiceNewLoanIndependedtKeyFactSheet extends ConsumerStatefulWidget {
 
 class _InvoiceNewLoanIndependedtKeyFactSheetState
     extends ConsumerState<InvoiceNewLoanIndependedtKeyFactSheet> {
-  int _endTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900;
-
-  @override
-  void initState() {
-    int properEndtime = max(
-        900 -
-            (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-                ref
-                    .read(invoiceNewLoanRequestProvider)
-                    .invoiceWithOffersFetchTime),
-        0);
-
-    setState(() {
-      _endTime = DateTime.now().millisecondsSinceEpoch + (properEndtime) * 1000;
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -57,7 +39,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(0, RelativeSize.height(20, height), 0,
+            padding: EdgeInsets.fromLTRB(0, RelativeSize.height(30, height), 0,
                 RelativeSize.height(50, height)),
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -66,104 +48,17 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: RelativeSize.width(20, width)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
-                          HapticFeedback.mediumImpact();
-
-                          ref.read(routerProvider).pop();
-                        },
-                        child: Icon(
-                          Icons.arrow_back_outlined,
-                          size: 25,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.65),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Container(
-                        height: 25,
-                        width: 65,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.75),
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Help?",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.extraBold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: InvoiceNewLoanRequestTopNav(
+                    onBackClick: () {
+                      ref.read(routerProvider).pop();
+                    },
                   ),
                 ),
-                const SpacerWidget(height: 36),
+                const SpacerWidget(height: 35),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: RelativeSize.width(20, width)),
-                  child: Container(
-                    width: 180,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: const Color.fromRGBO(233, 248, 238, 1),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.surface,
-                        width: 1,
-                      ),
-                    ),
-                    child: Center(
-                      child: CountdownTimer(
-                        endTime: _endTime,
-                        widgetBuilder: (_, CurrentRemainingTime? time) {
-                          String text =
-                              "${time?.min ?? "00"}min : ${time?.sec ?? "00"}sec";
-
-                          if (ref
-                              .read(invoiceNewLoanRequestProvider)
-                              .fetchingInvoiceWithOffers) {
-                            text = "Fetching...";
-                          }
-
-                          if (time == null) {
-                            text = "Time's up!";
-                          }
-
-                          return Text(
-                            "Valid for: $text",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.medium,
-                              color: const Color.fromRGBO(39, 188, 92, 1),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                  child: const InvoiceNewLoanRequestCountdownTimer(),
                 ),
                 const SpacerWidget(
                   height: 20,
@@ -220,7 +115,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                             TextSpan(
                               text: selectedOffer.bankName,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(78, 78, 78, 1),
                                 fontSize: AppFontSizes.h3,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -245,9 +140,13 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                           ),
                           children: [
                             TextSpan(
-                              text: "To be done",
+                              text: newLoanStateRef.currentState.index >=
+                                      LoanRequestProgress
+                                          .entityKycCompleted.index
+                                  ? "Completed"
+                                  : "To be done",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(78, 78, 78, 1),
                                 fontSize: AppFontSizes.h3,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -288,7 +187,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                           Text(
                             "₹ ${selectedOffer.deposit}",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(78, 78, 78, 1),
                                 fontSize: AppFontSizes.h2,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -314,7 +213,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                           Text(
                             "₹ ${selectedOffer.interest} ",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(78, 78, 78, 1),
                                 fontSize: AppFontSizes.h2,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -340,7 +239,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                           Text(
                             selectedOffer.tenure,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: const Color.fromRGBO(78, 78, 78, 1),
                                 fontSize: AppFontSizes.h2,
                                 fontWeight: AppFontWeights.bold,
                                 fontFamily: fontFamily,
@@ -367,7 +266,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                   ),
                 ),
                 const SpacerWidget(
-                  height: 20,
+                  height: 10,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,

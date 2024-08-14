@@ -13,4 +13,5 @@ enum LoanServiceErrorCodes {
   on_update_01_failed,
   generate_monitoring_consent_failed,
   monitoring_consent_verification_failed,
+  request_timeout,
 }

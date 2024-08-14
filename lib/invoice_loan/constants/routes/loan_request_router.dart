@@ -74,6 +74,7 @@ class InvoiceNewLoanRequestRouter {
       "/invoice-loan/new-loan-request/monitoring-consent-webview";
   static const final_details = "/invoice-loan/new-loan-request/final-details";
 
+  // Error
   static const loan_service_error =
       "/invoice-loan/new-loan-request/loan-service-error";
   static const loan_service_unavailable =

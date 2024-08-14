@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
@@ -28,7 +29,6 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
       canPop: false,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
             padding: EdgeInsets.only(top: RelativeSize.height(30, height)),
@@ -39,16 +39,10 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: RelativeSize.width(20, width)),
-                  child: GestureDetector(
-                    onTap: () async {
-                      HapticFeedback.mediumImpact();
+                  child: InvoiceNewLoanRequestTopNav(
+                    onBackClick: () {
                       ref.read(routerProvider).pop();
                     },
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      size: 25,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
                   ),
                 ),
                 const SpacerWidget(
@@ -72,12 +66,12 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 320,
+                        height: 330,
                         width: width,
                         child: Stack(
                           children: [
                             SizedBox(
-                              height: 320,
+                              height: 330,
                               width: width,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -92,7 +86,7 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     padding: EdgeInsets.only(
-                                        top: RelativeSize.height(60, height),
+                                        top: RelativeSize.height(40, height),
                                         bottom: RelativeSize.height(20, height),
                                         left: 5,
                                         right: 5),
@@ -178,9 +172,7 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                                                   SizedBox(
                                                     width: 150,
                                                     child: Text(
-                                                      invoice.irn.isNotEmpty
-                                                          ? invoice.irn
-                                                          : invoice.inum,
+                                                      invoice.getInvoiceId(),
                                                       softWrap: true,
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(
@@ -569,6 +561,39 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .onSurface,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SpacerWidget(
+                                          height: 15,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Total",
+                                              style: TextStyle(
+                                                fontFamily: fontFamily,
+                                                fontSize: AppFontSizes.b1,
+                                                fontWeight:
+                                                    AppFontWeights.medium,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Rs. ${invoiceitem.getTotalItemAmount().toStringAsFixed(2)}",
+                                              style: TextStyle(
+                                                fontFamily: fontFamily,
+                                                fontSize: AppFontSizes.b1,
+                                                fontWeight:
+                                                    AppFontWeights.medium,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                             ),
                                           ],

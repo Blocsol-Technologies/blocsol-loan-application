@@ -173,6 +173,7 @@ Widget getLenderDetailsAssetURL(String bankName, String imageUrl) {
     );
   }
   return Image.network(
+    alignment: Alignment.centerLeft,
     imageUrl,
     fit: BoxFit.contain,
     errorBuilder:

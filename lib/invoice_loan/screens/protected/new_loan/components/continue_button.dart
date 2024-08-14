@@ -40,7 +40,7 @@ class _ContinueButtonState extends State<ContinueButton> {
       },
       child: Container(
         width: RelativeSize.width(250, width),
-        height: RelativeSize.height(40, height),
+        height: RelativeSize.height(38, height),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(5),

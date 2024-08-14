@@ -121,7 +121,7 @@ class _DashboardHeaderState extends ConsumerState<DashboardHeader> {
             ],
           ),
           const SpacerWidget(
-            height: 35,
+            height: 25,
           ),
           liabilitiesRef.fetchingLiabilityDetails &&
                   liabilitiesRef.numOpenLiabilities < 0

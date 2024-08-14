@@ -51,6 +51,7 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final liabilitiesRef = ref.watch(invoiceLoanLiabilitiesProvider);
 
     return Container(
@@ -75,13 +76,41 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
             height: 10,
           ),
           liabilitiesRef.liabilities.isEmpty
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset("assets/animations/loading_spinner.json",
-                        height: 50, width: 50),
-                  ],
+              ? Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  height: RelativeSize.height(180, height),
+                  width: width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Lottie.asset(
+                          "assets/animations/invoice_offer_not_found.json",
+                          height: 130,
+                          width: 130),
+                      Text(
+                        "No Offers Found",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.h3,
+                          fontWeight: AppFontWeights.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                       Text(
+                        "Get A Loan Now!",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.normal,
+                          color: const Color.fromRGBO(151, 151, 151, 1),
+                        ),
+                      )
+                    ],
+                  ),
                 )
               : ListView.builder(
                   shrinkWrap: true,

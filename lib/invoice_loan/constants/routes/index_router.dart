@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/dashboard.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/liabilities_home.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/dashboard.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,10 @@ List<GoRoute> invoiceLoanIndexRoutes = [
   GoRoute(
     path: InvoiceLoanIndexRouter.dashboard,
     builder: (context, state) => const InvoiceLoanDashboard(),
+  ),
+    GoRoute(
+    path: InvoiceLoanIndexRouter.liabilities,
+    builder: (context, state) => const InvoiceLoanLiabilitiesHome(),
   ),
   GoRoute(
     path: InvoiceLoanIndexRouter.profile,

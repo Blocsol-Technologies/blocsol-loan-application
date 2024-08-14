@@ -354,9 +354,9 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
         child: Container(
           padding: EdgeInsets.fromLTRB(
             RelativeSize.width(25, width),
-            RelativeSize.height(15, height),
+            RelativeSize.height(10, height),
             RelativeSize.width(20, width),
-            RelativeSize.height(15, height),
+            RelativeSize.height(10, height),
           ),
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
@@ -390,7 +390,7 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                     child: Center(
                       child: Icon(
                         Icons.currency_rupee_sharp,
-                        size: 27,
+                        size: 22,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
@@ -443,7 +443,7 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                   : Icon(
                       Icons.arrow_forward_ios_sharp,
                       color: Theme.of(context).colorScheme.onPrimary,
-                      size: 25,
+                      size: 20,
                     ),
             ],
           ),

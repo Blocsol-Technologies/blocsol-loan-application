@@ -52,6 +52,7 @@ mixin _$LoanRequestStateData {
       throw _privateConstructorUsedError; //
   String get disbursedCancellationFee => throw _privateConstructorUsedError;
   String get sanctionedCancellationFee => throw _privateConstructorUsedError;
+  bool get fetchingRepaymentSetupUrl => throw _privateConstructorUsedError;
   bool get checkingRepaymentSetupSuccess => throw _privateConstructorUsedError;
   bool get repaymentSetupFailure => throw _privateConstructorUsedError; //
   bool get fetchingLoanAgreementForm => throw _privateConstructorUsedError;
@@ -109,6 +110,7 @@ abstract class $LoanRequestStateDataCopyWith<$Res> {
       bool submittingBankAccountDetails,
       String disbursedCancellationFee,
       String sanctionedCancellationFee,
+      bool fetchingRepaymentSetupUrl,
       bool checkingRepaymentSetupSuccess,
       bool repaymentSetupFailure,
       bool fetchingLoanAgreementForm,
@@ -168,6 +170,7 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
     Object? submittingBankAccountDetails = null,
     Object? disbursedCancellationFee = null,
     Object? sanctionedCancellationFee = null,
+    Object? fetchingRepaymentSetupUrl = null,
     Object? checkingRepaymentSetupSuccess = null,
     Object? repaymentSetupFailure = null,
     Object? fetchingLoanAgreementForm = null,
@@ -313,6 +316,10 @@ class _$LoanRequestStateDataCopyWithImpl<$Res,
           ? _value.sanctionedCancellationFee
           : sanctionedCancellationFee // ignore: cast_nullable_to_non_nullable
               as String,
+      fetchingRepaymentSetupUrl: null == fetchingRepaymentSetupUrl
+          ? _value.fetchingRepaymentSetupUrl
+          : fetchingRepaymentSetupUrl // ignore: cast_nullable_to_non_nullable
+              as bool,
       checkingRepaymentSetupSuccess: null == checkingRepaymentSetupSuccess
           ? _value.checkingRepaymentSetupSuccess
           : checkingRepaymentSetupSuccess // ignore: cast_nullable_to_non_nullable
@@ -400,6 +407,7 @@ abstract class _$$LoanRequestStateDataImplCopyWith<$Res>
       bool submittingBankAccountDetails,
       String disbursedCancellationFee,
       String sanctionedCancellationFee,
+      bool fetchingRepaymentSetupUrl,
       bool checkingRepaymentSetupSuccess,
       bool repaymentSetupFailure,
       bool fetchingLoanAgreementForm,
@@ -456,6 +464,7 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
     Object? submittingBankAccountDetails = null,
     Object? disbursedCancellationFee = null,
     Object? sanctionedCancellationFee = null,
+    Object? fetchingRepaymentSetupUrl = null,
     Object? checkingRepaymentSetupSuccess = null,
     Object? repaymentSetupFailure = null,
     Object? fetchingLoanAgreementForm = null,
@@ -601,6 +610,10 @@ class __$$LoanRequestStateDataImplCopyWithImpl<$Res>
           ? _value.sanctionedCancellationFee
           : sanctionedCancellationFee // ignore: cast_nullable_to_non_nullable
               as String,
+      fetchingRepaymentSetupUrl: null == fetchingRepaymentSetupUrl
+          ? _value.fetchingRepaymentSetupUrl
+          : fetchingRepaymentSetupUrl // ignore: cast_nullable_to_non_nullable
+              as bool,
       checkingRepaymentSetupSuccess: null == checkingRepaymentSetupSuccess
           ? _value.checkingRepaymentSetupSuccess
           : checkingRepaymentSetupSuccess // ignore: cast_nullable_to_non_nullable
@@ -683,6 +696,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
       required this.submittingBankAccountDetails,
       required this.disbursedCancellationFee,
       required this.sanctionedCancellationFee,
+      required this.fetchingRepaymentSetupUrl,
       required this.checkingRepaymentSetupSuccess,
       required this.repaymentSetupFailure,
       required this.fetchingLoanAgreementForm,
@@ -781,6 +795,8 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
   @override
   final String sanctionedCancellationFee;
   @override
+  final bool fetchingRepaymentSetupUrl;
+  @override
   final bool checkingRepaymentSetupSuccess;
   @override
   final bool repaymentSetupFailure;
@@ -804,7 +820,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
 
   @override
   String toString() {
-    return 'LoanRequestStateData(requestingNewLoan: $requestingNewLoan, currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, loanUpdateFormSubmitted: $loanUpdateFormSubmitted, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, skipAadharKyc: $skipAadharKyc, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, skipEntityKyc: $skipEntityKyc, fetchingEntityKYCURl: $fetchingEntityKYCURl, verifyingEntityKYC: $verifyingEntityKYC, entityKYCFailure: $entityKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
+    return 'LoanRequestStateData(requestingNewLoan: $requestingNewLoan, currentState: $currentState, transactionId: $transactionId, gstDataDownloadTime: $gstDataDownloadTime, downloadingGSTData: $downloadingGSTData, gstInvoicesFetchedTime: $gstInvoicesFetchedTime, selectedAA: $selectedAA, aaConsentSuccess: $aaConsentSuccess, invoices: $invoices, loadingInvoices: $loadingInvoices, submittingInvoicesForOffers: $submittingInvoicesForOffers, selectedInvoice: $selectedInvoice, selectedOffer: $selectedOffer, fetchingInvoiceWithOffers: $fetchingInvoiceWithOffers, offerSelected: $offerSelected, invoicesWithOffers: $invoicesWithOffers, invoiceWithOffersFetchTime: $invoiceWithOffersFetchTime, loanUpdateFormSubmitted: $loanUpdateFormSubmitted, multipleSubmissionsForOfferUpdateForm: $multipleSubmissionsForOfferUpdateForm, skipAadharKyc: $skipAadharKyc, fetchingAadharKYCURl: $fetchingAadharKYCURl, verifyingAadharKYC: $verifyingAadharKYC, aadharKYCFailure: $aadharKYCFailure, skipEntityKyc: $skipEntityKyc, fetchingEntityKYCURl: $fetchingEntityKYCURl, verifyingEntityKYC: $verifyingEntityKYC, entityKYCFailure: $entityKYCFailure, bankName: $bankName, bankAccountNumber: $bankAccountNumber, bankIFSC: $bankIFSC, submittingBankAccountDetails: $submittingBankAccountDetails, disbursedCancellationFee: $disbursedCancellationFee, sanctionedCancellationFee: $sanctionedCancellationFee, fetchingRepaymentSetupUrl: $fetchingRepaymentSetupUrl, checkingRepaymentSetupSuccess: $checkingRepaymentSetupSuccess, repaymentSetupFailure: $repaymentSetupFailure, fetchingLoanAgreementForm: $fetchingLoanAgreementForm, verifyingLoanAgreementSuccess: $verifyingLoanAgreementSuccess, loanAgreementFailure: $loanAgreementFailure, generatingMonitoringConsent: $generatingMonitoringConsent, generateMonitoringConsentErr: $generateMonitoringConsentErr, validatingMonitoringConsentSuccess: $validatingMonitoringConsentSuccess, monitoringConsentError: $monitoringConsentError, loanId: $loanId)';
   }
 
   @override
@@ -875,6 +891,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
             (identical(other.submittingBankAccountDetails, submittingBankAccountDetails) || other.submittingBankAccountDetails == submittingBankAccountDetails) &&
             (identical(other.disbursedCancellationFee, disbursedCancellationFee) || other.disbursedCancellationFee == disbursedCancellationFee) &&
             (identical(other.sanctionedCancellationFee, sanctionedCancellationFee) || other.sanctionedCancellationFee == sanctionedCancellationFee) &&
+            (identical(other.fetchingRepaymentSetupUrl, fetchingRepaymentSetupUrl) || other.fetchingRepaymentSetupUrl == fetchingRepaymentSetupUrl) &&
             (identical(other.checkingRepaymentSetupSuccess, checkingRepaymentSetupSuccess) || other.checkingRepaymentSetupSuccess == checkingRepaymentSetupSuccess) &&
             (identical(other.repaymentSetupFailure, repaymentSetupFailure) || other.repaymentSetupFailure == repaymentSetupFailure) &&
             (identical(other.fetchingLoanAgreementForm, fetchingLoanAgreementForm) || other.fetchingLoanAgreementForm == fetchingLoanAgreementForm) &&
@@ -923,6 +940,7 @@ class _$LoanRequestStateDataImpl implements _LoanRequestStateData {
         submittingBankAccountDetails,
         disbursedCancellationFee,
         sanctionedCancellationFee,
+        fetchingRepaymentSetupUrl,
         checkingRepaymentSetupSuccess,
         repaymentSetupFailure,
         fetchingLoanAgreementForm,
@@ -979,6 +997,7 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
       required final bool submittingBankAccountDetails,
       required final String disbursedCancellationFee,
       required final String sanctionedCancellationFee,
+      required final bool fetchingRepaymentSetupUrl,
       required final bool checkingRepaymentSetupSuccess,
       required final bool repaymentSetupFailure,
       required final bool fetchingLoanAgreementForm,
@@ -1056,6 +1075,8 @@ abstract class _LoanRequestStateData implements LoanRequestStateData {
   String get disbursedCancellationFee;
   @override
   String get sanctionedCancellationFee;
+  @override
+  bool get fetchingRepaymentSetupUrl;
   @override
   bool get checkingRepaymentSetupSuccess;
   @override

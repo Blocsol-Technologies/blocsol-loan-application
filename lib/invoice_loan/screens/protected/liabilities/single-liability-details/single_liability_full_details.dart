@@ -71,7 +71,7 @@ class _InvoiceLoanLiabilityFullDetailsState
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          top: RelativeSize.height(20, height),
+                          top: RelativeSize.height(30, height),
                           left: RelativeSize.width(30, width),
                           right: RelativeSize.width(30, width)),
                       child: Row(

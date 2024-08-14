@@ -2,7 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -14,7 +14,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -102,77 +101,29 @@ class _InvoiceNewLoanAgreementState
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(
-                RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
-                RelativeSize.width(20, width),
-                RelativeSize.height(0, height)),
+            padding: EdgeInsets.only(
+              top: RelativeSize.height(30, height),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
-                          HapticFeedback.mediumImpact();
-                          ref.read(routerProvider).pop();
-                        },
-                        child: Icon(
-                          Icons.arrow_back_outlined,
-                          size: 25,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.65),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          HapticFeedback.mediumImpact();
-                          ref
-                              .read(routerProvider)
-                              .push(InvoiceLoanSupportRouter.raise_new_ticket);
-                        },
-                        child: Container(
-                          height: 25,
-                          width: 65,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.75),
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Help?",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.extraBold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: RelativeSize.width(20, width),
+                  ),
+                  child: InvoiceNewLoanRequestTopNav(
+                    onBackClick: () {
+                      ref.read(routerProvider).pop();
+                    },
                   ),
                 ),
                 const SpacerWidget(
-                  height: 32,
+                  height: 35,
                 ),
-                SizedBox(
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: RelativeSize.width(20, width),
+                  ),
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,73 +143,85 @@ class _InvoiceNewLoanAgreementState
                 const SpacerWidget(
                   height: 20,
                 ),
-                Text(
-                  "Loan Agreement",
-                  style: TextStyle(
-                      fontFamily: fontFamily,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: AppFontSizes.h1,
-                      fontWeight: AppFontWeights.bold,
-                      letterSpacing: 0.4),
-                  softWrap: true,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: RelativeSize.width(20, width),
+                  ),
+                  child: Text(
+                    "Loan Agreement",
+                    style: TextStyle(
+                        fontFamily: fontFamily,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: AppFontSizes.h1,
+                        fontWeight: AppFontWeights.bold,
+                        letterSpacing: 0.4),
+                    softWrap: true,
+                  ),
                 ),
                 const SpacerWidget(
                   height: 16,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Deposit A/c :",
-                      style: TextStyle(
-                          fontFamily: fontFamily,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: AppFontSizes.b1,
-                          fontWeight: AppFontWeights.normal,
-                          letterSpacing: 0.14),
-                      softWrap: true,
-                    ),
-                    const SpacerWidget(
-                      width: 8,
-                    ),
-                    SizedBox(
-                      height: 25,
-                      child: getLenderDetailsAssetURL(newLoanStateRef.bankName,
-                          newLoanStateRef.selectedOffer.bankLogoURL),
-                    ),
-                    const SpacerWidget(
-                      width: 8,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            newLoanStateRef.bankName,
-                            style: TextStyle(
-                                fontFamily: fontFamily,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                letterSpacing: 0.165),
-                          ),
-                          Text(
-                            "Acc No - ${newLoanStateRef.bankAccountNumber}",
-                            style: TextStyle(
-                                fontFamily: fontFamily,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.35),
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.medium,
-                                letterSpacing: 0.15),
-                          ),
-                        ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: RelativeSize.width(20, width),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Deposit A/c :",
+                        style: TextStyle(
+                            fontFamily: fontFamily,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.normal,
+                            letterSpacing: 0.14),
+                        softWrap: true,
                       ),
-                    ),
-                  ],
+                      const SpacerWidget(
+                        width: 8,
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: getLenderDetailsAssetURL(
+                            newLoanStateRef.bankName,
+                            newLoanStateRef.selectedOffer.bankLogoURL),
+                      ),
+                      const SpacerWidget(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              newLoanStateRef.bankName,
+                              style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.medium,
+                                  letterSpacing: 0.165),
+                            ),
+                            Text(
+                              "Acc No - ${newLoanStateRef.bankAccountNumber}",
+                              style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.35),
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.medium,
+                                  letterSpacing: 0.15),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SpacerWidget(
                   height: 35,
@@ -266,7 +229,7 @@ class _InvoiceNewLoanAgreementState
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                        vertical: 20, horizontal: 30),
                     width: MediaQuery.of(context).size.width,
                     color: Theme.of(context)
                         .colorScheme

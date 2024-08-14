@@ -59,6 +59,7 @@ class LoanRequestStateData with _$LoanRequestStateData {
     //
     required String disbursedCancellationFee,
     required String sanctionedCancellationFee,
+    required bool fetchingRepaymentSetupUrl,
     required bool checkingRepaymentSetupSuccess,
     required bool repaymentSetupFailure,
     //
@@ -112,6 +113,7 @@ class LoanRequestStateData with _$LoanRequestStateData {
     //
     disbursedCancellationFee: '',
     sanctionedCancellationFee: '',
+    fetchingRepaymentSetupUrl: false,
     checkingRepaymentSetupSuccess: false,
     repaymentSetupFailure: false,
     //

@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
@@ -17,7 +16,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:lottie/lottie.dart';
 
 class InvoiceNewLoanOfferDetails extends ConsumerStatefulWidget {
@@ -32,7 +30,6 @@ class _InvoiceNewLoanOfferDetailsState
     extends ConsumerState<InvoiceNewLoanOfferDetails> {
   bool _descindingOrder = false;
   List<OfferDetails> _offerDetailsList = [];
-  int _endTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900;
 
   void _sortOffers() {
     if (_descindingOrder) {
@@ -49,21 +46,11 @@ class _InvoiceNewLoanOfferDetailsState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      int properEndTime = max(
-          900 -
-              (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-                  ref
-                      .read(invoiceNewLoanRequestProvider)
-                      .invoiceWithOffersFetchTime),
-          0);
-
       setState(() {
         _offerDetailsList = ref
             .read(invoiceNewLoanRequestProvider)
             .selectedInvoice
             .offerDetailsList;
-        _endTime =
-            DateTime.now().millisecondsSinceEpoch + (properEndTime) * 1000;
       });
     });
 
@@ -88,114 +75,20 @@ class _InvoiceNewLoanOfferDetailsState
           body: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(
                 RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
+                RelativeSize.height(30, height),
                 RelativeSize.width(20, width),
                 RelativeSize.height(50, height)),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).pop();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 25,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.65),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                        ref
-                            .read(routerProvider)
-                            .push(InvoiceLoanSupportRouter.raise_new_ticket);
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 65,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.75),
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Help?",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.extraBold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                InvoiceNewLoanRequestTopNav(
+                  onBackClick: () {
+                    ref.read(routerProvider).pop();
+                  },
                 ),
-                const SpacerWidget(height: 30),
-                Container(
-                  width: 180,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: const Color.fromRGBO(233, 248, 238, 1),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.surface,
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: CountdownTimer(
-                      endTime: _endTime,
-                      widgetBuilder: (_, CurrentRemainingTime? time) {
-                        String text =
-                            "${time?.min ?? "00"}min : ${time?.sec ?? "00"}sec";
-
-                        if (ref
-                            .read(invoiceNewLoanRequestProvider)
-                            .fetchingInvoiceWithOffers) {
-                          text = "Fetching...";
-                        }
-
-                        if (time == null) {
-                          text = "Time's up!";
-                        }
-
-                        return Text(
-                          "Valid for: $text",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.b1,
-                            fontWeight: AppFontWeights.medium,
-                            color: const Color.fromRGBO(39, 188, 92, 1),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                const SpacerWidget(height: 35),
+                const InvoiceNewLoanRequestCountdownTimer(),
                 const SpacerWidget(
                   height: 16,
                 ),
@@ -203,8 +96,8 @@ class _InvoiceNewLoanOfferDetailsState
                   "Select Offer ",
                   style: TextStyle(
                     fontFamily: fontFamily,
-                    fontSize: AppFontSizes.h1,
-                    fontWeight: AppFontWeights.extraBold,
+                    fontSize: AppFontSizes.heading,
+                    fontWeight: AppFontWeights.bold,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   softWrap: true,
@@ -224,7 +117,9 @@ class _InvoiceNewLoanOfferDetailsState
                     ),
                     children: [
                       TextSpan(
-                        text: selectedInvoiceOffer.inum,
+                        text: selectedInvoiceOffer.inum.length < 15
+                            ? selectedInvoiceOffer.inum
+                            : selectedInvoiceOffer.inum.substring(0, 15),
                         style: TextStyle(
                           color: const Color.fromRGBO(80, 80, 80, 1),
                           fontSize: AppFontSizes.h3,
@@ -470,13 +365,11 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withOpacity(0.15), // Shadow color
-                offset: const Offset(0, 2), // Offset in the x and y direction
-                blurRadius: 10, // Spread of the shadow
-                spreadRadius: 0, // Extent of the shadow
+                color:
+                    Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
+                offset: const Offset(0, 2),
+                blurRadius: 10,
+                spreadRadius: 0,
               ),
             ],
           ),
@@ -510,10 +403,10 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                   ),
                   _selectingOffer
                       ? Lottie.asset("assets/animations/loading_spinner.json",
-                          height: 30, width: 30)
+                          height: 25, width: 25)
                       : Icon(
                           Icons.arrow_forward_ios_sharp,
-                          size: 20,
+                          size: 15,
                           color: Theme.of(context)
                               .colorScheme
                               .onSurface
@@ -528,75 +421,85 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Loan",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.medium,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.5),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              right: BorderSide(
+                        color: Color.fromRGBO(200, 200, 200, 1),
+                        width: 1.5,
+                      ))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Loan",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.medium,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.5),
+                            ),
                           ),
-                        ),
-                        const SpacerWidget(
-                          height: 4,
-                        ),
-                        Text(
-                          "₹ ${widget.offer.deposit}",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.bold,
-                            color: Theme.of(context).colorScheme.onSurface,
+                          const SpacerWidget(
+                            height: 4,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "₹ ${widget.offer.deposit}",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SpacerWidget(
-                    width: 8,
                   ),
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Interest",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.medium,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.5),
-                          ),
-                        ),
-                        const SpacerWidget(
-                          height: 4,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: widget.offer.interestRate,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              right: BorderSide(
+                        color: Color.fromRGBO(200, 200, 200, 1),
+                        width: 1.5,
+                      ))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Interest",
                             style: TextStyle(
                               fontFamily: fontFamily,
-                              color: Theme.of(context).colorScheme.onSurface,
                               fontSize: AppFontSizes.h3,
-                              fontWeight: AppFontWeights.bold,
+                              fontWeight: AppFontWeights.medium,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.5),
                             ),
                           ),
-                        ),
-                      ],
+                          const SpacerWidget(
+                            height: 4,
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: widget.offer.interestRate,
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SpacerWidget(
-                    width: 8,
                   ),
                   Expanded(
                     flex: 1,
@@ -656,9 +559,9 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                       ),
                       children: [
                         TextSpan(
-                          text: "₹ ${widget.offer.totalRepayment} ",
+                          text: "₹ ${widget.offer.deposit} ",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: const Color.fromRGBO(80, 80, 80, 1),
                             fontSize: AppFontSizes.b1,
                             fontWeight: AppFontWeights.bold,
                             fontFamily: fontFamily,
@@ -676,7 +579,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
                         TextSpan(
                           text: "${widget.offer.tenure} ",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: const Color.fromRGBO(80, 80, 80, 1),
                             fontSize: AppFontSizes.b1,
                             fontWeight: AppFontWeights.bold,
                             fontFamily: fontFamily,

@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
@@ -15,11 +14,9 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:string_similarity/string_similarity.dart';
-import 'package:flutter_countdown_timer/index.dart';
 
 class InvoiceNewLoanOffersSelect extends ConsumerStatefulWidget {
   const InvoiceNewLoanOffersSelect({super.key});
@@ -39,7 +36,6 @@ class _InvoiceNewLoanOffersSelectState
   final bool _timerExpired = false;
   Timer? _debounce;
   List<LoanDetails> _filteredOffers = [];
-  int endTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900;
 
   Timer? _invoicePoll;
   int _interval = 10;
@@ -125,21 +121,11 @@ class _InvoiceNewLoanOffersSelectState
 
   @override
   void initState() {
-    _textInputController.addListener(_onTextChanged);
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _textInputController.addListener(_onTextChanged);
       await onInvoiceOffersRefresh();
-      int properEndTime = max(
-          900 -
-              (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-                  ref
-                      .read(invoiceNewLoanRequestProvider)
-                      .invoiceWithOffersFetchTime),
-          0);
 
       setState(() {
-        endTime =
-            DateTime.now().millisecondsSinceEpoch + (properEndTime) * 1000;
         _filteredOffers =
             ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
       });
@@ -175,131 +161,32 @@ class _InvoiceNewLoanOffersSelectState
             resizeToAvoidBottomInset: false,
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(
-                  0,
-                  RelativeSize.height(20, height),
-                  0,
-                  RelativeSize.height(50, height)),
+              padding: EdgeInsets.fromLTRB(0, RelativeSize.height(30, height),
+                  0, RelativeSize.height(50, height)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: RelativeSize.width(20, width)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () async {
-                            HapticFeedback.mediumImpact();
-                            ref.read(routerProvider).pop();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_outlined,
-                            size: 25,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.65),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            HapticFeedback.mediumImpact();
-                            ref.read(routerProvider).push(InvoiceLoanSupportRouter.raise_new_ticket);
-                          },
-                          child: Container(
-                            height: 25,
-                            width: 65,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withOpacity(0.75),
-                                width: 1,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Help?",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.extraBold,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
+                    child: InvoiceNewLoanRequestTopNav(
+                      onBackClick: () {
+                        ref.read(routerProvider).pop();
+                      },
                     ),
                   ),
                   const SpacerWidget(
-                    height: 30,
+                    height: 35,
                   ),
+                
                   Padding(
-            padding: EdgeInsets.symmetric(horizontal: RelativeSize.width(20, width)),
-                    child: Container(
-                      width: 180,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: const Color.fromRGBO(233, 248, 238, 1),
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.surface,
-                          width: 1,
-                        ),
-                      ),
-                      child: Center(
-                        child: CountdownTimer(
-                          endTime: endTime,
-                          widgetBuilder: (_, CurrentRemainingTime? time) {
-                            String text =
-                                "${time?.min ?? "00"}min : ${time?.sec ?? "00"}sec";
-                    
-                            if (ref
-                                .read(invoiceNewLoanRequestProvider)
-                                .fetchingInvoiceWithOffers) {
-                              text = "Fetching...";
-                            }
-                    
-                            if (time == null) {
-                              text = "Time's up!";
-                            }
-                    
-                            return Text(
-                              "Valid for: $text",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.medium,
-                                color: const Color.fromRGBO(39, 188, 92, 1),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SpacerWidget(
-                    height: 16,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: RelativeSize.width(20, width)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
                     child: Text(
                       "Loan Offers",
                       style: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: AppFontSizes.h1,
+                        fontSize: AppFontSizes.heading,
                         fontWeight: AppFontWeights.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -309,7 +196,8 @@ class _InvoiceNewLoanOffersSelectState
                     height: 16,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: RelativeSize.width(20, width)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
                     child: Text(
                       "Select an invoice from the below list to check the loan offers from lenders",
                       softWrap: true,
@@ -400,7 +288,9 @@ class _InvoiceNewLoanOffersSelectState
                                         .setSelectedInvoice(
                                             _filteredOffers[idx]);
 
-                                    ref.read(routerProvider).push(InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                                    ref.read(routerProvider).push(
+                                        InvoiceNewLoanRequestRouter
+                                            .single_bank_offer_select);
                                   },
                                 );
                               },
@@ -433,7 +323,9 @@ class OfferItems extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: index % 2 == 0 ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.tertiary,
+        color: index % 2 != 0
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.tertiary,
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
@@ -475,19 +367,76 @@ class OfferItems extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                  child: Text(
-                    "${offerDetails.idt} . ${offerDetails.inum} . \u{20B9}${offerDetails.amount}",
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.b1,
-                      fontWeight: AppFontWeights.normal,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.6),
-                      letterSpacing: 0.15,
-                    ),
-                    softWrap: true,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        offerDetails.idt,
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.normal,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.6),
+                          letterSpacing: 0.15,
+                        ),
+                        softWrap: true,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Container(
+                          height: 5,
+                          width: 5,
+                          decoration: const BoxDecoration(
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        offerDetails.inum.length < 15
+                            ? offerDetails.inum
+                            : offerDetails.inum.substring(0, 15),
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.normal,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.6),
+                          letterSpacing: 0.15,
+                        ),
+                        softWrap: true,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Container(
+                          height: 5,
+                          width: 5,
+                          decoration: const BoxDecoration(
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "\u{20B9}${offerDetails.amount}",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.normal,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.6),
+                          letterSpacing: 0.15,
+                        ),
+                        softWrap: true,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -507,13 +456,14 @@ class OfferItems extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: index % 2 == 0 ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.surface,
+                  color: index % 2 != 0
+                      ? Theme.of(context).colorScheme.tertiary
+                      : Theme.of(context).colorScheme.surface,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
+                    Expanded(
                       child: Wrap(
                         spacing: 10,
                         runSpacing: 10,
@@ -521,23 +471,26 @@ class OfferItems extends StatelessWidget {
                         children: <Widget>[
                           ...offers.map((item) {
                             return SizedBox(
-                              height: 30,
-                              width: 50,
+                              height: 45,
+                              width: 70,
                               child: getLenderDetailsAssetURL(
                                   item.bankName, item.bankLogoURL),
                             );
                           }),
-                          Text(
-                            "${offers.length} ${offers.length <= 1 ? "Offer" : "Offers"}",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.extraBold,
-                              color: Theme.of(context).colorScheme.primary,
-                              letterSpacing: 0.15,
-                            ),
-                          ),
                         ],
+                      ),
+                    ),
+                    const SpacerWidget(
+                      width: 10,
+                    ),
+                    Text(
+                      "${offers.length} ${offers.length <= 1 ? "Offer" : "Offers"}",
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: AppFontSizes.b1,
+                        fontWeight: AppFontWeights.extraBold,
+                        color: Theme.of(context).colorScheme.primary,
+                        letterSpacing: 0.15,
                       ),
                     ),
                   ],
@@ -585,7 +538,7 @@ class _OfferSearchState extends State<OfferSearch> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
-            height: 50,
+            height: 40,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
@@ -603,7 +556,7 @@ class _OfferSearchState extends State<OfferSearch> {
               children: <Widget>[
                 Icon(
                   Icons.search,
-                  size: 24,
+                  size: 20,
                   color:
                       Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
@@ -617,7 +570,7 @@ class _OfferSearchState extends State<OfferSearch> {
                     controller: widget.textEditingController,
                     style: TextStyle(
                       fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h2,
+                      fontSize: AppFontSizes.h3,
                       fontWeight: AppFontWeights.bold,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -627,7 +580,7 @@ class _OfferSearchState extends State<OfferSearch> {
                       contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
                       hintStyle: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: AppFontSizes.h2,
+                        fontSize: AppFontSizes.h3,
                         fontWeight: AppFontWeights.normal,
                         color: Theme.of(context).colorScheme.scrim,
                       ),
@@ -656,7 +609,6 @@ class _OfferSearchState extends State<OfferSearch> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -664,7 +616,7 @@ class _OfferSearchState extends State<OfferSearch> {
                       "OFFERS (${widget.lenFilteredInvoices})",
                       style: TextStyle(
                           fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h2,
+                          fontSize: AppFontSizes.h3,
                           fontWeight: AppFontWeights.bold,
                           color: Theme.of(context).colorScheme.onSurface,
                           letterSpacing: 0.13),
@@ -672,69 +624,66 @@ class _OfferSearchState extends State<OfferSearch> {
                   ],
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () async {
-                    if (refreshingInvoices) {
-                      return;
-                    }
+              GestureDetector(
+                onTap: () async {
+                  if (refreshingInvoices) {
+                    return;
+                  }
 
-                    setState(() {
-                      refreshingInvoices = true;
-                    });
+                  setState(() {
+                    refreshingInvoices = true;
+                  });
 
-                    await widget.onRefrersh();
+                  await widget.onRefrersh();
 
-                    setState(() {
-                      refreshingInvoices = false;
-                    });
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 100,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.75),
-                        width: 1,
-                      ),
+                  setState(() {
+                    refreshingInvoices = false;
+                  });
+                },
+                child: Container(
+                  height: 25,
+                  width: 90,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.75),
+                      width: 1,
                     ),
-                    child: refreshingInvoices
-                        ? Lottie.asset(
-                            "assets/animations/loading_spinner.json",
-                            height: 35,
-                            width: 35,
-                          )
-                        : Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.refresh,
-                                size: 18,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              const SpacerWidget(
-                                width: 3,
-                              ),
-                              Text(
-                                "REFRESH",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.h3,
-                                  fontWeight: AppFontWeights.extraBold,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ],
-                          ),
                   ),
+                  child: refreshingInvoices
+                      ? Lottie.asset(
+                          "assets/animations/loading_spinner.json",
+                          height: 25,
+                          width: 25,
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.refresh,
+                              size: 15,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            const SpacerWidget(
+                              width: 3,
+                            ),
+                            Text(
+                              "REFRESH",
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                fontWeight: AppFontWeights.extraBold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ],

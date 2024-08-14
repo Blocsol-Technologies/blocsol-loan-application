@@ -101,19 +101,8 @@ class LiabilityCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Text(
-                //   "${oldLoanDetails.idt} . ${oldLoanDetails.inum}",
-                //   softWrap: true,
-                //   textAlign: TextAlign.left,
-                //   style: TextStyle(
-                //     fontFamily: fontFamily,
-                //     fontSize: AppFontSizes.h3,
-                //     fontWeight: AppFontWeights.normal,
-                //     color: const Color.fromRGBO(120, 120, 120, 1),
-                //   ),
-                // ),
                 Text(
-                  "Repayment: ${oldLoanDetails.offerDetails.getNextDueDate()}",
+                  "${oldLoanDetails.idt} . ${oldLoanDetails.inum}",
                   softWrap: true,
                   textAlign: TextAlign.left,
                   style: TextStyle(
@@ -123,7 +112,6 @@ class LiabilityCard extends ConsumerWidget {
                     color: const Color.fromRGBO(120, 120, 120, 1),
                   ),
                 ),
-
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();

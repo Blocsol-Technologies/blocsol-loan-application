@@ -62,7 +62,6 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
     if (!mounted) return;
 
     if (!response.success) {
-
       controller.disposeTimer();
 
       context.go(InvoiceNewLoanRequestRouter.loan_service_unavailable,

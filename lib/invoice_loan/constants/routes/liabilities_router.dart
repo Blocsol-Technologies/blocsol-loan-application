@@ -10,29 +10,29 @@ import 'package:go_router/go_router.dart';
 
 class InvoiceLoanLiabilitiesRouter {
   static const String singleLiabilityDetails =
-      'invoice-loan/liabilities/single-liability-details';
+      '/invoice-loan/liabilities/single-liability-details';
 
-  static const String full_details = 'invoice-loan/liabilities/full-details';
+  static const String full_details = '/invoice-loan/liabilities/full-details';
   static const String payment_history =
-      'invoice-loan/liabilities/payment-history';
+      '/invoice-loan/liabilities/payment-history';
   static const String general_webview =
-      'invoice-loan/liabilities/general-webview';  
+      '/invoice-loan/liabilities/general-webview';  
 
-  static const String payment_error_page = 'invoice-loan/liabilities/error-page';
+  static const String payment_error_page = '/invoice-loan/liabilities/error-page';
 
   // Foreclosure
   static const String liability_foreclosure_webview =
-      'invoice-loan/liabilities/liability-foreclosure-webview';
+      '/invoice-loan/liabilities/liability-foreclosure-webview';
 
   // Missed Emi
   static const String missed_emi_payment =
-      'invoice-loan/liabilities/missed-emi-payment';
+      '/invoice-loan/liabilities/missed-emi-payment';
 
   // Prepayment
   static const String prepayment_amount_selection =
-      'invoice-loan/liabilities/prepayment-amount-selection';
+      '/invoice-loan/liabilities/prepayment-amount-selection';
   static const String prepayment_webview =
-      'invoice-loan/liabilities/prepayment-webview';
+      '/invoice-loan/liabilities/prepayment-webview';
 }
 
 List<GoRoute> invoiceLoanLiabilitiesRoutes = [

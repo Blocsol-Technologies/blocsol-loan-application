@@ -2,8 +2,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/continue_button.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -13,7 +14,6 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -151,70 +151,19 @@ class _InvoiceNewLoanBankAccountDetailsState
           body: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(
                 RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
+                RelativeSize.height(30, height),
                 RelativeSize.width(20, width),
                 RelativeSize.height(50, height)),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).pop();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 25,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.65),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                        ref
-                            .read(routerProvider)
-                            .push(InvoiceLoanSupportRouter.raise_new_ticket);
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 65,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.75),
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Help?",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.extraBold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SpacerWidget(height: 35),
+                InvoiceNewLoanRequestTopNav(onBackClick: () {
+                  ref.read(routerProvider).pop();
+                }),
+                const SpacerWidget(height: 12),
+                const InvoiceNewLoanRequestCountdownTimer(),
+                const SpacerWidget(height: 12),
                 _gettingBankAccountFormDetails
                     ? SizedBox(
                         width: width,

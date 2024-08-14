@@ -55,7 +55,7 @@ class _LiabilityGeneralWebviewState extends ConsumerState<InvoiceLoanLiabilityGe
                 const LiabilityTopDecoration(),
                 Container(
                   padding:
-                      EdgeInsets.only(top: RelativeSize.height(40, height)),
+                      EdgeInsets.only(top: RelativeSize.height(30, height)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

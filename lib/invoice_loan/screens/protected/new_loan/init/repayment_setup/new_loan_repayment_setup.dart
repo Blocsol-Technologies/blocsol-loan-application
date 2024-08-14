@@ -3,7 +3,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/alert_dialog.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/continue_button.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/repayment_setup/repayment_setup_repayment_setup_webview.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -16,15 +20,10 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 
 class InvoiceNewLoanRepaymentSetup extends ConsumerStatefulWidget {
   const InvoiceNewLoanRepaymentSetup({super.key});
@@ -37,14 +36,11 @@ class InvoiceNewLoanRepaymentSetup extends ConsumerStatefulWidget {
 class _InvoiceNewLoanRepaymentSetupState
     extends ConsumerState<InvoiceNewLoanRepaymentSetup> {
   final _cancelToken = CancelToken();
-  final GlobalKey _repaymentURLWebviewKey = GlobalKey();
 
   bool _showRepaymentWebview = false;
-  bool _loadingRepaymentURL = false;
-  InAppWebViewController? _webViewController;
   String _currentUrl = "";
 
-  void _checkRepaymentSuccessStatus() async {
+  Future<void> _checkRepaymentSuccessStatus() async {
     if (ref.read(invoiceNewLoanRequestProvider).repaymentSetupFailure) {
       final snackBar = SnackBar(
         elevation: 0,
@@ -85,13 +81,9 @@ class _InvoiceNewLoanRepaymentSetupState
   }
 
   void _fetchRepaymentFormUrl() async {
-    if (_loadingRepaymentURL) {
+    if (ref.read(invoiceNewLoanRequestProvider).fetchingRepaymentSetupUrl) {
       return;
     }
-
-    setState(() {
-      _loadingRepaymentURL = true;
-    });
 
     var fetchURLResponse = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
@@ -99,16 +91,10 @@ class _InvoiceNewLoanRepaymentSetupState
 
     if (!mounted) return;
 
-    setState(() {
-      _loadingRepaymentURL = false;
-    });
-
     if (fetchURLResponse.success) {
       setState(() {
         _currentUrl = fetchURLResponse.data['url'];
       });
-      _webViewController?.loadUrl(
-          urlRequest: URLRequest(url: WebUri(fetchURLResponse.data['url'])));
     } else {
       final snackBar = SnackBar(
         elevation: 0,
@@ -125,51 +111,6 @@ class _InvoiceNewLoanRepaymentSetupState
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
-    }
-  }
-
-  Future<void> _refetchRepaymentSetupURL() async {
-    if (!ref.read(invoiceNewLoanRequestProvider).repaymentSetupFailure) {
-      return;
-    }
-
-    ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .setRepaymentSetupFailure(false);
-
-    setState(() {
-      _loadingRepaymentURL = true;
-    });
-
-    var response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .refetchRepaymentSetupForm(_cancelToken);
-
-    setState(() {
-      _loadingRepaymentURL = false;
-    });
-
-    if (!mounted) return;
-
-    if (!response.success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to refetch Repayment Mandate URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    } else {
-      _webViewController?.loadUrl(
-          urlRequest: URLRequest(url: WebUri(response.data)));
     }
   }
 
@@ -203,445 +144,373 @@ class _InvoiceNewLoanRepaymentSetupState
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Container(
-            padding: EdgeInsets.fromLTRB(
-                RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
-                RelativeSize.width(20, width),
-                RelativeSize.height(0, height)),
+            padding: EdgeInsets.only(
+              top: RelativeSize.height(30, height),
+            ),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        HapticFeedback.mediumImpact();
-                        if (_showRepaymentWebview) {
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.surface,
-                                    title: Text(
-                                      'Confirm',
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h1,
-                                        fontWeight: AppFontWeights.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    content: Text(
-                                      'Have you successfully set up Repayment?',
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h3,
-                                        fontWeight: AppFontWeights.medium,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          HapticFeedback.mediumImpact();
-                                          ref.read(routerProvider).pop();
-                                        },
-                                        child: Text('Go Back',
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h1,
-                                              fontWeight: AppFontWeights.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            )),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(true);
-                                        },
-                                        child: Text('No',
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h1,
-                                              fontWeight: AppFontWeights.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            )),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(true);
-                                          _checkRepaymentSuccessStatus();
-                                        },
-                                        child: Text('Yes',
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h1,
-                                              fontWeight: AppFontWeights.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            )),
-                                      ),
-                                    ]);
-                              });
-                        } else {
-                          ref.read(routerProvider).pop();
-                        }
-                      },
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 25,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.65),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 65,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: Theme.of(context)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: InvoiceNewLoanRequestTopNav(onBackClick: () async {
+                    if (_showRepaymentWebview) {
+                      await showDialog(
+                          context: context,
+                          barrierColor: Theme.of(context)
                               .colorScheme
-                              .primary
-                              .withOpacity(0.75),
-                          width: 1,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Help?",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.b1,
-                            fontWeight: AppFontWeights.extraBold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                              .onSurface
+                              .withOpacity(0.5),
+                          builder: (BuildContext context) {
+                            return NewLoanAlertDialog(
+                                text:
+                                    "Have you completed loan repayment setup?",
+                                onConfirm: () async {
+                                  await _checkRepaymentSuccessStatus();
+                                });
+                          });
+                    } else {
+                      ref.read(routerProvider).pop();
+                    }
+                  }),
                 ),
-                const SpacerWidget(
-                  height: 35,
+                const SpacerWidget(height: 12),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: const InvoiceNewLoanRequestCountdownTimer(),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 30,
-                      child: getLenderDetailsAssetURL(
-                          selectedOffer.bankName, selectedOffer.bankLogoURL),
-                    ),
-                    const SpacerWidget(
-                      width: 10,
-                    ),
-                  ],
+                const SpacerWidget(height: 12),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 30,
+                        child: getLenderDetailsAssetURL(
+                            selectedOffer.bankName, selectedOffer.bankLogoURL),
+                      ),
+                      const SpacerWidget(
+                        width: 10,
+                      ),
+                    ],
+                  ),
                 ),
                 const SpacerWidget(
                   height: 8,
                 ),
-                Text(
-                  "Setup Auto Repayment",
-                  style: TextStyle(
-                      fontFamily: fontFamily,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: AppFontSizes.h1,
-                      fontWeight: AppFontWeights.bold,
-                      letterSpacing: 0.4),
-                  softWrap: true,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: Text(
+                    "Setup Auto Repayment",
+                    style: TextStyle(
+                        fontFamily: fontFamily,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: AppFontSizes.h1,
+                        fontWeight: AppFontWeights.bold,
+                        letterSpacing: 0.4),
+                    softWrap: true,
+                  ),
                 ),
                 const SpacerWidget(
                   height: 16,
                 ),
-                Text(
-                  "Allow lender to auto-deduct repayment from your ${newLoanStateRef.bankName} ending ****${newLoanStateRef.bankAccountNumber.substring(newLoanStateRef.bankAccountNumber.length - 4)}",
-                  style: TextStyle(
-                      fontFamily: fontFamily,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: AppFontSizes.h3,
-                      fontWeight: AppFontWeights.normal,
-                      letterSpacing: 0.4),
-                  softWrap: true,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: Text(
+                    "Allow lender to auto-deduct repayment from your ${newLoanStateRef.bankName} ending ****${newLoanStateRef.bankAccountNumber.substring(newLoanStateRef.bankAccountNumber.length - 4)}",
+                    style: TextStyle(
+                        fontFamily: fontFamily,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: AppFontSizes.h3,
+                        fontWeight: AppFontWeights.normal,
+                        letterSpacing: 0.4),
+                    softWrap: true,
+                  ),
                 ),
                 const SpacerWidget(
-                  height: 35,
+                  height: 20,
                 ),
                 if (!_showRepaymentWebview) ...[
-                  Text(
-                    "Repayment Details",
-                    style: TextStyle(
-                        fontFamily: fontFamily,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: AppFontSizes.h2,
-                        fontWeight: AppFontWeights.bold,
-                        letterSpacing: 0.14),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                    child: Text(
+                      "Repayment Details",
+                      style: TextStyle(
+                          fontFamily: fontFamily,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: AppFontSizes.h2,
+                          fontWeight: AppFontWeights.bold,
+                          letterSpacing: 0.14),
+                    ),
                   ),
                   const SpacerWidget(
                     height: 20,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text("Amount Payable:",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.b1,
-                                      fontWeight: AppFontWeights.medium)),
-                            ),
-                            const SpacerWidget(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "₹ ${selectedOffer.totalRepayment}",
-                                softWrap: true,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.b1,
-                                    fontWeight: AppFontWeights.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SpacerWidget(
-                          height: 15,
-                        ),
-                        const SpacerWidget(
-                          height: 15,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text("Autorepay End (Due Date After):",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.b1,
-                                      fontWeight: AppFontWeights.medium)),
-                            ),
-                            const SpacerWidget(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "From: ${selectedOffer.tenure}",
-                                    softWrap: true,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text("Amount Payable:",
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b1,
-                                        fontWeight: AppFontWeights.bold),
-                                  ),
-                                ],
+                                        fontWeight: AppFontWeights.medium)),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SpacerWidget(
-                          height: 15,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Sanctioned Cancellation Fee:",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.b1,
-                                    fontWeight: AppFontWeights.medium),
+                              const SpacerWidget(
+                                width: 5,
                               ),
-                            ),
-                            const SpacerWidget(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Text(
-                                newLoanStateRef.sanctionedCancellationFee,
-                                softWrap: true,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.b1,
-                                    fontWeight: AppFontWeights.bold),
+                              Expanded(
+                                child: Text(
+                                  "₹ ${selectedOffer.totalRepayment}",
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.bold),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SpacerWidget(
-                    height: 20,
-                  ),
-                  Text(
-                    "Account Details",
-                    style: TextStyle(
-                        fontFamily: fontFamily,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: AppFontSizes.h2,
-                        fontWeight: AppFontWeights.bold,
-                        letterSpacing: 0.14),
-                  ),
-                  const SpacerWidget(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.2),
-                                width: 1))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Account Number",
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.medium,
-                            fontFamily: fontFamily,
-                            letterSpacing: 0.14,
+                            ],
                           ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              newLoanStateRef.bankAccountNumber,
-                              style: TextStyle(
-                                color: const Color.fromRGBO(145, 145, 145, 1),
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.bold,
-                                fontFamily: fontFamily,
-                                letterSpacing: 0.165,
-                              ),
-                            ),
-                            const SpacerWidget(
-                              height: 3,
-                            ),
-                            Text(
-                              newLoanStateRef.bankIFSC,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.4),
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.normal,
-                                fontFamily: fontFamily,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.2),
-                                width: 1))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Account Holder Name",
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.medium,
-                            fontFamily: fontFamily,
-                            letterSpacing: 0.14,
+                          const SpacerWidget(
+                            height: 15,
                           ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              msmeBasicDetailsRef.legalName,
-                              style: TextStyle(
-                                color: const Color.fromRGBO(145, 145, 145, 1),
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.bold,
-                                fontFamily: fontFamily,
-                                letterSpacing: 0.165,
+                          const SpacerWidget(
+                            height: 15,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text("Autorepay End (Due Date After):",
+                                    style: TextStyle(
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.b1,
+                                        fontWeight: AppFontWeights.medium)),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              const SpacerWidget(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "From: ${selectedOffer.tenure}",
+                                      softWrap: true,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontFamily: fontFamily,
+                                          fontSize: AppFontSizes.b1,
+                                          fontWeight: AppFontWeights.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SpacerWidget(
+                            height: 15,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  "Sanctioned Cancellation Fee:",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.medium),
+                                ),
+                              ),
+                              const SpacerWidget(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  newLoanStateRef.sanctionedCancellationFee,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SpacerWidget(
                     height: 20,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                    child: Text(
+                      "Account Details",
+                      style: TextStyle(
+                          fontFamily: fontFamily,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: AppFontSizes.h2,
+                          fontWeight: AppFontWeights.bold,
+                          letterSpacing: 0.14),
+                    ),
+                  ),
+                  const SpacerWidget(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.2),
+                                  width: 1))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Account Number",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.medium,
+                              fontFamily: fontFamily,
+                              letterSpacing: 0.14,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                newLoanStateRef.bankAccountNumber,
+                                style: TextStyle(
+                                  color: const Color.fromRGBO(145, 145, 145, 1),
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.bold,
+                                  fontFamily: fontFamily,
+                                  letterSpacing: 0.165,
+                                ),
+                              ),
+                              const SpacerWidget(
+                                height: 3,
+                              ),
+                              Text(
+                                newLoanStateRef.bankIFSC,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.4),
+                                  fontSize: AppFontSizes.b2,
+                                  fontWeight: AppFontWeights.normal,
+                                  fontFamily: fontFamily,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.2),
+                                  width: 1))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Account Holder Name",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.medium,
+                              fontFamily: fontFamily,
+                              letterSpacing: 0.14,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                msmeBasicDetailsRef.legalName,
+                                style: TextStyle(
+                                  color: const Color.fromRGBO(145, 145, 145, 1),
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.bold,
+                                  fontFamily: fontFamily,
+                                  letterSpacing: 0.165,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SpacerWidget(
+                    height: 50,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -655,174 +524,22 @@ class _InvoiceNewLoanRepaymentSetupState
                   ),
                 ],
                 if (_showRepaymentWebview) ...[
-                  Expanded(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: ref
-                              .watch(invoiceNewLoanRequestProvider)
-                              .entityKYCFailure
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                const SpacerWidget(height: 50),
-                                Lottie.asset("assets/animations/error.json",
-                                    height: 300, width: 300),
-                                const SpacerWidget(height: 35),
-                                Text(
-                                  "Your Repayment Mandate Setup Failed!",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h2,
-                                    fontWeight: AppFontWeights.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                const SpacerWidget(
-                                  height: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.mediumImpact();
-                                    _refetchRepaymentSetupURL();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Try Again?",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h2,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SpacerWidget(
-                                  height: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.mediumImpact();
-                                    ref.read(routerProvider).pop();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Cancel?",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h2,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          : ref
-                                  .read(invoiceNewLoanRequestProvider)
-                                  .checkingRepaymentSetupSuccess
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    const SpacerWidget(height: 50),
-                                    Lottie.asset(
-                                        "assets/animations/loading_spinner.json",
-                                        height: 250,
-                                        width: 250),
-                                    const SpacerWidget(height: 35),
-                                    Text(
-                                      "Verifying Repayment Success...",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h2,
-                                        fontWeight: AppFontWeights.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Please do not click back or close the app",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.b1,
-                                        fontWeight: AppFontWeights.medium,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Stack(
-                                  children: [
-                                    _loadingRepaymentURL
-                                        ? const LinearProgressIndicator()
-                                        : Container(),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: InAppWebView(
-                                        key: _repaymentURLWebviewKey,
-                                        gestureRecognizers: const <Factory<
-                                            VerticalDragGestureRecognizer>>{},
-                                        initialSettings: InAppWebViewSettings(
-                                          javaScriptEnabled: true,
-                                          verticalScrollBarEnabled: true,
-                                          disableHorizontalScroll: true,
-                                          disableVerticalScroll: false,
-                                        ),
-                                        onLoadStop: (controller, url) {
-                                          setState(() {
-                                            _loadingRepaymentURL = false;
-                                          });
-                                        },
-                                        initialUrlRequest: URLRequest(
-                                            url: WebUri(_currentUrl)),
-                                        onWebViewCreated: (controller) async {
-                                          _webViewController = controller;
-                                          controller.loadUrl(
-                                              urlRequest: URLRequest(
-                                                  url: WebUri(_currentUrl)));
-                                        },
-                                        onLoadStart: (controller, url) async {
-                                          setState(() {
-                                            _loadingRepaymentURL = true;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  Container(
+                    height: 5,
+                    width: width,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(248, 248, 248, 1),
+                      border: Border.symmetric(
+                        horizontal: BorderSide(
+                          color: Color.fromRGBO(230, 230, 230, 1),
+                          width: 1,
+                        ),
+                      ),
                     ),
-                  )
+                  ),
+                  Expanded(
+                      child:
+                          InvoiceNewLoanRepaymentSetupWebview(url: _currentUrl))
                 ]
               ],
             ),

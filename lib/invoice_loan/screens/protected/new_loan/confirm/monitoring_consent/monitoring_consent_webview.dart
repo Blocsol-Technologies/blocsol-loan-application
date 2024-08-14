@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -15,12 +16,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 
 class InvoiceNewLoanMonitoringConsentWebview extends ConsumerStatefulWidget {
   final String url;
@@ -34,14 +34,15 @@ class InvoiceNewLoanMonitoringConsentWebview extends ConsumerStatefulWidget {
 class _InvoiceNewLoanMonitoringConsentWebviewState
     extends ConsumerState<InvoiceNewLoanMonitoringConsentWebview> {
   final _cancelToken = CancelToken();
-  final GlobalKey _montoringConsentAAWebviewScreen = GlobalKey();
+  final GlobalKey _webviewKey = GlobalKey();
+  final _controller = StreamController<SwipeRefreshState>.broadcast();
 
-  String _currentUrl = "";
-  bool _loadingAAURL = true;
+  Stream<SwipeRefreshState> get _stream => _controller.stream;
+  InAppWebViewController? _webViewController;
+  bool _loading = true;
 
-  InAppWebViewController? webViewController;
-
-  void _checkMonitoringConsentSuccess(String? ecres, String? resdate) async {
+  Future<void> _checkMonitoringConsentSuccess(
+      String? ecres, String? resdate) async {
     if (ref
         .read(invoiceNewLoanRequestProvider)
         .validatingMonitoringConsentSuccess) {
@@ -67,12 +68,18 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     }
   }
 
-  @override
-  void initState() {
+  Future<void> _refresh() async {
     setState(() {
-      _currentUrl = widget.url;
+      _loading = true;
     });
-    super.initState();
+
+    _webViewController?.loadUrl(
+        urlRequest: URLRequest(url: WebUri(widget.url)));
+
+    setState(() {
+      _loading = false;
+    });
+    _controller.sink.add(SwipeRefreshState.hidden);
   }
 
   @override
@@ -95,263 +102,181 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Container(
-            padding: EdgeInsets.fromLTRB(
-                RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
-                RelativeSize.width(20, width),
-                RelativeSize.height(0, height)),
-            child: newLoanStateRef.monitoringConsentError
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Lottie.asset(
-                          "assets/animations/error.json",
-                          height: 200,
-                          width: 200,
+            padding: EdgeInsets.only(
+              top: RelativeSize.height(30, height),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: InvoiceNewLoanRequestTopNav(
+                    onBackClick: () {
+                      ref.read(routerProvider).pop();
+                    },
+                  ),
+                ),
+                const SpacerWidget(height: 22),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(20, width)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Provide monitoring consent",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.title,
+                          fontWeight: AppFontWeights.extraBold,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        const SpacerWidget(height: 20),
-                        Text(
-                          "You did not provide account monitoring consent. Could not validate monitoring consent. Contact Support...",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.h3,
-                            fontWeight: AppFontWeights.bold,
-                            letterSpacing: 0.4,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SpacerWidget(height: 40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        softWrap: true,
+                      ),
+                      const SpacerWidget(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.go(InvoiceLoanIndexRouter.dashboard);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 20),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Restart Journey",
+                            SizedBox(
+                              height: 40,
+                              child: getLenderDetailsAssetURL(
+                                  selectedOffer.bankName,
+                                  selectedOffer.bankLogoURL),
+                            ),
+                            const SpacerWidget(
+                              width: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SpacerWidget(
+                  height: 15,
+                ),
+                Container(
+                  height: 5,
+                  width: width,
+                  decoration: const BoxDecoration(
+                    color: Color.fromRGBO(248, 248, 248, 1),
+                    border: Border.symmetric(
+                      horizontal: BorderSide(
+                        color: Color.fromRGBO(230, 230, 230, 1),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SwipeRefresh.adaptive(
+                    shrinkWrap: true,
+                    stateStream: _stream,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onRefresh: () {
+                      _refresh();
+                    },
+                    children: [
+                      SizedBox(
+                        height: RelativeSize.height(550, height),
+                        width: width,
+                        child: ref
+                                .read(invoiceNewLoanRequestProvider)
+                                .validatingMonitoringConsentSuccess
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  const SpacerWidget(height: 50),
+                                  Lottie.asset(
+                                      "assets/animations/loading_spinner.json",
+                                      height: 180,
+                                      width: 180),
+                                  const SpacerWidget(height: 35),
+                                  Text(
+                                    "Verifying Monitoring Consent Success...",
                                     style: TextStyle(
                                       fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.h3,
+                                      fontSize: AppFontSizes.h2,
+                                      fontWeight: AppFontWeights.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Please do not click back or close the app",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
                                       fontWeight: AppFontWeights.medium,
-                                      letterSpacing: 0.4,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onPrimary,
+                                          .onSurface,
                                     ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                : newLoanStateRef.validatingMonitoringConsentSuccess
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const SpacerWidget(height: 150),
-                            Lottie.asset(
-                                "assets/animations/loading_spinner.json",
-                                height: 220,
-                                width: 220),
-                            const SpacerWidget(height: 35),
-                            Text(
-                              "Verifying Monitoring Consent Success...",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h2,
-                                fontWeight: AppFontWeights.bold,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                            Text(
-                              "Please do not click back or close the app",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () async {
-                                  HapticFeedback.mediumImpact();
-                                  ref.read(routerProvider).pop();
-                                },
-                                child: Icon(
-                                  Icons.arrow_back_outlined,
-                                  size: 25,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.65),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                 HapticFeedback.mediumImpact();
-                                 ref.read(routerProvider).push(InvoiceLoanSupportRouter.raise_new_ticket);
-                                },
-                                child: Container(
-                                  height: 25,
-                                  width: 65,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(18),
-                                    border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withOpacity(0.75),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Help?",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.b1,
-                                        fontWeight: AppFontWeights.extraBold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SpacerWidget(
-                            height: 35,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 40,
-                                  child: getLenderDetailsAssetURL(
-                                      selectedOffer.bankName,
-                                      selectedOffer.bankLogoURL),
-                                ),
-                                const SpacerWidget(
-                                  width: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SpacerWidget(
-                            height: 10,
-                          ),
-                          Text(
-                            "Monitoring Consent",
-                            style: TextStyle(
-                                fontFamily: fontFamily,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: AppFontSizes.h1,
-                                fontWeight: AppFontWeights.bold,
-                                letterSpacing: 0.4),
-                            softWrap: true,
-                          ),
-                          const SpacerWidget(
-                            height: 15,
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Stack(
-                                children: [
-                                  _loadingAAURL
-                                      ? const LinearProgressIndicator()
-                                      : Container(),
-                                  InAppWebView(
-                                    key: _montoringConsentAAWebviewScreen,
-                                    gestureRecognizers: const <Factory<
-                                        VerticalDragGestureRecognizer>>{},
-                                    initialSettings: InAppWebViewSettings(
-                                      javaScriptEnabled: true,
-                                      verticalScrollBarEnabled: true,
-                                      disableHorizontalScroll: true,
-                                      disableVerticalScroll: false,
-                                    ),
-                                    onLoadStop: (controller, url) {
-                                      setState(() {
-                                        _loadingAAURL = false;
-                                        _currentUrl = url.toString();
-                                      });
-                                    },
-                                    initialUrlRequest:
-                                        URLRequest(url: WebUri(_currentUrl)),
-                                    onLoadStart: (controller, url) async {
-                                      setState(() {
-                                        _loadingAAURL = true;
-                                        _currentUrl = url.toString();
-                                      });
-                                    },
-                                    onWebViewCreated: (controller) async {
-                                      webViewController = controller;
-                                    },
-                                    shouldOverrideUrlLoading:
-                                        (controller, navigationAction) async {
-                                      var uri = navigationAction.request.url;
-                                      if (uri != null &&
-                                          uri.toString().contains(
-                                              'https://ondc.invoicepe.in/aa-redirect')) {
-                                        String? ecres =
-                                            uri.queryParameters['ecres'];
-                                        String? resdate =
-                                            uri.queryParameters['resdate'];
-                                        _checkMonitoringConsentSuccess(
-                                            ecres, resdate);
-                                      }
-                                      return NavigationActionPolicy.ALLOW;
-                                    },
                                   ),
                                 ],
+                              )
+                            : Stack(
+                                children: [
+                                  SizedBox(
+                                    width: width,
+                                    height: 900,
+                                    child: InAppWebView(
+                                      key: _webviewKey,
+                                      gestureRecognizers: const <Factory<
+                                          VerticalDragGestureRecognizer>>{},
+                                      initialSettings: InAppWebViewSettings(
+                                        javaScriptEnabled: true,
+                                        verticalScrollBarEnabled: true,
+                                        disableHorizontalScroll: true,
+                                        disableVerticalScroll: false,
+                                      ),
+                                      initialUrlRequest: URLRequest(
+                                        url: WebUri(widget.url),
+                                      ),
+                                      onLoadStop: (controller, url) {
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                      },
+                                      shouldOverrideUrlLoading:
+                                          (controller, navigationAction) async {
+                                        var uri = navigationAction.request.url;
+
+                                        if (uri != null &&
+                                            uri.toString().contains(
+                                                'https://ondc.invoicepe.in/aa-redirect')) {
+                                          // Extract query parameters
+                                          String? ecres =
+                                              uri.queryParameters['ecres'];
+                                          String? resdate =
+                                              uri.queryParameters['resdate'];
+
+                                          _checkMonitoringConsentSuccess(
+                                              ecres, resdate);
+                                        }
+                                        return NavigationActionPolicy.ALLOW;
+                                      },
+                                    ),
+                                  ),
+                                  _loading
+                                      ? const LinearProgressIndicator()
+                                      : Container(),
+                                ],
                               ),
-                            ),
-                          )
-                        ],
                       ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

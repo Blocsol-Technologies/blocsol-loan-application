@@ -131,7 +131,7 @@ class _InvoiceLoanLiabilityForeclosureWebviewState
                 const LiabilityTopDecoration(),
                 Container(
                   padding:
-                      EdgeInsets.only(top: RelativeSize.height(20, height)),
+                      EdgeInsets.only(top: RelativeSize.height(30, height)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

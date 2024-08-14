@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/continue_button.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -16,7 +16,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:string_similarity/string_similarity.dart';
 
@@ -150,106 +149,13 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Top Nav
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        HapticFeedback.mediumImpact();
-                        context.go(InvoiceNewLoanRequestRouter.dashboard);
-                      },
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 25,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 90,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.75),
-                          width: 1,
-                        ),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Center(
-                            child: Text(
-                              "Step 1 of 5",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.extraBold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Container(
-                              width: 16,
-                              height: 30,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.15),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SpacerWidget(
-                      width: 12,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                        ref
-                            .read(routerProvider)
-                            .push(InvoiceLoanSupportRouter.raise_new_ticket);
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 65,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.75),
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Help?",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.extraBold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                InvoiceNewLoanRequestTopNav(
+                    onBackClick: () {
+                      ref.read(routerProvider).pop();
+                    },
+                  ),
                 const SpacerWidget(
-                  height: 48,
+                  height: 42,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -274,9 +180,9 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     padding: EdgeInsets.fromLTRB(
-                        5,
+                        0,
                         RelativeSize.height(5, height),
-                        5,
+                        0,
                         RelativeSize.height(22, height)),
                     child: Column(
                       children: [
@@ -311,7 +217,7 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
                           ],
                         ),
                         const SpacerWidget(
-                          height: 20,
+                          height: 15,
                         ),
                         InvoiceSearch(
                           onRefrersh: _onInvoiceRefresh,
@@ -329,11 +235,6 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
                                 width: width,
                                 height: RelativeSize.height(280, height),
                                 child: SingleChildScrollView(
-                                  padding: EdgeInsets.fromLTRB(
-                                      RelativeSize.width(20, width),
-                                      0,
-                                      RelativeSize.width(20, width),
-                                      0),
                                   physics: const BouncingScrollPhysics(),
                                   child: newLoanStateRef.loadingInvoices
                                       ? Container(
@@ -459,7 +360,7 @@ class InvoiceItem extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(RelativeSize.width(10, width), 0,
-                  RelativeSize.width(10, width), 0),
+                  RelativeSize.width(27, width), 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -531,8 +432,8 @@ class InvoiceItem extends StatelessWidget {
                     ),
                   ),
                   Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 17,
+                    Icons.arrow_forward_ios,
+                    size: 12,
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
@@ -547,7 +448,7 @@ class InvoiceItem extends StatelessWidget {
             Container(
               height: 5,
               width: MediaQuery.of(context).size.width,
-              color: const Color.fromRGBO(220, 220, 220, 1),
+              color: Colors.transparent,
             )
           ],
         ),
@@ -609,7 +510,7 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
               children: <Widget>[
                 Icon(
                   Icons.search,
-                  size: 24,
+                  size: 20,
                   color:
                       Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
@@ -623,17 +524,17 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                     controller: widget.textEditingController,
                     style: TextStyle(
                       fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: AppFontWeights.bold,
+                      fontSize: AppFontSizes.h3,
+                      fontWeight: AppFontWeights.medium,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                     decoration: InputDecoration(
                       counterText: "",
-                      hintText: 'Search Company Name',
+                      hintText: 'Search Name',
                       contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
                       hintStyle: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: AppFontSizes.h2,
+                        fontSize: AppFontSizes.h3,
                         fontWeight: AppFontWeights.normal,
                         color: Theme.of(context).colorScheme.scrim,
                       ),
@@ -659,10 +560,10 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
             height: 20,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -675,11 +576,14 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                           color: Theme.of(context).colorScheme.onSurface,
                           letterSpacing: 0.13),
                     ),
+                    const SpacerWidget(
+                      height: 3,
+                    ),
                     Text(
                       "All these invoices will be shared for requesting loan offers from lenders ",
                       style: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: AppFontSizes.b3,
+                        fontSize: AppFontSizes.b2,
                         fontWeight: AppFontWeights.normal,
                         color: Theme.of(context).colorScheme.onSurface,
                         letterSpacing: 0.1,
@@ -688,6 +592,9 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                     ),
                   ],
                 ),
+              ),
+              const SpacerWidget(
+                width: 5,
               ),
               Expanded(
                 flex: 2,
@@ -708,8 +615,8 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                     });
                   },
                   child: Container(
-                    height: 30,
-                    width: 100,
+                    height: 25,
+                    width: 90,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -722,37 +629,29 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                         width: 1,
                       ),
                     ),
-                    child: refreshingInvoices
-                        ? Lottie.asset(
-                            "assets/animations/loading_spinner.json",
-                            height: 35,
-                            width: 35,
-                          )
-                        : Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Icon(
-                                Icons.refresh,
-                                size: 20,
-                                color: Color.fromRGBO(0, 165, 236, 1),
-                              ),
-                              const SpacerWidget(
-                                width: 3,
-                              ),
-                              Text(
-                                widget.refreshingInvoices
-                                    ? "Fetching ..."
-                                    : "REFRESH",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.h3,
-                                  fontWeight: AppFontWeights.bold,
-                                  color: const Color.fromRGBO(0, 165, 236, 1),
-                                ),
-                              ),
-                            ],
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.refresh,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        const SpacerWidget(
+                          width: 3,
+                        ),
+                        Text(
+                          widget.refreshingInvoices ? "FETCHING" : "REFRESH",
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.bold,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

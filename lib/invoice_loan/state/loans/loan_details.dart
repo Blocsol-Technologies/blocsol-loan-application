@@ -112,6 +112,12 @@ class Invoice {
       chksum: "",
     );
   }
+
+  String getInvoiceId() {
+    String val = irn.isNotEmpty ? irn : inum;
+
+    return val.substring(0, 15);
+  }
 }
 
 class InvoiceItems {
@@ -145,6 +151,10 @@ class InvoiceItems {
       itemNumber: 0,
       itemDetails: InvoiceItemsDetails.demo(),
     );
+  }
+
+  num getTotalItemAmount() {
+    return itemDetails.txval + itemDetails.camt + itemDetails.iamt + itemDetails.samt + itemDetails.csamt; 
   }
 }
 
@@ -654,7 +664,7 @@ class OfferDetails {
     this.disbursementErr = false,
     this.state = "",
     this.totalRepayment = "",
-      this.parentItemId = "",
+    this.parentItemId = "",
     this.netDisbursedAmount = "",
     this.annualPercentageRate = "",
     this.insuranceCharges = "",

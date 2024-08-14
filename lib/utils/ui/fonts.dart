@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppFontSizes {
-  static double title = 30;
+  static double title = 28;
   static double emphasis = 24;
+  static double heading = 20;
   static double h1 = 18;
   static double h2 = 16;
   static double h3 = 14;

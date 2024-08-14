@@ -4,7 +4,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/alert_dialog.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -21,6 +23,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 
 class InvoiceNewLoanAgreementWebview extends ConsumerStatefulWidget {
   final String url;
@@ -35,12 +38,13 @@ class _InvoiceNewLoanAgreementWebviewState
     extends ConsumerState<InvoiceNewLoanAgreementWebview> {
   final _cancelToken = CancelToken();
   final GlobalKey _agreementWebviewKey = GlobalKey();
+  final _controller = StreamController<SwipeRefreshState>.broadcast();
 
-  final bool _loadingAgreementURL = false;
+  Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
-  String _currentUrl = "";
+  String _currentUrl = '';
 
-  void _checkLoanAgreementSuccess() async {
+  Future<void> _checkLoanAgreementSuccess() async {
     if (ref.read(invoiceNewLoanRequestProvider).loanAgreementFailure) {
       final snackBar = SnackBar(
         elevation: 0,
@@ -105,6 +109,13 @@ class _InvoiceNewLoanAgreementWebviewState
     }
   }
 
+  Future<void> _refresh() async {
+    _webViewController?.loadUrl(
+        urlRequest: URLRequest(url: WebUri(_currentUrl)));
+
+    _controller.sink.add(SwipeRefreshState.hidden);
+  }
+
   @override
   initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -139,259 +150,91 @@ class _InvoiceNewLoanAgreementWebviewState
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(
-                RelativeSize.width(20, width),
-                RelativeSize.height(20, height),
-                RelativeSize.width(20, width),
-                RelativeSize.height(0, height)),
+            padding: EdgeInsets.only(
+              top: RelativeSize.height(30, height),
+            ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
-                          HapticFeedback.mediumImpact();
-                          await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.surface,
-                                title: Text(
-                                  'Confirm',
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h1,
-                                    fontWeight: AppFontWeights.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                content: Text(
-                                  'Have you successfully signed the Agreement?',
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h3,
-                                    fontWeight: AppFontWeights.medium,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      ref.read(routerProvider).pop();
-                                    },
-                                    child: Text('Go Back',
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h1,
-                                          fontWeight: AppFontWeights.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        )),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(true);
-                                    },
-                                    child: Text('No',
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h1,
-                                          fontWeight: AppFontWeights.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        )),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(true);
-                                      _checkLoanAgreementSuccess();
-                                    },
-                                    child: Text('Yes',
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h1,
-                                          fontWeight: AppFontWeights.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        )),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: Icon(
-                          Icons.arrow_back_outlined,
-                          size: 25,
-                          color: Theme.of(context)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
+                    child: InvoiceNewLoanRequestTopNav(onBackClick: () async {
+                      await showDialog(
+                          context: context,
+                          barrierColor: Theme.of(context)
                               .colorScheme
                               .onSurface
-                              .withOpacity(0.65),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          HapticFeedback.mediumImpact();
-                          ref.read(routerProvider).push(InvoiceLoanSupportRouter.raise_new_ticket);
-                        },
-                        child: Container(
-                          height: 25,
-                          width: 65,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.75),
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Help?",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.extraBold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                              .withOpacity(0.5),
+                          builder: (BuildContext context) {
+                            return NewLoanAlertDialog(
+                                text: "Have you signed the loan agreement?",
+                                onConfirm: () async {
+                                  await _checkLoanAgreementSuccess();
+                                });
+                          });
+                    }),
+                  ),
+                  const SpacerWidget(height: 12),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
+                    child: const InvoiceNewLoanRequestCountdownTimer(),
+                  ),
+                  const SpacerWidget(height: 12),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: RelativeSize.width(20, width)),
+                    child: Text(
+                      "Loan Agreement",
+                      style: TextStyle(
+                          fontFamily: fontFamily,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: AppFontSizes.h1,
+                          fontWeight: AppFontWeights.bold,
+                          letterSpacing: 0.4),
+                      softWrap: true,
+                    ),
                   ),
                   const SpacerWidget(
-                    height: 35,
+                    height: 20,
                   ),
-                  Text(
-                    "Loan Agreement",
-                    style: TextStyle(
-                        fontFamily: fontFamily,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: AppFontSizes.h1,
-                        fontWeight: AppFontWeights.bold,
-                        letterSpacing: 0.4),
-                    softWrap: true,
-                  ),
-                  const SpacerWidget(
-                    height: 16,
+                  Container(
+                    height: 5,
+                    width: width,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(248, 248, 248, 1),
+                      border: Border.symmetric(
+                        horizontal: BorderSide(
+                          color: Color.fromRGBO(230, 230, 230, 1),
+                          width: 1,
+                        ),
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: ref
-                              .watch(invoiceNewLoanRequestProvider)
-                              .loanAgreementFailure
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                const SpacerWidget(height: 0),
-                                Lottie.asset("assets/animations/error.json",
-                                    height: 200, width: 200),
-                                const SpacerWidget(height: 35),
-                                Text(
-                                  "Your Loan Agreement Failed!",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h2,
-                                    fontWeight: AppFontWeights.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                const SpacerWidget(
-                                  height: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.heavyImpact();
-                                    _refetchLoanAgreementURL();
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Try Again?",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h3,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SpacerWidget(
-                                  height: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.mediumImpact();
-                                    context.go(InvoiceNewLoanRequestRouter.dashboard);
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Cancel?",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h3,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          : newLoanStateRef.verifyingLoanAgreementSuccess
+                      width: width,
+                      child: SwipeRefresh.adaptive(
+                        shrinkWrap: true,
+                        stateStream: _stream,
+                        onRefresh: () {
+                          _refresh();
+                        },
+                        children: [
+                          ref
+                                  .watch(invoiceNewLoanRequestProvider)
+                                  .loanAgreementFailure
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    const SpacerWidget(height: 50),
-                                    Lottie.asset(
-                                        "assets/animations/loading_spinner.json",
-                                        height: 250,
-                                        width: 250),
+                                    const SpacerWidget(height: 0),
+                                    Lottie.asset("assets/animations/error.json",
+                                        height: 180, width: 180),
                                     const SpacerWidget(height: 35),
                                     Text(
-                                      "Verifying Agreement Success...",
+                                      "Your Loan Agreement Failed!",
                                       style: TextStyle(
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.h2,
@@ -401,45 +244,143 @@ class _InvoiceNewLoanAgreementWebviewState
                                             .onSurface,
                                       ),
                                     ),
-                                    Text(
-                                      "Please do not click back or close the app",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.b1,
-                                        fontWeight: AppFontWeights.medium,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                    const SpacerWidget(
+                                      height: 30,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        HapticFeedback.heavyImpact();
+                                        _refetchLoanAgreementURL();
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Try Again?",
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.h3,
+                                              fontWeight: AppFontWeights.medium,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
+                                    const SpacerWidget(
+                                      height: 30,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        HapticFeedback.mediumImpact();
+                                        context.go(InvoiceNewLoanRequestRouter
+                                            .dashboard);
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Cancel?",
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.h3,
+                                              fontWeight: AppFontWeights.medium,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 )
-                              : Stack(
-                                  children: [
-                                    _loadingAgreementURL
-                                        ? const LinearProgressIndicator()
-                                        : Container(),
-                                    InAppWebView(
-                                      key: _agreementWebviewKey,
-                                      gestureRecognizers: const <Factory<
-                                          VerticalDragGestureRecognizer>>{},
-                                      initialSettings: InAppWebViewSettings(
-                                        javaScriptEnabled: true,
-                                        verticalScrollBarEnabled: true,
-                                        disableHorizontalScroll: true,
-                                        disableVerticalScroll: false,
-                                      ),
-                                      initialUrlRequest:
-                                          URLRequest(url: WebUri(_currentUrl)),
-                                      onWebViewCreated: (controller) async {
-                                        _webViewController = controller;
-                                        _webViewController?.loadUrl(
-                                            urlRequest: URLRequest(
-                                                url: WebUri(widget.url)));
-                                      },
+                              : newLoanStateRef.verifyingLoanAgreementSuccess
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        const SpacerWidget(height: 50),
+                                        Lottie.asset(
+                                            "assets/animations/loading_spinner.json",
+                                            height: 180,
+                                            width: 180),
+                                        const SpacerWidget(height: 35),
+                                        Text(
+                                          "Verifying Agreement Success...",
+                                          style: TextStyle(
+                                            fontFamily: fontFamily,
+                                            fontSize: AppFontSizes.h2,
+                                            fontWeight: AppFontWeights.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Please do not click back or close the app",
+                                          style: TextStyle(
+                                            fontFamily: fontFamily,
+                                            fontSize: AppFontSizes.b1,
+                                            fontWeight: AppFontWeights.medium,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Stack(
+                                      children: [
+                                        SizedBox(
+                                          width: width,
+                                          height: 1000,
+                                          child: InAppWebView(
+                                            key: _agreementWebviewKey,
+                                            gestureRecognizers: const <Factory<
+                                                VerticalDragGestureRecognizer>>{},
+                                            initialSettings:
+                                                InAppWebViewSettings(
+                                              javaScriptEnabled: true,
+                                              verticalScrollBarEnabled: true,
+                                              disableHorizontalScroll: true,
+                                              disableVerticalScroll: false,
+                                            ),
+                                            initialUrlRequest: URLRequest(
+                                                url: WebUri(_currentUrl)),
+                                            onWebViewCreated:
+                                                (controller) async {
+                                              _webViewController = controller;
+                                              _webViewController?.loadUrl(
+                                                  urlRequest: URLRequest(
+                                                      url: WebUri(widget.url)));
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                        ],
+                      ),
                     ),
                   )
                 ]),
