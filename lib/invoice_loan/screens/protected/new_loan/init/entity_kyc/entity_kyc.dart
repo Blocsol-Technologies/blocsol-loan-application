@@ -39,6 +39,7 @@ class _InvoiceNewLoanEntityKycState
   bool _loading = true;
   Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
+  // ignore: unused_field
   String _url = '';
 
   Future<void> _checkEntityKYCSuccess() async {
@@ -175,16 +176,7 @@ class _InvoiceNewLoanEntityKycState
   }
 
   Future<void> _refresh() async {
-    setState(() {
-      _loading = true;
-    });
-
-    _webViewController?.loadUrl(urlRequest: URLRequest(url: WebUri(_url)));
-
-    setState(() {
-      _loading = false;
-    });
-
+    _fetchEntityKYCURL();
     _controller.sink.add(SwipeRefreshState.hidden);
   }
 

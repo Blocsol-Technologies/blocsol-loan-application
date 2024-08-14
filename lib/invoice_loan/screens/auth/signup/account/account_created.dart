@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SignupAccountCreated extends ConsumerStatefulWidget {
   const SignupAccountCreated({super.key});
@@ -21,6 +22,35 @@ class SignupAccountCreated extends ConsumerStatefulWidget {
 class _SignupAccountCreatedState extends ConsumerState<SignupAccountCreated> {
   final double _outerCircleDiameter = 250;
   final double _difference = 25;
+
+  Future<void> _onContinueClickHandler() async {
+    final permissions = [
+      Permission.locationWhenInUse,
+      Permission.camera,
+      Permission.mediaLibrary,
+      Permission.notification,
+      Permission.sms,
+    ];
+
+    bool allGranted = true;
+
+    for (var permission in permissions) {
+      if (!(await permission.isGranted)) {
+        allGranted = false;
+        break;
+      }
+    }
+
+    if (!mounted || !context.mounted) return;
+
+    if (allGranted) {
+      context.go(InvoiceLoanIndexRouter.dashboard);
+      return;
+    } else {
+      context.go(InvoiceLoanIndexRouter.permissions);
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,9 +280,9 @@ class _SignupAccountCreatedState extends ConsumerState<SignupAccountCreated> {
                     height: 140,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       HapticFeedback.heavyImpact();
-                      context.go(InvoiceLoanIndexRouter.dashboard);
+                      _onContinueClickHandler();
                     },
                     child: Container(
                       height: 35,

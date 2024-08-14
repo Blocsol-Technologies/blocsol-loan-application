@@ -1,13 +1,14 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme.dart';
-import 'package:blocsol_loan_application/home.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/router.dart';
+import 'package:blocsol_loan_application/choice_screens/login_choice.dart';
 import 'package:blocsol_loan_application/main.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/login_router.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/router.dart';
+import 'package:blocsol_loan_application/choice_screens/signup_choice.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,6 +17,7 @@ part 'router.g.dart';
 
 class AppRoutes {
   static const entry = "/";
+  static const signupChoice = "/signup_choice";
 }
 
 final List<String> publicRoutes = [];
@@ -31,7 +33,11 @@ class Router extends _$Router {
       routes: [
         GoRoute(
           path: AppRoutes.entry,
-          builder: (context, state) => const Home(),
+          builder: (context, state) => const LoginChoice(),
+        ),
+         GoRoute(
+          path: AppRoutes.signupChoice,
+          builder: (context, state) => const SignupChoice(),
         ),
         ...invoiceLoanRoutes,
       ],
@@ -51,7 +57,7 @@ class Router extends _$Router {
               .setTheme(ThemeState.personalLoanTheme);
         }
 
-        logger.d("navigating to path: ${state.uri.path}");
+        logger.d("navigating to path: ${state.uri.path} \n extra: ${state.extra}");
 
         if (invoiceLoanToken.isNotEmpty &&
             invoiceLoanPublicRoutes
@@ -74,7 +80,7 @@ class Router extends _$Router {
         if (personalLoanToken.isEmpty &&
             personalLoanProtectedRoutes
                 .any((route) => route.path == state.uri.path)) {
-          return PersonalLoanLoginRouter.index;
+          return PersonalLoanLoginRouter.mobil_auth;
         }
 
         return null;

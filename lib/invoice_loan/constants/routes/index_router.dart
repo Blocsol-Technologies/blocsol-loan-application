@@ -1,3 +1,4 @@
+import 'package:blocsol_loan_application/invoice_loan/screens/auth/permissions.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/dashboard.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/liabilities_home.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/dashboard.dart';
@@ -9,6 +10,7 @@ class InvoiceLoanIndexRouter {
   static const profile = "/invoice-loan/profile";
   static const notifications = "/invoice-loan/notifications";
   static const support = "/invoice-loan/support";
+  static const permissions = "/invoice-loan/login/permissions";
 }
 
 List<GoRoute> invoiceLoanIndexRoutes = [
@@ -16,7 +18,7 @@ List<GoRoute> invoiceLoanIndexRoutes = [
     path: InvoiceLoanIndexRouter.dashboard,
     builder: (context, state) => const InvoiceLoanDashboard(),
   ),
-    GoRoute(
+  GoRoute(
     path: InvoiceLoanIndexRouter.liabilities,
     builder: (context, state) => const InvoiceLoanLiabilitiesHome(),
   ),
@@ -31,5 +33,9 @@ List<GoRoute> invoiceLoanIndexRoutes = [
   GoRoute(
     path: InvoiceLoanIndexRouter.support,
     builder: (context, state) => const InvoiceLoanDashboard(),
+  ),
+  GoRoute(
+    path: InvoiceLoanIndexRouter.permissions,
+    builder: (context, state) => const InvoiceLoanAppPermissions(),
   ),
 ];

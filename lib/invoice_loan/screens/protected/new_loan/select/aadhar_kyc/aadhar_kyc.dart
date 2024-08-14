@@ -40,6 +40,7 @@ class _InvoiceNewLoanAadharKycState
   bool _loading = true;
   Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
+  // ignore: unused_field
   String _aadharKycUrl = "";
 
   Future<void> _checkAadharKYCSuccess() async {
@@ -169,15 +170,8 @@ class _InvoiceNewLoanAadharKycState
   }
 
   Future<void> _refresh() async {
-    setState(() {
-      _loading = true;
-    });
-    _webViewController?.loadUrl(
-        urlRequest: URLRequest(url: WebUri(_aadharKycUrl)));
+    _fetchKYCURL();
 
-    setState(() {
-      _loading = false;
-    });
     _controller.sink.add(SwipeRefreshState.hidden);
   }
 
@@ -201,7 +195,6 @@ class _InvoiceNewLoanAadharKycState
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider);
-    print("Aadhar KYC URL: $_aadharKycUrl");
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
     return PopScope(
@@ -257,7 +250,8 @@ class _InvoiceNewLoanAadharKycState
                             "Aadhaar KYC",
                             style: TextStyle(
                                 fontFamily: fontFamily,
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color:
+                                    Theme.of(context).colorScheme.onSurface,
                                 fontSize: AppFontSizes.heading,
                                 fontWeight: AppFontWeights.bold,
                                 letterSpacing: 0.4),

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,8 +40,33 @@ class _LoginMobileOtpValidationState
     if (!mounted) return;
 
     if (response.success) {
-      context.go(InvoiceLoanIndexRouter.dashboard);
-      return;
+      final permissions = [
+        Permission.locationWhenInUse,
+        Permission.camera,
+        Permission.mediaLibrary,
+        Permission.notification,
+        Permission.sms,
+      ];
+
+      // Check if all permissions are granted
+      bool allGranted = true;
+
+      for (var permission in permissions) {
+        if (!(await permission.isGranted)) {
+          allGranted = false;
+          break;
+        }
+      }
+
+      if (!mounted || !context.mounted) return;
+
+      if (allGranted) {
+        context.go(InvoiceLoanIndexRouter.dashboard);
+        return;
+      } else {
+        context.go(InvoiceLoanIndexRouter.permissions);
+        return;
+      }
     }
 
     setState(() {

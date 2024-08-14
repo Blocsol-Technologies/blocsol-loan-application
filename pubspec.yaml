@@ -76,6 +76,11 @@ flutter:
     - assets/images/invoice_loan/bottom_nav_bar/profile_active.png
     - assets/images/invoice_loan/bottom_nav_bar/profile_inactive.png
 
+    # Permissions
+    - assets/images/invoice_loan/permissions/p1.png
+    - assets/images/invoice_loan/permissions/p2.png
+    - assets/images/invoice_loan/permissions/p3.png
+
     # Dashboard
     - assets/images/invoice_loan/dashboard/header/user_icon.png
 
@@ -103,6 +108,8 @@ flutter:
     - assets/animations/404.json
     - assets/animations/searching_data.json
     - assets/animations/invoice_offer_not_found.json
+    - assets/animations/downloading_new_data.json
+    - assets/animations/fetching_data.json
 
   fonts:
     - family: Poppins

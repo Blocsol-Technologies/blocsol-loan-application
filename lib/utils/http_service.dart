@@ -7,7 +7,7 @@ const String serverUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
 const String baseUrl =
-    "https://47a0-2401-4900-1c71-9ac9-a58e-1af5-5d34-afe4.ngrok-free.app/financial-services/invoice-based-credit";
+    "https://ab5b-2401-4900-1c71-9ac9-a19d-e3b1-f970-ce14.ngrok-free.app/financial-services/invoice-based-credit";
 
 class HttpService {
   late Dio _dio;

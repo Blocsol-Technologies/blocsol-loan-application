@@ -14,13 +14,11 @@ List<GoRoute> invoiceLoanLoginRoutes = [
     path: InvoiceLoanLoginRouter.mobile_auth,
     builder: (context, state) => const LoginMobileValidation(),
   ),
-
-    GoRoute(
+  GoRoute(
     path: InvoiceLoanLoginRouter.password,
     builder: (context, state) => const LoginPasswordValidation(),
   ),
-
-    GoRoute(
+  GoRoute(
     path: InvoiceLoanLoginRouter.otp_validation,
     builder: (context, state) => const LoginMobileOtpValidation(),
   ),

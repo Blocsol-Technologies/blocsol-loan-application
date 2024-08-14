@@ -1,5 +1,7 @@
+import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -24,7 +26,7 @@ class _InvoicesFetchingScreenState
     extends ConsumerState<InvoicesFetchingScreen> {
   final _cancelToken = CancelToken();
 
-  void fetchGstInvoices() async {
+  void _fetchGstInvoices() async {
     if (ref.read(invoiceNewLoanRequestProvider).loadingInvoices) {
       return;
     }
@@ -62,13 +64,15 @@ class _InvoicesFetchingScreenState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fetchGstInvoices();
+      _fetchGstInvoices();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
     return PopScope(
@@ -81,20 +85,23 @@ class _InvoicesFetchingScreenState
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.fromLTRB(
-                  20,
-                  RelativeSize.height(90, MediaQuery.of(context).size.height),
-                  20,
-                  50),
+                  20, RelativeSize.height(30, height), 20, 50),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  InvoiceNewLoanRequestTopNav(onBackClick: () {
+                    ref.read(routerProvider).pop();
+                  }),
+                  const SpacerWidget(
+                    height: 80,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Lottie.asset(
-                        'assets/animations/searching_data.json',
-                        width: (MediaQuery.of(context).size.width - 40) * 0.85,
+                        'assets/animations/fetching_data.json',
+                        width: (width - 40),
                       ),
                     ],
                   ),
@@ -102,11 +109,11 @@ class _InvoicesFetchingScreenState
                     height: 60,
                   ),
                   Text(
-                    "Fetching Invoice Data",
+                    "Fetching Your GST Data",
                     style: TextStyle(
                       fontFamily: fontFamily,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: AppFontSizes.h2,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: AppFontSizes.heading,
                       fontWeight: AppFontWeights.bold,
                       letterSpacing: 0.14,
                     ),
@@ -114,15 +121,15 @@ class _InvoicesFetchingScreenState
                     softWrap: true,
                   ),
                   const SpacerWidget(
-                    height: 10,
+                    height: 5,
                   ),
                   Text(
-                    "Do not click back or close the App",
+                    "And we are almost done...",
                     style: TextStyle(
                       fontFamily: fontFamily,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: AppFontWeights.bold,
+                      color: const Color.fromRGBO(130, 130, 130, 1),
+                      fontSize: AppFontSizes.h3,
+                      fontWeight: AppFontWeights.medium,
                       letterSpacing: 0.14,
                     ),
                     textAlign: TextAlign.center,

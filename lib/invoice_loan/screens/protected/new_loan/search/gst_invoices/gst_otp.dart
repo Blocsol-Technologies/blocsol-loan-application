@@ -3,6 +3,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/continue_button.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
@@ -13,7 +15,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 class GstOtpValidation extends ConsumerStatefulWidget {
   const GstOtpValidation({super.key});
@@ -31,6 +32,7 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
   bool _otpVerificationError = false;
 
   Future<void> verifyGSTOTP() async {
+    
     if (!RegexProvider.otpRegex.hasMatch(_otpTextController.text)) {
       setState(() {
         _otpVerificationError = true;
@@ -103,139 +105,99 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider);
+    ref.watch(invoiceNewLoanRequestProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
+    ref.watch(invoiceLoanEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: Theme.of(context).colorScheme.surface,
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+          body: Container(
+            height: height,
+            width: width,
             padding: EdgeInsets.fromLTRB(
                 RelativeSize.width(30, width),
                 RelativeSize.height(30, height),
                 RelativeSize.width(30, width),
                 RelativeSize.height(50, height)),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: GestureDetector(
-                    onTap: () async {
-                      HapticFeedback.mediumImpact();
-                      ref.read(routerProvider).pop();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 25,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.65),
-                    ),
+                InvoiceNewLoanRequestTopNav(onBackClick: () {
+                  ref.read(routerProvider).pop();
+                }),
+                const SpacerWidget(height: 70),
+                SizedBox(
+                  width: width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "We need the updated data",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.heading,
+                          fontWeight: AppFontWeights.medium,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        softWrap: true,
+                      ),
+                      const SpacerWidget(
+                        height: 5,
+                      ),
+                      Text(
+                        "The data seems to be old for your offer. The updated data provides better offer opportunities.",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.normal,
+                          color: const Color.fromRGBO(130, 130, 130, 1),
+                        ),
+                        softWrap: true,
+                      ),
+                    ],
                   ),
-                ),
-                const SpacerWidget(height: 32),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(15, width)),
-                  child: Text(
-                    "GST OTP Verification",
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h1,
-                      fontWeight: AppFontWeights.extraBold,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    softWrap: true,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Lottie.asset(
-                      "assets/animations/clock.json",
-                      height: 220,
-                      width: 220,
-                    ),
-                  ],
                 ),
                 const SpacerWidget(
-                  height: 5,
+                  height: 60,
                 ),
                 Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 25,
-                  ),
-                  decoration: BoxDecoration(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  height: 2,
+                  width: RelativeSize.width(150, width),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SpacerWidget(
+                  height: 40,
+                ),
+                SizedBox(
+                  width: width,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: RichText(
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "We have your Invoice Data Till :",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.bold,
-                              letterSpacing: 0.14,
-                            ),
-                            children: [
-                              TextSpan(
-                                text:
-                                    " ${newLoanStateRef.gstDataDownloadTime} ",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  letterSpacing: 0.14,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.bold,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ),
-                              TextSpan(
-                                text:
-                                    "Provide OTP sent to your GST registered phone number.",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.bold,
-                                  letterSpacing: 0.14,
-                                ),
-                              ),
-                              TextSpan(
-                                text:
-                                    "We will fetch latest invoices and send them to the lenders",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.bold,
-                                  letterSpacing: 0.14,
-                                ),
-                              ),
-                            ],
-                          ),
+                    children: [
+                      Text(
+                        "Verify GST OTP.",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.h1,
+                          fontWeight: AppFontWeights.medium,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
+                        softWrap: true,
+                      ),
+                      const SpacerWidget(
+                        height: 5,
+                      ),
+                      Text(
+                        "Enter the OTP sent on your registered mobile number.",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b2,
+                          fontWeight: AppFontWeights.normal,
+                          color: const Color.fromRGBO(130, 130, 130, 1),
+                        ),
+                        softWrap: true,
                       ),
                     ],
                   ),
@@ -243,66 +205,72 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
                 const SpacerWidget(
                   height: 20,
                 ),
-                Text(
-                  "Confirm OTP",
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: AppFontSizes.h2,
-                    fontWeight: AppFontWeights.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: 0.14,
-                  ),
-                ),
-                const SpacerWidget(
-                  height: 13,
-                ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.start,
-                  maxLength: 10,
-                  controller: _otpTextController,
-                  onChanged: (val) {
-                    setState(() {
-                      _otpVerificationError = false;
-                    });
-                  },
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: AppFontSizes.b1,
-                    fontWeight: AppFontWeights.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  textDirection: TextDirection.ltr,
-                  focusNode: _textInputFocusNode,
-                  decoration: InputDecoration(
-                    counterText: "",
-                    hintText: 'OTP',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    hintStyle: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.b1,
-                      fontWeight: AppFontWeights.normal,
-                      color: Theme.of(context).colorScheme.scrim,
-                    ),
-                    fillColor:
-                        Theme.of(context).colorScheme.scrim.withOpacity(0.1),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: _otpVerificationError
-                            ? Theme.of(context).colorScheme.error
-                            : Theme.of(context).colorScheme.primary,
+                SizedBox(
+                  height: RelativeSize.height(60, height),
+                  width: width,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 7),
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.start,
+                          onChanged: (_) {
+                            setState(() {
+                              _otpVerificationError = false;
+                            });
+                          },
+                          maxLength: 6,
+                          controller: _otpTextController,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          textDirection: TextDirection.ltr,
+                          focusNode: _textInputFocusNode,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 15),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: _otpVerificationError
+                                    ? Theme.of(context).colorScheme.error
+                                    : const Color.fromRGBO(76, 76, 76, 1),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Positioned(
+                        top: 0,
+                        left: 15,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          color: Theme.of(context).colorScheme.surface,
+                          child: Text(
+                            "6-Digi OTP",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.normal,
+                              color: const Color.fromRGBO(164, 164, 164, 1),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SpacerWidget(
-                  height: 25,
-                ),
+                const Expanded(child: SizedBox()),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Column(

@@ -17,7 +17,7 @@ class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final newLoanRequestRef = ref.watch(invoiceNewLoanRequestProvider);
+    final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider).currentState;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,7 +36,7 @@ class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
         Expanded(
           child: Container(),
         ),
-        newLoanRequestRef.currentState.index >=
+        newLoanStateRef.index >=
                 LoanRequestProgress.loanOfferSelected.index
             ? GestureDetector(
                 onTap: () {
