@@ -7,7 +7,7 @@ part of 'sse.dart';
 // **************************************************************************
 
 String _$invoiceLoanServerSentEventsHash() =>
-    r'52351c4f72fac538468c251b5d16be4935d2b4da';
+    r'69029078dc59aee6607fbe7d5a47784455113cc3';
 
 /// See also [InvoiceLoanServerSentEvents].
 @ProviderFor(InvoiceLoanServerSentEvents)

@@ -19,7 +19,6 @@ mixin _$SupportStateData {
   String get transactionId => throw _privateConstructorUsedError;
   String get providerId => throw _privateConstructorUsedError;
   String get issueId => throw _privateConstructorUsedError;
-  String get gst => throw _privateConstructorUsedError;
   bool get generatingSupportTicket => throw _privateConstructorUsedError;
   bool get fetchingAllSupportTickets => throw _privateConstructorUsedError;
   bool get fetchingSingleSupportTicket => throw _privateConstructorUsedError;
@@ -42,7 +41,6 @@ abstract class $SupportStateDataCopyWith<$Res> {
       {String transactionId,
       String providerId,
       String issueId,
-      String gst,
       bool generatingSupportTicket,
       bool fetchingAllSupportTickets,
       bool fetchingSingleSupportTicket,
@@ -67,7 +65,6 @@ class _$SupportStateDataCopyWithImpl<$Res, $Val extends SupportStateData>
     Object? transactionId = null,
     Object? providerId = null,
     Object? issueId = null,
-    Object? gst = null,
     Object? generatingSupportTicket = null,
     Object? fetchingAllSupportTickets = null,
     Object? fetchingSingleSupportTicket = null,
@@ -87,10 +84,6 @@ class _$SupportStateDataCopyWithImpl<$Res, $Val extends SupportStateData>
       issueId: null == issueId
           ? _value.issueId
           : issueId // ignore: cast_nullable_to_non_nullable
-              as String,
-      gst: null == gst
-          ? _value.gst
-          : gst // ignore: cast_nullable_to_non_nullable
               as String,
       generatingSupportTicket: null == generatingSupportTicket
           ? _value.generatingSupportTicket
@@ -132,7 +125,6 @@ abstract class _$$SupportStateDataImplCopyWith<$Res>
       {String transactionId,
       String providerId,
       String issueId,
-      String gst,
       bool generatingSupportTicket,
       bool fetchingAllSupportTickets,
       bool fetchingSingleSupportTicket,
@@ -155,7 +147,6 @@ class __$$SupportStateDataImplCopyWithImpl<$Res>
     Object? transactionId = null,
     Object? providerId = null,
     Object? issueId = null,
-    Object? gst = null,
     Object? generatingSupportTicket = null,
     Object? fetchingAllSupportTickets = null,
     Object? fetchingSingleSupportTicket = null,
@@ -175,10 +166,6 @@ class __$$SupportStateDataImplCopyWithImpl<$Res>
       issueId: null == issueId
           ? _value.issueId
           : issueId // ignore: cast_nullable_to_non_nullable
-              as String,
-      gst: null == gst
-          ? _value.gst
-          : gst // ignore: cast_nullable_to_non_nullable
               as String,
       generatingSupportTicket: null == generatingSupportTicket
           ? _value.generatingSupportTicket
@@ -215,7 +202,6 @@ class _$SupportStateDataImpl implements _SupportStateData {
       {required this.transactionId,
       required this.providerId,
       required this.issueId,
-      required this.gst,
       required this.generatingSupportTicket,
       required this.fetchingAllSupportTickets,
       required this.fetchingSingleSupportTicket,
@@ -230,8 +216,6 @@ class _$SupportStateDataImpl implements _SupportStateData {
   final String providerId;
   @override
   final String issueId;
-  @override
-  final String gst;
   @override
   final bool generatingSupportTicket;
   @override
@@ -253,7 +237,7 @@ class _$SupportStateDataImpl implements _SupportStateData {
 
   @override
   String toString() {
-    return 'SupportStateData(transactionId: $transactionId, providerId: $providerId, issueId: $issueId, gst: $gst, generatingSupportTicket: $generatingSupportTicket, fetchingAllSupportTickets: $fetchingAllSupportTickets, fetchingSingleSupportTicket: $fetchingSingleSupportTicket, supportTickets: $supportTickets, selectedSupportTicket: $selectedSupportTicket, sendingStatusRequest: $sendingStatusRequest)';
+    return 'SupportStateData(transactionId: $transactionId, providerId: $providerId, issueId: $issueId, generatingSupportTicket: $generatingSupportTicket, fetchingAllSupportTickets: $fetchingAllSupportTickets, fetchingSingleSupportTicket: $fetchingSingleSupportTicket, supportTickets: $supportTickets, selectedSupportTicket: $selectedSupportTicket, sendingStatusRequest: $sendingStatusRequest)';
   }
 
   @override
@@ -266,7 +250,6 @@ class _$SupportStateDataImpl implements _SupportStateData {
             (identical(other.providerId, providerId) ||
                 other.providerId == providerId) &&
             (identical(other.issueId, issueId) || other.issueId == issueId) &&
-            (identical(other.gst, gst) || other.gst == gst) &&
             (identical(
                     other.generatingSupportTicket, generatingSupportTicket) ||
                 other.generatingSupportTicket == generatingSupportTicket) &&
@@ -291,7 +274,6 @@ class _$SupportStateDataImpl implements _SupportStateData {
       transactionId,
       providerId,
       issueId,
-      gst,
       generatingSupportTicket,
       fetchingAllSupportTickets,
       fetchingSingleSupportTicket,
@@ -312,7 +294,6 @@ abstract class _SupportStateData implements SupportStateData {
       {required final String transactionId,
       required final String providerId,
       required final String issueId,
-      required final String gst,
       required final bool generatingSupportTicket,
       required final bool fetchingAllSupportTickets,
       required final bool fetchingSingleSupportTicket,
@@ -326,8 +307,6 @@ abstract class _SupportStateData implements SupportStateData {
   String get providerId;
   @override
   String get issueId;
-  @override
-  String get gst;
   @override
   bool get generatingSupportTicket;
   @override

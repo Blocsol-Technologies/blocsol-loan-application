@@ -23,7 +23,7 @@ class InvoiceLoanServerSentEvents extends _$InvoiceLoanServerSentEvents {
 
     EventFlux.instance.connect(
       EventFluxConnectionType.get,
-      '$serverUrl/ondc/events',
+      '$invoiceLoanServerUrl/ondc/events',
       header: {"Authorization": token, "Keep-Alive": "true"},
       onSuccessCallback: (EventFluxResponse? response) {
 

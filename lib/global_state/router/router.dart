@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_rou
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/router.dart';
 import 'package:blocsol_loan_application/choice_screens/login_choice.dart';
 import 'package:blocsol_loan_application/main.dart';
+import 'package:blocsol_loan_application/not_found.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/login_router.dart';
 import 'package:blocsol_loan_application/personal_loan/routes/router.dart';
@@ -30,12 +31,20 @@ class Router extends _$Router {
       navigatorKey: navigatorKey,
       debugLogDiagnostics: true,
       initialLocation: AppRoutes.entry,
+      errorBuilder: (context, state) {
+        bool isInvoiceLoanRoute =
+            invoiceLoanRoutes.any((route) => route.path == state.uri.path);
+
+        return NotFoundPage(
+          invoiceLoanPage: isInvoiceLoanRoute,
+        );
+      },
       routes: [
         GoRoute(
           path: AppRoutes.entry,
           builder: (context, state) => const LoginChoice(),
         ),
-         GoRoute(
+        GoRoute(
           path: AppRoutes.signupChoice,
           builder: (context, state) => const SignupChoice(),
         ),
@@ -57,7 +66,8 @@ class Router extends _$Router {
               .setTheme(ThemeState.personalLoanTheme);
         }
 
-        logger.d("navigating to path: ${state.uri.path} \n extra: ${state.extra}");
+        logger.d(
+            "navigating to path: ${state.uri.path} \n extra: ${state.extra}");
 
         if (invoiceLoanToken.isNotEmpty &&
             invoiceLoanPublicRoutes

@@ -4,10 +4,13 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class InvoiceLoanAllLiabilitiesHttpController {
-  static Future<ServerResponse> fetchLiabilities(
+
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+   Future<ServerResponse> fetchLiabilities(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
+      
       var response = await httpService
           .get("/ondc/fetch-all-confirmed-orders", authToken, cancelToken, {});
 
@@ -54,10 +57,10 @@ class InvoiceLoanAllLiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchAllClosedLiabilities(
+   Future<ServerResponse> fetchAllClosedLiabilities(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
+      
       var response = await httpService
           .get("/ondc/fetch-all-closed-orders", authToken, cancelToken, {});
 

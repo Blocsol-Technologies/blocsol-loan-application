@@ -5,10 +5,11 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class InvoiceLoanUserProfileDetailsHttpController {
-  static Future<ServerResponse> getCompanyDetails(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> getCompanyDetails(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .get("/accounts/get-msme-basic-details", authToken, cancelToken, {});
 
@@ -43,7 +44,8 @@ class InvoiceLoanUserProfileDetailsHttpController {
                   response.data['data']?['accountAggregatorSetup'] ?? false,
               "bankAccounts": bankAccountsList,
               "primaryBankAccount": primaryBankAccount,
-              "accountAggregatorId": response.data['data']?['accountAggregatorId'],
+              "accountAggregatorId": response.data['data']
+                  ?['accountAggregatorId'],
             });
       } else {
         return ServerResponse(
@@ -70,14 +72,13 @@ class InvoiceLoanUserProfileDetailsHttpController {
     }
   }
 
-  static Future<ServerResponse> updateBankAccountDetails(
+  Future<ServerResponse> updateBankAccountDetails(
       String accountNumber,
       String ifscCode,
       bool setPrimary,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/accounts/update-bank-account-details", authToken, cancelToken, {
         "accountNumber": accountNumber,
@@ -113,14 +114,11 @@ class InvoiceLoanUserProfileDetailsHttpController {
     }
   }
 
-  static Future<ServerResponse> updateAccountAggregator(
-      String accountAggregatorName,
-      String authToken,
-      CancelToken cancelToken) async {
+  Future<ServerResponse> updateAccountAggregator(String accountAggregatorName,
+      String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-      var response = await httpService.post(
-          "/accounts/update-account-aggregator", authToken, cancelToken, {
+      var response = await httpService
+          .post("/accounts/update-account-aggregator", authToken, cancelToken, {
         "accountAggregator": accountAggregatorName,
       });
 
@@ -152,15 +150,11 @@ class InvoiceLoanUserProfileDetailsHttpController {
     }
   }
 
-    static Future<ServerResponse> changeAccountPassword(
-      String oldPassword,
-      String newPassoword,
-      String authToken,
-      CancelToken cancelToken) async {
+  Future<ServerResponse> changeAccountPassword(String oldPassword,
+      String newPassoword, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-      var response = await httpService.post(
-          "/accounts/change-account-password", authToken, cancelToken, {
+      var response = await httpService
+          .post("/accounts/change-account-password", authToken, cancelToken, {
         "oldPassword": oldPassword,
         "newPassword": newPassoword,
       });

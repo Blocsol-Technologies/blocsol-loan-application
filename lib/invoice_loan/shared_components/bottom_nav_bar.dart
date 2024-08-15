@@ -29,6 +29,11 @@ class InvoiceLoanBottomNavBar extends ConsumerWidget {
                 .read(bottomNavStateProvider.notifier)
                 .changeItem(BottomNavItems.loans);
             context.go(InvoiceLoanIndexRouter.liabilities);
+             case 2:
+            ref
+                .read(bottomNavStateProvider.notifier)
+                .changeItem(BottomNavItems.invoices);
+            context.go(InvoiceLoanIndexRouter.invoices);
         }
       },
       type: BottomNavigationBarType.fixed,

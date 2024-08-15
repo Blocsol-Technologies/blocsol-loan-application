@@ -3,10 +3,11 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class SignupHttpController {
-  static Future<ServerResponse> sendMobileOtp(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> sendMobileOtp(
       String phoneNumber, signature, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get(
           "/signup/mobile-validation/send-otp",
           "",
@@ -40,10 +41,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyMobileOtp(
+  Future<ServerResponse> verifyMobileOtp(
       String phoneNumber, otp, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get(
           "/signup/mobile-validation/verify-otp",
           "",
@@ -79,10 +79,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> sendEmailOtp(
+  Future<ServerResponse> sendEmailOtp(
       String email, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get("/signup/email-validation/send-otp",
           "", cancelToken, {"email": email});
 
@@ -115,10 +114,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyEmailOtp(
+  Future<ServerResponse> verifyEmailOtp(
       String email, otp, otpId, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get(
           "/signup/email-validation/verify-otp",
           "",
@@ -154,10 +152,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> createPreliminaryProfile(
+  Future<ServerResponse> createPreliminaryProfile(
       String email, phoneNumber, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/signup/preliminary-registration",
           "", cancelToken, {"email": email, "phoneNumber": phoneNumber});
 
@@ -191,10 +188,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyGstNumber(
+  Future<ServerResponse> verifyGstNumber(
       String gst, phoneNumber, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/signup/gst-authentication", "",
           cancelToken, {"gst": gst, "phoneNumber": phoneNumber});
 
@@ -233,10 +229,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyUdyamNumber(
+  Future<ServerResponse> verifyUdyamNumber(
       String gst, udyam, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/signup/udyam-verification", "",
           cancelToken, {"gst": gst, "udyam": udyam});
 
@@ -270,10 +265,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> sendGstOtp(
+  Future<ServerResponse> sendGstOtp(
       String gst, gstUsername, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/signup/gst-send-otp", "",
           cancelToken, {"gstNumber": gst, "gstUsername": gstUsername});
 
@@ -306,10 +300,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyGstOtp(
+  Future<ServerResponse> verifyGstOtp(
       String gst, gstUsername, otp, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/signup/gst-validate-otp",
           "",
@@ -345,10 +338,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> checkGstDataDownloadCompletion(
+  Future<ServerResponse> checkGstDataDownloadCompletion(
       String gst, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get(
           "/signup/gst-validation-completion-check",
           "",
@@ -385,10 +377,9 @@ class SignupHttpController {
     }
   }
 
-  static Future<ServerResponse> setAccountPassword(
+  Future<ServerResponse> setAccountPassword(
       String gst, password, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/signup/set-password", "",
           cancelToken, {"gst": gst, "password": password});
 

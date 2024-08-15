@@ -64,7 +64,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         return;
       }
 
-      var httpService = HttpService();
+      var httpService = HttpService(service: ServiceType.InvoiceLoan);
       var response = await httpService
           .get("/ondc/get-latest-event", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -471,7 +471,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     }
 
     try {
-      var httpService = HttpService();
+      var httpService = HttpService(service: ServiceType.InvoiceLoan);
 
       await httpService.post("/ondc/consume-event", authToken, cancelToken, {
         "transaction_id": transactionId,

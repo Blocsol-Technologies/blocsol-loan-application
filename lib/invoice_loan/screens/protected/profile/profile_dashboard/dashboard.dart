@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/dashboard_hero.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/nav_item.dart';
@@ -43,6 +44,8 @@ class InvoiceLoanProfileDashboard extends ConsumerWidget {
                 text: "Bank Account",
                 route: InvoiceLoanProfileRouter.bankAccountSettings,
               ),
+              const ProfileNavItem(
+                  text: "Support", route: InvoiceLoanIndexRouter.support),
               Container(
                 width: width,
                 height: RelativeSize.height(70, height),

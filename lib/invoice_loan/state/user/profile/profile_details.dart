@@ -55,9 +55,8 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response =
-        await InvoiceLoanUserProfileDetailsHttpController.getCompanyDetails(
-            authToken, cancelToken);
+    var response = await InvoiceLoanUserProfileDetailsHttpController()
+        .getCompanyDetails(authToken, cancelToken);
 
     state = state.copyWith(fetchingData: false);
 
@@ -86,7 +85,7 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
       String ifscCode, bool setPrimary, CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await InvoiceLoanUserProfileDetailsHttpController
+    var response = await InvoiceLoanUserProfileDetailsHttpController()
         .updateBankAccountDetails(
             accountNumber, ifscCode, setPrimary, authToken, cancelToken);
 
@@ -119,7 +118,7 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
       String accountAggregatorName, CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await InvoiceLoanUserProfileDetailsHttpController
+    var response = await InvoiceLoanUserProfileDetailsHttpController()
         .updateAccountAggregator(accountAggregatorName, authToken, cancelToken);
 
     if (response.success) {
@@ -135,8 +134,8 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
       String oldPassword, String newPassword, CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response =
-        await InvoiceLoanUserProfileDetailsHttpController.changeAccountPassword(
+    var response = await InvoiceLoanUserProfileDetailsHttpController()
+        .changeAccountPassword(
             oldPassword, newPassword, authToken, cancelToken);
 
     return response;

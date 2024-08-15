@@ -45,7 +45,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(fetchingSingleLiabilityDetails: true);
 
-    var response = await LiabilitiesHttpController.fetchSingleLiabilityDetails(
+    var response = await LiabilitiesHttpController().fetchSingleLiabilityDetails(
         transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingSingleLiabilityDetails: false);
@@ -73,7 +73,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    return await LiabilitiesHttpController.performStatusRequest(
+    return await LiabilitiesHttpController().performStatusRequest(
         transactionId, providerId, authToken, cancelToken);
   }
 
@@ -93,7 +93,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(initiatingForeclosure: true);
 
-    var response = await LiabilitiesHttpController.initiateForeclosure(
+    var response = await LiabilitiesHttpController().initiateForeclosure(
         transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(initiatingForeclosure: false);
@@ -117,7 +117,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(loanForeclosureFailed: false, verifyingForeclosure: true);
 
-    var response = await LiabilitiesHttpController.checkForeclosureSuccess(
+    var response = await LiabilitiesHttpController().checkForeclosureSuccess(
         transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(verifyingForeclosure: false);
@@ -142,7 +142,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(initiatingPrepayment: true);
 
-    var response = await LiabilitiesHttpController.initiatePartPrepayment(
+    var response = await LiabilitiesHttpController().initiatePartPrepayment(
         amount, transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(initiatingPrepayment: false);
@@ -170,7 +170,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(prepaymentFailed: false);
 
-    var response = await LiabilitiesHttpController.checkPrepaymentSuccess(
+    var response = await LiabilitiesHttpController().checkPrepaymentSuccess(
         prepaymentId, transactionId, providerId, authToken, cancelToken);
 
     if (!response.success) {
@@ -197,7 +197,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(initiatingMissedEmiPayment: true);
 
-    var response = await LiabilitiesHttpController.initiateMissedEmiRepayment(
+    var response = await LiabilitiesHttpController().initiateMissedEmiRepayment(
         state.missedEmiPaymentId,
         transactionId,
         providerId,
@@ -233,7 +233,7 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
     state = state.copyWith(missedEmiPaymentFailed: false, verifyingMissedEmiPaymentSuccess: true);
 
     var response =
-        await LiabilitiesHttpController.checkMissedEmiRepaymentSuccess(
+        await LiabilitiesHttpController().checkMissedEmiRepaymentSuccess(
             missedEmiPaymentId,
             transactionId,
             providerId,

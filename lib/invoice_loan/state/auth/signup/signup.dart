@@ -68,7 +68,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response = await SignupHttpController.sendMobileOtp(
+    var response = await SignupHttpController().sendMobileOtp(
         phoneNumber, signature, cancelToken);
 
     if (response.success) {
@@ -97,7 +97,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.verifyMobileOtp(phoneNumber, otp, cancelToken);
+    return SignupHttpController().verifyMobileOtp(phoneNumber, otp, cancelToken);
   }
 
   /* Verify Email OTP */
@@ -110,7 +110,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response = await SignupHttpController.sendEmailOtp(email, cancelToken);
+    var response = await SignupHttpController().sendEmailOtp(email, cancelToken);
 
     if (response.success) {
       state = state.copyWith(email: email, emailOtpId: response.data);
@@ -139,7 +139,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.verifyEmailOtp(email, otp, otpId, cancelToken);
+    return SignupHttpController().verifyEmailOtp(email, otp, otpId, cancelToken);
   }
 
   /* Create Preliminary Profile */
@@ -162,7 +162,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.createPreliminaryProfile(
+    return SignupHttpController().createPreliminaryProfile(
         email, phoneNumber, cancelToken);
   }
 
@@ -185,7 +185,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response = await SignupHttpController.verifyGstNumber(
+    var response = await SignupHttpController().verifyGstNumber(
         gst, phoneNumber, cancelToken);
 
     if (response.success) {
@@ -219,7 +219,7 @@ class SignupState extends _$SignupState {
     }
 
     var response =
-        await SignupHttpController.verifyUdyamNumber(gst, udyam, cancelToken);
+        await SignupHttpController().verifyUdyamNumber(gst, udyam, cancelToken);
 
     if (response.success) {
       state = state.copyWith(udyamNumber: udyam);
@@ -248,7 +248,7 @@ class SignupState extends _$SignupState {
     }
 
     var response =
-        await SignupHttpController.sendGstOtp(gst, gstUsername, cancelToken);
+        await SignupHttpController().sendGstOtp(gst, gstUsername, cancelToken);
 
     if (response.success) {
       state = state.copyWith(gstUsername: gstUsername);
@@ -284,7 +284,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    return SignupHttpController.verifyGstOtp(
+    return SignupHttpController().verifyGstOtp(
         gst, gstUsername, otp, cancelToken);
   }
 
@@ -303,7 +303,7 @@ class SignupState extends _$SignupState {
     num pollCount = 0;
 
     while (!isDone && pollCount < 10) {
-      var response = await SignupHttpController.checkGstDataDownloadCompletion(
+      var response = await SignupHttpController().checkGstDataDownloadCompletion(
           gst, CancelToken());
 
       if (response.success) {
@@ -344,7 +344,7 @@ class SignupState extends _$SignupState {
       );
     }
 
-    var response = await SignupHttpController.setAccountPassword(
+    var response = await SignupHttpController().setAccountPassword(
         gst, password, cancelToken);
 
     if (response.success) {

@@ -1,4 +1,4 @@
-package com.example.blocsol_loan_application
+package blocsol.loanapplication.com
 
 import io.flutter.embedding.android.FlutterActivity
 

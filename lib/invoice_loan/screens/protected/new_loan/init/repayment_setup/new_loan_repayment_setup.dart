@@ -241,7 +241,7 @@ class _InvoiceNewLoanRepaymentSetupState
                 if (!_showRepaymentWebview) ...[
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(20, width)),
+                        horizontal: RelativeSize.width(20, width)),
                     child: Text(
                       "Repayment Details",
                       style: TextStyle(
@@ -257,7 +257,7 @@ class _InvoiceNewLoanRepaymentSetupState
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(20, width)),
+                        horizontal: RelativeSize.width(20, width)),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.symmetric(
@@ -275,8 +275,9 @@ class _InvoiceNewLoanRepaymentSetupState
                               Expanded(
                                 child: Text("Amount Payable:",
                                     style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b1,
                                         fontWeight: AppFontWeights.medium)),
@@ -310,8 +311,9 @@ class _InvoiceNewLoanRepaymentSetupState
                               Expanded(
                                 child: Text("Autorepay End (Due Date After):",
                                     style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b1,
                                         fontWeight: AppFontWeights.medium)),
@@ -382,7 +384,7 @@ class _InvoiceNewLoanRepaymentSetupState
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(20, width)),
+                        horizontal: RelativeSize.width(20, width)),
                     child: Text(
                       "Account Details",
                       style: TextStyle(
@@ -398,7 +400,7 @@ class _InvoiceNewLoanRepaymentSetupState
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(20, width)),
+                        horizontal: RelativeSize.width(20, width)),
                     child: Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -462,7 +464,7 @@ class _InvoiceNewLoanRepaymentSetupState
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: RelativeSize.width(20, width)),
+                        horizontal: RelativeSize.width(20, width)),
                     child: Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -562,9 +564,13 @@ String getRepaymentTime(int start, int days) {
   return formattedEndDate;
 }
 
-String getFromattedTime(int time) {
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(time * 1000);
-  String formattedEndDate = DateFormat('d MMM, yyyy').format(date);
+String getFormattedTime(String time) {
+  try {
+    DateTime dateTime = DateTime.parse(time);
 
-  return formattedEndDate;
+    String formattedEndDate = DateFormat('d MMM, yyyy hh:mm').format(dateTime);
+    return formattedEndDate;
+  } catch (e) {
+    return 'NA';
+  }
 }

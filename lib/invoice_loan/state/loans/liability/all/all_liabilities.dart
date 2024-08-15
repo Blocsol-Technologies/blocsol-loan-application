@@ -22,16 +22,14 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
       state = state.copyWith(fetchingLiabilitiess: true);
     }
 
-    var response =
-        await InvoiceLoanAllLiabilitiesHttpController.fetchLiabilities(
-            authToken, cancelToken);
+    var response = await InvoiceLoanAllLiabilitiesHttpController()
+        .fetchLiabilities(authToken, cancelToken);
 
     state = state.copyWith(
         fetchingLiabilitiess: false,
         liabilitiessFetchTime: DateTime.now().millisecondsSinceEpoch ~/ 1000);
 
     if (response.success) {
-
       if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
               state.liabilitiessFetchTime >
           900) {
@@ -49,20 +47,21 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
     return response;
   }
 
-  Future<ServerResponse> fetchAllClosedLiabilities(CancelToken cancelToken) async {
+  Future<ServerResponse> fetchAllClosedLiabilities(
+      CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     if (state.liabilities.isEmpty) {
       state = state.copyWith(fetchingClosedLiabilities: true);
     }
 
-    var response =
-        await InvoiceLoanAllLiabilitiesHttpController.fetchAllClosedLiabilities(
-            authToken, cancelToken);
+    var response = await InvoiceLoanAllLiabilitiesHttpController()
+        .fetchAllClosedLiabilities(authToken, cancelToken);
 
     state = state.copyWith(
         fetchingClosedLiabilities: false,
-        closedLiabilitiessFetchTime: DateTime.now().millisecondsSinceEpoch ~/ 1000);
+        closedLiabilitiessFetchTime:
+            DateTime.now().millisecondsSinceEpoch ~/ 1000);
 
     if (response.success) {
       if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -

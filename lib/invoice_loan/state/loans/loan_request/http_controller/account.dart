@@ -1,14 +1,14 @@
-
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestAccountHttpController {
-  static Future<ServerResponse> provideGstConsent(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> provideGstConsent(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/provide-gst-consent", authToken, cancelToken, {});
 
@@ -49,10 +49,9 @@ class LoanRequestAccountHttpController {
     }
   }
 
-  static Future<ServerResponse> sendGstOtp(
+  Future<ServerResponse> sendGstOtp(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .get("/ondc/send-gst-otp", authToken, cancelToken, {});
 
@@ -93,10 +92,9 @@ class LoanRequestAccountHttpController {
     }
   }
 
-  static Future<ServerResponse> verifyGstOtp(
+  Future<ServerResponse> verifyGstOtp(
       String otp, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .get("/ondc/verify-gst-otp", authToken, cancelToken, {"otp": otp});
 
@@ -131,10 +129,9 @@ class LoanRequestAccountHttpController {
     }
   }
 
-  static Future<ServerResponse> downloadGstData(
+  Future<ServerResponse> downloadGstData(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/download-gst-data", authToken, cancelToken, {});
 
@@ -170,10 +167,9 @@ class LoanRequestAccountHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchGstInvoices(
+  Future<ServerResponse> fetchGstInvoices(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .get("/ondc/fetch-gst-invoices", authToken, cancelToken, {});
 

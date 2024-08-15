@@ -4,15 +4,15 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestSelectHttpController {
-  static Future<ServerResponse> refetchSelectedOfferDetails(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> refetchSelectedOfferDetails(
       String transactionId,
       String offerId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService.post(
           "/ondc/refetch-selected-offer-details", authToken, CancelToken(), {
         "transaction_id": transactionId,
@@ -56,7 +56,7 @@ class LoanRequestSelectHttpController {
     }
   }
 
-  static Future<ServerResponse> selectOffer(
+  Future<ServerResponse> selectOffer(
       String transactionId,
       String offerId,
       String invoiceId,
@@ -65,7 +65,6 @@ class LoanRequestSelectHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response =
           await httpService.post("/ondc/select-offer", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -106,7 +105,7 @@ class LoanRequestSelectHttpController {
     }
   }
 
-  static Future<ServerResponse> submitLoanUpdateForm(
+  Future<ServerResponse> submitLoanUpdateForm(
       String transactionId,
       String providerId,
       String loanTerm,
@@ -114,8 +113,6 @@ class LoanRequestSelectHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response =
           await httpService.post("/ondc/fill-form-02", authToken, cancelToken, {
         "requested_loan_amount": loanAmount,
@@ -157,11 +154,9 @@ class LoanRequestSelectHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchAadharKycUrl(String transactionId,
+  Future<ServerResponse> fetchAadharKycUrl(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .post("/ondc/fetch-form-03", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -201,10 +196,9 @@ class LoanRequestSelectHttpController {
     }
   }
 
-  static Future<ServerResponse> refetchAadharKycUrl(String transactionId,
+  Future<ServerResponse> refetchAadharKycUrl(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/refetch-form-03-submission-url", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -244,11 +238,9 @@ class LoanRequestSelectHttpController {
     }
   }
 
-  static Future<ServerResponse> checkAadharKycSuccess(String transactionId,
+  Future<ServerResponse> checkAadharKycSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService.post(
           "/ondc/check-form-03-submission-success", authToken, cancelToken, {
         "transaction_id": transactionId,

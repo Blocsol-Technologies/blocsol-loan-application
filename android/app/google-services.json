@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "409557116547",
+    "project_id": "loan-application-9a07e",
+    "storage_bucket": "loan-application-9a07e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409557116547:android:42212e21dea4f329835db6",
+        "android_client_info": {
+          "package_name": "blocsol.loanapplication.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQuJ13jPCRhxtl1SRaypN3Di0XAFTLRug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

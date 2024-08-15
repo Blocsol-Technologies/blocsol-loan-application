@@ -1,14 +1,14 @@
-
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestSearchHttpController {
-  static Future<ServerResponse> performGeneralSearch(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> performGeneralSearch(
       bool foreceNew, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.get("/ondc/general-search", authToken,
           cancelToken, {"force_new": foreceNew ? "y" : "n"});
 
@@ -91,10 +91,9 @@ class LoanRequestSearchHttpController {
     }
   }
 
-  static Future<ServerResponse> submitForms(
+  Future<ServerResponse> submitForms(
       String transactionId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response =
           await httpService.post("/ondc/submit-forms", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -131,7 +130,7 @@ class LoanRequestSearchHttpController {
     }
   }
 
-  static Future<ServerResponse> generateAAUrl(
+  Future<ServerResponse> generateAAUrl(
       String transactionId,
       String aaId,
       String aaUrl,
@@ -139,7 +138,6 @@ class LoanRequestSearchHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/generate_aa_url", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -182,7 +180,7 @@ class LoanRequestSearchHttpController {
     }
   }
 
-  static Future<ServerResponse> checkConsentSuccess(
+  Future<ServerResponse> checkConsentSuccess(
       String transactionId,
       String ecres,
       String resdate,
@@ -190,7 +188,6 @@ class LoanRequestSearchHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/check_aa_consent_success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -232,11 +229,9 @@ class LoanRequestSearchHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchLoanOffers(
+  Future<ServerResponse> fetchLoanOffers(
       String transactionId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .get("/ondc/fetch-invoice-offers", authToken, cancelToken, {
         "transaction_id": transactionId,

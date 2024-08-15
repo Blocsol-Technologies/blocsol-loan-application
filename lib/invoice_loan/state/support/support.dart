@@ -24,16 +24,6 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
     state = state.copyWith(selectedSupportTicket: supportTicket);
   }
 
-  void setIssueDetails(
-      String providerId, String transactionId, String issueId, String gst) {
-    state = state.copyWith(
-      providerId: providerId,
-      transactionId: transactionId,
-      issueId: issueId,
-      gst: gst,
-    );
-  }
-
   void addMessageToSelectedSupportTicket(Message message) {
     var selectedSupportTicket = state.selectedSupportTicket;
     selectedSupportTicket.addMessage(message);
@@ -42,9 +32,7 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
 
   void setSupportContext(String transactionId, String providerId) {
     state = state.copyWith(
-      transactionId: transactionId,
-      providerId: providerId,
-    );
+        transactionId: transactionId, providerId: providerId);
   }
 
   Future<ServerResponse> fetchAllSupportTickets(CancelToken cancelToken) async {
@@ -52,13 +40,14 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
 
     state = state.copyWith(fetchingAllSupportTickets: true);
 
-    var response = await SupportHttpController.fetchAllSupportTickets(
+    var response = await SupportHttpController().fetchAllSupportTickets(
         authToken, cancelToken);
 
-    state = state.copyWith(fetchingAllSupportTickets: false);
-
     if (response.success) {
-      state = state.copyWith(supportTickets: response.data);
+      state = state.copyWith(
+          supportTickets: response.data,
+          fetchingAllSupportTickets:
+              (response.data as List<SupportTicket>).isNotEmpty);
     }
 
     return response;
@@ -70,10 +59,10 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
 
     state = state.copyWith(fetchingSingleSupportTicket: true);
 
-    var response = await SupportHttpController.fetchSingleSupportTicketDetails(
-        state.issueId,
-        state.transactionId,
-        state.providerId,
+    var response = await SupportHttpController().fetchSingleSupportTicketDetails(
+        state.selectedSupportTicket.id,
+        state.selectedSupportTicket.transactionId,
+        state.selectedSupportTicket.providerId,
         authToken,
         cancelToken);
 
@@ -97,7 +86,7 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
 
     state = state.copyWith(generatingSupportTicket: true);
 
-    var response = await SupportHttpController.raiseSupportIssue(
+    var response = await SupportHttpController().raiseSupportIssue(
         message,
         status,
         category,
@@ -118,7 +107,7 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
 
     state = state.copyWith(sendingStatusRequest: true);
 
-    var response = await SupportHttpController.askForStatusUpdate(state.issueId,
+    var response = await SupportHttpController().askForStatusUpdate(state.issueId,
         state.transactionId, state.providerId, authToken, cancelToken);
 
     state = state.copyWith(sendingStatusRequest: false);

@@ -118,7 +118,7 @@ class SupportTicket {
       return SupportTicket(
         transactionId: json['transaction_id'],
         providerId: json['provider_id'],
-        gst: json['gst'],
+        gst: json['identifier'],
         conversations: messages,
         chatLink: json['chat_link'],
         id: json['id'],

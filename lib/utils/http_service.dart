@@ -3,22 +3,46 @@ import 'dart:convert';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:dio/dio.dart';
 
-const String serverUrl =
+const String invoiceLoanServerUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
-const String baseUrl =
-    "https://ab5b-2401-4900-1c71-9ac9-a19d-e3b1-f970-ce14.ngrok-free.app/financial-services/invoice-based-credit";
+const String personalLoanServerUrl =
+    "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
+
+const String invoiceLoanbaseUrl =
+    "https://6703-2401-4900-1c71-9ac9-285b-610b-c595-ab2e.ngrok-free.app/financial-services/invoice-based-credit";
+
+const String personalLoanbaseUrl =
+    "https://6703-2401-4900-1c71-9ac9-285b-610b-c595-ab2e.ngrok-free.app/financial-services/personal-credit";
+
+enum ServiceType {
+  InvoiceLoan,
+  PersonalLoan,
+}
 
 class HttpService {
   late Dio _dio;
 
-  HttpService() {
-    _dio = Dio(BaseOptions(baseUrl: baseUrl));
+  HttpService({required ServiceType service}) {
+    switch (service) {
+      case ServiceType.InvoiceLoan:
+        _dio = Dio(BaseOptions(baseUrl: invoiceLoanbaseUrl));
+        break;
+      case ServiceType.PersonalLoan:
+        _dio = Dio(BaseOptions(baseUrl: personalLoanbaseUrl));
+        break;
+      default:
+        throw Exception("Invalid Service Type");
+    }
     _dio.options.receiveTimeout = const Duration(minutes: 5);
   }
 
-  Future<Response> get(String endpoint, String authToken,
-      CancelToken cancelToken, Map<String, String> queryParams) async {
+  Future<Response> get(
+    String endpoint,
+    String authToken,
+    CancelToken cancelToken,
+    Map<String, String> queryParams,
+  ) async {
     Response response = Response(requestOptions: RequestOptions());
     try {
       logger.d(
@@ -42,8 +66,8 @@ class HttpService {
       rethrow;
     }
 
-     logger.f(
-          "Reponse for the GET Request to enpoint: $endpoint \n Query Params: $queryParams \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
+    logger.f(
+        "Reponse for the GET Request to enpoint: $endpoint \n Query Params: $queryParams \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
     return response;
   }
 
@@ -77,7 +101,7 @@ class HttpService {
     }
 
     logger.f(
-          "Reponse for the POST Request to enpoint: $endpoint \n Body Params: $data \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
+        "Reponse for the POST Request to enpoint: $endpoint \n Body Params: $data \n STATUS: ${response.statusCode} \n DATA: ${response.data}");
     return response;
   }
 }

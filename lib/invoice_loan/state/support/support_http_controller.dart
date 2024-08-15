@@ -1,16 +1,14 @@
-
-
 import 'package:blocsol_loan_application/invoice_loan/state/support/state/support_ticket.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class SupportHttpController {
-  static Future<ServerResponse> fetchAllSupportTickets(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> fetchAllSupportTickets(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .get("/ondc/get-all-support-tickets", authToken, cancelToken, {});
 
@@ -56,14 +54,13 @@ class SupportHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchSingleSupportTicketDetails(
+  Future<ServerResponse> fetchSingleSupportTicketDetails(
       String issueId,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/get-single-support-ticket-details", authToken, cancelToken, {
         'transaction_id': transactionId,
@@ -129,7 +126,7 @@ class SupportHttpController {
     }
   }
 
-  static Future<ServerResponse> raiseSupportIssue(
+  Future<ServerResponse> raiseSupportIssue(
       String message,
       String status,
       String category,
@@ -140,8 +137,6 @@ class SupportHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .post("/ondc/generate-support-ticket", authToken, cancelToken, {
         'transaction_id': transactionId,
@@ -185,15 +180,13 @@ class SupportHttpController {
     }
   }
 
-  static Future<ServerResponse> askForStatusUpdate(
+  Future<ServerResponse> askForStatusUpdate(
       String issueId,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .post("/ondc/raise-issue-status-request", authToken, cancelToken, {
         'transaction_id': transactionId,

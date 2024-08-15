@@ -3,10 +3,11 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoginHttpController {
-  static Future<ServerResponse> validatePassword(String phoneNumber,
-      String password, String deviceId, CancelToken cancelToken) async {
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> validatePassword(String phoneNumber, String password,
+      String deviceId, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/login/validate-password",
           "",
@@ -41,10 +42,9 @@ class LoginHttpController {
     }
   }
 
-  static Future<ServerResponse> validateOtp(
+  Future<ServerResponse> validateOtp(
       String phoneNumber, String otp, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post("/login/validate-otp", "",
           cancelToken, {"phone": phoneNumber, "otp": otp});
 

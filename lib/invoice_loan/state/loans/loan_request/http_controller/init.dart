@@ -3,10 +3,11 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestInitHttpController {
-  static Future<ServerResponse> performInitRequest(String transactionId,
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+  
+  Future<ServerResponse> performInitRequest(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/perform-init-request", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -46,10 +47,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchEntityKycForm(String transactionId,
+  Future<ServerResponse> fetchEntityKycForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/fetch-form-04", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -89,10 +89,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> refetchEntityKycForm(String transactionId,
+  Future<ServerResponse> refetchEntityKycForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/refetch-form-04-submission-url", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -131,10 +130,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> checkEntityKycFormSuccess(String transactionId,
+  Future<ServerResponse> checkEntityKycFormSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/check-form-04-submission-success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -174,14 +172,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchBankAccountFormDetails(
-      String transactionId,
-      String providerId,
-      String authToken,
-      CancelToken cancelToken) async {
+  Future<ServerResponse> fetchBankAccountFormDetails(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .post("/ondc/get-bank-account-form-details", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -227,7 +220,7 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> submitBankAccountDetails(
+  Future<ServerResponse> submitBankAccountDetails(
       String bankAccountNumber,
       String bankIfsc,
       String transactionId,
@@ -235,8 +228,6 @@ class LoanRequestInitHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var submitResponse = await httpService
           .post("/ondc/submit-form-05", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -278,11 +269,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchRepaymentSetupUrl(String transactionId,
+  Future<ServerResponse> fetchRepaymentSetupUrl(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService
           .post("/ondc/fetch-form-06", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -326,11 +315,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> checkRepaymentSetupSuccess(String transactionId,
+  Future<ServerResponse> checkRepaymentSetupSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService.post(
           "/ondc/check-form-06-submission-success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -370,10 +357,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> refetchRepaymentSetupForm(String transactionId,
+  Future<ServerResponse> refetchRepaymentSetupForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/refetch-form-06-submission-url", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -413,10 +399,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> fetchLoanAgreementForm(String transactionId,
+  Future<ServerResponse> fetchLoanAgreementForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/fetch-form-07", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -459,15 +444,13 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> submitLoanAgreementForm(
+  Future<ServerResponse> submitLoanAgreementForm(
       String otp,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService.post(
           "/ondc/submit-form-07", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -508,10 +491,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> checkLoanAgreementSuccess(String transactionId,
+  Future<ServerResponse> checkLoanAgreementSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/check-form-07-submission-success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -551,11 +533,9 @@ class LoanRequestInitHttpController {
     }
   }
 
-  static Future<ServerResponse> refetchLoanAgreementForm(String transactionId,
+  Future<ServerResponse> refetchLoanAgreementForm(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
-
       var response = await httpService.post(
           "/ondc/refetch-form-07-submission-url", authToken, cancelToken, {
         "transaction_id": transactionId,

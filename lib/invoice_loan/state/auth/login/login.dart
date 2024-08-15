@@ -37,7 +37,7 @@ class Login extends _$Login {
       return ServerResponse(success: false, message: "invalid password");
     }
 
-    var response = await LoginHttpController.validatePassword(
+    var response = await LoginHttpController().validatePassword(
         phoneNumber, password, deviceId, cancelToken);
 
     if (response.success) {
@@ -60,7 +60,7 @@ class Login extends _$Login {
     }
 
     var response =
-        await LoginHttpController.validateOtp(phoneNumber, otp, cancelToken);
+        await LoginHttpController().validateOtp(phoneNumber, otp, cancelToken);
 
     if (response.success) {
       await ref

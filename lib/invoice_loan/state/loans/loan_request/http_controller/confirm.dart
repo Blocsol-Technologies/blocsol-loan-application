@@ -1,17 +1,13 @@
-
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LoanRequestConfirmHttpController {
-  static Future<ServerResponse> checkMonitoringConsentRequirement(
-      String transactionId,
-      String providerId,
-      String authToken,
-      CancelToken cancelToken) async {
-    try {
-      var httpService = HttpService();
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
 
+  Future<ServerResponse> checkMonitoringConsentRequirement(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
+    try {
       var response = await httpService.post(
           "/ondc/check-monitoring-consent-requirement",
           authToken,
@@ -61,7 +57,7 @@ class LoanRequestConfirmHttpController {
     }
   }
 
-  static Future<ServerResponse> generateMonitoringConsentUrl(
+  Future<ServerResponse> generateMonitoringConsentUrl(
       String aaId,
       String aaUrl,
       String key,
@@ -70,7 +66,6 @@ class LoanRequestConfirmHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/generate-loan-monitoring-consent-handler",
           authToken,
@@ -117,7 +112,7 @@ class LoanRequestConfirmHttpController {
     }
   }
 
-  static Future<ServerResponse> checkMonitoringConsentSuccess(
+  Future<ServerResponse> checkMonitoringConsentSuccess(
       String ecres,
       String resdate,
       String aaName,
@@ -126,7 +121,6 @@ class LoanRequestConfirmHttpController {
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/check-loan-monitoring-consent-success",
           authToken,
@@ -171,13 +165,9 @@ class LoanRequestConfirmHttpController {
     }
   }
 
-  static Future<ServerResponse> checkLoanDisbursementSuccess(
-      String transactionId,
-      String providerId,
-      String authToken,
-      CancelToken cancelToken) async {
+  Future<ServerResponse> checkLoanDisbursementSuccess(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/check-disbursement-success", authToken, cancelToken, {
         "transaction_id": transactionId,

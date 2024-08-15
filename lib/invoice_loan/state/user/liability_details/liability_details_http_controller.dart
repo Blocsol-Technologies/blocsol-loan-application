@@ -4,10 +4,12 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class InvoiceLoanLiabilityDetailsHttpController {
-  static Future<ServerResponse> getLiabilityDetails(
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> getLiabilityDetails(
       String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
+      
       var response = await httpService
           .get("/accounts/get-liability-details", authToken, cancelToken, {});
 

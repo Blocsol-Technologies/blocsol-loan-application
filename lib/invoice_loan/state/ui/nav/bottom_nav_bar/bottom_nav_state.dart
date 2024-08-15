@@ -5,8 +5,7 @@ part 'bottom_nav_state.g.dart';
 enum BottomNavItems {
   home,
   loans,
-  support,
-  profile,
+  invoices
 }
 
 @riverpod

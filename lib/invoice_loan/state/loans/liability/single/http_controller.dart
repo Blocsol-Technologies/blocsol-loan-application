@@ -4,14 +4,11 @@ import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
 
 class LiabilitiesHttpController {
-  
-  static Future<ServerResponse> fetchSingleLiabilityDetails(
-      String transactionId,
-      String providerId,
-      String authToken,
-      CancelToken cancelToken) async {
+  final httpService = HttpService(service: ServiceType.InvoiceLoan);
+
+  Future<ServerResponse> fetchSingleLiabilityDetails(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/fetch-single-confirmed-order", authToken, cancelToken, {
         "provider_id": providerId,
@@ -52,10 +49,9 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> performStatusRequest(String transactionId,
+  Future<ServerResponse> performStatusRequest(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/perform-status-check", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -95,10 +91,9 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> initiateForeclosure(String transactionId,
+  Future<ServerResponse> initiateForeclosure(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/initiate-foreclosure", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -153,10 +148,9 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> checkForeclosureSuccess(String transactionId,
+  Future<ServerResponse> checkForeclosureSuccess(String transactionId,
       String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/check-foreclosure-success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -196,14 +190,13 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> initiatePartPrepayment(
+  Future<ServerResponse> initiatePartPrepayment(
       String amount,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/initiate-prepayment", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -260,14 +253,13 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> checkPrepaymentSuccess(
+  Future<ServerResponse> checkPrepaymentSuccess(
       String prepaymentId,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/check-prepayment-success", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -308,14 +300,13 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> initiateMissedEmiRepayment(
+  Future<ServerResponse> initiateMissedEmiRepayment(
       String missedEmiId,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService
           .post("/ondc/initiate-missed-emi-repayment", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -372,14 +363,13 @@ class LiabilitiesHttpController {
     }
   }
 
-  static Future<ServerResponse> checkMissedEmiRepaymentSuccess(
+  Future<ServerResponse> checkMissedEmiRepaymentSuccess(
       String missedEmiPaymentId,
       String transactionId,
       String providerId,
       String authToken,
       CancelToken cancelToken) async {
     try {
-      var httpService = HttpService();
       var response = await httpService.post(
           "/ondc/check-missed-emi-repayment-success", authToken, cancelToken, {
         "transaction_id": transactionId,

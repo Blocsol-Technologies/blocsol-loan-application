@@ -42,7 +42,7 @@ class InvoiceLoanUserLiabilityDetails
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response =
-        await InvoiceLoanLiabilityDetailsHttpController.getLiabilityDetails(
+        await InvoiceLoanLiabilityDetailsHttpController().getLiabilityDetails(
             authToken, cancelToken);
 
     state = state.copyWith(fetchingLiabilityDetails: false);

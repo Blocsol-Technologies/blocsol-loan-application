@@ -152,8 +152,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   Future<ServerResponse> provideGstConsent(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await LoanRequestAccountHttpController.provideGstConsent(
-        authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController()
+        .provideGstConsent(authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(
@@ -167,8 +167,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   Future<ServerResponse> sendGstOtp(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await LoanRequestAccountHttpController.sendGstOtp(
-        authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController()
+        .sendGstOtp(authToken, cancelToken);
 
     return response;
   }
@@ -185,8 +185,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await LoanRequestAccountHttpController.verifyGstOtp(
-        otp, authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController()
+        .verifyGstOtp(otp, authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(gstDataDownloadTime: response.data);
@@ -201,8 +201,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(downloadingGSTData: true);
 
-    var response = await LoanRequestAccountHttpController.downloadGstData(
-        authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController()
+        .downloadGstData(authToken, cancelToken);
 
     state = state.copyWith(downloadingGSTData: false);
 
@@ -219,8 +219,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await LoanRequestAccountHttpController.fetchGstInvoices(
-        authToken, cancelToken);
+    var response = await LoanRequestAccountHttpController()
+        .fetchGstInvoices(authToken, cancelToken);
 
     state = state.copyWith(loadingInvoices: false);
 
@@ -242,8 +242,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(requestingNewLoan: true);
 
-    var response = await LoanRequestSearchHttpController.performGeneralSearch(
-        foreceNew, authToken, cancelToken);
+    var response = await LoanRequestSearchHttpController()
+        .performGeneralSearch(foreceNew, authToken, cancelToken);
 
     if (response.success) {
       state =
@@ -269,8 +269,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(submittingInvoicesForOffers: true);
 
-    var response = await LoanRequestSearchHttpController.submitForms(
-        state.transactionId, authToken, cancelToken);
+    var response = await LoanRequestSearchHttpController()
+        .submitForms(state.transactionId, authToken, cancelToken);
 
     var accountAggregatorId =
         ref.read(invoiceLoanUserProfileDetailsProvider).accountAggregatorId;
@@ -308,8 +308,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestSearchHttpController.generateAAUrl(
-        transactionId, aaId, aaURL, key, authToken, cancelToken);
+    return await LoanRequestSearchHttpController()
+        .generateAAUrl(transactionId, aaId, aaURL, key, authToken, cancelToken);
   }
 
   Future<ServerResponse> checkConsentSuccess(
@@ -327,7 +327,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestSearchHttpController.checkConsentSuccess(
+    return await LoanRequestSearchHttpController().checkConsentSuccess(
         transactionId, ecres, resdate, key, authToken, cancelToken);
   }
 
@@ -337,8 +337,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingInvoiceWithOffers: true);
 
-    var response = await LoanRequestSearchHttpController.fetchLoanOffers(
-        state.transactionId, authToken, cancelToken);
+    var response = await LoanRequestSearchHttpController()
+        .fetchLoanOffers(state.transactionId, authToken, cancelToken);
 
     if (response.success) {
       if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
@@ -366,8 +366,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await LoanRequestSearchHttpController.fetchLoanOffers(
-        state.transactionId, authToken, cancelToken);
+    var response = await LoanRequestSearchHttpController()
+        .fetchLoanOffers(state.transactionId, authToken, cancelToken);
 
     if (response.success) {
       if (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
@@ -404,8 +404,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response =
-        await LoanRequestSelectHttpController.refetchSelectedOfferDetails(
+    var response = await LoanRequestSelectHttpController()
+        .refetchSelectedOfferDetails(
             transactionId, offerId, providerId, authToken, cancelToken);
 
     if (response.success) {
@@ -435,7 +435,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response = await LoanRequestSelectHttpController.selectOffer(
+    var response = await LoanRequestSelectHttpController().selectOffer(
         transactionId,
         offerId,
         invoiceId,
@@ -474,7 +474,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response = await LoanRequestSelectHttpController.submitLoanUpdateForm(
+    var response = await LoanRequestSelectHttpController().submitLoanUpdateForm(
         transactionId,
         providerId,
         loanTerm,
@@ -507,8 +507,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingAadharKYCURl: true);
 
-    var response = await LoanRequestSelectHttpController.fetchAadharKycUrl(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestSelectHttpController()
+        .fetchAadharKycUrl(transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingAadharKYCURl: false);
 
@@ -531,8 +531,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingAadharKYCURl: true, aadharKYCFailure: false);
 
-    var response = await LoanRequestSelectHttpController.refetchAadharKycUrl(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestSelectHttpController()
+        .refetchAadharKycUrl(transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingAadharKYCURl: false);
 
@@ -555,8 +555,9 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(verifyingAadharKYC: true);
 
-    var response = await LoanRequestSelectHttpController.checkAadharKycSuccess(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestSelectHttpController()
+        .checkAadharKycSuccess(
+            transactionId, providerId, authToken, cancelToken);
     state = state.copyWith(verifyingAadharKYC: false);
 
     return response;
@@ -575,8 +576,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response = await LoanRequestInitHttpController.performInitRequest(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestInitHttpController()
+        .performInitRequest(transactionId, providerId, authToken, cancelToken);
     state = state.copyWith(verifyingAadharKYC: false);
 
     return response;
@@ -598,8 +599,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingEntityKYCURl: true);
 
-    var response = await LoanRequestInitHttpController.fetchEntityKycForm(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestInitHttpController()
+        .fetchEntityKycForm(transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingEntityKYCURl: false);
 
@@ -622,7 +623,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingEntityKYCURl: true, entityKYCFailure: false);
 
-    var response = await LoanRequestInitHttpController.refetchEntityKycForm(
+    var response = await LoanRequestInitHttpController().refetchEntityKycForm(
         transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingEntityKYCURl: false);
@@ -647,8 +648,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(verifyingEntityKYC: true);
 
-    var response =
-        await LoanRequestInitHttpController.checkEntityKycFormSuccess(
+    var response = await LoanRequestInitHttpController()
+        .checkEntityKycFormSuccess(
             transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(verifyingEntityKYC: false);
@@ -670,7 +671,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.fetchBankAccountFormDetails(
+    return await LoanRequestInitHttpController().fetchBankAccountFormDetails(
         transactionId, providerId, authToken, cancelToken);
   }
 
@@ -697,7 +698,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.submitBankAccountDetails(
+    return await LoanRequestInitHttpController().submitBankAccountDetails(
         bankAccountNumber,
         bankIFSC,
         transactionId,
@@ -721,7 +722,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(fetchingRepaymentSetupUrl: true);
 
-    var response = await LoanRequestInitHttpController.fetchRepaymentSetupUrl(
+    var response = await LoanRequestInitHttpController().fetchRepaymentSetupUrl(
         transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingRepaymentSetupUrl: false);
@@ -751,8 +752,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(checkingRepaymentSetupSuccess: true);
 
-    var response =
-        await LoanRequestInitHttpController.checkRepaymentSetupSuccess(
+    var response = await LoanRequestInitHttpController()
+        .checkRepaymentSetupSuccess(
             transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(checkingRepaymentSetupSuccess: false);
@@ -775,7 +776,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.refetchRepaymentSetupForm(
+    return await LoanRequestInitHttpController().refetchRepaymentSetupForm(
         transactionId, providerId, authToken, cancelToken);
   }
 
@@ -792,7 +793,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.fetchLoanAgreementForm(
+    return await LoanRequestInitHttpController().fetchLoanAgreementForm(
         transactionId, providerId, authToken, cancelToken);
   }
 
@@ -819,8 +820,9 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(verifyingLoanAgreementSuccess: true);
 
-    var response = await LoanRequestInitHttpController.submitLoanAgreementForm(
-        otp, transactionId, providerId, authToken, cancelToken);
+    var response = await LoanRequestInitHttpController()
+        .submitLoanAgreementForm(
+            otp, transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(verifyingLoanAgreementSuccess: false);
 
@@ -843,8 +845,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     state = state.copyWith(verifyingLoanAgreementSuccess: true);
 
-    var response =
-        await LoanRequestInitHttpController.checkLoanAgreementSuccess(
+    var response = await LoanRequestInitHttpController()
+        .checkLoanAgreementSuccess(
             transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(verifyingLoanAgreementSuccess: false);
@@ -867,7 +869,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestInitHttpController.refetchLoanAgreementForm(
+    return await LoanRequestInitHttpController().refetchLoanAgreementForm(
         transactionId, providerId, authToken, cancelToken);
   }
 
@@ -885,7 +887,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    return await LoanRequestConfirmHttpController
+    return await LoanRequestConfirmHttpController()
         .checkMonitoringConsentRequirement(
             transactionId, providerId, authToken, cancelToken);
   }
@@ -913,15 +915,9 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     state = state.copyWith(
         generatingMonitoringConsent: true, monitoringConsentError: false);
 
-    var response =
-        await LoanRequestConfirmHttpController.generateMonitoringConsentUrl(
-            aaId,
-            aaURL,
-            state.selectedAA.key,
-            transactionId,
-            providerId,
-            authToken,
-            cancelToken);
+    var response = await LoanRequestConfirmHttpController()
+        .generateMonitoringConsentUrl(aaId, aaURL, state.selectedAA.key,
+            transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(
       generatingMonitoringConsent: true,
@@ -959,15 +955,9 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
         validatingMonitoringConsentSuccess: true,
         monitoringConsentError: false);
 
-    var response =
-        await LoanRequestConfirmHttpController.checkMonitoringConsentSuccess(
-            ecres,
-            resdate,
-            state.selectedAA.key,
-            transactionId,
-            offerProviderId,
-            authToken,
-            cancelToken);
+    var response = await LoanRequestConfirmHttpController()
+        .checkMonitoringConsentSuccess(ecres, resdate, state.selectedAA.key,
+            transactionId, offerProviderId, authToken, cancelToken);
 
     state = state.copyWith(
         loanId: response.data, validatingMonitoringConsentSuccess: false);
@@ -990,8 +980,8 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
       );
     }
 
-    var response =
-        await LoanRequestConfirmHttpController.checkLoanDisbursementSuccess(
+    var response = await LoanRequestConfirmHttpController()
+        .checkLoanDisbursementSuccess(
             transactionId, providerId, authToken, cancelToken);
 
     if (response.success) {

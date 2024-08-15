@@ -9,7 +9,7 @@ class SupportStateData with _$SupportStateData {
     required String transactionId,
     required String providerId,
     required String issueId,
-    required String gst,
+
     required bool generatingSupportTicket,
     required bool fetchingAllSupportTickets,
     required bool fetchingSingleSupportTicket,
@@ -22,7 +22,6 @@ class SupportStateData with _$SupportStateData {
     transactionId: '',
     providerId: '',
     issueId: '',
-    gst: '',
     generatingSupportTicket: false,
     fetchingAllSupportTickets: false,
     fetchingSingleSupportTicket: false,
