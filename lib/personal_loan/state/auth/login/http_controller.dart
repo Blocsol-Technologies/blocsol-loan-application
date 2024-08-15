@@ -35,7 +35,7 @@ class PersonalLoanLoginHttpController {
 
       if (e is DioException) {
         return ServerResponse(
-            success: false, message: e.response?.data['message'], data: null);
+            success: false, message: e.response?.data['message'], );
       }
 
       return ServerResponse(
@@ -69,7 +69,7 @@ class PersonalLoanLoginHttpController {
 
       if (e is DioException) {
         return ServerResponse(
-            success: false, message: e.response?.data['message'], data: null);
+            success: false, message: e.response?.data['message'], );
       }
 
       return ServerResponse(

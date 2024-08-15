@@ -7,7 +7,7 @@ part of 'liability_details.dart';
 // **************************************************************************
 
 String _$invoiceLoanUserLiabilityDetailsHash() =>
-    r'11b326496a1dcaae2066020dcb4b320585706bd9';
+    r'2b8d4acaf55f8b3a07f0b7c5c2517d999476e32c';
 
 /// See also [InvoiceLoanUserLiabilityDetails].
 @ProviderFor(InvoiceLoanUserLiabilityDetails)

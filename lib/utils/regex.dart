@@ -22,4 +22,7 @@ class RegexProvider {
 
   // Phone Number
   static final RegExp phoneRegex = RegExp(r'^[6-9]\d{9}$');
+
+  // Pan Number
+  static final RegExp panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
 }
