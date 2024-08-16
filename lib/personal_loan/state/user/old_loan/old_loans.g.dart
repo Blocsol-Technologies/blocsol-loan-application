@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'all_liabilities.dart';
+part of 'old_loans.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$invoiceLoanLiabilitiesHash() =>
-    r'7e9a37dcba56366c0ca2ca3313c9e12b9e023f70';
+String _$personalLoanLiabilitiesHash() =>
+    r'daa04263886f7344651b25380bb88558f684b4e0';
 
-/// See also [InvoiceLoanLiabilities].
-@ProviderFor(InvoiceLoanLiabilities)
-final invoiceLoanLiabilitiesProvider = AutoDisposeNotifierProvider<
-    InvoiceLoanLiabilities, AllLiabilitiesState>.internal(
-  InvoiceLoanLiabilities.new,
-  name: r'invoiceLoanLiabilitiesProvider',
+/// See also [PersonalLoanLiabilities].
+@ProviderFor(PersonalLoanLiabilities)
+final personalLoanLiabilitiesProvider = AutoDisposeNotifierProvider<
+    PersonalLoanLiabilities, LiabilityStateData>.internal(
+  PersonalLoanLiabilities.new,
+  name: r'personalLoanLiabilitiesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$invoiceLoanLiabilitiesHash,
+      : _$personalLoanLiabilitiesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$InvoiceLoanLiabilities = AutoDisposeNotifier<AllLiabilitiesState>;
+typedef _$PersonalLoanLiabilities = AutoDisposeNotifier<LiabilityStateData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

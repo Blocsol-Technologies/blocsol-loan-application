@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'all_liabilities.dart';
+part of 'sse.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$invoiceLoanLiabilitiesHash() =>
-    r'7e9a37dcba56366c0ca2ca3313c9e12b9e023f70';
+String _$invoiceLoanServerSentEventsHash() =>
+    r'69029078dc59aee6607fbe7d5a47784455113cc3';
 
-/// See also [InvoiceLoanLiabilities].
-@ProviderFor(InvoiceLoanLiabilities)
-final invoiceLoanLiabilitiesProvider = AutoDisposeNotifierProvider<
-    InvoiceLoanLiabilities, AllLiabilitiesState>.internal(
-  InvoiceLoanLiabilities.new,
-  name: r'invoiceLoanLiabilitiesProvider',
+/// See also [InvoiceLoanServerSentEvents].
+@ProviderFor(InvoiceLoanServerSentEvents)
+final invoiceLoanServerSentEventsProvider =
+    AutoDisposeNotifierProvider<InvoiceLoanServerSentEvents, void>.internal(
+  InvoiceLoanServerSentEvents.new,
+  name: r'invoiceLoanServerSentEventsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$invoiceLoanLiabilitiesHash,
+      : _$invoiceLoanServerSentEventsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$InvoiceLoanLiabilities = AutoDisposeNotifier<AllLiabilitiesState>;
+typedef _$InvoiceLoanServerSentEvents = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

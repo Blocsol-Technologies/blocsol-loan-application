@@ -1,20 +1,16 @@
 import 'package:go_router/go_router.dart';
 
 class PersonalLoanSignupRouter {
-  static const intro = '/signup/intro';
-  static const request_permissions = '/signup/request-permissions';
-  static const mobile_validation = '/signup/mobile-validation';
-  static const mobile_otp_verification = '/signup/mobile-otp-verification';
-  static const email_validation = '/signup/email-validation';
-  static const email_otp_verification = '/signup/email-otp-verification';
-  static const profile_creation = '/signup/profile-creation';
-  static const gst_validation = '/signup/gst-validation';
-  static const udyam_validation = '/signup/udyam-validation';
-  static const gst_username_validation = '/signup/gst-username-validation';
-  static const gst_otp_verification = '/signup/gst-otp-verification';
-  static const fetching_gst_details = '/signup/fetching-gst-details';
-  static const password_creation = '/signup/password-creation';
-  static const confirm_account = '/signup/confirm-account';
+  static const String intro = "/personal-credit/auth/signup/home";
+  static const String mobile_auth =
+      "/personal-credit/auth/signup/mobile-auth";
+  static const String mobile_otp_auth =
+      "/personal-credit/auth/signup/mobile-otp-auth";
+  static const String mobile_persmissions =
+      "/personal-credit/auth/signup/mobile-permissions";
+  static const String personal_details =
+      "/personal-credit/auth/signup/personal-details";
+  static const String password = "/personal-credit/auth/signup/password";
 }
 
 List<GoRoute> personalLoanSignupRoutes = [];

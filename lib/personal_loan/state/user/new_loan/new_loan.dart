@@ -13,7 +13,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'new_loan.g.dart';
 
 @riverpod
-class NewLoanState extends _$NewLoanState {
+class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   @override
   NewLoanStateData build() {
     ref.keepAlive();

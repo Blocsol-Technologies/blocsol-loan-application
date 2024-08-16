@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/http_controller.dart';
@@ -12,6 +14,16 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
   @override
   AllLiabilitiesState build() {
     ref.keepAlive();
+
+    var timer = Timer.periodic(const Duration(seconds: 10), (_) async {
+      await fetchAllLiabilities(CancelToken());
+      await fetchAllClosedLiabilities(CancelToken());
+    });
+
+    ref.onDispose(() {
+      timer.cancel();
+    });
+
     return AllLiabilitiesState.initial;
   }
 
