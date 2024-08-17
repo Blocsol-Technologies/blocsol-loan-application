@@ -12,7 +12,7 @@ import 'dart:convert';
 part 'sse.g.dart';
 
 @riverpod
-class InvoiceLoanServerSentEvents extends _$InvoiceLoanServerSentEvents {
+class PersonalLoanServerSentEvents extends _$PersonalLoanServerSentEvents {
   @override
   void build() {
     ref.keepAlive();

@@ -6,22 +6,22 @@ part of 'sse.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$invoiceLoanServerSentEventsHash() =>
-    r'390d21385a258ae8bc1f87f1228cac8d0a9e74c4';
+String _$personalLoanServerSentEventsHash() =>
+    r'acbdc8b31c06c0ffa83b18eb2d298a891c8140d2';
 
-/// See also [InvoiceLoanServerSentEvents].
-@ProviderFor(InvoiceLoanServerSentEvents)
-final invoiceLoanServerSentEventsProvider =
-    AutoDisposeNotifierProvider<InvoiceLoanServerSentEvents, void>.internal(
-  InvoiceLoanServerSentEvents.new,
-  name: r'invoiceLoanServerSentEventsProvider',
+/// See also [PersonalLoanServerSentEvents].
+@ProviderFor(PersonalLoanServerSentEvents)
+final personalLoanServerSentEventsProvider =
+    AutoDisposeNotifierProvider<PersonalLoanServerSentEvents, void>.internal(
+  PersonalLoanServerSentEvents.new,
+  name: r'personalLoanServerSentEventsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$invoiceLoanServerSentEventsHash,
+      : _$personalLoanServerSentEventsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$InvoiceLoanServerSentEvents = AutoDisposeNotifier<void>;
+typedef _$PersonalLoanServerSentEvents = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

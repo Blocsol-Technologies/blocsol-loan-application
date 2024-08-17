@@ -21,7 +21,7 @@ List<GoRoute> personalLoanPublicRoutes = [
 List<GoRoute> personalLoanProtectedRoutes = [
   ...personalLoanIndexRoutes,
   ...personalLoanProfileRoutes,
-  ...personalLoanRequestRoutes,
+  ...personalNewLoanRequestRoutes,
   ...personalLoanLiabilitiesRoutes,
   ...personalLoanSupportRoutes
 ];

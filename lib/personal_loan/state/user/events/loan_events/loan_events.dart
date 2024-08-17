@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/state/loan_events_state.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
@@ -103,7 +105,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
       return;
     }
 
-    var prevEvent = state;
+    var prevEvent = state.latestEvent;
 
     if (prevEvent.messageId == event.messageId && prevEvent.consumed) {
       return;
@@ -124,14 +126,14 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         // if (stepNumber == 1) {
         //   if (success) {
         //     ref
-        //         .read(newLoanStateProvider.notifier)
-        //         .updateState(NewLoanProgress.formGenerated);
+        //         .read(personalNewLoanRequestProvider.notifier)
+        //         .updateState(PersonalLoanRequestProgress.formGenerated);
         //     ref
-        //         .read(routerStateProvider)
-        //         .go(AppRoutes.pc_new_loan_process);
+        //         .read(routerProvider)
+        //         .push(PersonalNewLoanRequestRouter.new_loan_process);
         //     return;
         //   } else {
-        //     ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+        //     ref.read(routerProvider).push(PersonalNewLoanRequestRouter.new_loan_error,
         //         extra: "Unable to select the offer from the lender");
         //     return;
         //   }
@@ -141,10 +143,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         // if (stepNumber == 2) {
         //   if (success) {
         //     ref
-        //         .read(routerStateProvider)
-        //         .go(AppRoutes.pc_new_loan_update_offer_screen);
+        //         .read(routerProvider)
+        //         .push(PersonalNewLoanRequestRouter.new_loan_update_offer_screen);
         //   } else {
-        //     ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+        //     ref.read(routerProvider).push(PersonalNewLoanRequestRouter.new_loan_error,
         //         extra: "Error when fetching the loan update form");
 
         //     return;
@@ -154,21 +156,24 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         // on_select_03
         if (stepNumber == 3) {
           if (success) {
-            if (ref.read(newLoanStateProvider).aadharKYCFailure) {
+            if (ref.read(personalNewLoanRequestProvider).aadharKYCFailure) {
               ref
-                  .read(newLoanStateProvider.notifier)
-                  .updateState(NewLoanProgress.loanOfferSelect);
+                  .read(personalNewLoanRequestProvider.notifier)
+                  .updateState(PersonalLoanRequestProgress.loanOfferSelect);
               ref
-                  .read(newLoanStateProvider.notifier)
+                  .read(personalNewLoanRequestProvider.notifier)
                   .setAadharKYCFailure(false);
 
-              ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_process);
+              ref
+                  .read(routerProvider)
+                  .push(PersonalNewLoanRequestRouter.new_loan_process);
               return;
             }
 
             return;
           } else {
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra:
                     "Unable to refetch the updated loan offer from the lender. OnInit03 failed");
             return;
@@ -177,20 +182,22 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
 
         if (stepNumber == 4) {
           if (success) {
-            final cancelToken = CancelToken();
             var response = await ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .checkAadharKYCSuccess(cancelToken);
 
             if (!response.success) {
-              ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+              ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.new_loan_error,
                   extra:
                       "Error when checking aadhar kyc success ${response.message}");
               return;
             }
             return;
           } else {
-            ref.read(newLoanStateProvider.notifier).setAadharKYCFailure(true);
+            ref
+                .read(personalNewLoanRequestProvider.notifier)
+                .setAadharKYCFailure(true);
             return;
           }
         }
@@ -201,12 +208,15 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         if (stepNumber == 1) {
           if (success) {
             ref
-                .read(newLoanStateProvider.notifier)
-                .updateState(NewLoanProgress.aadharKYC);
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_process);
+                .read(personalNewLoanRequestProvider.notifier)
+                .updateState(PersonalLoanRequestProgress.aadharKYC);
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.new_loan_process);
             return;
           } else {
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra: "Error on the on_init_01");
             return;
           }
@@ -215,12 +225,15 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         if (stepNumber == 2) {
           if (success) {
             ref
-                .read(newLoanStateProvider.notifier)
-                .updateState(NewLoanProgress.bankAccountDetails);
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_process);
+                .read(personalNewLoanRequestProvider.notifier)
+                .updateState(PersonalLoanRequestProgress.bankAccountDetails);
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.new_loan_process);
             return;
           } else {
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra: "Error on the on_init_02");
             return;
           }
@@ -229,29 +242,30 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         // repayment response
         if (stepNumber == 3) {
           if (success) {
-            final cancelToken = CancelToken();
             var response = await ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .checkRepaymentSuccess(cancelToken);
 
             if (!response.success) {
               ref
-                  .read(newLoanStateProvider.notifier)
+                  .read(personalNewLoanRequestProvider.notifier)
                   .updateRepaymentSetupFailure(true);
-              ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+              ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.new_loan_error,
                   extra:
                       "Error when checking loan repayment success ${response.message}");
               return;
             }
             ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .updateRepaymentSetupFailure(false);
             return;
           } else {
             ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .updateRepaymentSetupFailure(true);
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra: "Error on the checking loan repayment status check");
             return;
           }
@@ -261,12 +275,15 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         if (stepNumber == 4) {
           if (success) {
             ref
-                .read(newLoanStateProvider.notifier)
-                .updateState(NewLoanProgress.repaymentSetup);
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_process);
+                .read(personalNewLoanRequestProvider.notifier)
+                .updateState(PersonalLoanRequestProgress.repaymentSetup);
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.new_loan_process);
             return;
           } else {
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra: "Error on the on_init_03");
             return;
           }
@@ -275,24 +292,23 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         // loan agreement
         if (stepNumber == 5) {
           if (success) {
-            final cancelToken = CancelToken();
             var response = await ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .checkLoanAgreementSuccess(cancelToken);
 
             if (!response.success) {
               ref
-                  .read(newLoanStateProvider.notifier)
+                  .read(personalNewLoanRequestProvider.notifier)
                   .updateLoanAgreementFailure(true);
               return;
             }
             ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .updateLoanAgreementFailure(false);
             return;
           } else {
             ref
-                .read(newLoanStateProvider.notifier)
+                .read(personalNewLoanRequestProvider.notifier)
                 .updateLoanAgreementFailure(true);
             return;
           }
@@ -304,12 +320,15 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         if (stepNumber == 1) {
           if (success) {
             ref
-                .read(newLoanStateProvider.notifier)
-                .updateState(NewLoanProgress.loanAgreement);
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_process);
+                .read(personalNewLoanRequestProvider.notifier)
+                .updateState(PersonalLoanRequestProgress.loanAgreement);
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.new_loan_process);
             return;
           } else {
-            ref.read(routerStateProvider).go(AppRoutes.pc_new_loan_error,
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_error,
                 extra: "Error on the on_confirm_01");
             return;
           }
@@ -343,9 +362,9 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
 
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var transactionId = ref.read(invoiceNewLoanRequestProvider).transactionId;
+    var transactionId = ref.read(personalNewLoanRequestProvider).transactionId;
     var providerId =
-        ref.read(invoiceNewLoanRequestProvider).selectedOffer.offerProviderId;
+        ref.read(personalNewLoanRequestProvider).selectedOffer.offerProviderId;
 
     if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
       return;

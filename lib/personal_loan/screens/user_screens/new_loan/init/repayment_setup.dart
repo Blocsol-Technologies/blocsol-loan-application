@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/contants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
@@ -21,91 +21,119 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-class PCNewLoanAgreementWebview extends ConsumerStatefulWidget {
-  final String url;
-  const PCNewLoanAgreementWebview({super.key, required this.url});
+class PCNewLoanRepaymentSetup extends ConsumerStatefulWidget {
+  const PCNewLoanRepaymentSetup({super.key});
 
   @override
-  ConsumerState<PCNewLoanAgreementWebview> createState() =>
-      _PCNewLoanAgreementWebviewState();
+  ConsumerState<PCNewLoanRepaymentSetup> createState() =>
+      _PCNewLoanRepaymentSetupState();
 }
 
-class _PCNewLoanAgreementWebviewState
-    extends ConsumerState<PCNewLoanAgreementWebview> {
-  bool _loadingAgreementURL = false;
-  final _cancelToken = CancelToken();
-  final GlobalKey _loanAgreementWebviewKey = GlobalKey();
-
+class _PCNewLoanRepaymentSetupState
+    extends ConsumerState<PCNewLoanRepaymentSetup> {
   InAppWebViewController? _webViewController;
+  bool _verifyingRepaymentSuccess = false;
+  String _currentURL = "";
+  bool _fetchingRepaymentURL = false;
 
-  String _currentUrl = "";
+  final GlobalKey _repaymentWebviewKey = GlobalKey();
+  final _cancelToken = CancelToken();
 
-  bool _verifyingLoanAgreementSuccess = false;
+  Future<void> _checkRepaymentSetupSuccess() async {
+    if (ref.read(personalNewLoanRequestProvider).repaymentSetupFailure) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error!',
+          message:
+              "Loan Repayment Setup Failed. Refetch Repayment Setup URL or Restart the journey",
+          contentType: ContentType.failure,
+        ),
+        duration: const Duration(seconds: 10),
+      );
 
-  void _checkLoanAgreementSuccess() async {
-    // if (_verifyingLoanAgreementSuccess) {
-    //   return;
-    // }
-
-    setState(() {
-      _verifyingLoanAgreementSuccess = true;
-    });
-
-    var checkForm07SubmissionSuccessResponse = await ref
-        .read(personalNewLoanRequestProvider.notifier)
-        .checkLoanAgreementSuccess(_cancelToken);
-
-    if (!mounted) return;
-
-    setState(() {
-      _verifyingLoanAgreementSuccess = true;
-    });
-
-    if (!checkForm07SubmissionSuccessResponse.success) {
-      if (mounted) {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Loan Repayment Setup Unsuccessful. Contact Support",
-            contentType: ContentType.failure,
-          ),
-          duration: const Duration(seconds: 15),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-
-        return;
-      }
-    }
-
-    ref
-        .read(personalNewLoanRequestProvider.notifier)
-        .updateState(PersonalLoanRequestProgress.loanAgreement);
-
-    if (mounted) {
-      context.go(PersonalNewLoanRequestRouter.new_loan_process);
-    }
-  }
-
-  Future<void> _refetchLoanAgreement() async {
-    if (!ref.read(personalNewLoanRequestProvider).loanAgreementFailure) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
       return;
     }
 
+    if (_verifyingRepaymentSuccess) {
+      return;
+    }
+
+    setState(() {
+      _verifyingRepaymentSuccess = true;
+    });
+
+    bool success = false;
+    int tries = 0;
+
+    while (!success && tries < 5) {
+      var repaymentSetupSuccessResponse = await ref
+          .read(personalNewLoanRequestProvider.notifier)
+          .checkRepaymentSuccess(_cancelToken);
+
+      if (repaymentSetupSuccessResponse.success) {
+        success = true;
+      } else {
+        tries++;
+        await Future.delayed(const Duration(seconds: 15));
+      }
+    }
+
+    if (!mounted) return;
+
+    if (!success) {
+      ref
+          .read(personalNewLoanRequestProvider.notifier)
+          .updateCheckingRepaymentSetupSuccess(false);
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error!',
+          message: "Repayment Setup. Contact Support",
+          contentType: ContentType.failure,
+        ),
+        duration: const Duration(seconds: 15),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      return;
+    }
+
+    setState(() {
+      _verifyingRepaymentSuccess = false;
+    });
+
     ref
         .read(personalNewLoanRequestProvider.notifier)
-        .updateLoanAgreementFailure(false);
+        .updateState(PersonalLoanRequestProgress.repaymentSetup);
+    context.go(PersonalNewLoanRequestRouter.new_loan_process);
+  }
+
+  void _fetchRepaymentURL() async {
+    if (_fetchingRepaymentURL) return;
+
+    setState(() {
+      _fetchingRepaymentURL = true;
+    });
 
     var response = await ref
         .read(personalNewLoanRequestProvider.notifier)
-        .refetchLoanAgreementURL(_cancelToken);
+        .fetchRepaymentURL(_cancelToken);
 
     if (!mounted) return;
+
+    setState(() {
+      _fetchingRepaymentURL = false;
+    });
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -114,7 +142,7 @@ class _PCNewLoanAgreementWebviewState
         backgroundColor: Colors.transparent,
         content: AwesomeSnackbarContent(
           title: 'Error!',
-          message: "Unable to refetch Loan Agreement URL. Contact Support.",
+          message: "Unable to fetch Repayment Setup URL. Contact Support.",
           contentType: ContentType.failure,
         ),
         duration: const Duration(seconds: 15),
@@ -127,10 +155,44 @@ class _PCNewLoanAgreementWebviewState
       return;
     } else {
       setState(() {
-        _currentUrl = response.data['url'];
+        _currentURL = response.data['url'];
       });
       _webViewController?.loadUrl(
           urlRequest: URLRequest(url: WebUri(response.data['url'])));
+    }
+  }
+
+  Future<void> _refetchWebviewURL() async {
+    if (!ref.read(personalNewLoanRequestProvider).repaymentSetupFailure) {
+      return;
+    }
+
+    var response = await ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .refetchRepaymentSetupURL(_cancelToken);
+
+    if (mounted) {
+      if (!response.success) {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Error!',
+            message: "Unable to refetch Repayment Setup URL. Contact Support.",
+            contentType: ContentType.failure,
+          ),
+          duration: const Duration(seconds: 15),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return;
+      } else {
+        _webViewController?.loadUrl(
+            urlRequest: URLRequest(url: WebUri(response.data['url'])));
+      }
     }
   }
 
@@ -139,15 +201,10 @@ class _PCNewLoanAgreementWebviewState
   }
 
   @override
-  initState() {
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      setState(() {
-        _currentUrl = widget.url;
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(url: WebUri(widget.url)));
-      });
+      _fetchRepaymentURL();
     });
-
     super.initState();
   }
 
@@ -161,11 +218,13 @@ class _PCNewLoanAgreementWebviewState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     final borrowerAccountDetailsRef =
         ref.watch(personalLoanAccountDetailsProvider);
-    ref.watch(personalLoanServerSentEventsProvider);
-    ref.watch(personalLoanEventsProvider);
     ref.watch(personalNewLoanRequestProvider);
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
+
     return PopScope(
       canPop: false,
       child: SafeArea(
@@ -222,7 +281,7 @@ class _PCNewLoanAgreementWebviewState
                                             ),
                                           ),
                                           content: Text(
-                                            'Have you signed the Loan Agreement successfully?',
+                                            'Have you setup Repayment Mandate successfully?',
                                             style: TextStyle(
                                               fontFamily: fontFamily,
                                               fontSize: AppFontSizes.b1,
@@ -271,7 +330,7 @@ class _PCNewLoanAgreementWebviewState
                                               onPressed: () {
                                                 HapticFeedback.mediumImpact();
                                                 Navigator.of(context).pop(true);
-                                                _checkLoanAgreementSuccess();
+                                                _checkRepaymentSetupSuccess();
                                               },
                                               child: Text('Yes',
                                                   style: TextStyle(
@@ -358,22 +417,17 @@ class _PCNewLoanAgreementWebviewState
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _checkLoanAgreementSuccess();
-                                },
-                                child: Text(
-                                  "Loan Agreement",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h1,
-                                    fontWeight: AppFontWeights.medium,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
+                              Text(
+                                "Loan Repayment Setup",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h1,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
+                                textAlign: TextAlign.center,
+                                softWrap: true,
                               ),
                             ],
                           ),
@@ -390,7 +444,7 @@ class _PCNewLoanAgreementWebviewState
                             width: MediaQuery.of(context).size.width,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
@@ -398,7 +452,7 @@ class _PCNewLoanAgreementWebviewState
                             ),
                             child: ref
                                     .watch(personalNewLoanRequestProvider)
-                                    .aadharKYCFailure
+                                    .repaymentSetupFailure
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -411,7 +465,7 @@ class _PCNewLoanAgreementWebviewState
                                           width: 300),
                                       const SpacerWidget(height: 35),
                                       Text(
-                                        "Your Loan Agreement Sign Failed!",
+                                        "Your Repayment Setup Failed!",
                                         style: TextStyle(
                                           fontFamily: fontFamily,
                                           fontSize: AppFontSizes.h2,
@@ -426,7 +480,7 @@ class _PCNewLoanAgreementWebviewState
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _refetchLoanAgreement();
+                                          _refetchWebviewURL();
                                         },
                                         child: Container(
                                           height: 40,
@@ -492,7 +546,7 @@ class _PCNewLoanAgreementWebviewState
                                       )
                                     ],
                                   )
-                                : _verifyingLoanAgreementSuccess
+                                : _verifyingRepaymentSuccess
                                     ? Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -506,7 +560,7 @@ class _PCNewLoanAgreementWebviewState
                                               width: 250),
                                           const SpacerWidget(height: 35),
                                           Text(
-                                            "Verifying Loan Agreement Success...",
+                                            "Verifying Repayment Setup Success...",
                                             style: TextStyle(
                                               fontFamily: fontFamily,
                                               fontSize: AppFontSizes.h2,
@@ -531,7 +585,7 @@ class _PCNewLoanAgreementWebviewState
                                       )
                                     : Stack(
                                         children: [
-                                          _loadingAgreementURL
+                                          _fetchingRepaymentURL
                                               ? const LinearProgressIndicator()
                                               : Container(),
                                           ClipRRect(
@@ -541,7 +595,7 @@ class _PCNewLoanAgreementWebviewState
                                               topRight: Radius.circular(20),
                                             ),
                                             child: InAppWebView(
-                                              key: _loanAgreementWebviewKey,
+                                              key: _repaymentWebviewKey,
                                               gestureRecognizers: const <Factory<
                                                   VerticalDragGestureRecognizer>>{},
                                               initialSettings:
@@ -552,22 +606,14 @@ class _PCNewLoanAgreementWebviewState
                                                 disableVerticalScroll: false,
                                               ),
                                               initialUrlRequest: URLRequest(
-                                                  url: WebUri(_currentUrl)),
-                                              onLoadStop: (_, __) {
-                                                setState(() {
-                                                  _loadingAgreementURL = false;
-                                                });
-                                              },
+                                                  url: WebUri(_currentURL)),
                                               onWebViewCreated:
                                                   (controller) async {
                                                 _webViewController = controller;
                                                 _webViewController!.loadUrl(
                                                     urlRequest: URLRequest(
                                                         url: WebUri(
-                                                            _currentUrl)));
-                                                setState(() {
-                                                  _loadingAgreementURL = false;
-                                                });
+                                                            _currentURL)));
                                               },
                                             ),
                                           ),

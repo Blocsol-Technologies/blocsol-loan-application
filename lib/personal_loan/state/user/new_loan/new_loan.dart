@@ -18,7 +18,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   NewLoanStateData build() {
     ref.keepAlive();
     return NewLoanStateData(
-      currentState: NewLoanProgress.started,
+      currentState: PersonalLoanRequestProgress.started,
       transactionId: "",
       //
       annualIncome: "",
@@ -61,7 +61,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
     );
   }
 
-  void updateState(NewLoanProgress progress) {
+  void updateState(PersonalLoanRequestProgress progress) {
     state = state.copyWith(currentState: progress);
   }
 
@@ -135,7 +135,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
   void reset() {
     state = NewLoanStateData(
-      currentState: NewLoanProgress.started,
+      currentState: PersonalLoanRequestProgress.started,
       transactionId: "",
       //
       annualIncome: "",

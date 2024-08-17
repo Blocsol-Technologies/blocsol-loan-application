@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NewLoanStateData {
-  NewLoanProgress get currentState => throw _privateConstructorUsedError;
+  PersonalLoanRequestProgress get currentState =>
+      throw _privateConstructorUsedError;
   String get transactionId => throw _privateConstructorUsedError; //
   String get annualIncome => throw _privateConstructorUsedError;
   String get selectedEmploymentType => throw _privateConstructorUsedError;
@@ -65,7 +66,7 @@ abstract class $NewLoanStateDataCopyWith<$Res> {
       _$NewLoanStateDataCopyWithImpl<$Res, NewLoanStateData>;
   @useResult
   $Res call(
-      {NewLoanProgress currentState,
+      {PersonalLoanRequestProgress currentState,
       String transactionId,
       String annualIncome,
       String selectedEmploymentType,
@@ -151,7 +152,7 @@ class _$NewLoanStateDataCopyWithImpl<$Res, $Val extends NewLoanStateData>
       currentState: null == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as NewLoanProgress,
+              as PersonalLoanRequestProgress,
       transactionId: null == transactionId
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
@@ -294,7 +295,7 @@ abstract class _$$NewLoanStateDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {NewLoanProgress currentState,
+      {PersonalLoanRequestProgress currentState,
       String transactionId,
       String annualIncome,
       String selectedEmploymentType,
@@ -378,7 +379,7 @@ class __$$NewLoanStateDataImplCopyWithImpl<$Res>
       currentState: null == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as NewLoanProgress,
+              as PersonalLoanRequestProgress,
       transactionId: null == transactionId
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
@@ -553,7 +554,7 @@ class _$NewLoanStateDataImpl implements _NewLoanStateData {
         _offers = offers;
 
   @override
-  final NewLoanProgress currentState;
+  final PersonalLoanRequestProgress currentState;
   @override
   final String transactionId;
 //
@@ -766,7 +767,7 @@ class _$NewLoanStateDataImpl implements _NewLoanStateData {
 
 abstract class _NewLoanStateData implements NewLoanStateData {
   const factory _NewLoanStateData(
-      {required final NewLoanProgress currentState,
+      {required final PersonalLoanRequestProgress currentState,
       required final String transactionId,
       required final String annualIncome,
       required final String selectedEmploymentType,
@@ -801,7 +802,7 @@ abstract class _NewLoanStateData implements NewLoanStateData {
       required final String loanId}) = _$NewLoanStateDataImpl;
 
   @override
-  NewLoanProgress get currentState;
+  PersonalLoanRequestProgress get currentState;
   @override
   String get transactionId;
   @override //

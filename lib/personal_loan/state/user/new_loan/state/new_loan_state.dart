@@ -4,7 +4,7 @@ import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'new_loan_state.freezed.dart';
 
-enum NewLoanProgress {
+enum PersonalLoanRequestProgress {
   started,
   formGenerated,
   bankConsent,
@@ -20,7 +20,7 @@ enum NewLoanProgress {
 @freezed
 class NewLoanStateData with _$NewLoanStateData {
   const factory NewLoanStateData({
-    required NewLoanProgress currentState,
+    required PersonalLoanRequestProgress currentState,
     required String transactionId,
     //
     required String annualIncome,
