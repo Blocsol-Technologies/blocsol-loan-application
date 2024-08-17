@@ -9,9 +9,10 @@ enum BorrowerBottomNavItems {
 }
 
 @riverpod
-class BorrowerBottomNavState extends _$BorrowerBottomNavState {
+class PersonalLoanBottomNavState extends _$PersonalLoanBottomNavState {
   @override
   BorrowerBottomNavItems build() {
+    ref.keepAlive();
     return BorrowerBottomNavItems.home;
   }
 

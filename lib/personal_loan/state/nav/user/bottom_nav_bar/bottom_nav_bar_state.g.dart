@@ -6,22 +6,23 @@ part of 'bottom_nav_bar_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$borrowerBottomNavStateHash() =>
-    r'fd5ba260f29df2899add8e7afeaf3f2ce69c31c7';
+String _$personalLoanBottomNavStateHash() =>
+    r'b68ea11ffc94afede3ea84cfd55a5d86f1fe249c';
 
-/// See also [BorrowerBottomNavState].
-@ProviderFor(BorrowerBottomNavState)
-final borrowerBottomNavStateProvider = AutoDisposeNotifierProvider<
-    BorrowerBottomNavState, BorrowerBottomNavItems>.internal(
-  BorrowerBottomNavState.new,
-  name: r'borrowerBottomNavStateProvider',
+/// See also [PersonalLoanBottomNavState].
+@ProviderFor(PersonalLoanBottomNavState)
+final personalLoanBottomNavStateProvider = AutoDisposeNotifierProvider<
+    PersonalLoanBottomNavState, BorrowerBottomNavItems>.internal(
+  PersonalLoanBottomNavState.new,
+  name: r'personalLoanBottomNavStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$borrowerBottomNavStateHash,
+      : _$personalLoanBottomNavStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$BorrowerBottomNavState = AutoDisposeNotifier<BorrowerBottomNavItems>;
+typedef _$PersonalLoanBottomNavState
+    = AutoDisposeNotifier<BorrowerBottomNavItems>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

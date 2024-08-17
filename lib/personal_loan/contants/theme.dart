@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 
 String fontFamily = "Poppins";
 
+List<List<Color>> bottomNavBarIconsGradientColors = [
+  [
+    const Color.fromRGBO(0, 43, 92, 1),
+    const Color.fromRGBO(0, 157, 170, 1),
+  ],
+  [
+    const Color.fromRGBO(0, 157, 170, 1),
+    const Color.fromRGBO(0, 43, 92, 1),
+  ]
+];
+
 var personLoanThemeVal = ThemeData(
   fontFamily: fontFamily,
   unselectedWidgetColor: const Color.fromRGBO(35, 35, 40, 1),

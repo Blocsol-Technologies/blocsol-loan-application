@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'support.g.dart';
 
 @riverpod
-class PersonalSupportState extends _$PersonalSupportState {
+class PersonalLoanSupportState extends _$PersonalLoanSupportState {
   @override
   PersonalLoanSupportStateData build() {
     ref.keepAlive();
