@@ -6,9 +6,9 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/router.da
 import 'package:blocsol_loan_application/choice_screens/login_choice.dart';
 import 'package:blocsol_loan_application/main.dart';
 import 'package:blocsol_loan_application/not_found.dart';
-import 'package:blocsol_loan_application/personal_loan/routes/index_router.dart';
-import 'package:blocsol_loan_application/personal_loan/routes/login_router.dart';
-import 'package:blocsol_loan_application/personal_loan/routes/router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/login_router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/router.dart';
 import 'package:blocsol_loan_application/choice_screens/signup_choice.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:go_router/go_router.dart';

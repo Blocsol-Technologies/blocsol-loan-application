@@ -1,9 +1,9 @@
-
+import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/app_permissions.dart';
 import 'package:go_router/go_router.dart';
 
 class PersonalLoanIndexRouter {
-  static const dashboard = "/invoice-loan/dashboard";
-
+  static const dashboard = "/personal-credit/dashboard";
+  static const permissions = "/personal-credit/permissions";
 
   /* User Screens */
   static const String home_screen = "/personal-credit/home";
@@ -93,4 +93,9 @@ class PersonalLoanIndexRouter {
       "/personal-credit/support/ticket-details";
 }
 
-List<GoRoute> personalLoanIndexRoutes = [];
+List<GoRoute> personalLoanIndexRoutes = [
+  GoRoute(
+    path: PersonalLoanIndexRouter.permissions,
+    builder: (context, state) => const PCMobilePermissions(),
+  ),
+];

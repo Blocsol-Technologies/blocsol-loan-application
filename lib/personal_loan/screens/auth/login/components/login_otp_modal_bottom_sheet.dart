@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/login/login.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,7 +19,8 @@ class LoginOTPModalBottomSheet extends ConsumerStatefulWidget {
   final String password;
   final String phoneNumber;
 
-  const LoginOTPModalBottomSheet({super.key, required this.phoneNumber, required this.password});
+  const LoginOTPModalBottomSheet(
+      {super.key, required this.phoneNumber, required this.password});
 
   @override
   ConsumerState<LoginOTPModalBottomSheet> createState() =>
@@ -69,7 +71,33 @@ class _LoginOTPModalBottomSheetState
       return;
     }
 
-    context.go(PersonalLoanIndexRouter.dashboard);
+    final permissions = [
+      Permission.locationWhenInUse,
+      Permission.camera,
+      Permission.mediaLibrary,
+      Permission.notification,
+      Permission.sms,
+    ];
+
+    // Check if all permissions are granted
+    bool allGranted = true;
+
+    for (var permission in permissions) {
+      if (!(await permission.isGranted)) {
+        allGranted = false;
+        break;
+      }
+    }
+
+    if (!mounted || !context.mounted) return;
+
+    if (allGranted) {
+      context.go(PersonalLoanIndexRouter.dashboard);
+      return;
+    } else {
+      context.go(PersonalLoanIndexRouter.permissions);
+      return;
+    }
   }
 
   void _resendOTP() async {
@@ -87,7 +115,8 @@ class _LoginOTPModalBottomSheetState
 
     var response = await ref
         .read(personalLoginStateProvider.notifier)
-        .verifyPassword(widget.phoneNumber, widget.password, _signature, _otpCancelToken);
+        .verifyPassword(
+            widget.phoneNumber, widget.password, _signature, _otpCancelToken);
 
     if (!context.mounted) return;
 

@@ -2,7 +2,7 @@ import 'package:blocsol_loan_application/choice_screens/components/bottom_decora
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
-import 'package:blocsol_loan_application/personal_loan/routes/login_router.dart';
+import 'package:blocsol_loan_application/personal_loan/contants/routes/login_router.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
