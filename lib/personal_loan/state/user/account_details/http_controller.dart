@@ -31,7 +31,7 @@ class PersonalLoanAccountDetailsHttpController {
             "phone": response.data['data']['phone'],
             "email": response.data['data']['email'],
             "notifications": notifications,
-            "udyam": response.data['data']['udyamNumber'],
+            "udyamNumber": response.data['data']['udyamNumber'],
             "companyName": response.data['data']['companyName'],
             "address": address,
           },

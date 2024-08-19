@@ -63,7 +63,7 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Liabilities",
+              "Loans",
               style: TextStyle(
                 fontFamily: fontFamily,
                 fontSize: AppFontSizes.h3,

@@ -5,7 +5,6 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabiliti
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/foreclosure/foreclose_bottom_sheet.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/utils/top_decoration.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -124,186 +123,174 @@ class _SingleLiabilityDetailsHomeState
           body: SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 20),
             physics: const BouncingScrollPhysics(),
-            child: Stack(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const LiabilityTopDecoration(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: RelativeSize.height(30, height),
-                          left: RelativeSize.width(30, width),
-                          right: RelativeSize.width(30, width)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              HapticFeedback.mediumImpact();
-                              context.go(InvoiceLoanIndexRouter.liabilities);
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: RelativeSize.height(30, height),
+                      left: RelativeSize.width(30, width),
+                      right: RelativeSize.width(30, width)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          context.go(InvoiceLoanIndexRouter.liabilities);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.mediumImpact();
+                                ref
+                                    .read(invoiceLoanSupportProvider.notifier)
+                                    .setSupportContext(
+                                        selectedLiability
+                                            .offerDetails.transactionId,
+                                        selectedLiability
+                                            .offerDetails.offerProviderId);
+                                ref.read(routerProvider).push(
+                                    InvoiceLoanSupportRouter.raise_new_ticket);
+                              },
+                              child: Icon(
+                                Icons.support_agent_outlined,
+                                size: 20,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.mediumImpact();
-                                    ref
-                                        .read(
-                                            invoiceLoanSupportProvider.notifier)
-                                        .setSupportContext(
-                                            selectedLiability
-                                                .offerDetails.transactionId,
-                                            selectedLiability
-                                                .offerDetails.offerProviderId);
-                                    ref.read(routerProvider).push(
-                                        InvoiceLoanSupportRouter
-                                            .raise_new_ticket);
-                                  },
-                                  child: Icon(
-                                    Icons.support_agent_outlined,
-                                    size: 20,
+                            const SpacerWidget(
+                              width: 20,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                HapticFeedback.mediumImpact();
+                                await _performStatusCheck();
+                              },
+                              child: Container(
+                                height: RelativeSize.height(30, height),
+                                width: RelativeSize.width(120, width),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
                                     color:
-                                        Theme.of(context).colorScheme.onPrimary,
+                                        Theme.of(context).colorScheme.secondary,
+                                    width: 1,
                                   ),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                const SpacerWidget(
-                                  width: 20,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    HapticFeedback.mediumImpact();
-                                    await _performStatusCheck();
-                                  },
-                                  child: Container(
-                                    height: RelativeSize.height(30, height),
-                                    width: RelativeSize.width(120, width),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        width: 1,
-                                      ),
+                                child: Center(
+                                  child: Text(
+                                    "Status Check",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.medium,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onPrimary,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Status Check",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.b1,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SpacerWidget(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: RelativeSize.width(50, width)),
-                      child: SizedBox(
-                        width: width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              selectedLiability.offerDetails.bankName,
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h1,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
-                              textAlign: TextAlign.center,
-                              softWrap: true,
-                            ),
-                            const SpacerWidget(
-                              height: 10,
-                            ),
-                            Text(
-                              selectedLiability.offerDetails.transactionId,
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                letterSpacing: 0.24,
-                              ),
-                              textAlign: TextAlign.center,
-                              softWrap: true,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    const SpacerWidget(
-                      height: 85,
-                    ),
-                    _performingStatusCheck
-                        ? Container(
-                            padding: const EdgeInsets.all(40),
-                            height: RelativeSize.height(500, height),
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Lottie.asset(
-                                    "assets/animations/loading_spinner.json",
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.contain),
-                                const SpacerWidget(
-                                  height: 20,
-                                ),
-                                Text(
-                                  "Refetching loan details...",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h3,
-                                    fontWeight: AppFontWeights.medium,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : selectedLiability.offerDetails.disbursementErr
-                            ? const LoanDisbursementError()
-                            : selectedLiability.offerDetails.isLoanDisbursed()
-                                ? const DisbursedLoanDetails()
-                                : const LoanNotDisbursed(),
-                  ],
+                    ],
+                  ),
                 ),
+                const SpacerWidget(
+                  height: 30,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: RelativeSize.width(50, width)),
+                  child: SizedBox(
+                    width: width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          selectedLiability.offerDetails.bankName,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.h1,
+                            fontWeight: AppFontWeights.medium,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                        const SpacerWidget(
+                          height: 10,
+                        ),
+                        Text(
+                          selectedLiability.offerDetails.transactionId,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.normal,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            letterSpacing: 0.24,
+                          ),
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SpacerWidget(
+                  height: 30,
+                ),
+                _performingStatusCheck
+                    ? Container(
+                        padding: const EdgeInsets.all(40),
+                        height: RelativeSize.height(500, height),
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                                "assets/animations/loading_spinner.json",
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.contain),
+                            const SpacerWidget(
+                              height: 20,
+                            ),
+                            Text(
+                              "Refetching loan details...",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : selectedLiability.offerDetails.disbursementErr
+                        ? const LoanDisbursementError()
+                        : selectedLiability.offerDetails.isLoanDisbursed()
+                            ? const DisbursedLoanDetails()
+                            : const LoanNotDisbursed(),
               ],
             ),
           ),
@@ -347,7 +334,9 @@ class LoanDisbursementError extends ConsumerWidget {
           GestureDetector(
             onTap: () {
               HapticFeedback.mediumImpact();
-              ref.read(routerProvider).push(InvoiceLoanSupportRouter.raise_new_ticket);
+              ref
+                  .read(routerProvider)
+                  .push(InvoiceLoanSupportRouter.raise_new_ticket);
             },
             child: Container(
               height: 40,
@@ -418,8 +407,7 @@ class DisbursedLoanDetails extends ConsumerStatefulWidget {
 }
 
 class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
-  void _handlerAddReminder() {
-  }
+  void _handlerAddReminder() {}
 
   void _handlePrepayClick() {
     ref
@@ -465,200 +453,231 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        Container(
+        SizedBox(
           height: RelativeSize.height(280, height),
           width: width,
-          padding:
-              EdgeInsets.symmetric(horizontal: RelativeSize.width(55, width)),
           child: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: Center(
-                          child: CircularPercentIndicator(
-                            radius: 60,
-                            lineWidth: 12,
-                            animation: true,
-                            percent: selectedLiability.offerDetails
-                                .getAmountPaidPercentage(),
-                            center: SizedBox(
-                              height: 100,
-                              width: 100,
-                              child: getLenderDetailsAssetURL(
-                                  selectedLiability.offerDetails.bankName,
-                                  selectedLiability.offerDetails.bankLogoURL),
-                            ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color.fromRGBO(38, 36, 123, 1),
-                          ),
-                        ),
-                      ),
-                      const SpacerWidget(
-                        width: 25,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Balance Left",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                            const SpacerWidget(
-                              height: 15,
-                            ),
-                            Text(
-                              "₹ ${selectedLiability.offerDetails.getBalanceLeft()}",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h1,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SpacerWidget(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: RelativeSize.height(45, height),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Amount Paid",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                            Text(
-                              "₹ ${selectedLiability.offerDetails.getAmountPaid()}",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SpacerWidget(
-                        width: 20,
-                      ),
-                      SizedBox(
-                        height: RelativeSize.height(45, height),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Total Repayment",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                            Text(
-                              "₹ ${selectedLiability.offerDetails.totalRepayment}",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SpacerWidget(
-                        width: 20,
-                      ),
-                      SizedBox(
-                        height: RelativeSize.height(45, height),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Next Due Date",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                            Text(
-                              selectedLiability.offerDetails.getNextDueDate(),
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  const SpacerWidget(
-                    height: 42,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      HapticFeedback.mediumImpact();
-                      ref
-                          .read(routerProvider)
-                          .push(InvoiceLoanLiabilitiesRouter.full_details);
-                    },
-                    child: Text(
-                      "View Details and Documents",
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontSize: AppFontSizes.b1,
-                        fontWeight: AppFontWeights.medium,
-                        color: Theme.of(context).colorScheme.primary,
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Transform.scale(
+                  scale: 1.5,
+                  child: Container(
+                    width: RelativeSize.width(353, width),
+                    height: RelativeSize.width(353, width)*0.62,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            "assets/images/invoice_loan/liabilities/background.png"),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SpacerWidget(
-                    height: 18,
-                  ),
-                  Container(
-                    height: 3,
-                    width: RelativeSize.width(225, width),
-                    color: Theme.of(context).colorScheme.scrim.withOpacity(0.5),
-                  ),
-                ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: RelativeSize.width(55, width)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 120,
+                          width: 120,
+                          child: Center(
+                            child: CircularPercentIndicator(
+                              radius: 60,
+                              lineWidth: 12,
+                              animation: true,
+                              percent: selectedLiability.offerDetails
+                                  .getAmountPaidPercentage(),
+                              center: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: getLenderDetailsAssetURL(
+                                    selectedLiability.offerDetails.bankName,
+                                    selectedLiability.offerDetails.bankLogoURL),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor:
+                                  const Color.fromRGBO(38, 36, 123, 1),
+                            ),
+                          ),
+                        ),
+                        const SpacerWidget(
+                          width: 25,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Balance Left",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.normal,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                              const SpacerWidget(
+                                height: 15,
+                              ),
+                              Text(
+                                "₹ ${selectedLiability.offerDetails.getBalanceLeft()}",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h1,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SpacerWidget(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: RelativeSize.height(45, height),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Amount Paid",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b2,
+                                  fontWeight: AppFontWeights.normal,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                              Text(
+                                "₹ ${selectedLiability.offerDetails.getAmountPaid()}",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SpacerWidget(
+                          width: 20,
+                        ),
+                        SizedBox(
+                          height: RelativeSize.height(45, height),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Total Repayment",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b2,
+                                  fontWeight: AppFontWeights.normal,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                              Text(
+                                "₹ ${selectedLiability.offerDetails.totalRepayment}",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SpacerWidget(
+                          width: 20,
+                        ),
+                        SizedBox(
+                          height: RelativeSize.height(45, height),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Next Due Date",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b2,
+                                  fontWeight: AppFontWeights.normal,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                              Text(
+                                selectedLiability.offerDetails.getNextDueDate(),
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h3,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    const SpacerWidget(
+                      height: 42,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        ref
+                            .read(routerProvider)
+                            .push(InvoiceLoanLiabilitiesRouter.full_details);
+                      },
+                      child: Text(
+                        "View Details and Documents",
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontSize: AppFontSizes.b1,
+                          fontWeight: AppFontWeights.medium,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    const SpacerWidget(
+                      height: 18,
+                    ),
+                    Container(
+                      height: 3,
+                      width: RelativeSize.width(225, width),
+                      color:
+                          Theme.of(context).colorScheme.scrim.withOpacity(0.5),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

@@ -62,7 +62,7 @@ class InvoiceLoanAllLiabilitiesHttpController {
     try {
       
       var response = await httpService
-          .get("/ondc/fetch-all-closed-orders", authToken, cancelToken, {});
+          .get("/ondc/fetch-all-completed-orders", authToken, cancelToken, {});
 
       // Updating the fetch time in order to show no offers fetched message on frontend if no offers or error
 

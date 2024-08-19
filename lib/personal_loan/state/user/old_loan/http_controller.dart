@@ -28,7 +28,9 @@ class PersonalLoanLiabilitiesHttpController {
         );
       } else {
         return ServerResponse(
-            success: false, message: response.data['message']);
+            success: false,
+            message: response.data['message'],
+            data: <PersonalLoanDetails>[]);
       }
     } catch (e, stackTrace) {
       ErrorInstance(
@@ -46,8 +48,8 @@ class PersonalLoanLiabilitiesHttpController {
 
       return ServerResponse(
           success: false,
-          message:
-              "error occured when validating password! Contact Support...");
+          message: "error occured when validating password! Contact Support...",
+          data: <PersonalLoanDetails>[]);
     }
   }
 

@@ -29,8 +29,8 @@ class PersonalLoginState extends _$PersonalLoginState {
           success: false, message: "Invalid Password", data: null);
     }
 
-    var response = await PersonalLoanLoginHttpController().validatePassword(
-        phoneNumber, password, signature, cancelToken);
+    var response = await PersonalLoanLoginHttpController()
+        .validatePassword(phoneNumber, password, signature, cancelToken);
 
     if (response.success) {
       state = state.copyWith(pan: response.data, phoneNumber: phoneNumber);
@@ -51,10 +51,10 @@ class PersonalLoginState extends _$PersonalLoginState {
       return ServerResponse(success: false, message: "Invalid OTP", data: null);
     }
 
-    var response = await PersonalLoanLoginHttpController().validateOtp(
-        state.phoneNumber, otp, state.pan, cancelToken);
+    var response = await PersonalLoanLoginHttpController()
+        .validateOtp(state.phoneNumber, otp, state.pan, cancelToken);
 
-    if (response.data['success']) {
+    if (response.success) {
       ref.read(authProvider.notifier).setPersonalLoanAuthToken(response.data);
     }
 

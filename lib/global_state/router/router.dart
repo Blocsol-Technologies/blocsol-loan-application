@@ -49,6 +49,7 @@ class Router extends _$Router {
           builder: (context, state) => const SignupChoice(),
         ),
         ...invoiceLoanRoutes,
+        ...personalLoanRoutes,
       ],
       redirect: (context, state) async {
         var (personalLoanToken, invoiceLoanToken) =
@@ -58,12 +59,12 @@ class Router extends _$Router {
           await ref
               .read(appThemeProvider.notifier)
               .setTheme(ThemeState.invoiceLoanTheme);
-        }
-
-        if (personalLoanRoutes.any((route) => route.path == state.uri.path)) {
+        } else if (personalLoanRoutes.any((route) => route.path == state.uri.path)) {
           await ref
               .read(appThemeProvider.notifier)
               .setTheme(ThemeState.personalLoanTheme);
+        } else {
+          await ref.read(appThemeProvider.notifier).setTheme(ThemeState.defaultTheme);
         }
 
         logger.d(

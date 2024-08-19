@@ -48,9 +48,10 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
   /* Get Borrower Details */
 
   Future<ServerResponse> getBorrowerDetails(CancelToken cancelToken) async {
-    var (authToken, _) = await ref.read(authProvider.notifier).getAuthTokens();
+    var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
 
-    var response = await PersonalLoanAccountDetailsHttpController().getBorrowerDetails(authToken, cancelToken);
+    var response = await PersonalLoanAccountDetailsHttpController()
+        .getBorrowerDetails(authToken, cancelToken);
 
     if (response.success) {
       state = state.copyWith(
@@ -66,12 +67,8 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
         companyName: response.data['companyName'],
         address: response.data['address'],
       );
-
-      return ServerResponse(
-          success: true, message: response.data['message'], data: null);
-    } else {
-      return ServerResponse(
-          success: false, message: response.data['message'], data: null);
     }
+
+    return response;
   }
 }

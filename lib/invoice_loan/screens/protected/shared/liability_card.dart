@@ -36,116 +36,126 @@ class LiabilityCard extends ConsumerWidget {
         _handleDetailsClickHandler(context, ref);
       },
       child: Container(
-        width: width,
-        padding: EdgeInsets.symmetric(
-          horizontal: RelativeSize.width(20, width),
-          vertical: RelativeSize.height(15, height),
-        ),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Color.fromRGBO(220, 220, 220, 1),
-              width: 5,
+          width: width,
+          padding: EdgeInsets.symmetric(
+            horizontal: RelativeSize.width(20, width),
+            vertical: RelativeSize.height(15, height),
+          ),
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Color.fromRGBO(220, 220, 220, 1),
+                width: 5,
+              ),
             ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    width: 35,
-                    child: getLenderDetailsAssetURL(
-                        oldLoanDetails.offerDetails.bankName,
-                        oldLoanDetails.offerDetails.bankLogoURL),
-                  ),
-                  const SpacerWidget(
-                    width: 6,
-                  ),
-                  Expanded(
-                    child: Text(
-                      oldLoanDetails.offerDetails.bankName,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 35,
+                width: 42,
+                child: getLenderDetailsAssetURL(
+                    oldLoanDetails.offerDetails.bankName,
+                    oldLoanDetails.offerDetails.bankLogoURL),
+              ),
+              const SpacerWidget(
+                width: 5,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 130,
+                            child: Text(
+                              oldLoanDetails.offerDetails.bankName,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                          const SpacerWidget(
+                            width: 6,
+                          ),
+                          Text(
+                            "₹ ${oldLoanDetails.offerDetails.totalRepayment}",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SpacerWidget(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${oldLoanDetails.idt} . ${oldLoanDetails.inum}",
+                          softWrap: true,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.normal,
+                            color: const Color.fromRGBO(120, 120, 120, 1),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            HapticFeedback.mediumImpact();
+                            ref
+                                .read(invoiceLoanLiabilityProvider.notifier)
+                                .updateSelectedOffer(oldLoanDetails);
+                            ref.read(routerProvider).push(
+                                InvoiceLoanLiabilitiesRouter
+                                    .singleLiabilityDetails);
+                          },
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Color.fromRGBO(120, 120, 120, 1),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SpacerWidget(
+                      height: 10,
+                    ),
+                    Text(
+                      "Repayment: ${oldLoanDetails.offerDetails.getNextDueDate()}",
                       softWrap: true,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: fontFamily,
-                        fontSize: AppFontSizes.h3,
-                        fontWeight: AppFontWeights.bold,
-                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: AppFontSizes.b1,
+                        fontWeight: AppFontWeights.normal,
+                        color: const Color.fromRGBO(120, 120, 120, 1),
                       ),
                     ),
-                  ),
-                  const SpacerWidget(
-                    width: 6,
-                  ),
-                  Text(
-                    "₹ ${oldLoanDetails.offerDetails.totalRepayment}",
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h3,
-                      fontWeight: AppFontWeights.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SpacerWidget(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${oldLoanDetails.idt} . ${oldLoanDetails.inum}",
-                  softWrap: true,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: AppFontSizes.h3,
-                    fontWeight: AppFontWeights.normal,
-                    color: const Color.fromRGBO(120, 120, 120, 1),
-                  ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    ref
-                        .read(invoiceLoanLiabilityProvider.notifier)
-                        .updateSelectedOffer(oldLoanDetails);
-                    ref.read(routerProvider).push(
-                        InvoiceLoanLiabilitiesRouter.singleLiabilityDetails);
-                  },
-                  child: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 15,
-                    color: Color.fromRGBO(120, 120, 120, 1),
-                  ),
-                ),
-              ],
-            ),
-            const SpacerWidget(
-              height: 10,
-            ),
-            Text(
-              "Repayment: ${oldLoanDetails.offerDetails.getNextDueDate()}",
-              softWrap: true,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontFamily: fontFamily,
-                fontSize: AppFontSizes.h3,
-                fontWeight: AppFontWeights.normal,
-                color: const Color.fromRGBO(120, 120, 120, 1),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
     );
   }
 }

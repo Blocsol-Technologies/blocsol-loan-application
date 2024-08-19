@@ -95,6 +95,9 @@ flutter:
     - assets/images/invoice_loan/profile/office.png
     - assets/images/invoice_loan/profile/settings.png
 
+    # Liabilities
+    - assets/images/invoice_loan/liabilities/background.png
+
     # Invoice New Loan Request
     - assets/images/invoice_loan/new_loan_request/invoice.png
 
@@ -118,6 +121,7 @@ flutter:
     - assets/animations/downloading_new_data.json
     - assets/animations/fetching_data.json
     - assets/animations/under_construction.json
+    - assets/animations/empty.json
 
   fonts:
     - family: Poppins

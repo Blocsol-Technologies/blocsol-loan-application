@@ -30,15 +30,15 @@ class _InvoiceNewLoanOffersSelectState
     extends ConsumerState<InvoiceNewLoanOffersSelect> {
   final _textInputController = TextEditingController();
   final Duration _debounceDuration = const Duration(milliseconds: 1000);
-  final _maxInterval = 60;
+
   final _cancelToken = CancelToken();
 
+  int _maxInterval = 12;
   final bool _timerExpired = false;
   Timer? _debounce;
   List<LoanDetails> _filteredOffers = [];
 
   Timer? _invoicePoll;
-  int _interval = 10;
 
   void _onInvoiceTextInput(String searchQuery) {
     String normalizedSearchText = searchQuery.toLowerCase();
@@ -96,7 +96,7 @@ class _InvoiceNewLoanOffersSelectState
   }
 
   void _startFetching() {
-    _invoicePoll = Timer.periodic(Duration(seconds: _interval), (timer) async {
+    _invoicePoll = Timer.periodic(const Duration(seconds: 5), (timer) async {
       await ref
           .read(invoiceNewLoanRequestProvider.notifier)
           .fetchLoanOffers(_cancelToken);
@@ -105,18 +105,14 @@ class _InvoiceNewLoanOffersSelectState
   }
 
   void _adjustInterval() {
-    // Increase the interval linearly up to the maximum
-    if (_interval < _maxInterval) {
-      _interval += 10;
-      _invoicePoll?.cancel(); // Cancel the current timer
-      _invoicePoll =
-          Timer.periodic(Duration(seconds: _interval), (timer) async {
-        await ref
-            .read(invoiceNewLoanRequestProvider.notifier)
-            .fetchLoanOffers(_cancelToken);
-        _adjustInterval();
-      });
+    if (_maxInterval == 0) {
+      _invoicePoll?.cancel();
+      return;
     }
+
+    setState(() {
+      _maxInterval -= 1;
+    });
   }
 
   @override
@@ -178,7 +174,6 @@ class _InvoiceNewLoanOffersSelectState
                   const SpacerWidget(
                     height: 35,
                   ),
-                
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: RelativeSize.width(20, width)),
@@ -220,7 +215,11 @@ class _InvoiceNewLoanOffersSelectState
                   const SpacerWidget(
                     height: 12,
                   ),
-                  newLoanStateRef.invoicesWithOffers.isEmpty && !_timerExpired
+                  (_maxInterval == 0 &&
+                          ref
+                              .read(invoiceNewLoanRequestProvider)
+                              .invoicesWithOffers
+                              .isEmpty)
                       ? Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.symmetric(
@@ -228,19 +227,18 @@ class _InvoiceNewLoanOffersSelectState
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Lottie.asset(
-                                  "assets/animations/loading_spinner.json",
-                                  height: 150,
-                                  width: 150),
+                              Lottie.asset("assets/animations/empty.json",
+                                  height: 150, width: 150),
                               const SpacerWidget(
                                 height: 15,
                               ),
                               Text(
-                                "Loading Offers Data ...",
+                                "We are in touch with the lender to generate offers for you. We will get back to you shortly ...",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: fontFamily,
                                     fontSize: AppFontSizes.h2,
-                                    fontWeight: AppFontWeights.bold,
+                                    fontWeight: AppFontWeights.medium,
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface),
@@ -248,7 +246,7 @@ class _InvoiceNewLoanOffersSelectState
                             ],
                           ))
                       : newLoanStateRef.invoicesWithOffers.isEmpty &&
-                              _timerExpired
+                              !_timerExpired
                           ? Container(
                               width: MediaQuery.of(context).size.width,
                               padding: const EdgeInsets.symmetric(
@@ -256,13 +254,15 @@ class _InvoiceNewLoanOffersSelectState
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Lottie.asset("assets/animations/error.json",
-                                      height: 150, width: 150),
+                                  Lottie.asset(
+                                      "assets/animations/loading_spinner.json",
+                                      height: 150,
+                                      width: 150),
                                   const SpacerWidget(
                                     height: 15,
                                   ),
                                   Text(
-                                    "No Offers Found ...",
+                                    "Loading Offers Data ...",
                                     style: TextStyle(
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.h2,
@@ -273,29 +273,59 @@ class _InvoiceNewLoanOffersSelectState
                                   )
                                 ],
                               ))
-                          : ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (ctx, idx) {
-                                return OfferItems(
-                                  index: idx,
-                                  offerDetails: _filteredOffers[idx],
-                                  offers: _filteredOffers[idx].offerDetailsList,
-                                  onOfferSelect: () {
-                                    ref
-                                        .read(invoiceNewLoanRequestProvider
-                                            .notifier)
-                                        .setSelectedInvoice(
-                                            _filteredOffers[idx]);
+                          : newLoanStateRef.invoicesWithOffers.isEmpty &&
+                                  _timerExpired
+                              ? Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 30),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Lottie.asset(
+                                          "assets/animations/error.json",
+                                          height: 150,
+                                          width: 150),
+                                      const SpacerWidget(
+                                        height: 15,
+                                      ),
+                                      Text(
+                                        "No Offers Found ...",
+                                        style: TextStyle(
+                                            fontFamily: fontFamily,
+                                            fontSize: AppFontSizes.h2,
+                                            fontWeight: AppFontWeights.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface),
+                                      )
+                                    ],
+                                  ))
+                              : ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (ctx, idx) {
+                                    return OfferItems(
+                                      index: idx,
+                                      offerDetails: _filteredOffers[idx],
+                                      offers:
+                                          _filteredOffers[idx].offerDetailsList,
+                                      onOfferSelect: () {
+                                        ref
+                                            .read(invoiceNewLoanRequestProvider
+                                                .notifier)
+                                            .setSelectedInvoice(
+                                                _filteredOffers[idx]);
 
-                                    ref.read(routerProvider).push(
-                                        InvoiceNewLoanRequestRouter
-                                            .single_bank_offer_select);
+                                        ref.read(routerProvider).push(
+                                            InvoiceNewLoanRequestRouter
+                                                .single_bank_offer_select);
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                              itemCount: _filteredOffers.length,
-                            ),
+                                  itemCount: _filteredOffers.length,
+                                ),
                 ],
               ),
             )),

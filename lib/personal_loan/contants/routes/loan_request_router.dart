@@ -8,6 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/new_loan_error.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/new_loan_process.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/search/data_consent.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/search/peronal_details_form.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/aadhar_kyc.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_bank_select.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_info.dart';
@@ -97,8 +98,8 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   ),
 
   GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_data_consent,
-    builder: (context, state) => const PCNewLoanDataConsent(),
+    path: PersonalNewLoanRequestRouter.new_loan_personal_details_form,
+    builder: (context, state) => const PCNewLoanPersonalDetailsForm(),
   ),
 
   GoRoute(

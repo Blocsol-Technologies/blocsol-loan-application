@@ -29,6 +29,8 @@ class PCHomeScreen extends ConsumerStatefulWidget {
 class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
   final _cancelToken = CancelToken();
 
+  bool _noOffersFound = false;
+
   void _handleNotificationBellPress() {
     // TODO: Implement Notification Bell Press
   }
@@ -66,8 +68,10 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
 
     if (!mounted) return;
 
-    if (!response.success) {
-      return;
+    if ((response.data as List<dynamic>).isEmpty) {
+      setState(() {
+        _noOffersFound = true;
+      });
     }
 
     setState(() {});
@@ -87,7 +91,8 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var oldLoanStateRef = ref.read(personalLoanLiabilitiesProvider);
-    var borrowerAccountDetailsRef =ref.watch(personalLoanAccountDetailsProvider);
+    var borrowerAccountDetailsRef =
+        ref.watch(personalLoanAccountDetailsProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -229,7 +234,9 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).push(PersonalLoanIndexRouter.liabilities_screen);
+                        ref
+                            .read(routerProvider)
+                            .push(PersonalLoanIndexRouter.liabilities_screen);
                       },
                       child: Text(
                         "Show All",
@@ -251,30 +258,50 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
                     width: width,
                     padding: EdgeInsets.symmetric(
                         horizontal: RelativeSize.width(30, width)),
-                    child: oldLoanStateRef.oldLoans.isNotEmpty
-                        ? SingleChildScrollView(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: oldLoanStateRef.oldLoans.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: RelativeSize.width(30, width),
-                                  ),
-                                  child: PersonalLoanLiabilityCard(
-                                    screenHeight: height,
-                                    screenWidth: width,
-                                    oldLoanDetails:
-                                        oldLoanStateRef.oldLoans[index],
-                                  ),
-                                );
-                              },
-                            ),
+                    child: _noOffersFound
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Lottie.asset('assets/animations/empty.json',
+                                  height: 180, width: 180),
+                              const SpacerWidget(
+                                height: 20,
+                              ),
+                              Text(
+                                "No Loan Offers Found!",
+                                style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: AppFontSizes.h2,
+                                    fontWeight: AppFontWeights.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ],
                           )
-                        : oldLoanStateRef.oldLoans.isEmpty &&
-                                oldLoanStateRef.fetchingOldOffers
-                            ? Column(
+                        : oldLoanStateRef.oldLoans.isNotEmpty
+                            ? SingleChildScrollView(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: oldLoanStateRef.oldLoans.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            RelativeSize.width(30, width),
+                                      ),
+                                      child: PersonalLoanLiabilityCard(
+                                        screenHeight: height,
+                                        screenWidth: width,
+                                        oldLoanDetails:
+                                            oldLoanStateRef.oldLoans[index],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Lottie.asset(
@@ -295,33 +322,7 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
                                             .onSurface),
                                   ),
                                 ],
-                              )
-                            : oldLoanStateRef.oldLoans.isEmpty &&
-                                    !oldLoanStateRef.fetchingOldOffers &&
-                                    oldLoanStateRef.oldOffersFetchTime != 0
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Lottie.asset(
-                                          'assets/animations/error.json',
-                                          height: 150,
-                                          width: 150),
-                                      const SpacerWidget(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        "No Loan Offers Found!",
-                                        style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h2,
-                                            fontWeight: AppFontWeights.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface),
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox()),
+                              )),
               )
             ],
           ),
@@ -411,7 +412,8 @@ class _GetNewLoanButtonState extends ConsumerState<_GetNewLoanButton> {
 
                         if (mounted) {
                           if (newResponse.success) {
-                            context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                            context.go(
+                                PersonalNewLoanRequestRouter.new_loan_process);
                           } else {
                             final snackBar = SnackBar(
                               elevation: 0,
@@ -445,60 +447,81 @@ class _GetNewLoanButtonState extends ConsumerState<_GetNewLoanButton> {
                             switch (response.data['state']) {
                               case "approved":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(PersonalLoanRequestProgress.formGenerated);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .formGenerated);
                                 context.go(
                                     PersonalNewLoanRequestRouter
                                         .new_loan_account_aggregator_bank_select,
                                     extra: true);
                               case "search_complete":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(PersonalLoanRequestProgress.bankConsent);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .bankConsent);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                               default:
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                             }
                           case "select":
                             switch (response.data['state']) {
                               case "on_select_02":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(
-                                        PersonalLoanRequestProgress.loanOfferSelect);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .loanOfferSelect);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
 
                               default:
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(PersonalLoanRequestProgress.bankConsent);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .bankConsent);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                             }
 
                           case "init":
                             switch (response.data['state']) {
                               case "on_init_01":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(PersonalLoanRequestProgress.aadharKYC);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(
+                                        PersonalLoanRequestProgress.aadharKYC);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                               case "on_init_02":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(
-                                        PersonalLoanRequestProgress.bankAccountDetails);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .bankAccountDetails);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                               case "on_init_03":
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(
-                                        PersonalLoanRequestProgress.repaymentSetup);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(PersonalLoanRequestProgress
+                                        .repaymentSetup);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                               default:
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
-                                    .updateState(PersonalLoanRequestProgress.aadharKYC);
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
+                                    .updateState(
+                                        PersonalLoanRequestProgress.aadharKYC);
+                                context.go(PersonalNewLoanRequestRouter
+                                    .new_loan_process);
                             }
                         }
                       },
