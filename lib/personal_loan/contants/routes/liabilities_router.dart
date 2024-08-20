@@ -1,6 +1,7 @@
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_details_home.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_details_payment_history.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_foreclose_webview.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_full_details.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_general_webview.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_missed_emi_payment_webview.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_prepay.dart';
@@ -30,6 +31,10 @@ List<GoRoute> personalLoanLiabilitiesRoutes = [
   GoRoute(
     path: PersonalLoanLiabilitiesRouter.liability_details_home,
     builder: (context, state) => const PCLiabilityDetailsHome(),
+  ),
+  GoRoute(
+    path: PersonalLoanLiabilitiesRouter.liability_final_details,
+    builder: (context, state) => const PCLiabilityFullDetails(),
   ),
   GoRoute(
     path: PersonalLoanLiabilitiesRouter.liability_payment_history,

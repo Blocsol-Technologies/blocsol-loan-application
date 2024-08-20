@@ -73,6 +73,8 @@ flutter:
     - assets/images/aa_logos/finvu.png
     - assets/images/aa_logos/onemoney.png
     - assets/images/aa_logos/sahamati.png
+    - assets/images/aa_logos/sahamati_certified.png
+    - assets/images/aa_logos/account_aggregator_process.png
 
     - assets/images/invoice_loan/bottom_nav_bar/home_active.png
     - assets/images/invoice_loan/bottom_nav_bar/home_inactive.png

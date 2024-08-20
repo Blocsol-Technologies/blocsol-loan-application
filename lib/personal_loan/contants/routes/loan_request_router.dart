@@ -108,11 +108,6 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   ),
 
   GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_account_aggregator_info,
-    builder: (context, state) => const PCNewLoanAAInfo(),
-  ),
-
-  GoRoute(
     path: PersonalNewLoanRequestRouter.new_loan_account_aggregator_bank_select,
     builder: (context, state) => const PCNewLoanAABankSelect(),
   ),
@@ -123,16 +118,16 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   ),
 
   GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_aadhar_kyc_webview,
+    path: PersonalNewLoanRequestRouter.new_loan_generate_offers_and_aa_consent,
+    builder: (context, state) => const PCNewLoanGenerateOfferConsent(),
+  ),
+
+  GoRoute(
+    path: PersonalNewLoanRequestRouter.new_loan_aa_webview,
     builder: (context, state) {
       final url = state.extra as String;
       return PCNewLoanAAWebview(url: url);
     },
-  ),
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_generate_offers_and_aa_consent,
-    builder: (context, state) => const PCNewLoanGenerateOfferConsent(),
   ),
 
   // Select
@@ -157,11 +152,6 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   ),
 
   // Init
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_share_bank_details,
-    builder: (context, state) => const PCNewLoanBankAccountDetails(),
-  ),
 
   GoRoute(
     path: PersonalNewLoanRequestRouter.new_loan_share_bank_details,
@@ -198,11 +188,6 @@ List<GoRoute> personalNewLoanRequestRoutes = [
       final url = state.extra as String;
       return PCNewLoanMonitoringConsentAAWebview(url: url);
     },
-  ),
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_agreement,
-    builder: (context, state) => const PCNewLoanLoanAgreement(),
   ),
 
   GoRoute(

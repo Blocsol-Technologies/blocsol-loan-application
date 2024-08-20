@@ -285,7 +285,9 @@ class _InvoiceLoanLiabilitiesHomeState
                             height: 15,
                           ),
                           LoanSearch(
-                            onRefrersh: _onInvoiceRefresh,
+                            onRefrersh: () {
+                              _onInvoiceRefresh();
+                            },
                             refreshingLoans:
                                 liabiliiesStateRef.fetchingLiabilitiess,
                             textEditingController: _textInputController,

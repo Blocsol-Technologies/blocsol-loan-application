@@ -27,11 +27,11 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllLiabilities(_cancelToken);
 
-    await Future.delayed(const Duration(seconds: 5));
+    // await Future.delayed(const Duration(seconds: 5));
 
-    if (mounted && context.mounted) {
-      await _fetchLiabilities();
-    }
+    // if (mounted && context.mounted) {
+    //   await _fetchLiabilities();
+    // }
   }
 
   @override

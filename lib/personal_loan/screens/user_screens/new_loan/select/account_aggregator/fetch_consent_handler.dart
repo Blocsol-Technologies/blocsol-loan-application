@@ -90,7 +90,7 @@ class _PCNewLoanGenerateOfferConsentState
       return;
     }
 
-    context.go(PersonalNewLoanRequestRouter.new_loan_aa_webview, extra: response.data['url']);
+    context.go(PersonalNewLoanRequestRouter.new_loan_aa_webview, extra: response.data);
 
     return;
   }

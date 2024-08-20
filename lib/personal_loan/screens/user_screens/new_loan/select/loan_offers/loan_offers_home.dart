@@ -42,7 +42,6 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
 
   final _maxInterval = 60;
   final _cancelToken = CancelToken();
-  final _textInputController = TextEditingController();
   final Duration debounceDuration = const Duration(milliseconds: 1000);
 
   void _onOfferSearchTextInput(String searchQuery) {
@@ -83,21 +82,18 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
     }
   }
 
-  void _onTextChanged() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(debounceDuration, () {
-      _onOfferSearchTextInput(_textInputController.text);
-    });
-  }
-
   Future<void> _onOfferRefresh() async {
     if (ref.read(personalNewLoanRequestProvider).fetchingOffers) {
       return;
     }
 
-    var _ = await ref
+    var response = await ref
         .read(personalNewLoanRequestProvider.notifier)
         .fetchOffers(_cancelToken);
+
+    setState(() {
+      _filteredOffers = response.data;
+    });
   }
 
   void startFetching() {
@@ -110,13 +106,26 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
         return;
       }
 
-      await ref
+      var response = await ref
           .read(personalNewLoanRequestProvider.notifier)
           .fetchOffers(_cancelToken);
+
+      if (!mounted) return;
+
+      if (response.success) {
+        setState(() {
+          _numFeteched++;
+          _filteredOffers = response.data;
+        });
+
+        _handleOfferFilterChange();
+      } else {
+        setState(() {
+          _numFeteched++;
+        });
+      }
+
       _adjustInterval();
-      setState(() {
-        _numFeteched++;
-      });
     });
   }
 
@@ -156,8 +165,6 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
 
   @override
   void initState() {
-    _textInputController.addListener(_onTextChanged);
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _onOfferRefresh();
       int properEndTime = max(
@@ -180,8 +187,6 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
 
   @override
   void dispose() {
-    _textInputController.removeListener(_onTextChanged);
-    _textInputController.dispose();
     _cancelToken.cancel();
     _offerPoll?.cancel();
     _debounce?.cancel();
@@ -309,17 +314,22 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "Loan Offers",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.h1,
-                                  fontWeight: AppFontWeights.medium,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                              GestureDetector(
+                                onTap: () {
+                                  _onOfferRefresh();
+                                },
+                                child: Text(
+                                  "Loan Offers",
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: AppFontSizes.h1,
+                                    fontWeight: AppFontWeights.medium,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
                                 ),
-                                textAlign: TextAlign.center,
-                                softWrap: true,
                               ),
                               const SpacerWidget(
                                 height: 10,

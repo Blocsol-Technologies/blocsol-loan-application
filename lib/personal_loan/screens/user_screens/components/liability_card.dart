@@ -233,7 +233,7 @@ class PersonalLoanLiabilityCard extends ConsumerWidget {
                     width: RelativeSize.width(105, screenWidth),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     child: Center(
                       child: Text(
@@ -242,7 +242,7 @@ class PersonalLoanLiabilityCard extends ConsumerWidget {
                           fontFamily: fontFamily,
                           fontSize: AppFontSizes.b2,
                           fontWeight: AppFontWeights.medium,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ),

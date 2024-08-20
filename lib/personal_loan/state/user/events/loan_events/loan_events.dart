@@ -33,9 +33,11 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
 
   Future<void> fetchLatestEventForConsumption() async {
     try {
+      logger.i("Fetching latest personal loan events");
+
       final cancelToken = CancelToken();
 
-      var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+      var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
 
       var transactionId =
           ref.read(personalNewLoanRequestProvider).transactionId;
@@ -43,6 +45,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
           .read(personalNewLoanRequestProvider)
           .selectedOffer
           .offerProviderId;
+
+      logger.i("authToken is $authToken");
+      logger.i("transactionId is $transactionId");
+      logger.i("providerId is $providerId");
 
       if (authToken.isEmpty) {
         return;
@@ -64,11 +70,14 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
       }
 
       var httpService = HttpService(service: ServiceType.PersonalLoan);
+
       var response = await httpService
           .get("/ondc/get-latest-event", authToken, cancelToken, {
         "transaction_id": transactionId,
         "provider_id": providerId,
       });
+
+      logger.i("Latest event response: ${response.data}");
 
       if (!response.data['success']) {
         return;

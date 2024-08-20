@@ -35,9 +35,11 @@ class AppTheme extends _$AppTheme {
     } else {
       if (theme == 'invoice-loan-theme') {
         return AppThemeData.invoiceLoanTheme;
-      } else {
+      } else if (theme == 'personal-loan-theme')  {
         return AppThemeData.personalLoanTheme;
       }
+
+      return AppThemeData.defaultTheme;
     }
   }
 

@@ -184,7 +184,7 @@ class PCNewLoanAAInfo extends ConsumerWidget {
                             color: Color.fromRGBO(248, 248, 248, 1),
                           ),
                           child: Image.asset(
-                            'assets/images/aa/account_aggregator_process.png',
+                            'assets/images/aa_logos/account_aggregator_process.png',
                             fit: BoxFit.contain,
                           ),
                         ),

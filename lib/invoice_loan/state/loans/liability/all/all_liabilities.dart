@@ -15,14 +15,14 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
   AllLiabilitiesState build() {
     ref.keepAlive();
 
-    var timer = Timer.periodic(const Duration(seconds: 10), (_) async {
-      await fetchAllLiabilities(CancelToken());
-      await fetchAllClosedLiabilities(CancelToken());
-    });
+    // var timer = Timer.periodic(const Duration(seconds: 10), (_) async {
+    //   await fetchAllLiabilities(CancelToken());
+    //   await fetchAllClosedLiabilities(CancelToken());
+    // });
 
-    ref.onDispose(() {
-      timer.cancel();
-    });
+    // ref.onDispose(() {
+    //   timer.cancel();
+    // });
 
     return AllLiabilitiesState.initial;
   }

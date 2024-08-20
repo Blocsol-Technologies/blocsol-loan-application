@@ -192,7 +192,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
     if (response.success) {
       state =
-          state.copyWith(transactionId: response.data['transaction_id'] ?? '');
+          state.copyWith(transactionId: response.data['transactionId'] ?? '');
 
       bool redirection = response.data['alreadyExts'] ?? false;
 

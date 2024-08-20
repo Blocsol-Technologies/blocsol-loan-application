@@ -42,9 +42,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -83,9 +81,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -124,9 +120,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -190,9 +184,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -234,9 +226,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -253,9 +243,6 @@ class PersonalLoanRequestInitController {
         return ServerResponse(
           success: true,
           message: response.data['message'],
-          data: {
-            "url": response.data['data']['url'],
-          },
         );
       } else {
         return ServerResponse(
@@ -278,9 +265,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -319,9 +304,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -364,9 +347,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -405,9 +386,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
@@ -473,19 +452,14 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 
-  Future<ServerResponse> refetchLoanAgreementURL(
-      String transactionId,
-      String providerId,
-      String authToken,
-      CancelToken cancelToken) async {
+  Future<ServerResponse> refetchLoanAgreementURL(String transactionId,
+      String providerId, String authToken, CancelToken cancelToken) async {
     try {
-      var response =  await httpService.post(
+      var response = await httpService.post(
           "/ondc/refetch-form-06-submission-url", authToken, cancelToken, {
         "transaction_id": transactionId,
         "provider_id": providerId,
@@ -539,9 +513,7 @@ class PersonalLoanRequestInitController {
       }
 
       return ServerResponse(
-          success: false,
-          message:
-              "service unavailable. Try again later!");
+          success: false, message: "service unavailable. Try again later!");
     }
   }
 }

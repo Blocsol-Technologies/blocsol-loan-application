@@ -356,7 +356,7 @@ class _PCNewLoanAASelectState extends ConsumerState<PCNewLoanAASelect> {
                             SizedBox(
                               height: 30,
                               child: Image.asset(
-                                  "assets/images/aa/sahamati_certified.png",
+                                  "assets/images/aa_logos/sahamati_certified.png",
                                   fit: BoxFit.contain),
                             )
                           ]),
