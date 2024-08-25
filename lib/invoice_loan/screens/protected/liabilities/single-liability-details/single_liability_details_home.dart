@@ -5,6 +5,8 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabiliti
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/foreclosure/foreclose_bottom_sheet.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -448,6 +450,8 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
     final height = MediaQuery.of(context).size.height;
     final oldLoanStateRef = ref.watch(invoiceLoanLiabilityProvider);
     final selectedLiability = oldLoanStateRef.selectedLiability;
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
 
     return ListView(
       shrinkWrap: true,
@@ -466,7 +470,7 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
                   scale: 1.5,
                   child: Container(
                     width: RelativeSize.width(353, width),
-                    height: RelativeSize.width(353, width)*0.62,
+                    height: RelativeSize.width(353, width) * 0.62,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(

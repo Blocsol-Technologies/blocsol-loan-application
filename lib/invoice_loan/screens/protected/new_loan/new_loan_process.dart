@@ -292,7 +292,7 @@ class SearchPhase extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -361,7 +361,7 @@ class SearchPhase extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -617,7 +617,7 @@ class CompleteKYC extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -686,7 +686,7 @@ class CompleteKYC extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -1048,7 +1048,7 @@ class LoanAgreement extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -1118,7 +1118,7 @@ class LoanAgreement extends StatelessWidget {
                                       Icons.check,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .onPrimary,
                                       size: 10,
                                     )
                                   : Text(
@@ -1377,7 +1377,7 @@ class InactiveStep extends StatelessWidget {
                 child: stepCompleted
                     ? Icon(
                         Icons.check,
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         size: 15,
                       )
                     : Text(

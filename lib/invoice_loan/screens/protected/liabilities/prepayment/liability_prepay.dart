@@ -3,6 +3,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/utils/top_decoration.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -19,10 +21,12 @@ class InvoiceLoanLiabilityPrepayAmountSelector extends ConsumerStatefulWidget {
   const InvoiceLoanLiabilityPrepayAmountSelector({super.key});
 
   @override
-  ConsumerState<InvoiceLoanLiabilityPrepayAmountSelector> createState() => _LiabilityPrepayState();
+  ConsumerState<InvoiceLoanLiabilityPrepayAmountSelector> createState() =>
+      _LiabilityPrepayState();
 }
 
-class _LiabilityPrepayState extends ConsumerState<InvoiceLoanLiabilityPrepayAmountSelector> {
+class _LiabilityPrepayState
+    extends ConsumerState<InvoiceLoanLiabilityPrepayAmountSelector> {
   final _cancelToken = CancelToken();
 
   num _minPercentage = 0;
@@ -105,6 +109,8 @@ class _LiabilityPrepayState extends ConsumerState<InvoiceLoanLiabilityPrepayAmou
     final height = MediaQuery.of(context).size.height;
     final oldLoanStateRef = ref.watch(invoiceLoanLiabilityProvider);
     final selectedLiability = oldLoanStateRef.selectedLiability;
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
 
     return PopScope(
       canPop: false,
@@ -131,7 +137,8 @@ class _LiabilityPrepayState extends ConsumerState<InvoiceLoanLiabilityPrepayAmou
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.mediumImpact();
-                              context.go(InvoiceLoanLiabilitiesRouter.singleLiabilityDetails);
+                              context.go(InvoiceLoanLiabilitiesRouter
+                                  .singleLiabilityDetails);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -240,7 +247,9 @@ class _LiabilityPrepayState extends ConsumerState<InvoiceLoanLiabilityPrepayAmou
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).push(InvoiceLoanLiabilitiesRouter.payment_history);
+                        ref
+                            .read(routerProvider)
+                            .push(InvoiceLoanLiabilitiesRouter.payment_history);
                       },
                       child: Text(
                         "View Payments History",

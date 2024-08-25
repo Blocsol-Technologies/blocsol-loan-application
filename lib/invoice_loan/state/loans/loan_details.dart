@@ -154,7 +154,11 @@ class InvoiceItems {
   }
 
   num getTotalItemAmount() {
-    return itemDetails.txval + itemDetails.camt + itemDetails.iamt + itemDetails.samt + itemDetails.csamt; 
+    return itemDetails.txval +
+        itemDetails.camt +
+        itemDetails.iamt +
+        itemDetails.samt +
+        itemDetails.csamt;
   }
 }
 
@@ -623,6 +627,7 @@ class OfferDetails {
   final String bankLogoURL;
   final String transactionId;
   final String state;
+  final String fulfillmentStatus;
   final bool disbursementErr;
 
   final String totalRepayment;
@@ -663,6 +668,7 @@ class OfferDetails {
     required this.bankName,
     this.disbursementErr = false,
     this.state = "",
+    this.fulfillmentStatus = "INITIATED",
     this.totalRepayment = "",
     this.parentItemId = "",
     this.netDisbursedAmount = "",
@@ -732,6 +738,7 @@ class OfferDetails {
         bankLogoURL: json['bankLogoURL'],
         transactionId: json['transactionId'],
         disbursementErr: json['disbursement_err'] ?? false,
+        fulfillmentStatus: json['fulfillment_status'] ?? "INITIATED",
 
         // Loan Details
         totalRepayment: json['totalRepaymentAmount'] ?? "",
@@ -803,12 +810,11 @@ class OfferDetails {
   }
 
   bool isLoanDisbursed() {
-    return (state == "final_confirmation" || state == "closed") &&
-        !disbursementErr;
+    return fulfillmentStatus == "DISBURSED";
   }
 
   bool isLoanClosed() {
-    return state == "closed" || allPaid;
+    return fulfillmentStatus == "COMPLETED";
   }
 
   num getNumericalValue(String value) {

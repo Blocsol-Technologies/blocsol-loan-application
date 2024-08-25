@@ -1,6 +1,8 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/utils/top_decoration.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -20,7 +22,8 @@ class InvoiceLoanLiabilityGeneralWebview extends ConsumerStatefulWidget {
       _LiabilityGeneralWebviewState();
 }
 
-class _LiabilityGeneralWebviewState extends ConsumerState<InvoiceLoanLiabilityGeneralWebview> {
+class _LiabilityGeneralWebviewState
+    extends ConsumerState<InvoiceLoanLiabilityGeneralWebview> {
   String _currentURL = "";
   bool _fetchingURL = true;
   InAppWebViewController? _webViewController;
@@ -42,6 +45,8 @@ class _LiabilityGeneralWebviewState extends ConsumerState<InvoiceLoanLiabilityGe
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(

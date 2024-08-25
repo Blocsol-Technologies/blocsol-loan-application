@@ -1,5 +1,7 @@
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -27,6 +29,9 @@ class _MissedEmiPaymentModalBottomSheet
   Widget build(BuildContext context) {
     final oldLoanStateRef = ref.watch(invoiceLoanLiabilityProvider);
     final selectedLiability = oldLoanStateRef.selectedLiability;
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
+
     return Container(
       height: 260,
       width: MediaQuery.of(context).size.width,

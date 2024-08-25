@@ -335,6 +335,7 @@ class PersonalLoanDetails {
   final String bankName;
   final String bankLogoURL;
   final String transactionId;
+  final String fulfillmentStatus;
 
   final EndUse endUse;
   final String emi;
@@ -379,6 +380,7 @@ class PersonalLoanDetails {
     required this.bankName,
     this.bankLogoURL = "",
     required this.transactionId,
+    this.fulfillmentStatus = "INITIATED",
     this.totalRepaymentAmount = "",
     this.interest = "",
     required this.interestRate,
@@ -463,6 +465,7 @@ class PersonalLoanDetails {
         bankName: json['bankName'] ?? "",
         bankLogoURL: json['bankLogoURL'] ?? "",
         transactionId: json['transactionId'] ?? "",
+        fulfillmentStatus: json['fulfillment_status'] ?? "INITIATED",
         deposit: json['deposit'] ?? "",
         totalRepaymentAmount: json['totalRepaymentAmount'] ?? "",
         interest: json['interest'] ?? "",
@@ -570,12 +573,11 @@ class PersonalLoanDetails {
   }
 
   bool isLoanDisbursed() {
-    return (state == "final_confirmation" || state == "closed") &&
-        !disbursementErr;
+    return fulfillmentStatus == "DISBURSED";
   }
 
   bool isLoanClosed() {
-    return state == "closed" || allPaid;
+    return fulfillmentStatus == "COMPLETED";
   }
 
   String getBalanceLeft() {

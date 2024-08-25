@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/shared/liability_card.dart';
+import 'package:blocsol_loan_application/invoice_loan/shared_components/liability_card.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/ui/nav/bottom_nav_bar/bottom_nav_state.dart';

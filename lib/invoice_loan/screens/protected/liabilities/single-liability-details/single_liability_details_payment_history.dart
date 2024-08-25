@@ -3,6 +3,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/missed-emi/missed_emi_payment_modal_bottom_sheet.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -121,6 +123,8 @@ class _LiabilityPaymentHistoryState
     final height = MediaQuery.of(context).size.height;
     final oldLoanStateRef = ref.watch(invoiceLoanLiabilityProvider);
     final selectedLiability = oldLoanStateRef.selectedLiability;
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
 
     return PopScope(
       canPop: false,

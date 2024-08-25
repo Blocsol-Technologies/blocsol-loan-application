@@ -209,7 +209,6 @@ List<GoRoute> invoiceLoanRequestRoutes = [
 
   GoRoute(
     path: InvoiceNewLoanRequestRouter.final_details,
-    builder: (context, state) =>
-        const InvoiceNewLoanFlowCompletion(),
+    builder: (context, state) => const InvoiceNewLoanFlowCompletion(),
   ),
 ];
