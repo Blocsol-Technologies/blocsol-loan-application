@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PCSignupMobileOTPAuth extends ConsumerStatefulWidget {
   const PCSignupMobileOTPAuth({super.key});
@@ -40,10 +41,10 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
       _verifyingOTP = true;
     });
 
-    var response = await ref.read(personalLoanSignupProvider.notifier).verifyMobileOTP(
-        ref.read(personalLoanSignupProvider).phoneNumber,
-        _otpTextInputController.text,
-        _cancelToken);
+    var response = await ref
+        .read(personalLoanSignupProvider.notifier)
+        .verifyMobileOTP(ref.read(personalLoanSignupProvider).phoneNumber,
+            _otpTextInputController.text, _cancelToken);
 
     setState(() {
       _verifyingOTP = false;
@@ -86,10 +87,10 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
       _resendingOTP = true;
     });
 
-    var response = await ref.read(personalLoanSignupProvider.notifier).sendMobileOTP(
-        ref.read(personalLoanSignupProvider).phoneNumber,
-        _deviceSignature,
-        _cancelToken);
+    var response = await ref
+        .read(personalLoanSignupProvider.notifier)
+        .sendMobileOTP(ref.read(personalLoanSignupProvider).phoneNumber,
+            _deviceSignature, _cancelToken);
 
     setState(() {
       _resendingOTP = false;
@@ -182,7 +183,9 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
                       ),
                       onPressed: () {
                         HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).push(PersonalLoanSignupRouter.mobile_auth);
+                        ref
+                            .read(routerProvider)
+                            .push(PersonalLoanSignupRouter.mobile_auth);
                       },
                     ),
                     IconButton(
@@ -191,9 +194,11 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 30,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         HapticFeedback.mediumImpact();
-                        // TODO: Implement Support Click
+                        const whatsappUrl = "https://wa.me/918360458365";
+
+                        await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
                   ],

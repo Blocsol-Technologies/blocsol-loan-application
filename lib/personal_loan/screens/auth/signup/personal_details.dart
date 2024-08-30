@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:lottie/lottie.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PCSignupPersonalDetails extends ConsumerStatefulWidget {
   const PCSignupPersonalDetails({super.key});
@@ -67,7 +68,10 @@ class _PCSignupPersonalDetailsState
   }
 
   Future<void> _verifyUdyamDetails() async {
-    if (_verifyingUdyam || ref.read(personalLoanSignupProvider).udyamValidated) return;
+    if (_verifyingUdyam ||
+        ref.read(personalLoanSignupProvider).udyamValidated) {
+      return;
+    }
 
     setState(() {
       _verifyingUdyam = true;
@@ -280,7 +284,8 @@ class _PCSignupPersonalDetailsState
                       ),
                       onPressed: () {
                         HapticFeedback.mediumImpact();
-                        ref.read(routerProvider).pushReplacement(PersonalLoanSignupRouter.mobile_auth);
+                        ref.read(routerProvider).pushReplacement(
+                            PersonalLoanSignupRouter.mobile_auth);
                       },
                     ),
                     IconButton(
@@ -289,8 +294,11 @@ class _PCSignupPersonalDetailsState
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 30,
                       ),
-                      onPressed: () {
-                        // TODO: Implement Support Click
+                      onPressed: () async {
+                        HapticFeedback.mediumImpact();
+                        const whatsappUrl = "https://wa.me/918360458365";
+
+                        await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
                   ],

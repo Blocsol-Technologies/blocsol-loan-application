@@ -143,8 +143,7 @@ class _PCNewLoanLoanAgreementState
     }
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {
@@ -321,60 +320,6 @@ class _PCNewLoanLoanAgreementState
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () async {
-                                      HapticFeedback.mediumImpact();
-                                      // TODO: Implement loan agreement download functionality
-                                    },
-                                    child: Container(
-                                      height: 35,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.download,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            size: 20,
-                                          ),
-                                          const SpacerWidget(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "Download",
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontSize: AppFontSizes.h3,
-                                              fontWeight: AppFontWeights.bold,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    height: 10,
-                                  ),
                                   Expanded(
                                     child: SizedBox(
                                       width: MediaQuery.of(context).size.width,

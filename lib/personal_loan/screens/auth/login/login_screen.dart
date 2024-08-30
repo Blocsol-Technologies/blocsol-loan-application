@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PCLoginScreen extends ConsumerStatefulWidget {
   const PCLoginScreen({super.key});
@@ -39,11 +40,10 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
       _sendingOTP = true;
     });
 
-    var response = await ref.read(personalLoginStateProvider.notifier).verifyPassword(
-        _phoneNumberController.text,
-        _passwordController.text,
-        _signature,
-        _cancelToken);
+    var response = await ref
+        .read(personalLoginStateProvider.notifier)
+        .verifyPassword(_phoneNumberController.text, _passwordController.text,
+            _signature, _cancelToken);
 
     if (!mounted) return;
 
@@ -168,8 +168,11 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 30,
                       ),
-                      onPressed: () {
-                        // TODO: Implement Support Click
+                      onPressed: () async {
+                        HapticFeedback.mediumImpact();
+                        const whatsappUrl = "https://wa.me/918360458365";
+
+                        await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
                   ],
@@ -376,4 +379,3 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
     );
   }
 }
-

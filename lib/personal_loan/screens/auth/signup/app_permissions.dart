@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PCMobilePermissions extends ConsumerStatefulWidget {
   const PCMobilePermissions({super.key});
@@ -84,8 +85,11 @@ class _PCSignupMobilePermissionsState
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 30,
                       ),
-                      onPressed: () {
-                        // TODO: Implement Support Click
+                      onPressed: () async {
+                        HapticFeedback.mediumImpact();
+                        const whatsappUrl = "https://wa.me/918360458365";
+
+                        await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
                   ],

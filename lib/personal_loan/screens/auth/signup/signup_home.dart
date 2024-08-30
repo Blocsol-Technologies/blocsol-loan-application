@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PCSignupHome extends ConsumerStatefulWidget {
   const PCSignupHome({super.key});
@@ -182,8 +183,11 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 30,
                             ),
-                            onPressed: () {
-                              // TODO: Implement Support Click
+                            onPressed: () async {
+                              HapticFeedback.mediumImpact();
+                              const whatsappUrl = "https://wa.me/918360458365";
+
+                              await launchUrl(Uri.parse(whatsappUrl));
                             },
                           ),
                         ],
