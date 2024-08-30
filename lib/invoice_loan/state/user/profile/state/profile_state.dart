@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/bank_account.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/notification.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'profile_state.freezed.dart';
@@ -19,6 +20,8 @@ class InvoiceLoanUserProfileData with _$InvoiceLoanUserProfileData {
     required String accountAggregatorId,
     required List<BankAccountDetails> bankAccounts,
     required BankAccountDetails primaryBankAccount,
+    required List<IbcNotification> notifications,
+    required bool notificationSeen,
     required bool fetchingData,
   }) = _InvoiceLoanUserProfileData;
 
@@ -41,6 +44,8 @@ class InvoiceLoanUserProfileData with _$InvoiceLoanUserProfileData {
     ),
     accountAggregatorId: 'Loading...',
     accountAggregatorSetup: false,
+    notifications: [],
+    notificationSeen: false,
     fetchingData: false,
   );
 }

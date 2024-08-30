@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/bank_account.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/notification.dart';
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 
@@ -14,6 +15,17 @@ class InvoiceLoanUserProfileDetailsHttpController {
           .get("/accounts/get-msme-basic-details", authToken, cancelToken, {});
 
       if (response.data['success']) {
+        List<IbcNotification> notifications = [];
+
+        if (response.data['data']['notifications'] != null) {
+          List<dynamic> notificationsData =
+              response.data['data']['notifications'];
+
+          notifications = notificationsData
+              .map((item) => IbcNotification.fromJson(item))
+              .toList();
+        }
+
         List<BankAccountDetails> bankAccountsList = [];
 
         List<dynamic> bankAccounts = response.data['data']['bankAccounts'];
@@ -46,6 +58,8 @@ class InvoiceLoanUserProfileDetailsHttpController {
               "primaryBankAccount": primaryBankAccount,
               "accountAggregatorId": response.data['data']
                   ?['accountAggregatorId'],
+                  "notifications": notifications,
+                  "notificationsSeen": response.data['data']['notificationsSeen'],
             });
       } else {
         return ServerResponse(
@@ -184,6 +198,42 @@ class InvoiceLoanUserProfileDetailsHttpController {
           success: false,
           message:
               "Error occured when updating account password details! Contact Support...");
+    }
+  }
+
+  Future<ServerResponse> markNotificationsRead(
+      String deviceId, String authToken, CancelToken cancelToken) async {
+    try {
+      var response = await httpService
+          .post("/accounts/mark-notifications-read", authToken, cancelToken, {
+        "device_id": deviceId,
+      });
+
+      if (response.data['success']) {
+        return ServerResponse(
+            success: true, message: "notifications marked as read");
+      } else {
+        return ServerResponse(
+            success: false, message: response.data['message']);
+      }
+    } catch (e, stackTrace) {
+      ErrorInstance(
+        message: "error occured when marking notifications as read!",
+        exception: e,
+        trace: stackTrace,
+      ).reportError();
+
+      if (e is DioException) {
+        return ServerResponse(
+          success: false,
+          message: e.response?.data['message'],
+        );
+      }
+
+      return ServerResponse(
+          success: false,
+          message:
+              "Error occured when marking notifications as read! Contact Support...");
     }
   }
 }

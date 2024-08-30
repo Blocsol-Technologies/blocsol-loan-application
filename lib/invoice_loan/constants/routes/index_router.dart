@@ -1,6 +1,7 @@
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/permissions.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/dashboard.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/liabilities_home.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/notifications/notifications_home.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/dashboard.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/support/all_tickets.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,7 @@ List<GoRoute> invoiceLoanIndexRoutes = [
   ),
   GoRoute(
     path: InvoiceLoanIndexRouter.notifications,
-    builder: (context, state) => const InvoiceLoanDashboard(),
+    builder: (context, state) => const InvoiceLoanNotifications(),
   ),
   GoRoute(
     path: InvoiceLoanIndexRouter.support,

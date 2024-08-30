@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_main.dart';
@@ -115,6 +116,7 @@ class _LoginMobileOtpValidationState
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final loginState = ref.watch(loginProvider);
+    ref.watch(internetCheckProvider);
 
     return SafeArea(
       child: Scaffold(

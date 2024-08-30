@@ -31,6 +31,8 @@ mixin _$InvoiceLoanUserProfileData {
       throw _privateConstructorUsedError;
   BankAccountDetails get primaryBankAccount =>
       throw _privateConstructorUsedError;
+  List<IbcNotification> get notifications => throw _privateConstructorUsedError;
+  bool get notificationSeen => throw _privateConstructorUsedError;
   bool get fetchingData => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -59,6 +61,8 @@ abstract class $InvoiceLoanUserProfileDataCopyWith<$Res> {
       String accountAggregatorId,
       List<BankAccountDetails> bankAccounts,
       BankAccountDetails primaryBankAccount,
+      List<IbcNotification> notifications,
+      bool notificationSeen,
       bool fetchingData});
 }
 
@@ -89,6 +93,8 @@ class _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
     Object? accountAggregatorId = null,
     Object? bankAccounts = null,
     Object? primaryBankAccount = null,
+    Object? notifications = null,
+    Object? notificationSeen = null,
     Object? fetchingData = null,
   }) {
     return _then(_value.copyWith(
@@ -144,6 +150,14 @@ class _$InvoiceLoanUserProfileDataCopyWithImpl<$Res,
           ? _value.primaryBankAccount
           : primaryBankAccount // ignore: cast_nullable_to_non_nullable
               as BankAccountDetails,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as List<IbcNotification>,
+      notificationSeen: null == notificationSeen
+          ? _value.notificationSeen
+          : notificationSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -175,6 +189,8 @@ abstract class _$$InvoiceLoanUserProfileDataImplCopyWith<$Res>
       String accountAggregatorId,
       List<BankAccountDetails> bankAccounts,
       BankAccountDetails primaryBankAccount,
+      List<IbcNotification> notifications,
+      bool notificationSeen,
       bool fetchingData});
 }
 
@@ -204,6 +220,8 @@ class __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>
     Object? accountAggregatorId = null,
     Object? bankAccounts = null,
     Object? primaryBankAccount = null,
+    Object? notifications = null,
+    Object? notificationSeen = null,
     Object? fetchingData = null,
   }) {
     return _then(_$InvoiceLoanUserProfileDataImpl(
@@ -259,6 +277,14 @@ class __$$InvoiceLoanUserProfileDataImplCopyWithImpl<$Res>
           ? _value.primaryBankAccount
           : primaryBankAccount // ignore: cast_nullable_to_non_nullable
               as BankAccountDetails,
+      notifications: null == notifications
+          ? _value._notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as List<IbcNotification>,
+      notificationSeen: null == notificationSeen
+          ? _value.notificationSeen
+          : notificationSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
       fetchingData: null == fetchingData
           ? _value.fetchingData
           : fetchingData // ignore: cast_nullable_to_non_nullable
@@ -284,8 +310,11 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
       required this.accountAggregatorId,
       required final List<BankAccountDetails> bankAccounts,
       required this.primaryBankAccount,
+      required final List<IbcNotification> notifications,
+      required this.notificationSeen,
       required this.fetchingData})
-      : _bankAccounts = bankAccounts;
+      : _bankAccounts = bankAccounts,
+        _notifications = notifications;
 
   @override
   final bool dataConsentProvided;
@@ -319,12 +348,22 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
 
   @override
   final BankAccountDetails primaryBankAccount;
+  final List<IbcNotification> _notifications;
+  @override
+  List<IbcNotification> get notifications {
+    if (_notifications is EqualUnmodifiableListView) return _notifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_notifications);
+  }
+
+  @override
+  final bool notificationSeen;
   @override
   final bool fetchingData;
 
   @override
   String toString() {
-    return 'InvoiceLoanUserProfileData(dataConsentProvided: $dataConsentProvided, gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, accountAggregatorSetup: $accountAggregatorSetup, accountAggregatorId: $accountAggregatorId, bankAccounts: $bankAccounts, primaryBankAccount: $primaryBankAccount, fetchingData: $fetchingData)';
+    return 'InvoiceLoanUserProfileData(dataConsentProvided: $dataConsentProvided, gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, phone: $phone, udyamNumber: $udyamNumber, legalName: $legalName, tradeName: $tradeName, businessLocation: $businessLocation, accountAggregatorSetup: $accountAggregatorSetup, accountAggregatorId: $accountAggregatorId, bankAccounts: $bankAccounts, primaryBankAccount: $primaryBankAccount, notifications: $notifications, notificationSeen: $notificationSeen, fetchingData: $fetchingData)';
   }
 
   @override
@@ -356,6 +395,10 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
                 .equals(other._bankAccounts, _bankAccounts) &&
             (identical(other.primaryBankAccount, primaryBankAccount) ||
                 other.primaryBankAccount == primaryBankAccount) &&
+            const DeepCollectionEquality()
+                .equals(other._notifications, _notifications) &&
+            (identical(other.notificationSeen, notificationSeen) ||
+                other.notificationSeen == notificationSeen) &&
             (identical(other.fetchingData, fetchingData) ||
                 other.fetchingData == fetchingData));
   }
@@ -376,6 +419,8 @@ class _$InvoiceLoanUserProfileDataImpl implements _InvoiceLoanUserProfileData {
       accountAggregatorId,
       const DeepCollectionEquality().hash(_bankAccounts),
       primaryBankAccount,
+      const DeepCollectionEquality().hash(_notifications),
+      notificationSeen,
       fetchingData);
 
   @JsonKey(ignore: true)
@@ -402,6 +447,8 @@ abstract class _InvoiceLoanUserProfileData
       required final String accountAggregatorId,
       required final List<BankAccountDetails> bankAccounts,
       required final BankAccountDetails primaryBankAccount,
+      required final List<IbcNotification> notifications,
+      required final bool notificationSeen,
       required final bool fetchingData}) = _$InvoiceLoanUserProfileDataImpl;
 
   @override
@@ -430,6 +477,10 @@ abstract class _InvoiceLoanUserProfileData
   List<BankAccountDetails> get bankAccounts;
   @override
   BankAccountDetails get primaryBankAccount;
+  @override
+  List<IbcNotification> get notifications;
+  @override
+  bool get notificationSeen;
   @override
   bool get fetchingData;
   @override

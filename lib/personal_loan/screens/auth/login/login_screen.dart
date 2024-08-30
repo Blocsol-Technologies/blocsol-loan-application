@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
 import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/login/components/login_otp_modal_bottom_sheet.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/login/login.dart';
@@ -143,6 +144,7 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    ref.watch(internetCheckProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,

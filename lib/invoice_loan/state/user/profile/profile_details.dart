@@ -37,6 +37,19 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
     state = state.copyWith(bankAccounts: bankAccounts);
   }
 
+  bool setNotificationSeen(bool seen) {
+    state = state.copyWith(notificationSeen: seen);
+
+    return true;
+  }
+
+  int getNumUnseenNotifications() {
+    return state.notifications
+        .where((element) => !element.seen)
+        .toList()
+        .length;
+  }
+
   void setPrimaryBankAccount(BankAccountDetails bankAccount) {
     addBankAccount(bankAccount);
 
@@ -75,6 +88,8 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
         bankAccounts: response.data['bankAccounts'],
         primaryBankAccount: response.data['primaryBankAccount'],
         accountAggregatorId: response.data['accountAggregatorId'],
+        notificationSeen: response.data['notificationsSeen'],
+        notifications: response.data['notifications'],
       );
     }
 
@@ -137,6 +152,16 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
     var response = await InvoiceLoanUserProfileDetailsHttpController()
         .changeAccountPassword(
             oldPassword, newPassword, authToken, cancelToken);
+
+    return response;
+  }
+
+  Future<ServerResponse> markNotificationsRead(
+      String deviceId, CancelToken cancelToken) async {
+    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
+
+    var response = await InvoiceLoanUserProfileDetailsHttpController()
+        .markNotificationsRead(deviceId, authToken, cancelToken);
 
     return response;
   }

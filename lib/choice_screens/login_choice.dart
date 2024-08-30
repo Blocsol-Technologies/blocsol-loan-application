@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/choice_screens/components/bottom_decoration.dart';
+import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
@@ -22,6 +23,7 @@ class _LoginChoiceState extends ConsumerState<LoginChoice> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    ref.watch(internetCheckProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
