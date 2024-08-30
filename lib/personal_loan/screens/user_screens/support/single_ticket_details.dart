@@ -141,7 +141,7 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
             imageBase64,
             _cancelToken);
 
-    if (!context.mounted) return;
+    if (!context.mounted || !mounted) return;
 
     setState(() {
       _closingTicket = false;
@@ -476,8 +476,9 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
   }
 
   Future<void> _sendMessage() async {
-    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket)
+    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket) {
       return;
+    }
 
     List<String> imageBase64 = [];
 

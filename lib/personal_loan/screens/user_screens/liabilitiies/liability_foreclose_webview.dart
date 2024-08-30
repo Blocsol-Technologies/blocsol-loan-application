@@ -187,7 +187,6 @@ class _PCLiabilityForeclosureWebviewState
   }
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   @override
@@ -431,7 +430,7 @@ class _PCLiabilityForeclosureWebviewState
                             width: MediaQuery.of(context).size.width,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),

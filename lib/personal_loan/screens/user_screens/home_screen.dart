@@ -32,7 +32,6 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
   bool _noOffersFound = false;
 
   void _handleNotificationBellPress() {
-    // TODO: Implement Notification Bell Press
   }
 
   Future<void> _fetchBorrowerData() async {

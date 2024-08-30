@@ -1,18 +1,3 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'loan_events_state.freezed.dart';
-
-@freezed
-class LoanEventsState with _$LoanEventsState {
-  const factory LoanEventsState({
-    required LoanEvent latestEvent,
-  }) = _LoanEventsState;
-
-  static var initial = LoanEventsState(
-    latestEvent: LoanEvent.demo(),
-  );
-}
-
 class LoanEvent {
   final String messageId;
   final String transactionId;

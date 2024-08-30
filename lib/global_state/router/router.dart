@@ -32,9 +32,6 @@ class Router extends _$Router {
       debugLogDiagnostics: true,
       initialLocation: AppRoutes.entry,
       errorBuilder: (context, state) {
-
-        print("path is ${state.uri.path}");
-
         bool isInvoiceLoanRoute =
             invoiceLoanRoutes.any((route) => route.path == state.uri.path);
 

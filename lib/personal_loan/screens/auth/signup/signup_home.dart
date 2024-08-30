@@ -109,7 +109,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
     var width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SizedBox(
           height: height,
           width: width,
@@ -131,7 +131,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                             width: 1,
                           ),
                         ),
@@ -146,7 +146,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                             width: 1,
                           ),
                         ),
@@ -168,7 +168,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                           IconButton(
                             icon: Icon(
                               Icons.arrow_back_rounded,
-                              color: Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onSurface,
                               size: 30,
                             ),
                             onPressed: () {
@@ -179,7 +179,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                           IconButton(
                             icon: Icon(
                               Icons.support_agent_outlined,
-                              color: Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onSurface,
                               size: 30,
                             ),
                             onPressed: () {
@@ -203,7 +203,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                     style: TextStyle(
                         fontFamily: fontFamily,
                         fontSize: AppFontSizes.title,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: AppFontWeights.bold),
                   ),
                 ),

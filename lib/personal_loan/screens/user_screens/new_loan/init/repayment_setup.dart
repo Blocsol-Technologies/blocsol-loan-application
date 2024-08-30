@@ -197,7 +197,6 @@ class _PCNewLoanRepaymentSetupState
   }
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   @override

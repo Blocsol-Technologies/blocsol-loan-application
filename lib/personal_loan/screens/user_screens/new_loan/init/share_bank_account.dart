@@ -85,7 +85,6 @@ class _PCNewLoanBankAccountDetailsState
   }
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   @override

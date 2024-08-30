@@ -21,7 +21,6 @@ class PCLiabilityHome extends ConsumerStatefulWidget {
 
 class _PCLiabilityHomeState extends ConsumerState<PCLiabilityHome> {
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   @override

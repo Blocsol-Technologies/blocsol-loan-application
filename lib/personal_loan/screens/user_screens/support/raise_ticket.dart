@@ -446,7 +446,7 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
                           height: 40,
                           width: 120,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
                               color: Theme.of(context).colorScheme.onSurface,

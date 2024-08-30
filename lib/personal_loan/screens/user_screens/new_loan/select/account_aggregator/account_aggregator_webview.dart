@@ -113,7 +113,7 @@ class _PCNewLoanAAWebviewState extends ConsumerState<PCNewLoanAAWebview> {
   }
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
+    
   }
 
   @override

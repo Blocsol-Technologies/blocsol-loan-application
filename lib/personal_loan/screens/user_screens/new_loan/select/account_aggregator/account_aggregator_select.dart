@@ -27,7 +27,7 @@ class _PCNewLoanAASelectState extends ConsumerState<PCNewLoanAASelect> {
   int _selectedAAIndex = -1;
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
+    
   }
 
   void _fetchAAURL() {

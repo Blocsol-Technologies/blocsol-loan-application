@@ -49,12 +49,11 @@ class NotFoundPage extends ConsumerWidget {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  // if (invoiceLoanPage) {
-                  //   context.go(InvoiceLoanIndexRouter.dashboard);
-                  // } else {
-                  //   context.go(PersonalLoanIndexRouter.dashboard);
-                  // }
-                  context.go(InvoiceLoanIndexRouter.dashboard);
+                  if (invoiceLoanPage) {
+                    context.go(InvoiceLoanIndexRouter.dashboard);
+                  } else {
+                    context.go(PersonalLoanIndexRouter.dashboard);
+                  }
                 },
                 child: Container(
                   height: 40,

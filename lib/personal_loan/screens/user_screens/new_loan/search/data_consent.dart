@@ -31,7 +31,6 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
   bool _addingConsentArtifact = false;
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   Future<void> _provideConsent() async {
@@ -282,7 +281,7 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontWeight: AppFontWeights.bold,
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground,
+                                      .onSurface,
                                   letterSpacing: 0.13,
                                 ),
                               ),
@@ -297,7 +296,7 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontWeight: AppFontWeights.normal,
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground,
+                                      .onSurface,
                                   letterSpacing: 0.1,
                                 ),
                               )
@@ -317,15 +316,14 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                           children: [
                             Checkbox(
                               fillColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                if (!states.contains(MaterialState.selected)) {
+                                  WidgetStateProperty.resolveWith<Color>(
+                                      (Set<WidgetState> states) {
+                                if (!states.contains(WidgetState.selected)) {
                                   return Colors.red;
                                 }
-                                // Color when not selected
                                 return Theme.of(context)
                                     .colorScheme
-                                    .primary; // Default or any color when selected
+                                    .primary; 
                               }),
                               checkColor:
                                   Theme.of(context).colorScheme.onPrimary,
@@ -348,7 +346,7 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontWeight: AppFontWeights.normal,
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground,
+                                      .onSurface,
                                 ),
                                 softWrap: true,
                               ),

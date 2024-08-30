@@ -21,7 +21,6 @@ import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class PCNewLoanOfferHome extends ConsumerStatefulWidget {
   const PCNewLoanOfferHome({super.key});
@@ -43,44 +42,6 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
   final _maxInterval = 60;
   final _cancelToken = CancelToken();
   final Duration debounceDuration = const Duration(milliseconds: 1000);
-
-  void _onOfferSearchTextInput(String searchQuery) {
-    String normalizedSearchText = searchQuery.toLowerCase();
-
-    var offers = ref.read(personalNewLoanRequestProvider).offers;
-
-    if (normalizedSearchText.isEmpty) {
-      setState(() {
-        _filteredOffers = offers;
-      });
-      return;
-    } else {
-      setState(() {
-        List<PersonalLoanDetails> matchingOffers = offers.where((offerDet) {
-          String normalizedName = offerDet.bankName.toLowerCase();
-
-          double similarityScore =
-              normalizedName.similarityTo(normalizedSearchText);
-
-          return similarityScore > 0.3;
-        }).toList();
-
-        matchingOffers.sort((a, b) {
-          String normalizedNameA = a.bankName.toLowerCase();
-          String normalizedNameB = b.bankName.toLowerCase();
-
-          double similarityScoreA =
-              normalizedNameA.similarityTo(normalizedSearchText);
-          double similarityScoreB =
-              normalizedNameB.similarityTo(normalizedSearchText);
-
-          return similarityScoreB.compareTo(similarityScoreA);
-        });
-
-        _filteredOffers = matchingOffers;
-      });
-    }
-  }
 
   Future<void> _onOfferRefresh() async {
     if (ref.read(personalNewLoanRequestProvider).fetchingOffers) {
@@ -143,9 +104,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
     }
   }
 
-  void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
-  }
+  void _handleNotificationBellPress() {}
 
   void _handleOfferFilterChange() {
     List<PersonalLoanDetails> newFilteredOffers = List.from(_filteredOffers);

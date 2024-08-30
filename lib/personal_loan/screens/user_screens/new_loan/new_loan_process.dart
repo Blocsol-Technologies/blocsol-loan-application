@@ -30,7 +30,6 @@ class _PCNewLoanProcessScreenState
   late Timer _timer;
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   void _performLoanAction() async {

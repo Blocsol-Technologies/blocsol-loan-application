@@ -15,7 +15,7 @@ class PCNewLoanAAInfo extends ConsumerWidget {
   const PCNewLoanAAInfo({super.key});
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
+    
   }
 
   @override
@@ -196,7 +196,7 @@ class PCNewLoanAAInfo extends ConsumerWidget {
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(horizontal: 45),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,

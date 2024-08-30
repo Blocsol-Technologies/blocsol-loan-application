@@ -551,7 +551,7 @@ class _PCLiabilityPaymentDetailsState
                                                       AppFontWeights.normal,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .onBackground,
+                                                      .onSurface,
                                                 ),
                                               ),
                                               const SpacerWidget(
@@ -567,7 +567,7 @@ class _PCLiabilityPaymentDetailsState
                                                       AppFontWeights.medium,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .onBackground,
+                                                      .onSurface,
                                                 ),
                                               ),
                                             ],
@@ -596,7 +596,7 @@ class _PCLiabilityPaymentDetailsState
                                                       AppFontWeights.medium,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .onBackground,
+                                                      .onSurface,
                                                 ),
                                               ),
                                               const SpacerWidget(

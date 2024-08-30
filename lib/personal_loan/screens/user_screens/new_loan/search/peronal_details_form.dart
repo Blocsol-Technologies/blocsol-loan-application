@@ -34,7 +34,6 @@ class _PCNewLoanPersonalDetailsFormState
   String _selectedEndUse = "";
 
   void _handleNotificationBellPress() {
-    print("Notification Bell Pressed");
   }
 
   @override
