@@ -39,17 +39,22 @@ Future<void> main() async {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class LoanApplication extends ConsumerWidget {
+class LoanApplication extends ConsumerStatefulWidget {
   const LoanApplication({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoanApplication> createState() => _LoanApplicationState();
+}
+
+class _LoanApplicationState extends ConsumerState<LoanApplication> {
+  @override
+  Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     final _ = ref.watch(authProvider);
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Personal Credit App',
+      title: 'Loan App',
       theme: theme.valueOrNull ?? AppThemeData.defaultTheme,
       debugShowCheckedModeBanner: false,
       locale: const Locale('en'),

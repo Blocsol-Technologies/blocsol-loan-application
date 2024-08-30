@@ -1,3 +1,4 @@
+import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/gst_consent.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/header.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboard/lenders/lending_partners.dart';
@@ -6,6 +7,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/dashboar
 import 'package:blocsol_loan_application/invoice_loan/shared_components/bottom_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
+import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 
@@ -45,42 +47,86 @@ class _InvoiceLoanDashboardState extends ConsumerState<InvoiceLoanDashboard> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final profileDetailsRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    bool isInternetConnected = ref.watch(internetCheckProvider);
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         bottomNavigationBar: const InvoiceLoanBottomNavBar(),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: RelativeSize.height(40, height),
-          ),
-          physics:   RegexProvider.gstRegex.hasMatch(profileDetailsRef.gstNumber) &&
-                  !profileDetailsRef.dataConsentProvided
-              ? const NeverScrollableScrollPhysics()
-              : const BouncingScrollPhysics(),
-          child: Stack(
-            children: [
-              const Column(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: RelativeSize.height(40, height),
+              ),
+              physics: RegexProvider.gstRegex
+                          .hasMatch(profileDetailsRef.gstNumber) &&
+                      !profileDetailsRef.dataConsentProvided
+                  ? const NeverScrollableScrollPhysics()
+                  : const BouncingScrollPhysics(),
+              child: Stack(
                 children: [
-                  SpacerWidget(
-                    height: 35,
+                  const Column(
+                    children: [
+                      SpacerWidget(
+                        height: 35,
+                      ),
+                      DashboardHeader(),
+                      SpacerWidget(
+                        height: 20,
+                      ),
+                      LendersOnBoard(),
+                      RequestNewLoanButton(),
+                      DashboardLiabilities(),
+                    ],
                   ),
-                  DashboardHeader(),
-                  SpacerWidget(
-                    height: 20,
-                  ),
-                  LendersOnBoard(),
-                  RequestNewLoanButton(),
-                  DashboardLiabilities(),
+                  RegexProvider.gstRegex
+                              .hasMatch(profileDetailsRef.gstNumber) &&
+                          !profileDetailsRef.dataConsentProvided
+                      ? const GstConsentSheet()
+                      : const SizedBox()
                 ],
               ),
-              RegexProvider.gstRegex.hasMatch(profileDetailsRef.gstNumber) &&
-                      !profileDetailsRef.dataConsentProvided
-                  ? const GstConsentSheet()
-                  : const SizedBox()
-            ],
-          ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: isInternetConnected
+                  ? const SizedBox()
+                  : Container(
+                      width: width,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'No internet connection',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
