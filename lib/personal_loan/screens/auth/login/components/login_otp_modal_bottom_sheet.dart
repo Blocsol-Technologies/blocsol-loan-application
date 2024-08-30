@@ -300,28 +300,28 @@ class _LoginOTPModalBottomSheetState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _isAndroid && !_codeAutoFilled
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Lottie.asset('assets/animations/loading_spinner.json',
-                              height: 50, width: 50),
-                          Text(
-                            "Auto Reading OTP...",
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary
-                                  .withOpacity(0.5),
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.medium,
-                            ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox(),
+                // _isAndroid && !_codeAutoFilled
+                //     ? Row(
+                //         mainAxisAlignment: MainAxisAlignment.start,
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: <Widget>[
+                //           Lottie.asset('assets/animations/loading_spinner.json',
+                //               height: 50, width: 50),
+                //           Text(
+                //             "Auto Reading OTP...",
+                //             style: TextStyle(
+                //               fontFamily: fontFamily,
+                //               color: Theme.of(context)
+                //                   .colorScheme
+                //                   .onPrimary
+                //                   .withOpacity(0.5),
+                //               fontSize: AppFontSizes.b1,
+                //               fontWeight: AppFontWeights.medium,
+                //             ),
+                //           ),
+                //         ],
+                //       )
+                //     : const SizedBox(),
                 _errorOccured
                     ? Text(
                         _errorString,

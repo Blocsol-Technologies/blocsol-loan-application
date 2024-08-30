@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 String getStateNameFromStateCode(String stateCode) {
   switch (stateCode) {
     case "37":
@@ -73,4 +75,16 @@ String getStateNameFromStateCode(String stateCode) {
     default:
       return "Other territory";
   }
+}
+
+String convertUnixToHumanReadable(int unixTime) {
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
+
+  // Define the desired format
+  DateFormat dateFormat = DateFormat('dd MMM yy HH:mm');
+
+  // Format the DateTime
+  String formattedDate = dateFormat.format(dateTime);
+
+  return formattedDate;
 }

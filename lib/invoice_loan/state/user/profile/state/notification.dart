@@ -18,7 +18,7 @@ class IbcNotification {
   final String title;
   final String message;
   final Notificationtype type;
-  final num deliveredAt;
+  final int deliveredAt;
   final bool deleted;
   final num deletedAt;
   final bool seen;

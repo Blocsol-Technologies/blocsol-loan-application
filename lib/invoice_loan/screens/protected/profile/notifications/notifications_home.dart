@@ -48,13 +48,13 @@ class _InvoiceLoanNotificationsState
         .markNotificationsRead(deviceId, _cancelToken);
   }
 
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _setNotificationsRef();
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setNotificationsRead();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

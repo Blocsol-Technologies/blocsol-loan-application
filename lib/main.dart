@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,24 +18,24 @@ Future<void> main() async {
   );
   Intl.defaultLocale = 'en_IN';
   await initializeDateFormatting('en_IN', null);
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn =
-  //         'https://469ec94505f5cf8894e03407d282769b@o4506512927424512.ingest.sentry.io/4506755843686400';
-  //     options.tracesSampleRate = 1.0;
-  //   },
-  //   appRunner: () => runApp(
-  //     const ProviderScope(
-  //       child: PersonalCreditApp(),
-  //     ),
-  //   ),
-  // );
-
-  runApp(
-    const ProviderScope(
-      child: LoanApplication(),
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://469ec94505f5cf8894e03407d282769b@o4506512927424512.ingest.sentry.io/4506755843686400';
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(
+      const ProviderScope(
+        child: LoanApplication(),
+      ),
     ),
   );
+
+  // runApp(
+  //   const ProviderScope(
+  //     child: LoanApplication(),
+  //   ),
+  // );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -54,7 +55,7 @@ class _LoanApplicationState extends ConsumerState<LoanApplication> {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Loan App',
+      title: 'Invoicepe',
       theme: theme.valueOrNull ?? AppThemeData.defaultTheme,
       debugShowCheckedModeBanner: false,
       locale: const Locale('en'),

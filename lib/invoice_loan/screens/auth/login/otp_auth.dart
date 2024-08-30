@@ -220,23 +220,23 @@ class _LoginMobileOtpValidationState
                   ),
                   SectionMain(
                     textController: _textController,
-                    textInputChild: Row(
+                    textInputChild: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Lottie.asset('assets/animations/loading_spinner.json',
-                            height: 30, width: 30),
-                        const SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          "Auto reading OTP",
-                          style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontWeight: AppFontWeights.medium,
-                              fontSize: AppFontSizes.b1,
-                              color: const Color.fromRGBO(150, 150, 150, 1)),
-                        ),
+                        // Lottie.asset('assets/animations/loading_spinner.json',
+                        //     height: 30, width: 30),
+                        // const SizedBox(
+                        //   width: 7,
+                        // ),
+                        // Text(
+                        //   "Auto reading OTP",
+                        //   style: TextStyle(
+                        //       fontFamily: fontFamily,
+                        //       fontWeight: AppFontWeights.medium,
+                        //       fontSize: AppFontSizes.b1,
+                        //       color: const Color.fromRGBO(150, 150, 150, 1)),
+                        // ),
                       ],
                     ),
                     maxInputLength: 6,

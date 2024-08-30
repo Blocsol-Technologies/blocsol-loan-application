@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/notification.dart';
+import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 class NotificationItem extends StatelessWidget {
   final IbcNotification notification;
   const NotificationItem({super.key, required this.notification});
-  
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +34,27 @@ class NotificationItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                notification.title,
-                softWrap: true,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: AppFontSizes.h3,
-                  fontWeight: AppFontWeights.medium,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              RichText(
+                text: TextSpan(
+                    text: notification.title,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.b1,
+                      fontWeight: AppFontWeights.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: " - ${convertUnixToHumanReadable(notification.deliveredAt)}",
+                        style: TextStyle(
+                          fontSize: AppFontSizes.b4,
+                          fontWeight: AppFontWeights.normal,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.5),
+                        ),
+                      ),
+                    ]),
               ),
               Container(
                 height: 2,

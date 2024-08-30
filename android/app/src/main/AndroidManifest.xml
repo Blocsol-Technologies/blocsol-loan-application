@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="blocsol_loan_application"
+        android:label="Invoicepe"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

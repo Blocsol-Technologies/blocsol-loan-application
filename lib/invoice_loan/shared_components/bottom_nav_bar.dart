@@ -96,27 +96,27 @@ class InvoiceLoanBottomNavBar extends ConsumerWidget {
           ),
           label: "Loans",
         ),
-        BottomNavigationBarItem(
-          activeIcon: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            height: 25,
-            width: 25,
-            child: Image.asset(
-              "assets/images/invoice_loan/bottom_nav_bar/invoices_active.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-          icon: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            height: 25,
-            width: 25,
-            child: Image.asset(
-              "assets/images/invoice_loan/bottom_nav_bar/invoices_inactive.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-          label: "Invoices",
-        ),
+        // BottomNavigationBarItem(
+        //   activeIcon: Container(
+        //     margin: const EdgeInsets.only(bottom: 5),
+        //     height: 25,
+        //     width: 25,
+        //     child: Image.asset(
+        //       "assets/images/invoice_loan/bottom_nav_bar/invoices_active.png",
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        //   icon: Container(
+        //     margin: const EdgeInsets.only(bottom: 5),
+        //     height: 25,
+        //     width: 25,
+        //     child: Image.asset(
+        //       "assets/images/invoice_loan/bottom_nav_bar/invoices_inactive.png",
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        //   label: "Invoices",
+        // ),
       ],
     );
   }
