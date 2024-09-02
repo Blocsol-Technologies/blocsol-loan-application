@@ -3,7 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_ro
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/login/login.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';

@@ -57,7 +57,7 @@ class InvoiceLoanUserProfileDetailsHttpController {
               "bankAccounts": bankAccountsList,
               "primaryBankAccount": primaryBankAccount,
               "accountAggregatorId": response.data['data']
-                  ?['accountAggregatorId'],
+                  ?['accountAggregatorId'] ?? "",
                   "notifications": notifications,
                   "notificationsSeen": response.data['data']['notificationsSeen'],
             });

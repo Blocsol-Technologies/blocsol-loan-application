@@ -1,6 +1,6 @@
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/index_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -21,6 +21,7 @@ class NotFoundPage extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Container(
           padding: EdgeInsets.symmetric(
             vertical: RelativeSize.height(50, height),

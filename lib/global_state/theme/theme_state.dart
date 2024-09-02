@@ -1,5 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:flutter/material.dart';
 
 class AppThemeData {

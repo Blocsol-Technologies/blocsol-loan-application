@@ -1,6 +1,7 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_http_controller.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/bank_account.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/notification.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/profile_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:dio/dio.dart';
@@ -162,6 +163,17 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
 
     var response = await InvoiceLoanUserProfileDetailsHttpController()
         .markNotificationsRead(deviceId, authToken, cancelToken);
+
+    if (response.success) {
+      List<IbcNotification> newNotifications = [];
+
+      for (var notification in state.notifications) {
+        notification.markRead(true);
+        newNotifications.add(notification);
+      }
+
+      state = state.copyWith(notificationSeen: true, notifications: newNotifications);
+    }
 
     return response;
   }

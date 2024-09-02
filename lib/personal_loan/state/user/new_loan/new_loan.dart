@@ -410,10 +410,13 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   }
 
   Future<ServerResponse> verifyBankAccountDetails(
+      String bankType,
+      String bankAccountNumber,
+      String ifscCode,
       CancelToken cancelToken) async {
-    if (state.bankType.isEmpty ||
-        state.bankAccountNumber.isEmpty ||
-        state.bankIFSC.isEmpty) {
+    if (bankType.isEmpty ||
+        bankAccountNumber.isEmpty ||
+        ifscCode.isEmpty) {
       return ServerResponse(
           success: false, message: "Please fill all the details", data: null);
     }
@@ -422,13 +425,20 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
     var response = await PersonalLoanRequestInitController()
         .verifyBankAccountDetails(
-            state.bankType,
+            bankType,
             state.bankAccountNumber,
             state.bankIFSC,
             state.transactionId,
             state.selectedOffer.offerProviderId,
             authToken,
             cancelToken);
+
+    if (response.success) {
+      state = state.copyWith(
+          bankType: bankType,
+          bankAccountNumber: bankAccountNumber,
+          bankIFSC: ifscCode);
+    }
 
     return response;
   }

@@ -1,5 +1,5 @@
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main_background.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';

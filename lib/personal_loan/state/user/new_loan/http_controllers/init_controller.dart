@@ -134,25 +134,9 @@ class PersonalLoanRequestInitController {
       CancelToken cancelToken) async {
     try {
       var response = await httpService
-          .post("/ondc/validate-bank-details", authToken, cancelToken, {
-        "account_number": bankAccountNumber,
-        "ifsc_code": bankIFSC,
-      });
-
-      if (!response.data['success']) {
-        return ServerResponse(
-          success: false,
-          message: response.data['message'],
-        );
-      }
-
-      var nameAtBank = response.data['data']['name_at_bank'];
-
-      response = await httpService
           .post("/ondc/submit-form-04", authToken, cancelToken, {
         "transaction_id": transactionId,
         "provider_id": providerId,
-        "account_holder_name": nameAtBank,
         "bank_account_number": bankAccountNumber,
         "ifsc_code": bankIFSC,
         "bank_account_type": bankType,

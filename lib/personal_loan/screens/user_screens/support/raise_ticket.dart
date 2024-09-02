@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/support/utils.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/support.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';

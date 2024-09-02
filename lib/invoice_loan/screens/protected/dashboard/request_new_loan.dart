@@ -5,7 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_requ
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';

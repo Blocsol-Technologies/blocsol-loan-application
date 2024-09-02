@@ -1,9 +1,10 @@
 import 'package:blocsol_loan_application/choice_screens/components/bottom_decoration.dart';
 import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
+import 'package:blocsol_loan_application/global_state/misc/misc.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/signup_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -23,7 +24,8 @@ class _SignupChoiceState extends ConsumerState<SignupChoice> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-     ref.watch(internetCheckProvider);
+    ref.watch(internetCheckProvider);
+    ref.watch(miscProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -110,9 +112,7 @@ class _SignupChoiceState extends ConsumerState<SignupChoice> {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  ref
-                      .read(routerProvider)
-                      .push(PersonalLoanSignupRouter.intro);
+                  ref.read(routerProvider).push(PersonalLoanSignupRouter.intro);
                 },
                 child: Container(
                   height: 40,
@@ -137,7 +137,7 @@ class _SignupChoiceState extends ConsumerState<SignupChoice> {
               const SpacerWidget(
                 height: 95,
               ),
-              const Expanded(child:  SizedBox()),
+              const Expanded(child: SizedBox()),
               const ChoiceScreenBottomDecoration(),
             ],
           ),

@@ -1,12 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/init/utils.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
+import 'package:blocsol_loan_application/utils/common_misc.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -28,10 +29,13 @@ class PCNewLoanBankAccountDetails extends ConsumerStatefulWidget {
 
 class _PCNewLoanBankAccountDetailsState
     extends ConsumerState<PCNewLoanBankAccountDetails> {
+  final _cancelToken = CancelToken();
+  final _bankAccountNumberController = TextEditingController();
+  final _bankIFSCController = TextEditingController();
+
   String _selectedBankAccountType = "";
   bool _bankVerificationError = false;
   bool _verifyingBankAccount = false;
-  final _cancelToken = CancelToken();
 
   Future<void> _verifyBankAccountDetails() async {
     if (_verifyingBankAccount) {
@@ -45,7 +49,11 @@ class _PCNewLoanBankAccountDetailsState
 
     var verifyBankDetailsAndSubmitForm = await ref
         .read(personalNewLoanRequestProvider.notifier)
-        .verifyBankAccountDetails(_cancelToken);
+        .verifyBankAccountDetails(
+            _selectedBankAccountType.toLowerCase(),
+            _bankAccountNumberController.text,
+            _bankIFSCController.text,
+            _cancelToken);
 
     if (!mounted) return;
 
@@ -84,14 +92,35 @@ class _PCNewLoanBankAccountDetailsState
     }
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {
-    setState(() {
-      _selectedBankAccountType = InitUtils.bankAccountTypes[0].text;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref
+              .read(personalLoanAccountDetailsProvider)
+              .primaryBankAccount
+              .accountType ==
+          BankAccountType.savings) {
+        setState(() {
+          _selectedBankAccountType = "Saving";
+        });
+      } else {
+        setState(() {
+          _selectedBankAccountType = "Current";
+        });
+      }
+
+      _bankAccountNumberController.text = ref
+          .read(personalLoanAccountDetailsProvider)
+          .primaryBankAccount
+          .accountNumber;
+      _bankIFSCController.text = ref
+          .read(personalLoanAccountDetailsProvider)
+          .primaryBankAccount
+          .ifscCode;
     });
+
     super.initState();
   }
 
@@ -395,9 +424,8 @@ class _PCNewLoanBankAccountDetailsState
                               .toList(),
                           value: _selectedBankAccountType,
                           onChanged: (String? value) {
-                            ref
-                                .read(personalNewLoanRequestProvider.notifier)
-                                .updateBankType(value!.toLowerCase());
+                            if (value == null) return;
+
                             setState(() {
                               _selectedBankAccountType = value;
                             });
@@ -455,11 +483,12 @@ class _PCNewLoanBankAccountDetailsState
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.start,
                           maxLength: 20,
-                          onChanged: (value) {
-                            ref
-                                .read(personalNewLoanRequestProvider.notifier)
-                                .updateBankAccountNumber(value);
-                          },
+                          controller: _bankAccountNumberController,
+                          readOnly: ref
+                              .read(personalLoanAccountDetailsProvider)
+                              .primaryBankAccount
+                              .accountNumber
+                              .isNotEmpty,
                           style: TextStyle(
                             fontFamily: fontFamily,
                             fontSize: AppFontSizes.b1,
@@ -523,11 +552,12 @@ class _PCNewLoanBankAccountDetailsState
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.start,
                           maxLength: 15,
-                          onChanged: (value) {
-                            ref
-                                .read(personalNewLoanRequestProvider.notifier)
-                                .updateBankIFSC(value);
-                          },
+                          controller: _bankIFSCController,
+                          readOnly: ref
+                              .read(personalLoanAccountDetailsProvider)
+                              .primaryBankAccount
+                              .accountNumber
+                              .isNotEmpty,
                           style: TextStyle(
                             fontFamily: fontFamily,
                             fontSize: AppFontSizes.b1,

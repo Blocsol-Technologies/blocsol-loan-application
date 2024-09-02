@@ -21,7 +21,7 @@ class IbcNotification {
   final int deliveredAt;
   final bool deleted;
   final num deletedAt;
-  final bool seen;
+  bool seen;
 
   IbcNotification({
     required this.id,
@@ -81,5 +81,9 @@ class IbcNotification {
       type: Notificationtype.info,
       seen: false,
     );
+  }
+
+  void markRead(bool val) {
+    seen = val;
   }
 }

@@ -1,5 +1,5 @@
-import 'package:blocsol_loan_application/personal_loan/contants/routes/index_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/nav/user/bottom_nav_bar/bottom_nav_bar_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:flutter/material.dart';

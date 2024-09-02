@@ -27,7 +27,14 @@ mixin _$AccountDetailsData {
   String get pan => throw _privateConstructorUsedError;
   String get udyam => throw _privateConstructorUsedError;
   String get companyName => throw _privateConstructorUsedError;
-  NotificationsData get notifications => throw _privateConstructorUsedError;
+  bool get accountAggregatorSetup => throw _privateConstructorUsedError;
+  String get accountAggregatorId => throw _privateConstructorUsedError;
+  List<PlBankAccountDetails> get bankAccounts =>
+      throw _privateConstructorUsedError;
+  PlBankAccountDetails get primaryBankAccount =>
+      throw _privateConstructorUsedError;
+  List<PlNotification> get notifications => throw _privateConstructorUsedError;
+  bool get notificationSeen => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AccountDetailsDataCopyWith<AccountDetailsData> get copyWith =>
@@ -51,7 +58,12 @@ abstract class $AccountDetailsDataCopyWith<$Res> {
       String pan,
       String udyam,
       String companyName,
-      NotificationsData notifications});
+      bool accountAggregatorSetup,
+      String accountAggregatorId,
+      List<PlBankAccountDetails> bankAccounts,
+      PlBankAccountDetails primaryBankAccount,
+      List<PlNotification> notifications,
+      bool notificationSeen});
 }
 
 /// @nodoc
@@ -77,7 +89,12 @@ class _$AccountDetailsDataCopyWithImpl<$Res, $Val extends AccountDetailsData>
     Object? pan = null,
     Object? udyam = null,
     Object? companyName = null,
+    Object? accountAggregatorSetup = null,
+    Object? accountAggregatorId = null,
+    Object? bankAccounts = null,
+    Object? primaryBankAccount = null,
     Object? notifications = null,
+    Object? notificationSeen = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -120,10 +137,30 @@ class _$AccountDetailsDataCopyWithImpl<$Res, $Val extends AccountDetailsData>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String,
+      accountAggregatorSetup: null == accountAggregatorSetup
+          ? _value.accountAggregatorSetup
+          : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
+              as bool,
+      accountAggregatorId: null == accountAggregatorId
+          ? _value.accountAggregatorId
+          : accountAggregatorId // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccounts: null == bankAccounts
+          ? _value.bankAccounts
+          : bankAccounts // ignore: cast_nullable_to_non_nullable
+              as List<PlBankAccountDetails>,
+      primaryBankAccount: null == primaryBankAccount
+          ? _value.primaryBankAccount
+          : primaryBankAccount // ignore: cast_nullable_to_non_nullable
+              as PlBankAccountDetails,
       notifications: null == notifications
           ? _value.notifications
           : notifications // ignore: cast_nullable_to_non_nullable
-              as NotificationsData,
+              as List<PlNotification>,
+      notificationSeen: null == notificationSeen
+          ? _value.notificationSeen
+          : notificationSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -147,7 +184,12 @@ abstract class _$$AccountDetailsDataImplCopyWith<$Res>
       String pan,
       String udyam,
       String companyName,
-      NotificationsData notifications});
+      bool accountAggregatorSetup,
+      String accountAggregatorId,
+      List<PlBankAccountDetails> bankAccounts,
+      PlBankAccountDetails primaryBankAccount,
+      List<PlNotification> notifications,
+      bool notificationSeen});
 }
 
 /// @nodoc
@@ -171,7 +213,12 @@ class __$$AccountDetailsDataImplCopyWithImpl<$Res>
     Object? pan = null,
     Object? udyam = null,
     Object? companyName = null,
+    Object? accountAggregatorSetup = null,
+    Object? accountAggregatorId = null,
+    Object? bankAccounts = null,
+    Object? primaryBankAccount = null,
     Object? notifications = null,
+    Object? notificationSeen = null,
   }) {
     return _then(_$AccountDetailsDataImpl(
       name: null == name
@@ -214,10 +261,30 @@ class __$$AccountDetailsDataImplCopyWithImpl<$Res>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String,
+      accountAggregatorSetup: null == accountAggregatorSetup
+          ? _value.accountAggregatorSetup
+          : accountAggregatorSetup // ignore: cast_nullable_to_non_nullable
+              as bool,
+      accountAggregatorId: null == accountAggregatorId
+          ? _value.accountAggregatorId
+          : accountAggregatorId // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccounts: null == bankAccounts
+          ? _value._bankAccounts
+          : bankAccounts // ignore: cast_nullable_to_non_nullable
+              as List<PlBankAccountDetails>,
+      primaryBankAccount: null == primaryBankAccount
+          ? _value.primaryBankAccount
+          : primaryBankAccount // ignore: cast_nullable_to_non_nullable
+              as PlBankAccountDetails,
       notifications: null == notifications
-          ? _value.notifications
+          ? _value._notifications
           : notifications // ignore: cast_nullable_to_non_nullable
-              as NotificationsData,
+              as List<PlNotification>,
+      notificationSeen: null == notificationSeen
+          ? _value.notificationSeen
+          : notificationSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -236,7 +303,14 @@ class _$AccountDetailsDataImpl implements _AccountDetailsData {
       required this.pan,
       required this.udyam,
       required this.companyName,
-      required this.notifications});
+      required this.accountAggregatorSetup,
+      required this.accountAggregatorId,
+      required final List<PlBankAccountDetails> bankAccounts,
+      required this.primaryBankAccount,
+      required final List<PlNotification> notifications,
+      required this.notificationSeen})
+      : _bankAccounts = bankAccounts,
+        _notifications = notifications;
 
 // Personal Details
   @override
@@ -260,11 +334,33 @@ class _$AccountDetailsDataImpl implements _AccountDetailsData {
   @override
   final String companyName;
   @override
-  final NotificationsData notifications;
+  final bool accountAggregatorSetup;
+  @override
+  final String accountAggregatorId;
+  final List<PlBankAccountDetails> _bankAccounts;
+  @override
+  List<PlBankAccountDetails> get bankAccounts {
+    if (_bankAccounts is EqualUnmodifiableListView) return _bankAccounts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_bankAccounts);
+  }
+
+  @override
+  final PlBankAccountDetails primaryBankAccount;
+  final List<PlNotification> _notifications;
+  @override
+  List<PlNotification> get notifications {
+    if (_notifications is EqualUnmodifiableListView) return _notifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_notifications);
+  }
+
+  @override
+  final bool notificationSeen;
 
   @override
   String toString() {
-    return 'AccountDetailsData(name: $name, imageURL: $imageURL, email: $email, phone: $phone, dob: $dob, gender: $gender, address: $address, pan: $pan, udyam: $udyam, companyName: $companyName, notifications: $notifications)';
+    return 'AccountDetailsData(name: $name, imageURL: $imageURL, email: $email, phone: $phone, dob: $dob, gender: $gender, address: $address, pan: $pan, udyam: $udyam, companyName: $companyName, accountAggregatorSetup: $accountAggregatorSetup, accountAggregatorId: $accountAggregatorId, bankAccounts: $bankAccounts, primaryBankAccount: $primaryBankAccount, notifications: $notifications, notificationSeen: $notificationSeen)';
   }
 
   @override
@@ -284,13 +380,39 @@ class _$AccountDetailsDataImpl implements _AccountDetailsData {
             (identical(other.udyam, udyam) || other.udyam == udyam) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
-            (identical(other.notifications, notifications) ||
-                other.notifications == notifications));
+            (identical(other.accountAggregatorSetup, accountAggregatorSetup) ||
+                other.accountAggregatorSetup == accountAggregatorSetup) &&
+            (identical(other.accountAggregatorId, accountAggregatorId) ||
+                other.accountAggregatorId == accountAggregatorId) &&
+            const DeepCollectionEquality()
+                .equals(other._bankAccounts, _bankAccounts) &&
+            (identical(other.primaryBankAccount, primaryBankAccount) ||
+                other.primaryBankAccount == primaryBankAccount) &&
+            const DeepCollectionEquality()
+                .equals(other._notifications, _notifications) &&
+            (identical(other.notificationSeen, notificationSeen) ||
+                other.notificationSeen == notificationSeen));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name, imageURL, email, phone,
-      dob, gender, address, pan, udyam, companyName, notifications);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      imageURL,
+      email,
+      phone,
+      dob,
+      gender,
+      address,
+      pan,
+      udyam,
+      companyName,
+      accountAggregatorSetup,
+      accountAggregatorId,
+      const DeepCollectionEquality().hash(_bankAccounts),
+      primaryBankAccount,
+      const DeepCollectionEquality().hash(_notifications),
+      notificationSeen);
 
   @JsonKey(ignore: true)
   @override
@@ -302,18 +424,22 @@ class _$AccountDetailsDataImpl implements _AccountDetailsData {
 
 abstract class _AccountDetailsData implements AccountDetailsData {
   const factory _AccountDetailsData(
-          {required final String name,
-          required final String imageURL,
-          required final String email,
-          required final String phone,
-          required final String dob,
-          required final String gender,
-          required final Address address,
-          required final String pan,
-          required final String udyam,
-          required final String companyName,
-          required final NotificationsData notifications}) =
-      _$AccountDetailsDataImpl;
+      {required final String name,
+      required final String imageURL,
+      required final String email,
+      required final String phone,
+      required final String dob,
+      required final String gender,
+      required final Address address,
+      required final String pan,
+      required final String udyam,
+      required final String companyName,
+      required final bool accountAggregatorSetup,
+      required final String accountAggregatorId,
+      required final List<PlBankAccountDetails> bankAccounts,
+      required final PlBankAccountDetails primaryBankAccount,
+      required final List<PlNotification> notifications,
+      required final bool notificationSeen}) = _$AccountDetailsDataImpl;
 
   @override // Personal Details
   String get name;
@@ -336,7 +462,17 @@ abstract class _AccountDetailsData implements AccountDetailsData {
   @override
   String get companyName;
   @override
-  NotificationsData get notifications;
+  bool get accountAggregatorSetup;
+  @override
+  String get accountAggregatorId;
+  @override
+  List<PlBankAccountDetails> get bankAccounts;
+  @override
+  PlBankAccountDetails get primaryBankAccount;
+  @override
+  List<PlNotification> get notifications;
+  @override
+  bool get notificationSeen;
   @override
   @JsonKey(ignore: true)
   _$$AccountDetailsDataImplCopyWith<_$AccountDetailsDataImpl> get copyWith =>

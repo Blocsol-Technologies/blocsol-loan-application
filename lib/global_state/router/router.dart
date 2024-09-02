@@ -1,4 +1,6 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
+import 'package:blocsol_loan_application/global_state/misc/misc.dart';
+import 'package:blocsol_loan_application/global_state/misc/misc_state.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
@@ -6,9 +8,9 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/router.da
 import 'package:blocsol_loan_application/choice_screens/login_choice.dart';
 import 'package:blocsol_loan_application/main.dart';
 import 'package:blocsol_loan_application/not_found.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/index_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/login_router.dart';
-import 'package:blocsol_loan_application/personal_loan/contants/routes/router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/login_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/router.dart';
 import 'package:blocsol_loan_application/choice_screens/signup_choice.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:go_router/go_router.dart';
@@ -32,12 +34,26 @@ class Router extends _$Router {
       debugLogDiagnostics: true,
       initialLocation: AppRoutes.entry,
       errorBuilder: (context, state) {
-        bool isInvoiceLoanRoute =
-            invoiceLoanRoutes.any((route) => route.path == state.uri.path);
+        var currentState = ref.read(miscProvider).currentState;
 
-        return NotFoundPage(
-          invoiceLoanPage: isInvoiceLoanRoute,
-        );
+        switch (currentState) {
+          case ActiveState.none:
+            {
+              return const LoginChoice();
+            }
+          case ActiveState.invoiceLoan:
+            {
+              return const NotFoundPage(
+                invoiceLoanPage: true,
+              );
+            }
+          case ActiveState.personalLoan:
+            {
+              return const NotFoundPage(
+                invoiceLoanPage: false,
+              );
+            }
+        }
       },
       routes: [
         GoRoute(
@@ -56,15 +72,20 @@ class Router extends _$Router {
             ref.read(authProvider.notifier).getAuthTokens();
 
         if (invoiceLoanRoutes.any((route) => route.path == state.uri.path)) {
+          ref.read(miscProvider.notifier).updateState(ActiveState.invoiceLoan);
           await ref
               .read(appThemeProvider.notifier)
               .setTheme(ThemeState.invoiceLoanTheme);
-        } else if (personalLoanRoutes.any((route) => route.path == state.uri.path)) {
+        } else if (personalLoanRoutes
+            .any((route) => route.path == state.uri.path)) {
+          ref.read(miscProvider.notifier).updateState(ActiveState.personalLoan);
           await ref
               .read(appThemeProvider.notifier)
               .setTheme(ThemeState.personalLoanTheme);
         } else {
-          await ref.read(appThemeProvider.notifier).setTheme(ThemeState.defaultTheme);
+          await ref
+              .read(appThemeProvider.notifier)
+              .setTheme(ThemeState.defaultTheme);
         }
 
         logger.d(
