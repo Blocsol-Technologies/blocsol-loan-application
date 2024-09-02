@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/alert_dialog.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
@@ -15,7 +14,6 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -128,50 +126,6 @@ class _InvoiceNewLoanEntityKycState
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
-    }
-  }
-
-  Future<void> _refetchKYCURL() async {
-    if (!ref.read(invoiceNewLoanRequestProvider).entityKYCFailure) {
-      return;
-    }
-
-    setState(() {
-      _loading = true;
-    });
-
-    var response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .refetchEntityKycForm(_cancelToken);
-
-    if (!mounted || !context.mounted) return;
-
-    setState(() {
-      _loading = false;
-    });
-
-    if (!response.success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to refetch Entity KYC URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    } else {
-      setState(() {
-        _url = response.data['url'];
-      });
-      _webViewController?.loadUrl(
-          urlRequest: URLRequest(url: WebUri(response.data['url'])));
     }
   }
 
@@ -303,19 +257,19 @@ class _InvoiceNewLoanEntityKycState
                       SizedBox(
                         height: RelativeSize.height(530, height),
                         width: width,
-                        child: ref
-                                .watch(invoiceNewLoanRequestProvider)
-                                .entityKYCFailure
+                        child: newLoanStateRef.verifyingEntityKYC
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  const SpacerWidget(height: 20),
-                                  Lottie.asset("assets/animations/error.json",
-                                      height: 180, width: 180),
+                                  const SpacerWidget(height: 50),
+                                  Lottie.asset(
+                                      "assets/animations/loading_spinner.json",
+                                      height: 180,
+                                      width: 180),
                                   const SpacerWidget(height: 35),
                                   Text(
-                                    "Your Entity KYC Failed!",
+                                    "Verifying Entity KYC Success...",
                                     style: TextStyle(
                                       fontFamily: fontFamily,
                                       fontSize: AppFontSizes.h2,
@@ -325,132 +279,44 @@ class _InvoiceNewLoanEntityKycState
                                           .onSurface,
                                     ),
                                   ),
-                                  const SpacerWidget(
-                                    height: 30,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _refetchKYCURL();
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Try Again?",
-                                          style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h3,
-                                            fontWeight: AppFontWeights.medium,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                          ),
-                                        ),
-                                      ),
+                                  Text(
+                                    "Please do not click back or close the app",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.medium,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
                                     ),
                                   ),
-                                  const SpacerWidget(
-                                    height: 30,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                      ref.read(routerProvider).pop();
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Cancel?",
-                                          style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h3,
-                                            fontWeight: AppFontWeights.medium,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
                                 ],
                               )
-                            : newLoanStateRef.verifyingEntityKYC
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      const SpacerWidget(height: 50),
-                                      Lottie.asset(
-                                          "assets/animations/loading_spinner.json",
-                                          height: 180,
-                                          width: 180),
-                                      const SpacerWidget(height: 35),
-                                      Text(
-                                        "Verifying Entity KYC Success...",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h2,
-                                          fontWeight: AppFontWeights.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
+                            : Stack(
+                                children: [
+                                  SizedBox(
+                                    width: width,
+                                    height: 900,
+                                    child: InAppWebView(
+                                      key: _webViewKey,
+                                      gestureRecognizers: const <Factory<
+                                          VerticalDragGestureRecognizer>>{},
+                                      initialSettings: InAppWebViewSettings(
+                                        javaScriptEnabled: true,
+                                        verticalScrollBarEnabled: true,
+                                        disableHorizontalScroll: true,
+                                        disableVerticalScroll: false,
                                       ),
-                                      Text(
-                                        "Please do not click back or close the app",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.b1,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Stack(
-                                    children: [
-                                      SizedBox(
-                                        width: width,
-                                        height: 900,
-                                        child: InAppWebView(
-                                          key: _webViewKey,
-                                          gestureRecognizers: const <Factory<
-                                              VerticalDragGestureRecognizer>>{},
-                                          initialSettings: InAppWebViewSettings(
-                                            javaScriptEnabled: true,
-                                            verticalScrollBarEnabled: true,
-                                            disableHorizontalScroll: true,
-                                            disableVerticalScroll: false,
-                                          ),
-                                          onWebViewCreated: (controller) async {
-                                            _webViewController = controller;
-                                          },
-                                        ),
-                                      ),
-                                      _loading
-                                          ? const LinearProgressIndicator()
-                                          : Container(),
-                                    ],
+                                      onWebViewCreated: (controller) async {
+                                        _webViewController = controller;
+                                      },
+                                    ),
                                   ),
+                                  _loading
+                                      ? const LinearProgressIndicator()
+                                      : Container(),
+                                ],
+                              ),
                       ),
                     ],
                   ),

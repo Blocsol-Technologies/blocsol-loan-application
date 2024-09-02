@@ -7,7 +7,7 @@ part of 'account_details.dart';
 // **************************************************************************
 
 String _$personalLoanAccountDetailsHash() =>
-    r'27244e40c142d1437b76630763a886d791e1cd28';
+    r'873eaf0c29b9c761775608d8afdd82517f555b7b';
 
 /// See also [PersonalLoanAccountDetails].
 @ProviderFor(PersonalLoanAccountDetails)

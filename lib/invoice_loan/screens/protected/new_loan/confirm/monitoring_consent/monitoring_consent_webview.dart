@@ -37,7 +37,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
   final GlobalKey _webviewKey = GlobalKey();
   final _controller = StreamController<SwipeRefreshState>.broadcast();
 
-  Stream<SwipeRefreshState> get _stream => _controller.stream;
+  // Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
   bool _loading = true;
 
@@ -52,7 +52,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     if (ecres == null || resdate == null) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.monitoring_consent_verification_failed);
+          extra: InvoiceLoanServiceErrorCodes.monitoring_consent_verification_failed);
       return;
     }
 
@@ -63,7 +63,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     if (!checkSuccessResponse.success) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.monitoring_consent_verification_failed);
+          extra: InvoiceLoanServiceErrorCodes.monitoring_consent_verification_failed);
       return;
     }
   }
@@ -80,6 +80,18 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
       _loading = false;
     });
     _controller.sink.add(SwipeRefreshState.hidden);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _webViewController?.loadUrl(
+        urlRequest: URLRequest(
+          url: WebUri(widget.url),
+        ),
+      );
+    });
+    super.initState();
   }
 
   @override
@@ -175,104 +187,98 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
                   ),
                 ),
                 Expanded(
-                  child: SwipeRefresh.adaptive(
-                    shrinkWrap: true,
-                    stateStream: _stream,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onRefresh: () {
-                      _refresh();
-                    },
-                    children: [
-                      SizedBox(
-                        height: RelativeSize.height(550, height),
-                        width: width,
-                        child: ref
-                                .read(invoiceNewLoanRequestProvider)
-                                .validatingMonitoringConsentSuccess
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  const SpacerWidget(height: 50),
-                                  Lottie.asset(
-                                      "assets/animations/loading_spinner.json",
-                                      height: 180,
-                                      width: 180),
-                                  const SpacerWidget(height: 35),
-                                  Text(
-                                    "Verifying Monitoring Consent Success...",
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.h2,
-                                      fontWeight: AppFontWeights.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Please do not click back or close the app",
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.b1,
-                                      fontWeight: AppFontWeights.medium,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Stack(
-                                children: [
-                                  SizedBox(
-                                    width: width,
-                                    height: 900,
-                                    child: InAppWebView(
-                                      key: _webviewKey,
-                                      gestureRecognizers: const <Factory<
-                                          VerticalDragGestureRecognizer>>{},
-                                      initialSettings: InAppWebViewSettings(
-                                        javaScriptEnabled: true,
-                                        verticalScrollBarEnabled: true,
-                                        disableHorizontalScroll: true,
-                                        disableVerticalScroll: false,
-                                      ),
-                                      initialUrlRequest: URLRequest(
-                                        url: WebUri(widget.url),
-                                      ),
-                                      onLoadStop: (controller, url) {
-                                        setState(() {
-                                          _loading = false;
-                                        });
-                                      },
-                                      shouldOverrideUrlLoading:
-                                          (controller, navigationAction) async {
-                                        var uri = navigationAction.request.url;
-
-                                        if (uri != null &&
-                                            uri.toString().contains(
-                                                'https://ondc.invoicepe.in/aa-redirect')) {
-                                          // Extract query parameters
-                                          String? ecres =
-                                              uri.queryParameters['ecres'];
-                                          String? resdate =
-                                              uri.queryParameters['resdate'];
-
-                                          _checkMonitoringConsentSuccess(
-                                              ecres, resdate);
-                                        }
-                                        return NavigationActionPolicy.ALLOW;
-                                      },
-                                    ),
-                                  ),
-                                  _loading
-                                      ? const LinearProgressIndicator()
-                                      : Container(),
-                                ],
+                  child: SizedBox(
+                    height: RelativeSize.height(550, height),
+                    width: width,
+                    child: ref
+                            .read(invoiceNewLoanRequestProvider)
+                            .validatingMonitoringConsentSuccess
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const SpacerWidget(height: 50),
+                              Lottie.asset(
+                                  "assets/animations/loading_spinner.json",
+                                  height: 180,
+                                  width: 180),
+                              const SpacerWidget(height: 35),
+                              Text(
+                                "Verifying Monitoring Consent Success...",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.h2,
+                                  fontWeight: AppFontWeights.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
                               ),
-                      ),
-                    ],
+                              Text(
+                                "Please do not click back or close the app",
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.medium,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              SizedBox(
+                                width: width,
+                                height: 900,
+                                child: InAppWebView(
+                                  key: _webviewKey,
+                                  gestureRecognizers: const <Factory<
+                                      VerticalDragGestureRecognizer>>{},
+                                  initialSettings: InAppWebViewSettings(
+                                    javaScriptEnabled: true,
+                                    verticalScrollBarEnabled: true,
+                                    disableHorizontalScroll: true,
+                                    disableVerticalScroll: false,
+                                  ),
+                                  initialUrlRequest: URLRequest(
+                                    url: WebUri(widget.url),
+                                  ),
+                                  onLoadStop: (controller, url) {
+                                    setState(() {
+                                      _loading = false;
+                                    });
+                                  },
+                                  // initialize webview controller
+                                  onWebViewCreated: (controller) {
+                                    setState(() {
+                                      _webViewController = controller;
+                                    });
+                                  },
+                                  shouldOverrideUrlLoading:
+                                      (controller, navigationAction) async {
+                                    var uri = navigationAction.request.url;
+
+                                    if (uri != null &&
+                                        uri.toString().contains(
+                                            'https://ondc.invoicepe.in/aa-redirect')) {
+                                      // Extract query parameters
+                                      String? ecres =
+                                          uri.queryParameters['ecres'];
+                                      String? resdate =
+                                          uri.queryParameters['resdate'];
+
+                                      _checkMonitoringConsentSuccess(
+                                          ecres, resdate);
+                                    }
+                                    return NavigationActionPolicy.ALLOW;
+                                  },
+                                ),
+                              ),
+                              _loading
+                                  ? const LinearProgressIndicator()
+                                  : Container(),
+                            ],
+                          ),
                   ),
                 ),
               ],

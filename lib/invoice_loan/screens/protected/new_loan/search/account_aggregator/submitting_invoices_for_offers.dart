@@ -7,6 +7,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/l
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
   }
 
   void performActions() async {
+
     if (ref.read(invoiceNewLoanRequestProvider).submittingInvoicesForOffers) {
       return;
     }
@@ -127,6 +129,7 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
     return PopScope(
@@ -140,41 +143,27 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
             height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Lottie.asset("assets/animations/filing_invoice_forms.json",
-                    height: 250, width: 250),
+                const SpacerWidget(
+                  height: 50,
+                ),
+                Lottie.asset("assets/animations/rocket.json",
+                    height: RelativeSize.width(300, width),
+                    width: RelativeSize.width(300, width)),
                 const SpacerWidget(height: 35),
-                Text(
-                  'We are submitting your invoices for offers. This may take a few minutes.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: AppFontWeights.medium,
-                      color: Theme.of(context).colorScheme.onSurface),
-                ),
-                const SpacerWidget(height: 20),
-                Text(
-                  'Do not press back or close the app.',
-                  textAlign: TextAlign.center,
-                  softWrap: true,
-                  style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: AppFontWeights.medium,
-                      color: Theme.of(context).colorScheme.onSurface),
-                ),
-                const SpacerWidget(height: 20),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
                   decoration: BoxDecoration(
                     color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        Theme.of(context).colorScheme.primary.withOpacity(0.05),
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.3),
                     ),
                   ),
                   child: CountdownTimer(
@@ -182,8 +171,7 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
                     onEnd: onCountdownEnd,
                     endTime: endTime,
                     widgetBuilder: (_, CurrentRemainingTime? time) {
-                      String text =
-                          "min: ${time?.min ?? 0} - sec: ${time?.sec}";
+                      String text = "${time?.min ?? 0}:${time?.sec}";
 
                       if (time == null) {
                         text = "Time's up!";
@@ -199,6 +187,44 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
                         ),
                       );
                     },
+                  ),
+                ),
+                const SpacerWidget(
+                  height: 100,
+                ),
+                SizedBox(
+                  width: width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Initiating Loan Process with Lender...',
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: AppFontSizes.heading,
+                          fontWeight: AppFontWeights.bold,
+                          letterSpacing: 0.14,
+                        ),
+                        textAlign: TextAlign.start,
+                        softWrap: true,
+                      ),
+                      const SpacerWidget(
+                        height: 5,
+                      ),
+                      Text(
+                        'Do not press back or close the app.',
+                        style: TextStyle(
+                          fontFamily: fontFamily,
+                          color: const Color.fromRGBO(130, 130, 130, 1),
+                          fontSize: AppFontSizes.h3,
+                          fontWeight: AppFontWeights.medium,
+                          letterSpacing: 0.14,
+                        ),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                      ),
+                    ],
                   ),
                 ),
               ],

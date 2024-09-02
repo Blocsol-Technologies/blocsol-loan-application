@@ -1,14 +1,16 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +28,6 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
   final _cancelToken = CancelToken();
 
   void fetchMonitoringConsentHandler() async {
-
     var generateConsentResponse = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .generateLoanMonitoringConsentRequest(_cancelToken);
@@ -36,7 +37,7 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
     if (!generateConsentResponse.success) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.generate_monitoring_consent_failed);
+          extra: InvoiceLoanServiceErrorCodes.generate_monitoring_consent_failed);
       return;
     }
 
@@ -61,150 +62,81 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
 
   @override
   Widget build(BuildContext context) {
-    final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider);
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    ref.watch(invoiceNewLoanRequestProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(30),
-            child: newLoanStateRef.generateMonitoringConsentErr
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Lottie.asset(
-                        "assets/animations/error.json",
-                        height: 300,
-                        width: 300,
-                      ),
-                      const SizedBox(height: 20),
+            padding: EdgeInsets.fromLTRB(
+                20, RelativeSize.height(30, height), 20, 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                InvoiceNewLoanRequestTopNav(onBackClick: () {
+                  ref.read(routerProvider).pop();
+                }),
+                const SpacerWidget(
+                  height: 80,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Lottie.asset(
+                      'assets/animations/abstract_save.json',
+                      width: (width - 40),
+                    ),
+                  ],
+                ),
+                const SpacerWidget(
+                  height: 60,
+                ),
+                SizedBox(
+                  width: width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        "Error when generating monitoring consent. Contact Support...",
+                        "Generating Consent Details",
                         style: TextStyle(
                           fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h1,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: AppFontSizes.heading,
                           fontWeight: AppFontWeights.bold,
-                          letterSpacing: 0.4,
-                          color: Theme.of(context).colorScheme.primary,
+                          letterSpacing: 0.14,
                         ),
-                        softWrap: true,
                         textAlign: TextAlign.center,
+                        softWrap: true,
                       ),
-                      const SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              HapticFeedback.mediumImpact();
-                              ref.read(routerProvider).pop();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Go Back",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h3,
-                                    fontWeight: AppFontWeights.medium,
-                                    letterSpacing: 0.4,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              fetchMonitoringConsentHandler();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Try Again",
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h3,
-                                    fontWeight: AppFontWeights.medium,
-                                    letterSpacing: 0.4,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Lottie.asset(
-                        "assets/animations/submitting_details.json",
-                        height: 300,
-                        width: 300,
+                      const SpacerWidget(
+                        height: 5,
                       ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                            HapticFeedback.mediumImpact();
-                          fetchMonitoringConsentHandler();
-                        },
-                        child: Text(
-                          "Generating Consent Details...",
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.h1,
-                            fontWeight: AppFontWeights.bold,
-                            letterSpacing: 0.4,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
                       Text(
-                        "Please do not press back or exit",
+                        "Lender requires account monitoring consent for loan processing",
                         style: TextStyle(
                           fontFamily: fontFamily,
+                          color: const Color.fromRGBO(130, 130, 130, 1),
                           fontSize: AppFontSizes.h3,
                           fontWeight: AppFontWeights.medium,
-                          letterSpacing: 0.4,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.6),
+                          letterSpacing: 0.14,
                         ),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
                       ),
                     ],
                   ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

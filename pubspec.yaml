@@ -134,6 +134,11 @@ flutter:
     - assets/animations/fetching_data.json
     - assets/animations/under_construction.json
     - assets/animations/empty.json
+    - assets/animations/rocket.json
+    - assets/animations/abstract_save.json
+    - assets/animations/nfc_processing.json
+    - assets/animations/ok.json
+    - assets/animations/unavailable.json
 
   fonts:
     - family: Poppins

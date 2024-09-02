@@ -69,7 +69,7 @@ class _InvoiceNewLoanRepaymentSetupState
 
     if (!checkRepaymentSetupSuccessResponse.success) {
       context.go(InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.repayment_setup_failed);
+          extra: InvoiceLoanServiceErrorCodes.repayment_setup_failed);
       return;
     }
 

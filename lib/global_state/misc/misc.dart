@@ -8,8 +8,6 @@ part 'misc.g.dart';
 class Misc extends _$Misc {
   @override
   MiscState build()  {
-   
-
     ref.keepAlive();
     return MiscState.initialize();
   }

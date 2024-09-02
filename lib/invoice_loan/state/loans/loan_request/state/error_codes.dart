@@ -1,6 +1,6 @@
-enum LoanServiceErrorCodes {
-  unable_to_select_offer,
-  select_02_error,
+enum InvoiceLoanServiceErrorCodes {
+  unable_to_select_offer, // on_select_01 error
+  on_select_02_error,
   aadhar_kyc_failed,
   init_01_error,
   entity_kyc_error,

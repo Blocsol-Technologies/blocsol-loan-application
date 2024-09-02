@@ -12,32 +12,37 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
+  final bool showBackButton;
   final Function onBackClick;
-  const InvoiceNewLoanRequestTopNav({super.key, required this.onBackClick});
+  const InvoiceNewLoanRequestTopNav(
+      {super.key, required this.onBackClick, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider).currentState;
+    final newLoanStateRef =
+        ref.watch(invoiceNewLoanRequestProvider).currentState;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        GestureDetector(
-          onTap: () async {
-            HapticFeedback.mediumImpact();
-            await onBackClick();
-          },
-          child: Icon(
-            Icons.arrow_back_outlined,
-            size: 20,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
-          ),
+        showBackButton
+            ? GestureDetector(
+                onTap: () async {
+                  HapticFeedback.mediumImpact();
+                  await onBackClick();
+                },
+                child: Icon(
+                  Icons.arrow_back_outlined,
+                  size: 20,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                ),
+              )
+            : const SizedBox(),
+        const Expanded(
+          child: SizedBox(),
         ),
-        Expanded(
-          child: Container(),
-        ),
-        newLoanStateRef.index >=
-                LoanRequestProgress.loanOfferSelected.index
+        newLoanStateRef.index >= LoanRequestProgress.loanOfferSelected.index
             ? GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
@@ -46,8 +51,7 @@ class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
                 },
                 child: Container(
                   height: 25,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(

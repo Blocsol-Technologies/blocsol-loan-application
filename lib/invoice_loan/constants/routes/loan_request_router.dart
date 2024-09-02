@@ -1,3 +1,6 @@
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/kyc_verified.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/index.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_unavailable.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/loan_flow_completion.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/monitoring_consent/generating_monitoring_consent.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/confirm/monitoring_consent/monitoring_consent_webview.dart';
@@ -22,6 +25,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/select_offer_screen.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/select/offers/update_loan_offer_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:go_router/go_router.dart';
 
 class InvoiceNewLoanRequestRouter {
@@ -74,6 +78,8 @@ class InvoiceNewLoanRequestRouter {
       "/invoice-loan/new-loan-request/monitoring-consent-webview";
   static const final_details = "/invoice-loan/new-loan-request/final-details";
 
+  // Common
+  static const kyc_verified = "/invoice-loan/new-loan-request/kyc-verified";
   // Error
   static const loan_service_error =
       "/invoice-loan/new-loan-request/loan-service-error";
@@ -211,4 +217,36 @@ List<GoRoute> invoiceLoanRequestRoutes = [
     path: InvoiceNewLoanRequestRouter.final_details,
     builder: (context, state) => const InvoiceNewLoanFlowCompletion(),
   ),
+
+  // Common
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.kyc_verified,
+    builder: (context, state) {
+      IBCKycType kycTypeVal = state.extra as IBCKycType;
+
+      return InvoiceLoanKycVerified(kycType: kycTypeVal);
+    },
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_service_error,
+    builder: (context, state) {
+      InvoiceLoanServiceErrorCodes errorCodeVal =
+          state.extra as InvoiceLoanServiceErrorCodes;
+
+      return InvoiceLoanServiceError(errorCode: errorCodeVal);
+    },
+  ),
+
+  GoRoute(
+    path: InvoiceNewLoanRequestRouter.loan_service_unavailable,
+    builder: (context, state) {
+      String errMessage = (state.extra as String?) ??
+          "Service is currently unavailable. Please try again later.";
+
+      return InvoiceLoanServiceUnavailable(message: errMessage);
+    },
+  ),
 ];
+
+enum IBCKycType { aadhar, entity }

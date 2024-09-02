@@ -139,7 +139,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.unable_to_select_offer);
+                extra: InvoiceLoanServiceErrorCodes.unable_to_select_offer);
             break;
           }
         }
@@ -188,7 +188,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.select_02_error);
+                extra: InvoiceLoanServiceErrorCodes.on_select_02_error);
             break;
           }
         }
@@ -196,22 +196,15 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         // kyc form response
         if (stepNumber == 3) {
           if (success) {
-            var response = await ref
-                .read(invoiceNewLoanRequestProvider.notifier)
-                .checkAadharKycSuccess(cancelToken);
-
-            if (!response.success) {
-              ref.read(routerProvider).push(
-                  InvoiceNewLoanRequestRouter.loan_service_error,
-                  extra: LoanServiceErrorCodes.aadhar_kyc_failed);
-              break;
-            }
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.kyc_verified,
+                extra: IBCKycType.aadhar);
 
             break;
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.aadhar_kyc_failed);
+                extra: InvoiceLoanServiceErrorCodes.aadhar_kyc_failed);
             break;
           }
         }
@@ -232,7 +225,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.init_01_error);
+                extra: InvoiceLoanServiceErrorCodes.init_01_error);
             break;
           }
         }
@@ -240,21 +233,14 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         // entity kyc response
         if (stepNumber == 2) {
           if (success) {
-            var response = await ref
-                .read(invoiceNewLoanRequestProvider.notifier)
-                .checkEntityKycFormSuccess(cancelToken);
-
-            if (!response.success) {
-              ref.read(routerProvider).push(
-                  InvoiceNewLoanRequestRouter.loan_service_error,
-                  extra: LoanServiceErrorCodes.entity_kyc_error);
-              break;
-            }
-            return;
+            ref.read(routerProvider).push(
+                InvoiceNewLoanRequestRouter.kyc_verified,
+                extra: IBCKycType.entity);
+            break;
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.entity_kyc_error);
+                extra: InvoiceLoanServiceErrorCodes.entity_kyc_error);
             break;
           }
         }
@@ -273,7 +259,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.init_02_failed);
+                extra: InvoiceLoanServiceErrorCodes.init_02_failed);
             break;
           }
         }
@@ -292,7 +278,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.init_03_failed);
+                extra: InvoiceLoanServiceErrorCodes.init_03_failed);
             break;
           }
         }
@@ -307,14 +293,14 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
             if (!response.success) {
               ref.read(routerProvider).push(
                   InvoiceNewLoanRequestRouter.loan_service_error,
-                  extra: LoanServiceErrorCodes.repayment_setup_failed);
+                  extra: InvoiceLoanServiceErrorCodes.repayment_setup_failed);
               break;
             }
             break;
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.repayment_setup_failed);
+                extra: InvoiceLoanServiceErrorCodes.repayment_setup_failed);
             break;
           }
         }
@@ -333,7 +319,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.init_04_failed);
+                extra: InvoiceLoanServiceErrorCodes.init_04_failed);
             break;
           }
         }
@@ -348,14 +334,14 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
             if (!response.success) {
               ref.read(routerProvider).push(
                   InvoiceNewLoanRequestRouter.loan_service_error,
-                  extra: LoanServiceErrorCodes.loan_agreement_failed);
+                  extra: InvoiceLoanServiceErrorCodes.loan_agreement_failed);
               break;
             }
             return;
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.loan_agreement_failed);
+                extra: InvoiceLoanServiceErrorCodes.loan_agreement_failed);
             break;
           }
         }
@@ -377,7 +363,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.confirm_01_failed);
+                extra: InvoiceLoanServiceErrorCodes.confirm_01_failed);
             break;
           }
         }
@@ -391,7 +377,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.on_update_01_failed);
+                extra: InvoiceLoanServiceErrorCodes.on_update_01_failed);
             break;
           }
         }
@@ -413,7 +399,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
-                extra: LoanServiceErrorCodes.confirm_01_failed);
+                extra: InvoiceLoanServiceErrorCodes.confirm_01_failed);
             break;
           }
         }

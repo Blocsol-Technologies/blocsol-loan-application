@@ -18,10 +18,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
 
@@ -75,39 +73,11 @@ class _InvoiceNewLoanAgreementWebviewState
     if (!loanAgreementSuccessResponse.success) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: LoanServiceErrorCodes.loan_agreement_failed);
+          extra: InvoiceLoanServiceErrorCodes.loan_agreement_failed);
       return;
     }
   }
 
-  Future<void> _refetchLoanAgreementURL() async {
-    if (!ref.read(invoiceNewLoanRequestProvider).loanAgreementFailure) {
-      return;
-    }
-
-    ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .setLoanAgreementFailure(false);
-
-    var response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .refetchLoanAgreementForm(_cancelToken);
-
-    if (!mounted) return;
-
-    if (!response.success) {
-      context.go(InvoiceNewLoanRequestRouter.loan_service_unavailable,
-          extra: "unable to fetch the invoice loan agreement form");
-
-      return;
-    } else {
-      setState(() {
-        _currentUrl = response.data['url'];
-      });
-      _webViewController?.loadUrl(
-          urlRequest: URLRequest(url: WebUri(response.data)));
-    }
-  }
 
   Future<void> _refresh() async {
     _webViewController?.loadUrl(
@@ -222,98 +192,7 @@ class _InvoiceNewLoanAgreementWebviewState
                           _refresh();
                         },
                         children: [
-                          ref
-                                  .watch(invoiceNewLoanRequestProvider)
-                                  .loanAgreementFailure
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    const SpacerWidget(height: 0),
-                                    Lottie.asset("assets/animations/error.json",
-                                        height: 180, width: 180),
-                                    const SpacerWidget(height: 35),
-                                    Text(
-                                      "Your Loan Agreement Failed!",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h2,
-                                        fontWeight: AppFontWeights.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    const SpacerWidget(
-                                      height: 30,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        HapticFeedback.heavyImpact();
-                                        _refetchLoanAgreementURL();
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "Try Again?",
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h3,
-                                              fontWeight: AppFontWeights.medium,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SpacerWidget(
-                                      height: 30,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        HapticFeedback.mediumImpact();
-                                        context.go(InvoiceNewLoanRequestRouter
-                                            .dashboard);
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "Cancel?",
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h3,
-                                              fontWeight: AppFontWeights.medium,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : newLoanStateRef.verifyingLoanAgreementSuccess
+                        newLoanStateRef.verifyingLoanAgreementSuccess
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,

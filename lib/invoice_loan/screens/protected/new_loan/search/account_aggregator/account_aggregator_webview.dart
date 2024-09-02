@@ -37,7 +37,7 @@ class _NewLoanAccountAggregatorWebviewScreenState
   final GlobalKey webViewKey = GlobalKey();
   final _controller = StreamController<SwipeRefreshState>.broadcast();
 
-  Stream<SwipeRefreshState> get _stream => _controller.stream;
+  // Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
   bool _loading = true;
   bool _checkingConsentSuccess = false;
@@ -122,20 +122,6 @@ class _NewLoanAccountAggregatorWebviewScreenState
     ref.read(routerProvider).pushReplacement(
           InvoiceNewLoanRequestRouter.loan_offer_select,
         );
-  }
-
-  Future<void> _refresh() async {
-    setState(() {
-      _loading = true;
-    });
-
-    _webViewController?.loadUrl(
-        urlRequest: URLRequest(url: WebUri(widget.url)));
-
-    setState(() {
-      _loading = false;
-    });
-    _controller.sink.add(SwipeRefreshState.hidden);
   }
 
   @override
@@ -240,162 +226,152 @@ class _NewLoanAccountAggregatorWebviewScreenState
                   ),
                 ),
                 Expanded(
-                  child: SwipeRefresh.adaptive(
-                    shrinkWrap: true,
-                    stateStream: _stream,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onRefresh: () {
-                      _refresh();
-                    },
-                    children: [
-                      SizedBox(
-                        height: RelativeSize.height(550, height),
-                        width: width,
-                        child: _checkConsentError
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  const SpacerWidget(height: 50),
-                                  Lottie.asset("assets/animations/error.json",
-                                      height: 200, width: 200),
-                                  const SpacerWidget(height: 20),
-                                  SizedBox(
-                                    width: 250,
+                  child: SizedBox(
+                    height: RelativeSize.height(550, height),
+                    width: width,
+                    child: _checkConsentError
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const SpacerWidget(height: 50),
+                              Lottie.asset("assets/animations/error.json",
+                                  height: 200, width: 200),
+                              const SpacerWidget(height: 20),
+                              SizedBox(
+                                width: 250,
+                                child: Text(
+                                  "You did not provide AA consent for the lenders. You need to restart the loan process",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: AppFontSizes.h3,
+                                    fontWeight: AppFontWeights.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface,
+                                  ),
+                                  softWrap: true,
+                                ),
+                              ),
+                              const SpacerWidget(
+                                height: 50,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(invoiceNewLoanRequestProvider
+                                          .notifier)
+                                      .reset();
+                                  context.go(InvoiceNewLoanRequestRouter
+                                      .dashboard);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
                                     child: Text(
-                                      "You did not provide AA consent for the lenders. You need to restart the loan process",
-                                      textAlign: TextAlign.center,
+                                      "Restart",
                                       style: TextStyle(
                                         fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h3,
-                                        fontWeight: AppFontWeights.bold,
+                                        fontSize: AppFontSizes.h2,
+                                        fontWeight: AppFontWeights.medium,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .onPrimary,
                                       ),
-                                      softWrap: true,
                                     ),
                                   ),
-                                  const SpacerWidget(
-                                    height: 50,
+                                ),
+                              ),
+                            ],
+                          )
+                        : _checkingConsentSuccess
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  const SpacerWidget(height: 50),
+                                  Lottie.asset(
+                                      "assets/animations/loading_spinner.json",
+                                      height: 180,
+                                      width: 180),
+                                  const SpacerWidget(height: 35),
+                                  Text(
+                                    "Verifying Consent Success...",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.h2,
+                                      fontWeight: AppFontWeights.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      ref
-                                          .read(invoiceNewLoanRequestProvider
-                                              .notifier)
-                                          .reset();
-                                      context.go(InvoiceNewLoanRequestRouter
-                                          .dashboard);
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Restart",
-                                          style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h2,
-                                            fontWeight: AppFontWeights.medium,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                          ),
-                                        ),
-                                      ),
+                                  Text(
+                                    "Please do not click back or close the app",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.medium,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
                                     ),
                                   ),
                                 ],
                               )
-                            : _checkingConsentSuccess
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      const SpacerWidget(height: 50),
-                                      Lottie.asset(
-                                          "assets/animations/loading_spinner.json",
-                                          height: 180,
-                                          width: 180),
-                                      const SpacerWidget(height: 35),
-                                      Text(
-                                        "Verifying Consent Success...",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.h2,
-                                          fontWeight: AppFontWeights.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
+                            : Stack(
+                                children: [
+                                  SizedBox(
+                                    width: width,
+                                    height: 900,
+                                    child: InAppWebView(
+                                      key: webViewKey,
+                                      gestureRecognizers: const <Factory<
+                                          VerticalDragGestureRecognizer>>{},
+                                      initialSettings: InAppWebViewSettings(
+                                        javaScriptEnabled: true,
+                                        verticalScrollBarEnabled: true,
+                                        disableHorizontalScroll: true,
+                                        disableVerticalScroll: false,
                                       ),
-                                      Text(
-                                        "Please do not click back or close the app",
-                                        style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontSize: AppFontSizes.b1,
-                                          fontWeight: AppFontWeights.medium,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
+                                      initialUrlRequest: URLRequest(
+                                        url: WebUri(widget.url),
                                       ),
-                                    ],
-                                  )
-                                : Stack(
-                                    children: [
-                                      SizedBox(
-                                        width: width,
-                                        height: 900,
-                                        child: InAppWebView(
-                                          key: webViewKey,
-                                          gestureRecognizers: const <Factory<
-                                              VerticalDragGestureRecognizer>>{},
-                                          initialSettings: InAppWebViewSettings(
-                                            javaScriptEnabled: true,
-                                            verticalScrollBarEnabled: true,
-                                            disableHorizontalScroll: true,
-                                            disableVerticalScroll: false,
-                                          ),
-                                          initialUrlRequest: URLRequest(
-                                            url: WebUri(widget.url),
-                                          ),
-                                          shouldOverrideUrlLoading: (controller,
-                                              navigationAction) async {
-                                            var uri =
-                                                navigationAction.request.url;
-
-                                            if (uri != null &&
-                                                uri.toString().contains(
-                                                    'https://ondc.invoicepe.in/aa-redirect')) {
-                                              // Extract query parameters
-                                              String? ecres =
-                                                  uri.queryParameters['ecres'];
-                                              String? resdate = uri
-                                                  .queryParameters['resdate'];
-
-                                              _checkConsentSuccess(
-                                                  ecres, resdate);
-                                            }
-                                            return NavigationActionPolicy.ALLOW;
-                                          },
-                                        ),
-                                      ),
-                                      _loading
-                                          ? const LinearProgressIndicator()
-                                          : Container(),
-                                    ],
+                                      shouldOverrideUrlLoading: (controller,
+                                          navigationAction) async {
+                                        var uri =
+                                            navigationAction.request.url;
+                  
+                                        if (uri != null &&
+                                            uri.toString().contains(
+                                                'https://ondc.invoicepe.in/aa-redirect')) {
+                                          // Extract query parameters
+                                          String? ecres =
+                                              uri.queryParameters['ecres'];
+                                          String? resdate = uri
+                                              .queryParameters['resdate'];
+                  
+                                          _checkConsentSuccess(
+                                              ecres, resdate);
+                                        }
+                                        return NavigationActionPolicy.ALLOW;
+                                      },
+                                    ),
                                   ),
-                      ),
-                    ],
+                                  _loading
+                                      ? const LinearProgressIndicator()
+                                      : Container(),
+                                ],
+                              ),
                   ),
                 ),
               ],
