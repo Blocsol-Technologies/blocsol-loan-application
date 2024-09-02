@@ -1,9 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/account_aggregator/account_aggregator_box.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/account_aggregator/account_aggregator_box.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -14,17 +14,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceLoanProfileAASelect extends ConsumerStatefulWidget {
+class PlProfileAASelect extends ConsumerStatefulWidget {
   final List<AccountAggregatorInfo> aaList;
-  const InvoiceLoanProfileAASelect({super.key, required this.aaList});
+  const PlProfileAASelect({super.key, required this.aaList});
 
   @override
-  ConsumerState<InvoiceLoanProfileAASelect> createState() =>
-      _InvoiceLoanprofileAASelectState();
+  ConsumerState<PlProfileAASelect> createState() =>
+      _PlprofileAASelectState();
 }
 
-class _InvoiceLoanprofileAASelectState
-    extends ConsumerState<InvoiceLoanProfileAASelect> {
+class _PlprofileAASelectState
+    extends ConsumerState<PlProfileAASelect> {
   final _cancelToken = CancelToken();
 
   bool _updatingAA = false;
@@ -53,7 +53,7 @@ class _InvoiceLoanprofileAASelectState
     final accountAggregatorName = widget.aaList[_selectedIndex].key;
 
     var response = await ref
-        .read(invoiceLoanUserProfileDetailsProvider.notifier)
+        .read(personalLoanAccountDetailsProvider.notifier)
         .updateAccountAggregator(accountAggregatorName, _cancelToken);
 
     if (!mounted || !context.mounted) {
@@ -99,7 +99,7 @@ class _InvoiceLoanprofileAASelectState
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       String aaId =
-          ref.read(invoiceLoanUserProfileDetailsProvider).accountAggregatorId;
+          ref.read(personalLoanAccountDetailsProvider).accountAggregatorId;
 
       String aaName = aaId.split("@").last.toUpperCase();
 
@@ -117,7 +117,7 @@ class _InvoiceLoanprofileAASelectState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final _ = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    ref.watch(personalLoanAccountDetailsProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -129,7 +129,7 @@ class _InvoiceLoanprofileAASelectState
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const InvoiceLoanProfileTopNav(),
+              const PlProfileTopNav(),
               const SpacerWidget(
                 height: 35,
               ),
@@ -159,7 +159,7 @@ class _InvoiceLoanprofileAASelectState
               const SpacerWidget(
                 height: 25,
               ),
-              CurvedBackground(
+              PlCurvedBackground(
                 horizontalPadding: 11,
                 child: Column(
                   children: [
@@ -173,7 +173,7 @@ class _InvoiceLoanprofileAASelectState
                               itemBuilder: (ctx, idx) {
                                 AccountAggregatorInfo aa = widget.aaList[idx];
 
-                                return AccountAggregatorBox(
+                                return PlAccountAggregatorBox(
                                   aaInfo: aa,
                                   index: idx,
                                   selectedIndex: _selectedIndex,

@@ -1,20 +1,20 @@
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 
-class InvoiceLoanAccountSettings extends StatefulWidget {
-  const InvoiceLoanAccountSettings({super.key});
+class PlAccountSettings extends StatefulWidget {
+  const PlAccountSettings({super.key});
 
   @override
-  State<InvoiceLoanAccountSettings> createState() =>
-      _InvoiceLoanAccountSettingsState();
+  State<PlAccountSettings> createState() =>
+      _PlAccountSettingsState();
 }
 
-class _InvoiceLoanAccountSettingsState
-    extends State<InvoiceLoanAccountSettings> {
+class _PlAccountSettingsState
+    extends State<PlAccountSettings> {
   final _controller = ValueNotifier<bool>(false);
 
   bool _notificationsOn = false;

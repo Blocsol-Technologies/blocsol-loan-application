@@ -6,13 +6,13 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AccountAggregatorBox extends StatelessWidget {
+class PlAccountAggregatorBox extends StatelessWidget {
   final int selectedIndex;
   final int index;
   final AccountAggregatorInfo aaInfo;
   final Function onClick;
 
-  const AccountAggregatorBox(
+  const PlAccountAggregatorBox(
       {super.key,
       required this.aaInfo,
       required this.index,

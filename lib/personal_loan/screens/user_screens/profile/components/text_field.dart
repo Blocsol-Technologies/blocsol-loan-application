@@ -4,7 +4,7 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PersonalLoanProfileTextField extends StatelessWidget {
+class PlProfileTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
   final TextInputType keyboardType;
@@ -14,7 +14,7 @@ class PersonalLoanProfileTextField extends StatelessWidget {
   final bool obscureText;
   final List<TextInputFormatter> inputFormatters;
 
-  const PersonalLoanProfileTextField({
+  const PlProfileTextField({
     super.key,
     required this.label,
     required this.controller,

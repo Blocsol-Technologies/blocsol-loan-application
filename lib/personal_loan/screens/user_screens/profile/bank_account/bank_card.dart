@@ -5,13 +5,13 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 
-class BankDetailsCard extends StatelessWidget {
+class PlBankDetailsCard extends StatelessWidget {
   final String bankName;
   final String accountNumber;
   final String ifscCode;
   final String accountHolderName;
   final bool isPrimary;
-  const BankDetailsCard(
+  const PlBankDetailsCard(
       {super.key,
       required this.bankName,
       required this.accountNumber,

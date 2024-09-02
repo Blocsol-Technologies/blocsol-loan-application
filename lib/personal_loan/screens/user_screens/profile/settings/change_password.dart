@@ -1,9 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/text_field.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/text_field.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -14,16 +14,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceLoanProfileChangePassword extends ConsumerStatefulWidget {
-  const InvoiceLoanProfileChangePassword({super.key});
+class PlProfileChangePassword extends ConsumerStatefulWidget {
+  const PlProfileChangePassword({super.key});
 
   @override
-  ConsumerState<InvoiceLoanProfileChangePassword> createState() =>
-      _InvoiceLoanProfileChangePasswordState();
+  ConsumerState<PlProfileChangePassword> createState() =>
+      _PlProfileChangePasswordState();
 }
 
-class _InvoiceLoanProfileChangePasswordState
-    extends ConsumerState<InvoiceLoanProfileChangePassword> {
+class _PlProfileChangePasswordState
+    extends ConsumerState<PlProfileChangePassword> {
   final _oldPasswordTextController = TextEditingController();
   final _newPasswordTextController = TextEditingController();
   final _confirmNewPasswordTextController = TextEditingController();
@@ -99,7 +99,7 @@ class _InvoiceLoanProfileChangePasswordState
     }
 
     var response = await ref
-        .read(invoiceLoanUserProfileDetailsProvider.notifier)
+        .read(personalLoanAccountDetailsProvider.notifier)
         .changeAccountPassword(_oldPasswordTextController.text, _newPasswordTextController.text, _cancelToken);
 
     if (!mounted || !context.mounted) {
@@ -144,7 +144,7 @@ class _InvoiceLoanProfileChangePasswordState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final _ = ref.watch(invoiceLoanUserProfileDetailsProvider);
+ref.watch(personalLoanAccountDetailsProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -156,7 +156,7 @@ class _InvoiceLoanProfileChangePasswordState
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const InvoiceLoanProfileTopNav(),
+              const PlProfileTopNav(),
               const SpacerWidget(
                 height: 35,
               ),
@@ -172,7 +172,7 @@ class _InvoiceLoanProfileChangePasswordState
               const SpacerWidget(
                 height: 25,
               ),
-              CurvedBackground(
+              PlCurvedBackground(
                 horizontalPadding: 11,
                 child: Column(
                   children: [
@@ -181,7 +181,7 @@ class _InvoiceLoanProfileChangePasswordState
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: InvoiceLoanProfileTextField(
+                          child: PlProfileTextField(
                             label: "OLD PASSWORD",
                             hintText: "******",
                             obscureText: !_oldPasswordVisible,
@@ -224,7 +224,7 @@ class _InvoiceLoanProfileChangePasswordState
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: InvoiceLoanProfileTextField(
+                          child: PlProfileTextField(
                             label: "NEW PASSWORD",
                             hintText: "******",
                             obscureText: !_newPasswordVisible,
@@ -266,7 +266,7 @@ class _InvoiceLoanProfileChangePasswordState
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: InvoiceLoanProfileTextField(
+                          child: PlProfileTextField(
                             label: "CONFIRM NEW PASSWORD",
                             hintText: "******",
                             obscureText: !_confirmNewPasswordVisible,

@@ -1,45 +1,52 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/text_field.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/profile_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/text_field.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/text_formatters.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceLoanProfileAddBankAccount extends ConsumerStatefulWidget {
+class PlProfileAddBankAccount extends ConsumerStatefulWidget {
   final String accountNumber;
   final String ifscCode;
-  const InvoiceLoanProfileAddBankAccount(
+  const PlProfileAddBankAccount(
       {super.key, required this.accountNumber, required this.ifscCode});
 
   @override
-  ConsumerState<InvoiceLoanProfileAddBankAccount> createState() =>
-      _MyWidgetState();
+  ConsumerState<PlProfileAddBankAccount> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
+class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
   final _accountNumberTextController = TextEditingController();
   final _ifscCodeTextController = TextEditingController();
   final _cancelToken = CancelToken();
 
+  final List<String> _accountTypes = ["saving", "current"];
+
   bool _addingBankDetails = false;
   bool _setPrimaryBank = false;
+  String _accountType = "saving";
 
   Future<void> _updateBankDetails() async {
     var response = await ref
-        .read(invoiceLoanUserProfileDetailsProvider.notifier)
-        .updateCompanyBankAccountDetails(_accountNumberTextController.text,
-            _ifscCodeTextController.text, _setPrimaryBank, _cancelToken);
+        .read(personalLoanAccountDetailsProvider.notifier)
+        .updateCompanyBankAccountDetails(
+            _accountNumberTextController.text,
+            _ifscCodeTextController.text,
+            _setPrimaryBank,
+            _accountType == "saving" ? 1 : 0,
+            _cancelToken);
 
     if (!mounted) return;
 
@@ -64,7 +71,9 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
 
     if (!mounted) return;
 
-    ref.read(routerProvider).pushReplacement(InvoiceLoanProfileRouter.bankAccountSettings);
+    ref
+        .read(routerProvider)
+        .pushReplacement(PersonalLoanProfileRouter.bankAccountSettings);
 
     return;
   }
@@ -98,7 +107,7 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const InvoiceLoanProfileTopNav(),
+              const PlProfileTopNav(),
               const SpacerWidget(
                 height: 35,
               ),
@@ -114,11 +123,11 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
               const SpacerWidget(
                 height: 25,
               ),
-              CurvedBackground(
+              PlCurvedBackground(
                 horizontalPadding: 11,
                 child: Column(
                   children: [
-                    InvoiceLoanProfileTextField(
+                    PlProfileTextField(
                       label: "ENTER ACCOUNT NUMBER",
                       hintText: "Account Number",
                       keyboardType: TextInputType.number,
@@ -128,7 +137,7 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
                     const SpacerWidget(
                       height: 30,
                     ),
-                    InvoiceLoanProfileTextField(
+                    PlProfileTextField(
                       label: "ENTER IFSC CODE",
                       hintText: "Ifsc Code",
                       readOnly: widget.accountNumber.isNotEmpty,
@@ -137,6 +146,102 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
                     ),
                     const SpacerWidget(
                       height: 16,
+                    ),
+                    const SpacerWidget(
+                      height: 16,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: RelativeSize.width(30, width)),
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        underline: const SizedBox(),
+                        iconStyleData: IconStyleData(
+                          icon: Icon(
+                            Icons.account_balance,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            size: 20,
+                          ),
+                        ),
+                        hint: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          height: 40,
+                          width: width,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .scrim
+                                .withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                _accountType,
+                                style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        items: _accountTypes
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: AppFontSizes.b1,
+                                      fontWeight: AppFontWeights.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: _accountType,
+                        onChanged: (String? value) {
+                          if (value == null) return;
+
+                          setState(() {
+                            _accountType = value;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 40,
+                          width: width,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          offset: const Offset(0, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(5),
+                            thumbVisibility:
+                                WidgetStateProperty.all<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                        ),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,

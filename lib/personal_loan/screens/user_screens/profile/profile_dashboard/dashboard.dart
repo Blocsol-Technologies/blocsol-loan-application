@@ -1,11 +1,11 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/dashboard_hero.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/profile_dashboard/nav_item.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/profile_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/profile_dashboard/dashboard_hero.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/profile_dashboard/nav_item.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -14,8 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class InvoiceLoanProfileDashboard extends ConsumerWidget {
-  const InvoiceLoanProfileDashboard({super.key});
+class PLProfileDashboard extends ConsumerWidget {
+  const PLProfileDashboard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,20 +32,20 @@ class InvoiceLoanProfileDashboard extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const ProfileDashboardHero(),
+              const PLProfileDashboardHero(),
               SpacerWidget(
                 height: RelativeSize.height(52, height),
               ),
-              const ProfileNavItem(
+              const PlProfileNavItem(
                 text: "Account Information",
-                route: InvoiceLoanProfileRouter.accountInfo,
+                route: PersonalLoanProfileRouter.accountInfo,
               ),
-              const ProfileNavItem(
+              const PlProfileNavItem(
                 text: "Bank Account",
-                route: InvoiceLoanProfileRouter.bankAccountSettings,
+                route: PersonalLoanProfileRouter.bankAccountSettings,
               ),
-              const ProfileNavItem(
-                  text: "Support", route: InvoiceLoanIndexRouter.support),
+              const PlProfileNavItem(
+                  text: "Support", route: PersonalLoanIndexRouter.support_home),
               Container(
                 width: width,
                 height: RelativeSize.height(70, height),
@@ -71,9 +71,9 @@ class InvoiceLoanProfileDashboard extends ConsumerWidget {
                       onTap: () {
                         HapticFeedback.mediumImpact();
                         ref.read(routerProvider).push(
-                            InvoiceLoanProfileRouter.accountAggregatorSelect,
+                            PersonalLoanProfileRouter.accountAggregatorSelect,
                             extra: ref
-                                .read(invoiceLoanUserProfileDetailsProvider)
+                                .read(personalLoanAccountDetailsProvider)
                                 .primaryBankAccount
                                 .bankName);
                       },
@@ -111,9 +111,9 @@ class InvoiceLoanProfileDashboard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const ProfileNavItem(
+              const PlProfileNavItem(
                 text: "Settings",
-                route: InvoiceLoanProfileRouter.settings,
+                route: PersonalLoanProfileRouter.settings,
               ),
               GestureDetector(
                 onTap: () async {

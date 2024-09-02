@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class PersonalLoanProfileTopNav extends ConsumerWidget {
-  const PersonalLoanProfileTopNav({super.key});
+class PlProfileTopNav extends ConsumerWidget {
+  const PlProfileTopNav({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

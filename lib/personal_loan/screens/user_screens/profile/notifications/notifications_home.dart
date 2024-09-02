@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/notifications/notification_item.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/notifications/notification_item.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -12,16 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceLoanNotifications extends ConsumerStatefulWidget {
-  const InvoiceLoanNotifications({super.key});
+class PlNotifications extends ConsumerStatefulWidget {
+  const PlNotifications({super.key});
 
   @override
-  ConsumerState<InvoiceLoanNotifications> createState() =>
-      _InvoiceLoanNotificationsState();
+  ConsumerState<PlNotifications> createState() =>
+      _PlNotificationsState();
 }
 
-class _InvoiceLoanNotificationsState
-    extends ConsumerState<InvoiceLoanNotifications> {
+class _PlNotificationsState
+    extends ConsumerState<PlNotifications> {
   final _cancelToken = CancelToken();
 
   Future<void> _setNotificationsRead() async {
@@ -44,7 +44,7 @@ class _InvoiceLoanNotificationsState
     }
 
     await ref
-        .read(invoiceLoanUserProfileDetailsProvider.notifier)
+        .read(personalLoanAccountDetailsProvider.notifier)
         .markNotificationsRead(deviceId, _cancelToken);
   }
 
@@ -60,7 +60,7 @@ class _InvoiceLoanNotificationsState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final userDetailsRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    final userDetailsRef = ref.watch(personalLoanAccountDetailsProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -73,7 +73,7 @@ class _InvoiceLoanNotificationsState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const InvoiceLoanProfileTopNav(),
+              const PlProfileTopNav(),
               const SpacerWidget(
                 height: 35,
               ),
@@ -95,7 +95,7 @@ class _InvoiceLoanNotificationsState
                       ),
                     ),
                     Text(
-                      "You have ${ref.read(invoiceLoanUserProfileDetailsProvider.notifier).getNumUnseenNotifications()} unseen notifications",
+                      "You have ${ref.read(personalLoanAccountDetailsProvider.notifier).getNumUnseenNotifications()} unseen notifications",
                       style: TextStyle(
                           fontSize: AppFontSizes.b1,
                           fontWeight: AppFontWeights.medium,
@@ -129,7 +129,7 @@ class _InvoiceLoanNotificationsState
                   : ListView.builder(
                       shrinkWrap: true,
                       itemBuilder: (ctx, idx) {
-                        return NotificationItem(
+                        return PlNotificationItem(
                             notification: userDetailsRef.notifications[idx]);
                       },
                       itemCount: userDetailsRef.notifications.length,

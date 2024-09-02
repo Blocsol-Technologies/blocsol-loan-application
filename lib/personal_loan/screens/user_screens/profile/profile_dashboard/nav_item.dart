@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileNavItem extends ConsumerWidget {
+class PlProfileNavItem extends ConsumerWidget {
   final String text;
   final String route;
-  const ProfileNavItem({super.key, required this.text, required this.route});
+  const PlProfileNavItem({super.key, required this.text, required this.route});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

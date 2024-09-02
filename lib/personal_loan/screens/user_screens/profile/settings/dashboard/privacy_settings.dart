@@ -1,14 +1,14 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/profile_router.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InvoiceLoanPrivacySettings extends ConsumerWidget {
-  const InvoiceLoanPrivacySettings({super.key});
+class PlPrivacySettings extends ConsumerWidget {
+  const PlPrivacySettings({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +36,7 @@ class InvoiceLoanPrivacySettings extends ConsumerWidget {
               HapticFeedback.mediumImpact();
               ref
                   .read(routerProvider)
-                  .push(InvoiceLoanProfileRouter.changePassword);
+                  .push(PersonalLoanProfileRouter.changePassword);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

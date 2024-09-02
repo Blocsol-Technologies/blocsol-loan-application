@@ -1,23 +1,22 @@
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/settings/dashboard/account_settings.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/settings/dashboard/privacy_settings.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/dashboard/account_settings.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InvoiceLoanProfileSettingsDashboard extends ConsumerWidget {
-  const InvoiceLoanProfileSettingsDashboard({super.key});
+class PlProfileSettingsDashboard extends ConsumerWidget {
+  const PlProfileSettingsDashboard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final _ = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    final _ = ref.watch(personalLoanAccountDetailsProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -50,7 +49,7 @@ class InvoiceLoanProfileSettingsDashboard extends ConsumerWidget {
               )),
               Column(
                 children: [
-                  const InvoiceLoanProfileTopNav(),
+                  const PlProfileTopNav(),
                   const SpacerWidget(
                     height: 35,
                   ),
@@ -66,14 +65,14 @@ class InvoiceLoanProfileSettingsDashboard extends ConsumerWidget {
                   const SpacerWidget(
                     height: 25,
                   ),
-                  const CurvedBackground(
+                  const PlCurvedBackground(
                     child: Column(
                       children: [
-                        InvoiceLoanPrivacySettings(),
+                        PlAccountSettings(),
                         SpacerWidget(
                           height: 40,
                         ),
-                        InvoiceLoanAccountSettings(),
+                        PlAccountSettings(),
                       ],
                     ),
                   ),

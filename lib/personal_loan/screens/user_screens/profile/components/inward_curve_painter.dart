@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class InwardCurvePainter extends CustomPainter {
+class PlInwardCurvePainter extends CustomPainter {
   final Color color;
 
-  InwardCurvePainter({required this.color});
+  PlInwardCurvePainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {

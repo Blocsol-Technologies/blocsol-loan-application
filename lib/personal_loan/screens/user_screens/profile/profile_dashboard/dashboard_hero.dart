@@ -7,8 +7,8 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileDashboardHero extends ConsumerWidget {
-  const ProfileDashboardHero({super.key});
+class PLProfileDashboardHero extends ConsumerWidget {
+  const PLProfileDashboardHero({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +17,7 @@ class ProfileDashboardHero extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const PersonalLoanProfileTopNav(),
+        const PlProfileTopNav(),
         const SpacerWidget(
           height: 25,
         ),
@@ -30,9 +30,11 @@ class ProfileDashboardHero extends ConsumerWidget {
             color: Color.fromRGBO(228, 247, 255, 1),
           ),
           child: Center(
-            child: Image.asset(
-              "assets/images/invoice_loan/profile/office.png",
-              fit: BoxFit.contain,
+            child: Image.network(
+              profileDetailsRef.imageURL.isEmpty
+                  ? "https://placehold.co/30x30/000000/FFFFFF.png"
+                  : profileDetailsRef.imageURL,
+              fit: BoxFit.cover,
             ),
           ),
         ),

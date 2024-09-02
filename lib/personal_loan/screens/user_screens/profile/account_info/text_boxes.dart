@@ -3,11 +3,11 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 
-class InvoiceLoanProfileInfoTextBox extends StatelessWidget {
+class PlProfileInfoTextBox extends StatelessWidget {
   final String label;
   final String textVal;
 
-  const InvoiceLoanProfileInfoTextBox(
+  const PlProfileInfoTextBox(
       {super.key, required this.label, required this.textVal});
 
   @override

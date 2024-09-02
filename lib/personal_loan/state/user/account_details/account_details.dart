@@ -38,6 +38,19 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
     state = state.copyWith(bankAccounts: bankAccounts);
   }
 
+    bool setNotificationSeen(bool seen) {
+    state = state.copyWith(notificationSeen: seen);
+
+    return true;
+  }
+
+  int getNumUnseenNotifications() {
+    return state.notifications
+        .where((element) => !element.seen)
+        .toList()
+        .length;
+  }
+
   void setPrimaryBankAccount(PlBankAccountDetails bankAccount) {
     addBankAccount(bankAccount);
 

@@ -1,13 +1,13 @@
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/state/notification.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/state/notifications.dart';
 import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 
-class NotificationItem extends StatelessWidget {
-  final IbcNotification notification;
-  const NotificationItem({super.key, required this.notification});
+class PlNotificationItem extends StatelessWidget {
+  final PlNotification notification;
+  const PlNotificationItem({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -92,22 +92,22 @@ class NotificationItem extends StatelessWidget {
   }
 }
 
-Widget getNotificationWidget(Notificationtype type) {
+Widget getNotificationWidget(PlNotificationType type) {
   switch (type) {
-    case Notificationtype.info:
+    case PlNotificationType.info:
       return const Icon(
         Icons.info_rounded,
         color: Colors.blue,
         size: 22,
       );
-    case Notificationtype.success:
+    case PlNotificationType.success:
       return const Icon(
         Icons.check_circle_rounded,
         color: Colors.green,
         size: 22,
       );
 
-    case Notificationtype.error:
+    case PlNotificationType.error:
       return const Icon(
         Icons.error_rounded,
         color: Colors.red,

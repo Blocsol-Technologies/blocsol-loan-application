@@ -2,10 +2,10 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:flutter/material.dart';
 
-class CurvedBackground extends StatelessWidget {
+class PlCurvedBackground extends StatelessWidget {
   final Widget child;
   final double horizontalPadding;
-  const CurvedBackground({super.key, required this.child, this.horizontalPadding = 27});
+  const PlCurvedBackground({super.key, required this.child, this.horizontalPadding = 27});
 
   @override
   Widget build(BuildContext context) {

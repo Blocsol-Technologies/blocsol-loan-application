@@ -1,22 +1,22 @@
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/account_info/text_boxes.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/account_info/text_boxes.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InvoiceLoanProfileAccountInfo extends ConsumerWidget {
-  const InvoiceLoanProfileAccountInfo({super.key});
+class PlProfileAccountInfo extends ConsumerWidget {
+  const PlProfileAccountInfo({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final profileRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    final profileRef = ref.watch(personalLoanAccountDetailsProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -28,7 +28,7 @@ class InvoiceLoanProfileAccountInfo extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const InvoiceLoanProfileTopNav(),
+              const PlProfileTopNav(),
               const SpacerWidget(
                 height: 35,
               ),
@@ -44,40 +44,38 @@ class InvoiceLoanProfileAccountInfo extends ConsumerWidget {
               const SpacerWidget(
                 height: 25,
               ),
-              CurvedBackground(
+              PlCurvedBackground(
                 child: Column(
                   children: [
-                    InvoiceLoanProfileInfoTextBox(
+                    PlProfileInfoTextBox(
                       label: "Name",
-                      textVal: profileRef.tradeName,
+                      textVal: profileRef.name,
                     ),
                     const SpacerWidget(
                       height: 15,
                     ),
-                    InvoiceLoanProfileInfoTextBox(
-                      label: "GST Number",
-                      textVal: profileRef.gstNumber,
+                    PlProfileInfoTextBox(
+                      label: "Udyam Number",
+                      textVal: profileRef.udyam,
                     ),
                     const SpacerWidget(
                       height: 15,
                     ),
-                    InvoiceLoanProfileInfoTextBox(
+                    PlProfileInfoTextBox(
                       label: "Pan Number",
-                      textVal: profileRef.gstNumber.length == 15
-                          ? profileRef.gstNumber.substring(2, 12)
-                          : "",
+                      textVal: profileRef.pan,
                     ),
                     const SpacerWidget(
                       height: 15,
                     ),
-                    InvoiceLoanProfileInfoTextBox(
+                    PlProfileInfoTextBox(
                       label: "Contact",
                       textVal: profileRef.phone,
                     ),
                     const SpacerWidget(
                       height: 15,
                     ),
-                    InvoiceLoanProfileInfoTextBox(
+                    PlProfileInfoTextBox(
                         label: "Email", textVal: profileRef.email),
                   ],
                 ),
