@@ -11,7 +11,7 @@ class InvoiceLoanBottomNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomNavStateRef = ref.watch(bottomNavStateProvider);
+    final bottomNavStateRef = ref.watch(invoiceLoanBottomNavStateProvider);
 
     return BottomNavigationBar(
       currentIndex: bottomNavStateRef.index,
@@ -19,19 +19,19 @@ class InvoiceLoanBottomNavBar extends ConsumerWidget {
         switch (index) {
           case 0:
             ref
-                .read(bottomNavStateProvider.notifier)
+                .read(invoiceLoanBottomNavStateProvider.notifier)
                 .changeItem(BottomNavItems.home);
 
             context.go(InvoiceLoanIndexRouter.dashboard);
             break;
           case 1:
             ref
-                .read(bottomNavStateProvider.notifier)
+                .read(invoiceLoanBottomNavStateProvider.notifier)
                 .changeItem(BottomNavItems.loans);
             context.go(InvoiceLoanIndexRouter.liabilities);
              case 2:
             ref
-                .read(bottomNavStateProvider.notifier)
+                .read(invoiceLoanBottomNavStateProvider.notifier)
                 .changeItem(BottomNavItems.invoices);
             context.go(InvoiceLoanIndexRouter.invoices);
         }

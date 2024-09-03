@@ -6,21 +6,22 @@ part of 'bottom_nav_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bottomNavStateHash() => r'ff8d187cf2003eeae24681a2d56fb3c6893d735c';
+String _$invoiceLoanBottomNavStateHash() =>
+    r'153363a43c036054296203b9b0f6a67f70059dac';
 
-/// See also [BottomNavState].
-@ProviderFor(BottomNavState)
-final bottomNavStateProvider =
-    AutoDisposeNotifierProvider<BottomNavState, BottomNavItems>.internal(
-  BottomNavState.new,
-  name: r'bottomNavStateProvider',
+/// See also [InvoiceLoanBottomNavState].
+@ProviderFor(InvoiceLoanBottomNavState)
+final invoiceLoanBottomNavStateProvider = AutoDisposeNotifierProvider<
+    InvoiceLoanBottomNavState, BottomNavItems>.internal(
+  InvoiceLoanBottomNavState.new,
+  name: r'invoiceLoanBottomNavStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$bottomNavStateHash,
+      : _$invoiceLoanBottomNavStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$BottomNavState = AutoDisposeNotifier<BottomNavItems>;
+typedef _$InvoiceLoanBottomNavState = AutoDisposeNotifier<BottomNavItems>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

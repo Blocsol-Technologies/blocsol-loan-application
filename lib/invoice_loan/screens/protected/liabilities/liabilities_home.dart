@@ -168,7 +168,7 @@ class _InvoiceLoanLiabilitiesHomeState
                         onTap: () {
                           HapticFeedback.mediumImpact();
                           ref
-                              .read(bottomNavStateProvider.notifier).changeItem(BottomNavItems.home);
+                              .read(invoiceLoanBottomNavStateProvider.notifier).changeItem(BottomNavItems.home);
 
                               context.go(InvoiceLoanIndexRouter.dashboard);
                         },

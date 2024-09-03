@@ -5,7 +5,7 @@ part 'bottom_nav_state.g.dart';
 enum BottomNavItems { home, loans, invoices }
 
 @riverpod
-class BottomNavState extends _$BottomNavState {
+class InvoiceLoanBottomNavState extends _$InvoiceLoanBottomNavState {
   @override
   BottomNavItems build() {
     ref.keepAlive();
