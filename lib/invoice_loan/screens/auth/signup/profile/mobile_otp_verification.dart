@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
@@ -12,7 +11,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,10 +28,11 @@ class _SignupMobileOtpValidationState
   final _cancelToken = CancelToken();
 
   bool _otpVerificationError = false;
+  String _errMessage = "";
 
   Future<void> _verifyMobileOTP() async {
     var response = await ref
-        .read(signupStateProvider.notifier)
+        .read(invoiceLoanSignupStateProvider.notifier)
         .verifyMobileOTP(_textController.text, _cancelToken);
 
     if (!mounted) return;
@@ -45,23 +44,8 @@ class _SignupMobileOtpValidationState
 
     setState(() {
       _otpVerificationError = true;
+      _errMessage = response.message;
     });
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error!',
-        message: response.message,
-        contentType: ContentType.failure,
-      ),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
 
     return;
   }
@@ -89,7 +73,7 @@ class _SignupMobileOtpValidationState
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    final signupState = ref.read(signupStateProvider);
+    final signupState = ref.read(invoiceLoanSignupStateProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -193,25 +177,18 @@ class _SignupMobileOtpValidationState
                   ),
                   SectionMain(
                     textController: _textController,
-                    textInputChild: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Lottie.asset('assets/animations/loading_spinner.json',
-                            height: 30, width: 30),
-                        const SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          "Auto reading OTP",
-                          style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontWeight: AppFontWeights.medium,
-                              fontSize: AppFontSizes.b1,
-                              color: const Color.fromRGBO(150, 150, 150, 1)),
-                        ),
-                      ],
-                    ),
+                    textInputChild: _otpVerificationError
+                        ? Text(
+                            _errMessage,
+                            textAlign: TextAlign.start,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                fontWeight: AppFontWeights.medium,
+                                color: Colors.red),
+                          )
+                        : const SizedBox(),
                     maxInputLength: 6,
                     keyboardType: TextInputType.number,
                     hintText: "6-DIGIT OTP",

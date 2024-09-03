@@ -15,28 +15,29 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LoginState {
+mixin _$InvoiceLoanLoginState {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get deviceId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $LoginStateCopyWith<LoginState> get copyWith =>
+  $InvoiceLoanLoginStateCopyWith<InvoiceLoanLoginState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LoginStateCopyWith<$Res> {
-  factory $LoginStateCopyWith(
-          LoginState value, $Res Function(LoginState) then) =
-      _$LoginStateCopyWithImpl<$Res, LoginState>;
+abstract class $InvoiceLoanLoginStateCopyWith<$Res> {
+  factory $InvoiceLoanLoginStateCopyWith(InvoiceLoanLoginState value,
+          $Res Function(InvoiceLoanLoginState) then) =
+      _$InvoiceLoanLoginStateCopyWithImpl<$Res, InvoiceLoanLoginState>;
   @useResult
   $Res call({String phoneNumber, String deviceId});
 }
 
 /// @nodoc
-class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
-    implements $LoginStateCopyWith<$Res> {
-  _$LoginStateCopyWithImpl(this._value, this._then);
+class _$InvoiceLoanLoginStateCopyWithImpl<$Res,
+        $Val extends InvoiceLoanLoginState>
+    implements $InvoiceLoanLoginStateCopyWith<$Res> {
+  _$InvoiceLoanLoginStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -63,22 +64,24 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
 }
 
 /// @nodoc
-abstract class _$$LoginStateImplCopyWith<$Res>
-    implements $LoginStateCopyWith<$Res> {
-  factory _$$LoginStateImplCopyWith(
-          _$LoginStateImpl value, $Res Function(_$LoginStateImpl) then) =
-      __$$LoginStateImplCopyWithImpl<$Res>;
+abstract class _$$InvoiceLoanLoginStateImplCopyWith<$Res>
+    implements $InvoiceLoanLoginStateCopyWith<$Res> {
+  factory _$$InvoiceLoanLoginStateImplCopyWith(
+          _$InvoiceLoanLoginStateImpl value,
+          $Res Function(_$InvoiceLoanLoginStateImpl) then) =
+      __$$InvoiceLoanLoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String phoneNumber, String deviceId});
 }
 
 /// @nodoc
-class __$$LoginStateImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateImpl>
-    implements _$$LoginStateImplCopyWith<$Res> {
-  __$$LoginStateImplCopyWithImpl(
-      _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
+class __$$InvoiceLoanLoginStateImplCopyWithImpl<$Res>
+    extends _$InvoiceLoanLoginStateCopyWithImpl<$Res,
+        _$InvoiceLoanLoginStateImpl>
+    implements _$$InvoiceLoanLoginStateImplCopyWith<$Res> {
+  __$$InvoiceLoanLoginStateImplCopyWithImpl(_$InvoiceLoanLoginStateImpl _value,
+      $Res Function(_$InvoiceLoanLoginStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +90,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? deviceId = null,
   }) {
-    return _then(_$LoginStateImpl(
+    return _then(_$InvoiceLoanLoginStateImpl(
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -102,8 +105,9 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoginStateImpl implements _LoginState {
-  const _$LoginStateImpl({required this.phoneNumber, required this.deviceId});
+class _$InvoiceLoanLoginStateImpl implements _InvoiceLoanLoginState {
+  const _$InvoiceLoanLoginStateImpl(
+      {required this.phoneNumber, required this.deviceId});
 
   @override
   final String phoneNumber;
@@ -112,14 +116,14 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(phoneNumber: $phoneNumber, deviceId: $deviceId)';
+    return 'InvoiceLoanLoginState(phoneNumber: $phoneNumber, deviceId: $deviceId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginStateImpl &&
+            other is _$InvoiceLoanLoginStateImpl &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.deviceId, deviceId) ||
@@ -132,14 +136,15 @@ class _$LoginStateImpl implements _LoginState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
-      __$$LoginStateImplCopyWithImpl<_$LoginStateImpl>(this, _$identity);
+  _$$InvoiceLoanLoginStateImplCopyWith<_$InvoiceLoanLoginStateImpl>
+      get copyWith => __$$InvoiceLoanLoginStateImplCopyWithImpl<
+          _$InvoiceLoanLoginStateImpl>(this, _$identity);
 }
 
-abstract class _LoginState implements LoginState {
-  const factory _LoginState(
+abstract class _InvoiceLoanLoginState implements InvoiceLoanLoginState {
+  const factory _InvoiceLoanLoginState(
       {required final String phoneNumber,
-      required final String deviceId}) = _$LoginStateImpl;
+      required final String deviceId}) = _$InvoiceLoanLoginStateImpl;
 
   @override
   String get phoneNumber;
@@ -147,6 +152,6 @@ abstract class _LoginState implements LoginState {
   String get deviceId;
   @override
   @JsonKey(ignore: true)
-  _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$InvoiceLoanLoginStateImplCopyWith<_$InvoiceLoanLoginStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

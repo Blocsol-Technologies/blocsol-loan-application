@@ -62,8 +62,8 @@ class _InvoiceNewLoanRequestCountdownTimerState
         child: CountdownTimer(
           endTime: endTime,
           onEnd: () {
-            ref.read(invoiceNewLoanRequestProvider.notifier).reset();
-            context.go(InvoiceNewLoanRequestRouter.loan_service_error, extra: InvoiceLoanServiceErrorCodes.request_timeout);
+            // ref.read(invoiceNewLoanRequestProvider.notifier).reset();
+            // context.go(InvoiceNewLoanRequestRouter.loan_service_error, extra: InvoiceLoanServiceErrorCodes.request_timeout);
           },
           widgetBuilder: (_, CurrentRemainingTime? time) {
             String text = "${time?.min ?? "00"}min : ${time?.sec ?? "00"}sec";

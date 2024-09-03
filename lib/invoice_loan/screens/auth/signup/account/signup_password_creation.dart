@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main_background.dart';
@@ -35,11 +34,12 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
   bool _showPassword = false;
   bool _showConfirmedPassword = false;
   bool _isError = false;
+  String _errMessage = "";
   bool _animationComplete = false;
 
   Future<void> _setPassword() async {
     var response = await ref
-        .read(signupStateProvider.notifier)
+        .read(invoiceLoanSignupStateProvider.notifier)
         .setAccountPassword(_textEditingController.text, _cancelToken);
 
     if (!mounted) return;
@@ -51,23 +51,8 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
 
     setState(() {
       _isError = true;
+      _errMessage = response.message;
     });
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error!',
-        message: response.message,
-        contentType: ContentType.failure,
-      ),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
 
     return;
   }
@@ -432,7 +417,25 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
                             ),
                           ),
                           const SpacerWidget(
-                            height: 30,
+                            height: 4,
+                          ),
+                          SizedBox(
+                            width: width,
+                            child: _isError
+                                ? Text(
+                                    _errMessage,
+                                    textAlign: TextAlign.start,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.b1,
+                                        fontWeight: AppFontWeights.medium,
+                                        color: Colors.red),
+                                  )
+                                : const SizedBox(),
+                          ),
+                          const SpacerWidget(
+                            height: 25,
                           ),
                           _animationComplete
                               ? Expanded(

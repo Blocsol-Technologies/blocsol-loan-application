@@ -41,6 +41,7 @@ class PersonalLoanSignup extends _$PersonalLoanSignup {
     );
   }
 
+
   void updateEmailDetails(String email, String imageURL) {
     state = state.copyWith(email: email, imageURL: imageURL);
   }
@@ -54,32 +55,7 @@ class PersonalLoanSignup extends _$PersonalLoanSignup {
   }
 
   void reset() {
-    state = const SignupStateData(
-      email: "",
-      imageURL: "",
-
-      // Phone Auth
-      phoneNumber: "",
-
-      // Personal details
-      firstName: "",
-      lastName: "",
-      dob: "",
-      gender: "",
-      pan: "",
-
-      // Address details
-      address: "",
-      city: "",
-      state: "",
-      pincode: "",
-      udyam: "",
-      companyName: "",
-
-      udyamValidationRequired: false,
-      udyamValidated: false,
-      personalDetailsValidated: false,
-    );
+    ref.invalidateSelf();
   }
 
   // Backend Functionality ================================================

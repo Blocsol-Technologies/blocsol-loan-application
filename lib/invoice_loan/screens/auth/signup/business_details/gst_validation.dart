@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
@@ -26,10 +25,11 @@ class _SignupGstValidationState extends ConsumerState<SignupGstValidation> {
   final _cancelToken = CancelToken();
 
   bool _isError = false;
+  String _errMessage = "";
 
   Future<void> _verifyGst() async {
     var response = await ref
-        .read(signupStateProvider.notifier)
+        .read(invoiceLoanSignupStateProvider.notifier)
         .verifyGstNumber(_textController.text, _cancelToken);
 
     if (!mounted) return;
@@ -41,23 +41,8 @@ class _SignupGstValidationState extends ConsumerState<SignupGstValidation> {
 
     setState(() {
       _isError = true;
+      _errMessage = response.message;
     });
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error!',
-        message: response.message,
-        contentType: ContentType.failure,
-      ),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
 
     return;
   }
@@ -176,16 +161,27 @@ class _SignupGstValidationState extends ConsumerState<SignupGstValidation> {
                   ),
                   SectionMain(
                     textController: _textController,
-                    textInputChild: Text(
-                      "Sample: 06BB*******P1ZS",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontSize: AppFontSizes.b2,
-                        fontWeight: AppFontWeights.normal,
-                        color: const Color.fromRGBO(118, 118, 118, 1),
-                      ),
-                    ),
+                    textInputChild: _isError
+                        ? Text(
+                            _errMessage,
+                            textAlign: TextAlign.start,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                fontWeight: AppFontWeights.medium,
+                                color: Colors.red),
+                          )
+                        : Text(
+                            "Sample: 06BB*******P1ZS",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b2,
+                              fontWeight: AppFontWeights.normal,
+                              color: const Color.fromRGBO(118, 118, 118, 1),
+                            ),
+                          ),
                     maxInputLength: 15,
                     keyboardType: TextInputType.text,
                     hintText: "15-DIGIT GSTIN",

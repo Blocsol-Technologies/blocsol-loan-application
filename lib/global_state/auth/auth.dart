@@ -1,4 +1,6 @@
 import 'package:blocsol_loan_application/global_state/auth/auth_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/auth/login/login.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/utils/secure_storage.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -63,6 +65,10 @@ class Auth extends _$Auth {
 
     state = AsyncValue.data(
         AuthState(invoiceLoanToken: "", personalLoanToken: personalLoanToken));
+
+    ref.read(invoiceLoanLoginProvider.notifier).reset();
+    // ref.read(invoiceLoanSig)
+    ref.read(invoiceLoanEventsProvider.notifier).reset();
   }
 
   Future<void> logoutPersonalLoanUser() async {

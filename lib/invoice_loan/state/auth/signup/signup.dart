@@ -9,11 +9,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'signup.g.dart';
 
 @riverpod
-class SignupState extends _$SignupState {
+class InvoiceLoanSignupState extends _$InvoiceLoanSignupState {
   @override
-  SignupStateData build() {
+  InvoiceLoanSignupStateData build() {
     ref.keepAlive();
-    return SignupStateData.initial;
+    return InvoiceLoanSignupStateData.initial;
   }
 
   void dispose() {
@@ -53,7 +53,7 @@ class SignupState extends _$SignupState {
   }
 
   void reset() {
-    state = SignupStateData.initial;
+    ref.invalidateSelf();
   }
 
   // Http Requests ================================================

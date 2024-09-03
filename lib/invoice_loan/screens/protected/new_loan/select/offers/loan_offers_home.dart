@@ -312,6 +312,14 @@ class _InvoiceNewLoanOffersSelectState
                                       offers:
                                           _filteredOffers[idx].offerDetailsList,
                                       onOfferSelect: () {
+                                        var offer = _filteredOffers[idx]
+                                            .offerDetailsList[0];
+
+                                        ref
+                                            .read(invoiceNewLoanRequestProvider
+                                                .notifier)
+                                            .setTransactionId(
+                                                offer.transactionId);
                                         ref
                                             .read(invoiceNewLoanRequestProvider
                                                 .notifier)

@@ -26,7 +26,6 @@ class PersonalLoanServerSentEvents extends _$PersonalLoanServerSentEvents {
       '$personalLoanServerUrl/ondc/events',
       header: {"Authorization": token, "Keep-Alive": "true"},
       onSuccessCallback: (EventFluxResponse? response) {
-
         logger.w("SSE Connection established");
 
         response?.stream?.listen((data) async {
@@ -46,10 +45,17 @@ class PersonalLoanServerSentEvents extends _$PersonalLoanServerSentEvents {
           trace: StackTrace.current,
         ).reportError();
       },
-      reconnectConfig: ReconnectConfig(mode: ReconnectMode.linear, interval: const Duration(seconds: 5), maxAttempts: 5),
+      reconnectConfig: ReconnectConfig(
+          mode: ReconnectMode.linear,
+          interval: const Duration(seconds: 5),
+          maxAttempts: 5),
       autoReconnect: true,
     );
 
     return;
+  }
+
+  void reset() {
+    ref.invalidateSelf();
   }
 }

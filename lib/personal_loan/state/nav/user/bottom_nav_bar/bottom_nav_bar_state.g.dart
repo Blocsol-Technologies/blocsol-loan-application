@@ -7,7 +7,7 @@ part of 'bottom_nav_bar_state.dart';
 // **************************************************************************
 
 String _$personalLoanBottomNavStateHash() =>
-    r'b68ea11ffc94afede3ea84cfd55a5d86f1fe249c';
+    r'9fa774fcbf4b24517f810cba56e02045caa9d9b9';
 
 /// See also [PersonalLoanBottomNavState].
 @ProviderFor(PersonalLoanBottomNavState)

@@ -27,6 +27,10 @@ class InvoiceLoanLiabilities extends _$InvoiceLoanLiabilities {
     return AllLiabilitiesState.initial;
   }
 
+  void reset() {
+    ref.invalidateSelf();
+  }
+
   Future<ServerResponse> fetchAllLiabilities(CancelToken cancelToken) async {
     var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
 

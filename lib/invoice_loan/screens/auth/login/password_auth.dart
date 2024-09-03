@@ -39,8 +39,8 @@ class _LoginPasswordValidationState
   bool _animationComplete = false;
 
   Future<void> _verifyPassword() async {
-    var response = await ref.read(loginProvider.notifier).validatePassword(
-        ref.read(loginProvider).phoneNumber,
+    var response = await ref.read(invoiceLoanLoginProvider.notifier).validatePassword(
+        ref.read(invoiceLoanLoginProvider).phoneNumber,
         _textController.text,
         _cancelToken);
 
@@ -76,7 +76,7 @@ class _LoginPasswordValidationState
 
   void addSignature() async {
     String deviceId = await SmsAutoFill().getAppSignature;
-    ref.read(loginProvider.notifier).setDeviceId(deviceId);
+    ref.read(invoiceLoanLoginProvider.notifier).setDeviceId(deviceId);
   }
 
   @override
@@ -118,7 +118,7 @@ class _LoginPasswordValidationState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final _ = ref.watch(loginProvider);
+    final _ = ref.watch(invoiceLoanLoginProvider);
 
     return SafeArea(
       child: Scaffold(

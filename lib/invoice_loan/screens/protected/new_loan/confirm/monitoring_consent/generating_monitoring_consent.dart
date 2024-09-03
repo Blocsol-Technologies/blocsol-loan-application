@@ -114,7 +114,7 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
                           fontWeight: AppFontWeights.bold,
                           letterSpacing: 0.14,
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.start,
                         softWrap: true,
                       ),
                       const SpacerWidget(
@@ -129,7 +129,7 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
                           fontWeight: AppFontWeights.medium,
                           letterSpacing: 0.14,
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.start,
                         softWrap: true,
                       ),
                     ],

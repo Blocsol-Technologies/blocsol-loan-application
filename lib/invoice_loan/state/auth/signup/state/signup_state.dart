@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'signup_state.freezed.dart';
 
 @freezed
-class SignupStateData with _$SignupStateData {
-  const factory SignupStateData({
+class InvoiceLoanSignupStateData with _$InvoiceLoanSignupStateData {
+  const factory InvoiceLoanSignupStateData({
     required String gstNumber,
     required String gstUsername,
     required String email,
@@ -14,9 +14,9 @@ class SignupStateData with _$SignupStateData {
     required String companyLegalName,
     required String businessLocation,
     required String gstRegistrationDate,
-  }) = _SignupStateData;
+  }) = _InvoiceLoanSignupStateData;
 
-  static const SignupStateData initial = SignupStateData(
+  static const InvoiceLoanSignupStateData initial = InvoiceLoanSignupStateData(
     gstNumber: '',
     gstUsername: '',
     email: '',

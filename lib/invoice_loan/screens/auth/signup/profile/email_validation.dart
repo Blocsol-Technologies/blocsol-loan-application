@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
@@ -26,10 +25,11 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
   final _cancelToken = CancelToken();
 
   bool _emailValidationError = false;
+  String _errMessage = "";
 
   Future<void> _sendOTP() async {
     var response = await ref
-        .read(signupStateProvider.notifier)
+        .read(invoiceLoanSignupStateProvider.notifier)
         .sendEmailOTP(_textController.text, _cancelToken);
 
     if (!mounted) return;
@@ -41,23 +41,8 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
 
     setState(() {
       _emailValidationError = true;
+      _errMessage = response.message;
     });
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error!',
-        message: response.message,
-        contentType: ContentType.failure,
-      ),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
 
     return;
   }
@@ -176,7 +161,18 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
                   ),
                   SectionMain(
                     textController: _textController,
-                    textInputChild: const SizedBox(),
+                    textInputChild: _emailValidationError
+                        ? Text(
+                            _errMessage,
+                            textAlign: TextAlign.start,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                fontWeight: AppFontWeights.medium,
+                                color: Colors.red),
+                          )
+                        : const SizedBox(),
                     maxInputLength: 50,
                     keyboardType: TextInputType.emailAddress,
                     hintText: "OFFICIAL EMAIL",

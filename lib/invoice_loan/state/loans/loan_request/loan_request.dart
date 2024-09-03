@@ -55,6 +55,10 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     state = state.copyWith(multipleSubmissionsForOfferUpdateForm: multiple);
   }
 
+  void setTransactionId(String id) {
+    state = state.copyWith(transactionId: id);
+  }
+
   void setSkipAadharKyc(bool skip) {
     state = state.copyWith(skipAadharKyc: skip);
   }

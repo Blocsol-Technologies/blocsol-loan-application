@@ -7,7 +7,7 @@ part of 'login.dart';
 // **************************************************************************
 
 String _$personalLoginStateHash() =>
-    r'29b33dda95c89ebb5609203af625aed158630197';
+    r'27e5047731a1a8bfdfd410f0a8160e05b4e904ce';
 
 /// See also [PersonalLoginState].
 @ProviderFor(PersonalLoginState)

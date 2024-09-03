@@ -56,7 +56,7 @@ class _SignupAccountCreatedState extends ConsumerState<SignupAccountCreated> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final signupStateRef = ref.read(signupStateProvider);
+    final signupStateRef = ref.read(invoiceLoanSignupStateProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,

@@ -13,7 +13,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +34,7 @@ class _LoginMobileOtpValidationState
 
   Future<void> _verifyMobileOTP() async {
     var response = await ref
-        .read(loginProvider.notifier)
+        .read(invoiceLoanLoginProvider.notifier)
         .validateLoginOTP(_textController.text, _cancelToken);
 
     if (!mounted) return;
@@ -115,7 +114,7 @@ class _LoginMobileOtpValidationState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final loginState = ref.watch(loginProvider);
+    final loginState = ref.watch(invoiceLoanLoginProvider);
     ref.watch(internetCheckProvider);
 
     return SafeArea(

@@ -16,6 +16,10 @@ class PersonalLoginState extends _$PersonalLoginState {
     return const LoginStateData(pan: "", phoneNumber: "");
   }
 
+  void reset() {
+    ref.invalidateSelf();
+  }
+
   // 1. Validate Password
   Future<ServerResponse> verifyPassword(String phoneNumber, String password,
       String signature, CancelToken cancelToken) async {

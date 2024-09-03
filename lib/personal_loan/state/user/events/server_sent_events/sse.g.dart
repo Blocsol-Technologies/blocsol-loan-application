@@ -7,7 +7,7 @@ part of 'sse.dart';
 // **************************************************************************
 
 String _$personalLoanServerSentEventsHash() =>
-    r'acbdc8b31c06c0ffa83b18eb2d298a891c8140d2';
+    r'866de7436cb4b1b036cfe45043c8be53602ecd50';
 
 /// See also [PersonalLoanServerSentEvents].
 @ProviderFor(PersonalLoanServerSentEvents)

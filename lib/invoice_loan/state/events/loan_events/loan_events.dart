@@ -33,6 +33,10 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     return LoanEvent.demo();
   }
 
+  void reset () {
+    ref.invalidateSelf();
+  }
+
   Future<void> fetchLatestEventForConsumption() async {
     try {
       final cancelToken = CancelToken();

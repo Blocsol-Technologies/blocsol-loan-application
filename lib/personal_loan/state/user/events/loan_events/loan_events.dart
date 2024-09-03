@@ -31,6 +31,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
     return PersonalLoanEventState.initial;
   }
 
+  void reset() {
+    ref.invalidateSelf();
+  }
+
   Future<void> fetchLatestEventForConsumption() async {
     try {
       logger.i("Fetching latest personal loan events");

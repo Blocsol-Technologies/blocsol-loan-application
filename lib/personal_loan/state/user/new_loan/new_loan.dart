@@ -61,6 +61,10 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
     );
   }
 
+  void reset() {
+    ref.invalidateSelf();
+  }
+
   void updateState(PersonalLoanRequestProgress progress) {
     state = state.copyWith(currentState: progress);
   }
@@ -131,51 +135,6 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
   void updateLoanAgreementFailure(bool value) {
     state = state.copyWith(loanAgreementFailure: value);
-  }
-
-  void reset() {
-    state = NewLoanStateData(
-      currentState: PersonalLoanRequestProgress.started,
-      transactionId: "",
-      //
-      annualIncome: "",
-      selectedEmploymentType: "salaried",
-      selectedEndUse: "consumerDurablePurchase",
-      accountAggregatorInfoList: [],
-      selectedAA: AccountAggregatorInfo.demo(),
-      aaConsentSuccess: false,
-      //
-      fetchingOffers: false,
-      offers: [],
-      offersFetchTime: 0,
-      offerSelected: false,
-      selectedOffer: PersonalLoanDetails.newOffer(),
-      loanOfferUpdated: false,
-      //
-      fetchingAadharKYCURl: false,
-      verifyingAadharKYC: false,
-      aadharKYCFailure: false,
-      //
-      bankAccountNumber: "",
-      bankIFSC: "",
-      bankType: "",
-      submittingBankAccountDetails: false,
-      //
-      disbursedCancellationFee: "-",
-      sanctionedCancellationFee: "-",
-      checkingRepaymentSetupSuccess: false,
-      repaymentSetupFailure: false,
-      //
-      fetchingLoanAgreementForm: false,
-      verifyingLoanAgreementSuccess: false,
-      loanAgreementFailure: false,
-      generatingMonitoringConsent: false,
-      generateMonitoringConsentErr: false,
-      validatingMonitoringConsentSuccess: false,
-      monitoringConsentError: false,
-      loanId: "",
-      //
-    );
   }
 
   // ONDC Methdos
@@ -414,9 +373,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
       String bankAccountNumber,
       String ifscCode,
       CancelToken cancelToken) async {
-    if (bankType.isEmpty ||
-        bankAccountNumber.isEmpty ||
-        ifscCode.isEmpty) {
+    if (bankType.isEmpty || bankAccountNumber.isEmpty || ifscCode.isEmpty) {
       return ServerResponse(
           success: false, message: "Please fill all the details", data: null);
     }

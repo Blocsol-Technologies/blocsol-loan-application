@@ -27,7 +27,7 @@ class _LoginMobileValidationState extends ConsumerState<LoginMobileValidation> {
   final _textController = TextEditingController();
 
   Future<void> _setPhoneNumber() async {
-    ref.read(loginProvider.notifier).setPhoneNumber(_textController.text);
+    ref.read(invoiceLoanLoginProvider.notifier).setPhoneNumber(_textController.text);
     context.go(InvoiceLoanLoginRouter.password);
   }
 
@@ -42,7 +42,7 @@ class _LoginMobileValidationState extends ConsumerState<LoginMobileValidation> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final _ = ref.watch(loginProvider);
+    final _ = ref.watch(invoiceLoanLoginProvider);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,

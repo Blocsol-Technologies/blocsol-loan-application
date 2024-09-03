@@ -17,7 +17,7 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
   }
 
   void reset() {
-    state = SupportStateData.initial;
+    ref.invalidateSelf();
   }
 
   void setSelectSupportTicket(SupportTicket supportTicket) {

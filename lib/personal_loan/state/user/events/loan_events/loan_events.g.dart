@@ -7,7 +7,7 @@ part of 'loan_events.dart';
 // **************************************************************************
 
 String _$personalLoanEventsHash() =>
-    r'6793324424866717f2845679f677a66a1e4a0746';
+    r'ce1c2be8de56f8747559216aa54c8af857a6d2c1';
 
 /// See also [PersonalLoanEvents].
 @ProviderFor(PersonalLoanEvents)

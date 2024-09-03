@@ -3,13 +3,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'login_state.freezed.dart';
 
 @freezed
-class LoginState with _$LoginState {
-  const factory LoginState({
+class InvoiceLoanLoginState with _$InvoiceLoanLoginState {
+  const factory InvoiceLoanLoginState({
     required String phoneNumber,
     required String deviceId,
-  }) = _LoginState;
+  }) = _InvoiceLoanLoginState;
 
-  factory LoginState.initialize() => const LoginState(
+  factory InvoiceLoanLoginState.initialize() => const InvoiceLoanLoginState(
         phoneNumber: "",
         deviceId: "",
       );

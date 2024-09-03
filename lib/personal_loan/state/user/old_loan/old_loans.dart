@@ -44,19 +44,7 @@ class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
   }
 
   void reset() {
-    state = LiabilityStateData(
-        oldLoans: [],
-        selectedOldOffer: PersonalLoanDetails.newOffer(),
-        fetchingOldOffers: false,
-        oldOffersFetchTime: 0,
-        initiatingForeclosure: false,
-        initiatingPrepayment: false,
-        prepaymentId: "",
-        initiatingMissedEmiPayment: false,
-        missedEmiPaymentId: "",
-        missedEmiPaymentFailed: false,
-        loanForeclosureFailed: false,
-        prepaymentFailed: false);
+    ref.invalidateSelf();
   }
 
   // Fetch Old Loans

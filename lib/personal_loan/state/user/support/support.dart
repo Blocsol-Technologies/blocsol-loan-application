@@ -20,94 +20,7 @@ class PersonalLoanSupportState extends _$PersonalLoanSupportState {
       fetchingAllSupportTickets: false,
       fetchingSingleSupportTicket: false,
       generatingSupportTicket: false,
-      supportTickets: [
-        // SupportTicket(
-        //   transactionId: '3ddb94f3-7e0e-431a-baeb-06fa78794a06',
-        //   providerId: 'Kotak',
-        //   pan: '06BBOPK6960P1ZS',
-        //   conversations: [
-        //     // Message(
-        //     //     agent: 'CONSUMER',
-        //     //     message: 'I am not able to complete the KYC',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Rahul',
-        //     //     phone: '9876543210',
-        //     //     email: '',
-        //     //     updatedAt: '2024-04-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'SUPPORT',
-        //     //     message: 'Tell me what is the problem',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Avijeet',
-        //     //     phone: '8360458365',
-        //     //     email: '',
-        //     //     updatedAt: '2024-05-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'CONSUMER',
-        //     //     message: 'I am not able to complete the KYC',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Rahul',
-        //     //     phone: '9876543210',
-        //     //     email: '',
-        //     //     updatedAt: '2024-04-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'SUPPORT',
-        //     //     message: 'Tell me what is the problem',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Avijeet',
-        //     //     phone: '8360458365',
-        //     //     email: '',
-        //     //     updatedAt: '2024-05-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'CONSUMER',
-        //     //     message: 'I am not able to complete the KYC',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Rahul',
-        //     //     phone: '9876543210',
-        //     //     email: '',
-        //     //     updatedAt: '2024-04-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'SUPPORT',
-        //     //     message: 'Tell me what is the problem',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Avijeet',
-        //     //     phone: '8360458365',
-        //     //     email: '',
-        //     //     updatedAt: '2024-05-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'CONSUMER',
-        //     //     message: 'I am not able to complete the KYC',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Rahul',
-        //     //     phone: '9876543210',
-        //     //     email: '',
-        //     //     updatedAt: '2024-04-28T03:13:20Z',
-        //     //     images: []),
-        //     // Message(
-        //     //     agent: 'SUPPORT',
-        //     //     message: 'Tell me what is the problem',
-        //     //     actionTaken: 'No action taken',
-        //     //     name: 'Avijeet',
-        //     //     phone: '8360458365',
-        //     //     email: '',
-        //     //     updatedAt: '2024-05-28T03:13:20Z',
-        //     //     images: []),
-        //   ],
-        //   chatLink: '',
-        //   id: '3ddb94f3-7e0e-431a-baeb-06fa78794a06',
-        //   category: 'ORDER',
-        //   subCategory: 'Fees/Charges related issues',
-        //   createdAt: '2024-04-28T03:13:20Z',
-        //   updatedAt: '2024-04-30T03:13:20Z',
-        //   status: 'OPEN',
-        // )
-      ],
+      supportTickets: [],
       selectedSupportTicket: SupportTicket(
         transactionId: '',
         providerId: '',
@@ -126,30 +39,7 @@ class PersonalLoanSupportState extends _$PersonalLoanSupportState {
   }
 
   void reset() {
-    state = PersonalLoanSupportStateData(
-      transactionId: '',
-      providerId: '',
-      issueId: '',
-      pan: '',
-      generatingSupportTicket: false,
-      fetchingAllSupportTickets: false,
-      fetchingSingleSupportTicket: false,
-      supportTickets: [],
-      selectedSupportTicket: SupportTicket(
-        transactionId: '',
-        providerId: '',
-        pan: '',
-        conversations: [],
-        chatLink: '',
-        id: '',
-        category: '',
-        subCategory: '',
-        createdAt: '',
-        updatedAt: '',
-        status: '',
-      ),
-      sendingStatusRequest: false,
-    );
+    ref.invalidateSelf();
   }
 
   void setSelectSupportTicket(SupportTicket supportTicket) {

@@ -10,10 +10,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'login.g.dart';
 
 @riverpod
-class Login extends _$Login {
+class InvoiceLoanLogin extends _$InvoiceLoanLogin {
   @override
-  LoginState build() {
-    return LoginState.initialize();
+  InvoiceLoanLoginState build() {
+    return InvoiceLoanLoginState.initialize();
   }
 
   void setPhoneNumber(String phoneNumber) {
@@ -22,6 +22,10 @@ class Login extends _$Login {
 
   void setDeviceId(String deviceId) {
     state = state.copyWith(deviceId: deviceId);
+  }
+
+  void reset() {
+    ref.invalidateSelf();
   }
 
   // HTTP Requests
@@ -37,8 +41,8 @@ class Login extends _$Login {
       return ServerResponse(success: false, message: "invalid password");
     }
 
-    var response = await LoginHttpController().validatePassword(
-        phoneNumber, password, deviceId, cancelToken);
+    var response = await LoginHttpController()
+        .validatePassword(phoneNumber, password, deviceId, cancelToken);
 
     if (response.success) {
       state = state.copyWith(phoneNumber: phoneNumber);

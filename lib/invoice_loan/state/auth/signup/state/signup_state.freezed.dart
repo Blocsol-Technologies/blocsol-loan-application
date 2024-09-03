@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$SignupStateData {
+mixin _$InvoiceLoanSignupStateData {
   String get gstNumber => throw _privateConstructorUsedError;
   String get gstUsername => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
@@ -27,15 +27,16 @@ mixin _$SignupStateData {
   String get gstRegistrationDate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $SignupStateDataCopyWith<SignupStateData> get copyWith =>
-      throw _privateConstructorUsedError;
+  $InvoiceLoanSignupStateDataCopyWith<InvoiceLoanSignupStateData>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SignupStateDataCopyWith<$Res> {
-  factory $SignupStateDataCopyWith(
-          SignupStateData value, $Res Function(SignupStateData) then) =
-      _$SignupStateDataCopyWithImpl<$Res, SignupStateData>;
+abstract class $InvoiceLoanSignupStateDataCopyWith<$Res> {
+  factory $InvoiceLoanSignupStateDataCopyWith(InvoiceLoanSignupStateData value,
+          $Res Function(InvoiceLoanSignupStateData) then) =
+      _$InvoiceLoanSignupStateDataCopyWithImpl<$Res,
+          InvoiceLoanSignupStateData>;
   @useResult
   $Res call(
       {String gstNumber,
@@ -50,9 +51,10 @@ abstract class $SignupStateDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SignupStateDataCopyWithImpl<$Res, $Val extends SignupStateData>
-    implements $SignupStateDataCopyWith<$Res> {
-  _$SignupStateDataCopyWithImpl(this._value, this._then);
+class _$InvoiceLoanSignupStateDataCopyWithImpl<$Res,
+        $Val extends InvoiceLoanSignupStateData>
+    implements $InvoiceLoanSignupStateDataCopyWith<$Res> {
+  _$InvoiceLoanSignupStateDataCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -114,11 +116,12 @@ class _$SignupStateDataCopyWithImpl<$Res, $Val extends SignupStateData>
 }
 
 /// @nodoc
-abstract class _$$SignupStateDataImplCopyWith<$Res>
-    implements $SignupStateDataCopyWith<$Res> {
-  factory _$$SignupStateDataImplCopyWith(_$SignupStateDataImpl value,
-          $Res Function(_$SignupStateDataImpl) then) =
-      __$$SignupStateDataImplCopyWithImpl<$Res>;
+abstract class _$$InvoiceLoanSignupStateDataImplCopyWith<$Res>
+    implements $InvoiceLoanSignupStateDataCopyWith<$Res> {
+  factory _$$InvoiceLoanSignupStateDataImplCopyWith(
+          _$InvoiceLoanSignupStateDataImpl value,
+          $Res Function(_$InvoiceLoanSignupStateDataImpl) then) =
+      __$$InvoiceLoanSignupStateDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -134,11 +137,13 @@ abstract class _$$SignupStateDataImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$SignupStateDataImplCopyWithImpl<$Res>
-    extends _$SignupStateDataCopyWithImpl<$Res, _$SignupStateDataImpl>
-    implements _$$SignupStateDataImplCopyWith<$Res> {
-  __$$SignupStateDataImplCopyWithImpl(
-      _$SignupStateDataImpl _value, $Res Function(_$SignupStateDataImpl) _then)
+class __$$InvoiceLoanSignupStateDataImplCopyWithImpl<$Res>
+    extends _$InvoiceLoanSignupStateDataCopyWithImpl<$Res,
+        _$InvoiceLoanSignupStateDataImpl>
+    implements _$$InvoiceLoanSignupStateDataImplCopyWith<$Res> {
+  __$$InvoiceLoanSignupStateDataImplCopyWithImpl(
+      _$InvoiceLoanSignupStateDataImpl _value,
+      $Res Function(_$InvoiceLoanSignupStateDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -154,7 +159,7 @@ class __$$SignupStateDataImplCopyWithImpl<$Res>
     Object? businessLocation = null,
     Object? gstRegistrationDate = null,
   }) {
-    return _then(_$SignupStateDataImpl(
+    return _then(_$InvoiceLoanSignupStateDataImpl(
       gstNumber: null == gstNumber
           ? _value.gstNumber
           : gstNumber // ignore: cast_nullable_to_non_nullable
@@ -197,8 +202,8 @@ class __$$SignupStateDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SignupStateDataImpl implements _SignupStateData {
-  const _$SignupStateDataImpl(
+class _$InvoiceLoanSignupStateDataImpl implements _InvoiceLoanSignupStateData {
+  const _$InvoiceLoanSignupStateDataImpl(
       {required this.gstNumber,
       required this.gstUsername,
       required this.email,
@@ -230,14 +235,14 @@ class _$SignupStateDataImpl implements _SignupStateData {
 
   @override
   String toString() {
-    return 'SignupStateData(gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, emailOtpId: $emailOtpId, phoneNumber: $phoneNumber, udyamNumber: $udyamNumber, companyLegalName: $companyLegalName, businessLocation: $businessLocation, gstRegistrationDate: $gstRegistrationDate)';
+    return 'InvoiceLoanSignupStateData(gstNumber: $gstNumber, gstUsername: $gstUsername, email: $email, emailOtpId: $emailOtpId, phoneNumber: $phoneNumber, udyamNumber: $udyamNumber, companyLegalName: $companyLegalName, businessLocation: $businessLocation, gstRegistrationDate: $gstRegistrationDate)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignupStateDataImpl &&
+            other is _$InvoiceLoanSignupStateDataImpl &&
             (identical(other.gstNumber, gstNumber) ||
                 other.gstNumber == gstNumber) &&
             (identical(other.gstUsername, gstUsername) ||
@@ -273,22 +278,24 @@ class _$SignupStateDataImpl implements _SignupStateData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SignupStateDataImplCopyWith<_$SignupStateDataImpl> get copyWith =>
-      __$$SignupStateDataImplCopyWithImpl<_$SignupStateDataImpl>(
-          this, _$identity);
+  _$$InvoiceLoanSignupStateDataImplCopyWith<_$InvoiceLoanSignupStateDataImpl>
+      get copyWith => __$$InvoiceLoanSignupStateDataImplCopyWithImpl<
+          _$InvoiceLoanSignupStateDataImpl>(this, _$identity);
 }
 
-abstract class _SignupStateData implements SignupStateData {
-  const factory _SignupStateData(
-      {required final String gstNumber,
-      required final String gstUsername,
-      required final String email,
-      required final String emailOtpId,
-      required final String phoneNumber,
-      required final String udyamNumber,
-      required final String companyLegalName,
-      required final String businessLocation,
-      required final String gstRegistrationDate}) = _$SignupStateDataImpl;
+abstract class _InvoiceLoanSignupStateData
+    implements InvoiceLoanSignupStateData {
+  const factory _InvoiceLoanSignupStateData(
+          {required final String gstNumber,
+          required final String gstUsername,
+          required final String email,
+          required final String emailOtpId,
+          required final String phoneNumber,
+          required final String udyamNumber,
+          required final String companyLegalName,
+          required final String businessLocation,
+          required final String gstRegistrationDate}) =
+      _$InvoiceLoanSignupStateDataImpl;
 
   @override
   String get gstNumber;
@@ -310,6 +317,6 @@ abstract class _SignupStateData implements SignupStateData {
   String get gstRegistrationDate;
   @override
   @JsonKey(ignore: true)
-  _$$SignupStateDataImplCopyWith<_$SignupStateDataImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$InvoiceLoanSignupStateDataImplCopyWith<_$InvoiceLoanSignupStateDataImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

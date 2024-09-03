@@ -18,7 +18,7 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
   }
 
   void reset() {
-    state = AccountDetailsData.initial;
+    ref.invalidateSelf();
   }
 
   void addBankAccount(PlBankAccountDetails bankAccount) {

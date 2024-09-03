@@ -12,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class SignupMobileValidation extends ConsumerStatefulWidget {
@@ -30,6 +29,7 @@ class _SignupMobileValidationState
 
   String _deviceSignature = "";
   bool _phoneVerificationError = false;
+  String _errMessage = "";
 
   void addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
@@ -40,7 +40,7 @@ class _SignupMobileValidationState
 
   Future<void> _sendMobileOTP() async {
     var response = await ref
-        .read(signupStateProvider.notifier)
+        .read(invoiceLoanSignupStateProvider.notifier)
         .sendMobileOTP(_textController.text, _deviceSignature, _cancelToken);
 
     if (!mounted) return;
@@ -52,23 +52,8 @@ class _SignupMobileValidationState
 
     setState(() {
       _phoneVerificationError = true;
+      _errMessage = response.message;
     });
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error!',
-        message: response.message,
-        contentType: ContentType.failure,
-      ),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
 
     return;
   }
@@ -192,7 +177,16 @@ class _SignupMobileValidationState
                   ),
                   SectionMain(
                       textController: _textController,
-                      textInputChild: const SizedBox(),
+                      textInputChild: _phoneVerificationError ? Text(
+                        _errMessage,
+                        textAlign: TextAlign.start,
+                        softWrap: true,
+                        style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: AppFontSizes.b1,
+                            fontWeight: AppFontWeights.medium,
+                            color: Colors.red),
+                      ) : const SizedBox(),
                       maxInputLength: 10,
                       keyboardType: TextInputType.number,
                       hintText: "MOBILE NUMBER",

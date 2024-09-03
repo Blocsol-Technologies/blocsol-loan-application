@@ -19,4 +19,8 @@ class PersonalLoanBottomNavState extends _$PersonalLoanBottomNavState {
   void changeItem(BorrowerBottomNavItems item) {
     state = item;
   }
+
+  void reset() {
+    ref.invalidateSelf();
+  }
 }

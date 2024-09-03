@@ -104,6 +104,24 @@ class _SingleLiabilityDetailsHomeState
     return;
   }
 
+  Future<void> refetchLiabilityDetails() async {
+    if (ref.read(invoiceLoanLiabilityProvider).fetchingSingleLiabilityDetails) {
+      return;
+    }
+
+    await ref
+        .read(invoiceLoanLiabilityProvider.notifier)
+        .fetchSingleLiabilityDetails(_cancelToken);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refetchLiabilityDetails();
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
     _cancelToken.cancel();
