@@ -17,48 +17,7 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   @override
   NewLoanStateData build() {
     ref.keepAlive();
-    return NewLoanStateData(
-      currentState: PersonalLoanRequestProgress.started,
-      transactionId: "",
-      //
-      annualIncome: "",
-      selectedEmploymentType: "salaried",
-      selectedEndUse: "consumerDurablePurchase",
-      accountAggregatorInfoList: [],
-      selectedAA: AccountAggregatorInfo.demo(),
-      aaConsentSuccess: false,
-      //
-      fetchingOffers: false,
-      offers: [],
-      offersFetchTime: 0,
-      offerSelected: false,
-      selectedOffer: PersonalLoanDetails.newOffer(),
-      loanOfferUpdated: false,
-      //
-      fetchingAadharKYCURl: false,
-      verifyingAadharKYC: false,
-      aadharKYCFailure: false,
-      //
-      bankAccountNumber: "",
-      bankIFSC: "",
-      bankType: "",
-      submittingBankAccountDetails: false,
-      //
-      disbursedCancellationFee: "-",
-      sanctionedCancellationFee: "-",
-      checkingRepaymentSetupSuccess: false,
-      repaymentSetupFailure: false,
-      //
-      fetchingLoanAgreementForm: false,
-      verifyingLoanAgreementSuccess: false,
-      loanAgreementFailure: false,
-      generatingMonitoringConsent: false,
-      generateMonitoringConsentErr: false,
-      validatingMonitoringConsentSuccess: false,
-      monitoringConsentError: false,
-      loanId: "",
-      //
-    );
+    return NewLoanStateData.initial;
   }
 
   void reset() {
@@ -135,6 +94,18 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
   void updateLoanAgreementFailure(bool value) {
     state = state.copyWith(loanAgreementFailure: value);
+  }
+
+  double getProgressFillRatio() {
+    return (state.currentState.index + 1) /
+        PersonalLoanRequestProgress.values.length;
+  }
+
+  String getProgressUpdateText() {
+    int totalSteps = PersonalLoanRequestProgress.values.length;
+    int currentProgress = state.currentState.index + 1;
+
+    return "Step $currentProgress of $totalSteps";
   }
 
   // ONDC Methdos

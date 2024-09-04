@@ -1,4 +1,3 @@
-
 import 'package:blocsol_loan_application/personal_loan/state/user/utils/loan/loan_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -61,4 +60,47 @@ class NewLoanStateData with _$NewLoanStateData {
     required bool monitoringConsentError,
     required String loanId,
   }) = _NewLoanStateData;
+
+  static NewLoanStateData initial = NewLoanStateData(
+    currentState: PersonalLoanRequestProgress.started,
+    transactionId: "",
+    //
+    annualIncome: "",
+    selectedEmploymentType: "salaried",
+    selectedEndUse: "consumerDurablePurchase",
+    accountAggregatorInfoList: [],
+    selectedAA: AccountAggregatorInfo.demo(),
+    aaConsentSuccess: false,
+    //
+    fetchingOffers: false,
+    offers: [],
+    offersFetchTime: 0,
+    offerSelected: false,
+    selectedOffer: PersonalLoanDetails.newOffer(),
+    loanOfferUpdated: false,
+    //
+    fetchingAadharKYCURl: false,
+    verifyingAadharKYC: false,
+    aadharKYCFailure: false,
+    //
+    bankAccountNumber: "",
+    bankIFSC: "",
+    bankType: "",
+    submittingBankAccountDetails: false,
+    //
+    disbursedCancellationFee: "-",
+    sanctionedCancellationFee: "-",
+    checkingRepaymentSetupSuccess: false,
+    repaymentSetupFailure: false,
+    //
+    fetchingLoanAgreementForm: false,
+    verifyingLoanAgreementSuccess: false,
+    loanAgreementFailure: false,
+    generatingMonitoringConsent: false,
+    generateMonitoringConsentErr: false,
+    validatingMonitoringConsentSuccess: false,
+    monitoringConsentError: false,
+    loanId: "",
+    //
+  );
 }

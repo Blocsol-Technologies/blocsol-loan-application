@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/error_codes.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/state/loan_events_state.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
@@ -186,32 +187,25 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             return;
           } else {
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra:
-                    "Unable to refetch the updated loan offer from the lender. OnInit03 failed");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_select_03_error,
+                );
+            break;
           }
         }
 
         if (stepNumber == 4) {
           if (success) {
-            var response = await ref
-                .read(personalNewLoanRequestProvider.notifier)
-                .checkAadharKYCSuccess(cancelToken);
-
-            if (!response.success) {
-              ref.read(routerProvider).push(
-                  PersonalNewLoanRequestRouter.new_loan_error,
-                  extra:
-                      "Error when checking aadhar kyc success ${response.message}");
-              return;
-            }
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.kyc_verified);
             return;
           } else {
-            ref
-                .read(personalNewLoanRequestProvider.notifier)
-                .setAadharKYCFailure(true);
-            return;
+            ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.aadhar_kyc_failed,
+                );
+            break;
           }
         }
 
@@ -229,9 +223,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             return;
           } else {
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra: "Error on the on_init_01");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_init_01_error,
+                );
+            break;
           }
         }
 
@@ -246,9 +241,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             return;
           } else {
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra: "Error on the on_init_02");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_init_02_error,
+                );
+            break;
           }
         }
 
@@ -274,13 +270,11 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
                 .updateRepaymentSetupFailure(false);
             return;
           } else {
-            ref
-                .read(personalNewLoanRequestProvider.notifier)
-                .updateRepaymentSetupFailure(true);
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra: "Error on the checking loan repayment status check");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.repayment_setup_failed,
+                );
+            break;
           }
         }
 
@@ -296,9 +290,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             return;
           } else {
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra: "Error on the on_init_03");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_select_03_error,
+                );
+            break;
           }
         }
 
@@ -320,10 +315,11 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
                 .updateLoanAgreementFailure(false);
             return;
           } else {
-            ref
-                .read(personalNewLoanRequestProvider.notifier)
-                .updateLoanAgreementFailure(true);
-            return;
+            ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.loan_agreement_failed,
+                );
+            break;
           }
         }
 
@@ -341,9 +337,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             return;
           } else {
             ref.read(routerProvider).push(
-                PersonalNewLoanRequestRouter.new_loan_error,
-                extra: "Error on the on_confirm_01");
-            return;
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_confirm_01_failed,
+                );
+            break;
           }
         }
         break;

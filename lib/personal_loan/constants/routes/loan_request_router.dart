@@ -1,3 +1,7 @@
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/kyc_verified.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/error_codes.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/index.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_unavailable.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/confirm/final_disbursed_screen.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/confirm/final_processing_screen.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/confirm/loan_monitoring_webview.dart';
@@ -54,6 +58,8 @@ class PersonalNewLoanRequestRouter {
   static const String new_loan_aadhar_kyc_webview =
       "/personal-credit/new-loan/aadhar-kyc-webview";
 
+  static const kyc_verified = "/personal-loan/new-loan-request-kyc-verified";
+
   /* init */
   static const String new_loan_share_bank_details =
       "/personal-credit/new-loan/share-bank-details";
@@ -75,6 +81,13 @@ class PersonalNewLoanRequestRouter {
 
   static const String new_loan_final_disbursed_screen =
       "/personal-credit/new-loan/final-disbursed-screen";
+
+  // Common
+
+  static const loan_service_error =
+      "/personal-credit/new-loan-request/loan-service-error";
+  static const loan_service_unavailable =
+      "/personal-credit/new-loan-request/loan-service-unavailable";
 }
 
 List<GoRoute> personalNewLoanRequestRoutes = [
@@ -151,6 +164,10 @@ List<GoRoute> personalNewLoanRequestRoutes = [
     builder: (context, state) => const PCNewLoanAadharKYCWebview(),
   ),
 
+  GoRoute(
+    path: PersonalNewLoanRequestRouter.kyc_verified,
+    builder: (context, state) => const PCKycVerified(),
+  ),
   // Init
 
   GoRoute(
@@ -193,5 +210,29 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   GoRoute(
     path: PersonalNewLoanRequestRouter.new_loan_final_disbursed_screen,
     builder: (context, state) => const PCNewLoanDisbursedScreen(),
+  ),
+
+  // Common
+
+
+
+  GoRoute(
+    path: PersonalNewLoanRequestRouter.loan_service_error,
+    builder: (context, state) {
+      PersonalLoanServiceErrorCodes errorCodeVal =
+          state.extra as PersonalLoanServiceErrorCodes;
+
+      return PersonalLoanServiceError(errorCode: errorCodeVal);
+    },
+  ),
+
+  GoRoute(
+    path: PersonalNewLoanRequestRouter.loan_service_unavailable,
+    builder: (context, state) {
+      String errMessage = (state.extra as String?) ??
+          "Service is currently unavailable. Please try again later.";
+
+      return PersonalLoanServiceUnavailable(message: errMessage);
+    },
   ),
 ];

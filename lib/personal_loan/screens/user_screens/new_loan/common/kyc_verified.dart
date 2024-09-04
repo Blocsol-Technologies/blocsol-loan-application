@@ -1,11 +1,11 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/error_codes.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -14,49 +14,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceLoanKycVerified extends ConsumerStatefulWidget {
-  final IBCKycType kycType;
-  const InvoiceLoanKycVerified({super.key, required this.kycType});
+class PCKycVerified extends ConsumerStatefulWidget {
+  const PCKycVerified({super.key});
 
   @override
-  ConsumerState<InvoiceLoanKycVerified> createState() =>
-      _InvoiceLoanKycVerifiedScreenState();
+  ConsumerState<PCKycVerified> createState() =>
+      _PCKycVerifiedScreenState();
 }
 
-class _InvoiceLoanKycVerifiedScreenState
-    extends ConsumerState<InvoiceLoanKycVerified> {
+class _PCKycVerifiedScreenState
+    extends ConsumerState<PCKycVerified> {
   final _cancelToken = CancelToken();
 
   void _performNextSteps() async {
-    if (ref.read(invoiceNewLoanRequestProvider).verifyingAadharKYC || ref.read(invoiceNewLoanRequestProvider).verifyingEntityKYC) {
+    if (ref.read(personalNewLoanRequestProvider).verifyingAadharKYC) {
       return;
     }
 
     await Future.delayed(const Duration(seconds: 5));
 
-    if (widget.kycType == IBCKycType.aadhar) {
-      var response = await ref
-          .read(invoiceNewLoanRequestProvider.notifier)
-          .checkAadharKycSuccess(_cancelToken);
+     var response = await ref
+          .read(personalNewLoanRequestProvider.notifier)
+          .checkAadharKYCSuccess(_cancelToken);
 
       if (!response.success) {
         ref.read(routerProvider).push(
-            InvoiceNewLoanRequestRouter.loan_service_error,
-            extra: InvoiceLoanServiceErrorCodes.aadhar_kyc_failed);
+            PersonalNewLoanRequestRouter.loan_service_error,
+            extra: PersonalLoanServiceErrorCodes.aadhar_kyc_failed);
       }
       return;
-    } else {
-      var response = await ref
-          .read(invoiceNewLoanRequestProvider.notifier)
-          .checkEntityKycFormSuccess(_cancelToken);
-
-      if (!response.success) {
-        ref.read(routerProvider).push(
-            InvoiceNewLoanRequestRouter.loan_service_error,
-            extra: InvoiceLoanServiceErrorCodes.entity_kyc_error);
-      }
-      return;
-    }
   }
 
   @override
@@ -71,8 +57,8 @@ class _InvoiceLoanKycVerifiedScreenState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    ref.watch(invoiceLoanServerSentEventsProvider);
-    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
+    ref.watch(personalLoanEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(
@@ -88,7 +74,7 @@ class _InvoiceLoanKycVerifiedScreenState
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                InvoiceNewLoanRequestTopNav(onBackClick: () {
+                PersonalNewLoanRequestTopNav(onBackClick: () {
                   ref.read(routerProvider).pop();
                 }),
                 const SpacerWidget(
@@ -112,7 +98,7 @@ class _InvoiceLoanKycVerifiedScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${widget.kycType == IBCKycType.aadhar ? "Aadhar" : "Entity"} KYC Verified",
+                        "Aadhar KYC Verified",
                         style: TextStyle(
                           fontFamily: fontFamily,
                           color: Theme.of(context).colorScheme.onSurface,

@@ -1,11 +1,11 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -16,40 +16,38 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceNewLoanAgreementFailed extends ConsumerStatefulWidget {
-  const InvoiceNewLoanAgreementFailed({super.key});
+class PersonalLoanRepaymentSetupFailed extends ConsumerStatefulWidget {
+  const PersonalLoanRepaymentSetupFailed({super.key});
 
   @override
-  ConsumerState<InvoiceNewLoanAgreementFailed> createState() =>
-      _InvoiceNewLoanAgreementFailedState();
+  ConsumerState<PersonalLoanRepaymentSetupFailed> createState() =>
+      _PersonalLoanRepaymentSetupFailedState();
 }
 
-class _InvoiceNewLoanAgreementFailedState
-    extends ConsumerState<InvoiceNewLoanAgreementFailed> {
+class _PersonalLoanRepaymentSetupFailedState
+    extends ConsumerState<PersonalLoanRepaymentSetupFailed> {
   final _cancelToken = CancelToken();
-  bool _refetchingLoanAgreementUrl = false;
+  bool _refetchingRepaymentSetupUrl = false;
 
-  Future<void> _refetchLoanAgreementUrl() async {
-    if (!ref.read(invoiceNewLoanRequestProvider).loanAgreementFailure) {
+  Future<void> _refetchRepaymentSetupURL() async {
+    if (!ref.read(personalNewLoanRequestProvider).repaymentSetupFailure) {
       return;
     }
+    ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .updateRepaymentSetupFailure(false);
 
     setState(() {
-      _refetchingLoanAgreementUrl = true;
+      _refetchingRepaymentSetupUrl = true;
     });
 
-    ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .setLoanAgreementFailure(false);
-
     var response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .refetchLoanAgreementForm(_cancelToken);
-
+        .read(personalNewLoanRequestProvider.notifier)
+        .refetchRepaymentSetupURL(_cancelToken);
     if (!mounted) return;
 
     setState(() {
-      _refetchingLoanAgreementUrl = false;
+      _refetchingRepaymentSetupUrl = false;
     });
 
     if (!response.success) {
@@ -59,9 +57,9 @@ class _InvoiceNewLoanAgreementFailedState
         backgroundColor: Colors.transparent,
         content: getSnackbarNotificationWidget(
             message:
-                "Lender does not support refetching loan agreement. Please start again!",
+                "Unable to refetch Repayment Mandate URL. Contact Support.",
             notifType: SnackbarNotificationType.error),
-        duration: const Duration(seconds: 5),
+        duration: const Duration(seconds: 15),
       );
 
       ScaffoldMessenger.of(context)
@@ -74,8 +72,8 @@ class _InvoiceNewLoanAgreementFailedState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    ref.watch(invoiceLoanServerSentEventsProvider);
-    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
+    ref.watch(personalLoanEventsProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -90,14 +88,14 @@ class _InvoiceNewLoanAgreementFailedState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              InvoiceNewLoanRequestTopNav(
+              PersonalNewLoanRequestTopNav(
                 onBackClick: () {
                   ref.read(routerProvider).pushReplacement(
-                      InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                      PersonalNewLoanRequestRouter.new_loan_offers_home);
                 },
               ),
               const SpacerWidget(height: 35),
-              const InvoiceNewLoanRequestCountdownTimer(),
+              const PersonalNewLoanRequestCountdownTimer(),
               const SpacerWidget(
                 height: 16,
               ),
@@ -131,7 +129,7 @@ class _InvoiceNewLoanAgreementFailedState
                       softWrap: true,
                     ),
                     Text(
-                      "Loan Agreement Submission!",
+                      "E-Mandate Repayment Setup!",
                       style: TextStyle(
                         fontFamily: fontFamily,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -163,7 +161,7 @@ class _InvoiceNewLoanAgreementFailedState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        await _refetchLoanAgreementUrl();
+                        await _refetchRepaymentSetupURL();
                       },
                       child: Container(
                         height: 40,
@@ -177,12 +175,12 @@ class _InvoiceNewLoanAgreementFailedState
                           ),
                         ),
                         child: Center(
-                          child: _refetchingLoanAgreementUrl
+                          child: _refetchingRepaymentSetupUrl
                               ? Lottie.asset(
                                   "assets/animations/loading_spinner.json",
                                   width: 40)
                               : Text(
-                                  "Retry Agreement Signing",
+                                  "Retry E-Mandate",
                                   style: TextStyle(
                                     fontFamily: fontFamily,
                                     color:
@@ -202,8 +200,7 @@ class _InvoiceNewLoanAgreementFailedState
                       onTap: () {
                         HapticFeedback.heavyImpact();
                         ref.read(routerProvider).push(
-                            InvoiceNewLoanRequestRouter
-                                .single_bank_offer_select);
+                            PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
                         height: 40,

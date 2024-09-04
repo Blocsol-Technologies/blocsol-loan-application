@@ -1,11 +1,11 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -16,21 +16,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class InvoiceNewLoanAgreementFailed extends ConsumerStatefulWidget {
-  const InvoiceNewLoanAgreementFailed({super.key});
+class PersonalNewLoanAgreementFailed extends ConsumerStatefulWidget {
+  const PersonalNewLoanAgreementFailed({super.key});
 
   @override
-  ConsumerState<InvoiceNewLoanAgreementFailed> createState() =>
-      _InvoiceNewLoanAgreementFailedState();
+  ConsumerState<PersonalNewLoanAgreementFailed> createState() =>
+      _PersonalNewLoanAgreementFailedState();
 }
 
-class _InvoiceNewLoanAgreementFailedState
-    extends ConsumerState<InvoiceNewLoanAgreementFailed> {
+class _PersonalNewLoanAgreementFailedState
+    extends ConsumerState<PersonalNewLoanAgreementFailed> {
   final _cancelToken = CancelToken();
   bool _refetchingLoanAgreementUrl = false;
 
   Future<void> _refetchLoanAgreementUrl() async {
-    if (!ref.read(invoiceNewLoanRequestProvider).loanAgreementFailure) {
+    if (!ref.read(personalNewLoanRequestProvider).loanAgreementFailure) {
       return;
     }
 
@@ -39,12 +39,12 @@ class _InvoiceNewLoanAgreementFailedState
     });
 
     ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .setLoanAgreementFailure(false);
+        .read(personalNewLoanRequestProvider.notifier)
+        .updateLoanAgreementFailure(false);
 
     var response = await ref
-        .read(invoiceNewLoanRequestProvider.notifier)
-        .refetchLoanAgreementForm(_cancelToken);
+        .read(personalNewLoanRequestProvider.notifier)
+        .refetchLoanAgreementURL(_cancelToken);
 
     if (!mounted) return;
 
@@ -74,8 +74,8 @@ class _InvoiceNewLoanAgreementFailedState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    ref.watch(invoiceLoanServerSentEventsProvider);
-    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
+    ref.watch(personalLoanEventsProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -90,14 +90,14 @@ class _InvoiceNewLoanAgreementFailedState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              InvoiceNewLoanRequestTopNav(
+              PersonalNewLoanRequestTopNav(
                 onBackClick: () {
                   ref.read(routerProvider).pushReplacement(
-                      InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                      PersonalNewLoanRequestRouter.new_loan_offers_home);
                 },
               ),
               const SpacerWidget(height: 35),
-              const InvoiceNewLoanRequestCountdownTimer(),
+              const PersonalNewLoanRequestCountdownTimer(),
               const SpacerWidget(
                 height: 16,
               ),
@@ -202,8 +202,7 @@ class _InvoiceNewLoanAgreementFailedState
                       onTap: () {
                         HapticFeedback.heavyImpact();
                         ref.read(routerProvider).push(
-                            InvoiceNewLoanRequestRouter
-                                .single_bank_offer_select);
+                            PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
                         height: 40,
