@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
@@ -8,6 +7,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +55,9 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)

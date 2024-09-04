@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/curved_background.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/text_field.dart';
@@ -7,6 +6,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +41,11 @@ class _InvoiceLoanProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
+        content: getSnackbarNotificationWidget(
           message: "invalid old password",
-          contentType: ContentType.failure,
+          notifType: SnackbarNotificationType.error,
         ),
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -62,10 +61,9 @@ class _InvoiceLoanProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
+        content: getSnackbarNotificationWidget(
           message: "invalid new password",
-          contentType: ContentType.failure,
+          notifType: SnackbarNotificationType.error,
         ),
         duration: const Duration(seconds: 3),
       );
@@ -83,10 +81,9 @@ class _InvoiceLoanProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
+        content: getSnackbarNotificationWidget(
           message: "passwords do not match",
-          contentType: ContentType.failure,
+          notifType: SnackbarNotificationType.error,
         ),
         duration: const Duration(seconds: 3),
       );
@@ -100,7 +97,8 @@ class _InvoiceLoanProfileChangePasswordState
 
     var response = await ref
         .read(invoiceLoanUserProfileDetailsProvider.notifier)
-        .changeAccountPassword(_oldPasswordTextController.text, _newPasswordTextController.text, _cancelToken);
+        .changeAccountPassword(_oldPasswordTextController.text,
+            _newPasswordTextController.text, _cancelToken);
 
     if (!mounted || !context.mounted) {
       return;
@@ -116,10 +114,11 @@ class _InvoiceLoanProfileChangePasswordState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: response.success ? 'Success!' : 'Error!',
+      content: getSnackbarNotificationWidget(
         message: response.message,
-        contentType: response.success ? ContentType.success : ContentType.failure,
+        notifType: response.success
+            ? SnackbarNotificationType.success
+            : SnackbarNotificationType.error,
       ),
       duration: const Duration(seconds: 3),
     );

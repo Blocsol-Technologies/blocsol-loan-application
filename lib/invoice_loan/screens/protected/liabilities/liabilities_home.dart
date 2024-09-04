@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/shared_components/liability_card.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/ui/nav/bottom_nav_ba
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -113,11 +113,9 @@ class _InvoiceLoanLiabilitiesHomeState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'On Snap!',
-          message: "Unable to fetch loans. Please try again later.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch loans. Please try again later.",
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -168,9 +166,10 @@ class _InvoiceLoanLiabilitiesHomeState
                         onTap: () {
                           HapticFeedback.mediumImpact();
                           ref
-                              .read(invoiceLoanBottomNavStateProvider.notifier).changeItem(BottomNavItems.home);
+                              .read(invoiceLoanBottomNavStateProvider.notifier)
+                              .changeItem(BottomNavItems.home);
 
-                              context.go(InvoiceLoanIndexRouter.dashboard);
+                          context.go(InvoiceLoanIndexRouter.dashboard);
                         },
                         child: Icon(
                           Icons.arrow_back,

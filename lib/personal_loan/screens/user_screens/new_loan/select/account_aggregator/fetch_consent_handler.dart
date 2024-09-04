@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_ev
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -68,20 +69,17 @@ class _PCNewLoanGenerateOfferConsentState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'On Snap!',
-          message:
-              "Unable to submit personal details to lenders. Please contact support",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 10),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to submit personal details to lenders",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
 
-      await Future.delayed(const Duration(seconds: 10));
+      await Future.delayed(const Duration(seconds: 5));
 
       if (mounted) {
         context.go(PersonalNewLoanRequestRouter.new_loan_process);
@@ -90,7 +88,8 @@ class _PCNewLoanGenerateOfferConsentState
       return;
     }
 
-    context.go(PersonalNewLoanRequestRouter.new_loan_aa_webview, extra: response.data);
+    context.go(PersonalNewLoanRequestRouter.new_loan_aa_webview,
+        extra: response.data);
 
     return;
   }
@@ -114,7 +113,6 @@ class _PCNewLoanGenerateOfferConsentState
 
   @override
   Widget build(BuildContext context) {
-
     ref.watch(personalNewLoanRequestProvider);
     ref.watch(personalLoanEventsProvider);
     ref.watch(personalLoanServerSentEventsProvider);

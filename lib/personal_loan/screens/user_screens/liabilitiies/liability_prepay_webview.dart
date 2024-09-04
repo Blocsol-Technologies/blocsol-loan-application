@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
@@ -8,6 +7,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/account_detail
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -73,11 +73,9 @@ class _PCLiabilityPrepaymentWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Prepayment Unsuccessful. Contact Support",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Prepayment unsuccessful",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -95,11 +93,9 @@ class _PCLiabilityPrepaymentWebviewState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Success!',
-        message: "Prepayment Successful",
-        contentType: ContentType.success,
-      ),
+      content: getSnackbarNotificationWidget(
+          message: "Prepayment successful",
+          notifType: SnackbarNotificationType.success),
       duration: const Duration(seconds: 5),
     );
 
@@ -139,11 +135,9 @@ class _PCLiabilityPrepaymentWebviewState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Success!',
-        message: "Prepayment Successful",
-        contentType: ContentType.success,
-      ),
+      content: getSnackbarNotificationWidget(
+          message: "Prepayment successful",
+          notifType: SnackbarNotificationType.success),
       duration: const Duration(seconds: 5),
     );
 
@@ -169,8 +163,7 @@ class _PCLiabilityPrepaymentWebviewState
     });
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {

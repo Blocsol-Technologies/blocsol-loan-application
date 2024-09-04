@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -8,6 +7,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_e
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
@@ -58,11 +58,9 @@ class _LiabilityPrepayState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 

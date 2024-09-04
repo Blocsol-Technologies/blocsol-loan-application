@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/init/loan_agreement/agreement_otp_modal_bottom_sheet.dart';
@@ -9,6 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_l
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -78,11 +78,9 @@ class _PCNewLoanLoanAgreementState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to submit OTP. Contact Support",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to submit OTP",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -126,12 +124,10 @@ class _PCNewLoanLoanAgreementState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to fetch Loan Agreement URL. Contact Support.",
-            contentType: ContentType.failure,
-          ),
-          duration: const Duration(seconds: 15),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to fetch loan agreement url",
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
         );
 
         ScaffoldMessenger.of(context)

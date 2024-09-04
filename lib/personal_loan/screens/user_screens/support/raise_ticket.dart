@@ -1,11 +1,16 @@
 import 'dart:io';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/inward_curve_painter.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/support/utils.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/support.dart';
+
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
+import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
@@ -15,22 +20,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'dart:convert';
 
-class PCRaiseNewTicketScreen extends ConsumerStatefulWidget {
-  const PCRaiseNewTicketScreen({super.key});
+class PersonalLoanRaiseNewTicket extends ConsumerStatefulWidget {
+  const PersonalLoanRaiseNewTicket({super.key});
 
   @override
-  ConsumerState<PCRaiseNewTicketScreen> createState() =>
-      _PCRaiseNewTicketScreenState();
+  ConsumerState<PersonalLoanRaiseNewTicket> createState() =>
+      _PersonalLoanRaiseNewTicketState();
 }
 
-class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen> {
+class _PersonalLoanRaiseNewTicketState
+    extends ConsumerState<PersonalLoanRaiseNewTicket> {
   final cancelToken = CancelToken();
   final ImagePicker _picker = ImagePicker();
   final _messageController = TextEditingController();
 
   List<XFile> _mediaFileList = <XFile>[];
-  String categorySelectedName = categories[0].name;
-  String subCategorySelectedName = categories[0].subCategories[0];
+  String categorySelectedName = plSupportCategories[0].name;
+  List<PlSubcategory> subCategories = plSupportCategories[0].subCategories;
+  String subCategorySelectedName = plSupportCategories[0].subCategories[0].name;
 
   Future<void> _onImageButtonPressed(
     ImageSource source, {
@@ -47,11 +54,9 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to select images",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "unable to select images",
+              notifType: SnackbarNotificationType.error),
         );
 
         if (context.mounted) {
@@ -75,13 +80,19 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
       imageBase64.add(base64Image);
     }
 
-    var category = categories
-        .firstWhere((Category element) => element.name == categorySelectedName);
+    var category = plSupportCategories
+        .firstWhere((PlSupportCategory element) => element.name == categorySelectedName);
+
+    var subCategoryCode = plSupportCategories
+        .firstWhere((PlSupportCategory element) => element.name == categorySelectedName)
+        .subCategories
+        .firstWhere((element) => element.name == subCategorySelectedName)
+        .value;
 
     final response =
         await ref.read(personalLoanSupportStateProvider.notifier).raiseSupportIssue(
               category.value,
-              subCategorySelectedName,
+              subCategoryCode,
               "OPEN",
               _messageController.text,
               imageBase64,
@@ -93,37 +104,31 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
     if (response.success) {
       _mediaFileList.clear();
       _messageController.clear();
-      categorySelectedName = categories[0].name;
-      subCategorySelectedName = categories[0].subCategories[0];
+      categorySelectedName = plSupportCategories[0].name;
+      subCategorySelectedName = plSupportCategories[0].subCategories[0].name;
 
       final snackBar = SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Success!',
-          message: "Support Ticket Raised. View in 'My Tickets'",
-          contentType: ContentType.success,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Support Ticket Raised. View in 'My Tickets'",
+            notifType: SnackbarNotificationType.success),
       );
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-      }
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
 
-      
+      ref.read(routerProvider).push(PersonalLoanIndexRouter.support_home);
     } else {
       final snackBar = SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       if (context.mounted) {
@@ -142,340 +147,386 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final supportRef = ref.watch(personalLoanSupportStateProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
           body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              HapticFeedback.heavyImpact();
-                              ref.read(routerProvider).pop();
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.onSurface,
+            child: Container(
+              width: width,
+              padding: EdgeInsets.fromLTRB(
+                  RelativeSize.width(35, width),
+                  RelativeSize.height(20, height),
+                  RelativeSize.width(35, width),
+                  0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const PlProfileTopNav(),
+                  const SpacerWidget(
+                    height: 45,
+                  ),
+                  Text(
+                    'New Request',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: AppFontSizes.h1,
+                      fontWeight: AppFontWeights.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  const SpacerWidget(
+                    height: 5,
+                  ),
+                  Text(
+                    'Please provide us the necessary details',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: AppFontSizes.b1,
+                      fontWeight: AppFontWeights.medium,
+                      color: const Color.fromRGBO(80, 80, 80, 1),
+                    ),
+                  ),
+                  const SpacerWidget(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: RelativeSize.height(630, height),
+                    width: width,
+                    child: CustomPaint(
+                      painter: PlInwardCurvePainter(
+                          color: Theme.of(context).colorScheme.surface),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: 50,
+                            left: RelativeSize.width(30, width),
+                            right: RelativeSize.width(30, width)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'PlSupportCategory',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Raise a Ticket',
-                            style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontWeight: AppFontWeights.medium,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: AppFontSizes.h1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Please provide the details of your issue below. Our support team will get back to you as soon as possible.',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.5),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Text(
-                        'Category',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      DropdownButton2<String>(
-                        isExpanded: true,
-                        underline: const SizedBox(),
-                        iconStyleData: IconStyleData(
-                          icon: Icon(
-                            Icons.category,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            size: 20,
-                          ),
-                        ),
-                        hint: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          height: 40,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .scrim
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Category",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.bold,
+                            const SpacerWidget(height: 10),
+                            DropdownButton2<String>(
+                              isExpanded: true,
+                              underline: const SpacerWidget(),
+                              iconStyleData: IconStyleData(
+                                icon: Icon(
+                                  Icons.category,
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
+                                  size: 20,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        items: categories
-                            .map((Category item) => DropdownMenuItem<String>(
-                                  value: item.name,
-                                  child: Text(
-                                    item.name,
-                                    style: TextStyle(
-                                      fontSize: AppFontSizes.b1,
-                                      fontWeight: AppFontWeights.bold,
+                              hint: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                height: 40,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .scrim
+                                      .withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      "PlSupportCategory",
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.b1,
+                                        fontWeight: AppFontWeights.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              items: plSupportCategories
+                                  .map((PlSupportCategory item) =>
+                                      DropdownMenuItem<String>(
+                                        value: item.name,
+                                        child: Text(
+                                          item.name,
+                                          style: TextStyle(
+                                            fontSize: AppFontSizes.b1,
+                                            fontWeight: AppFontWeights.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: categorySelectedName,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  categorySelectedName = value ?? "";
+
+                                  subCategories = plSupportCategories
+                                      .firstWhere((PlSupportCategory element) =>
+                                          element.name == categorySelectedName)
+                                      .subCategories;
+
+                                  subCategorySelectedName =
+                                      subCategories[0].name;
+                                });
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(5),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                              ),
+                            ),
+                            const SpacerWidget(height: 20),
+                            Text(
+                              'Sub-PlSupportCategory',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            const SpacerWidget(height: 10),
+                            SubCategorySelector(
+                              onSubCategorySelected: (String val) {
+                                setState(() {
+                                  subCategorySelectedName = val;
+                                });
+                              },
+                              selectedSubCategory: subCategorySelectedName,
+                              subCategories: plSupportCategories
+                                  .firstWhere((PlSupportCategory element) =>
+                                      element.name == categorySelectedName)
+                                  .subCategories,
+                            ),
+                            const SpacerWidget(height: 20),
+                            Text(
+                              'Images (optional)',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            const SpacerWidget(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _onImageButtonPressed(
+                                      ImageSource.gallery,
+                                      context: context,
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 35,
+                                    width: RelativeSize.width(180, width),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                        child: Icon(
+                                      Icons.add_a_photo,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onPrimary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: categorySelectedName,
-                        onChanged: (String? value) {
-                          setState(() {
-                            categorySelectedName = value ?? "";
-                          });
-                        },
-                        buttonStyleData: ButtonStyleData(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.only(left: 14, right: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          offset: const Offset(0, 0),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(5),
-                            thumbVisibility:
-                                WidgetStateProperty.all<bool>(true),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Sub-Category',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      SubCategorySelector(
-                        onSubCategorySelected: (String val) {
-                          setState(() {
-                            subCategorySelectedName = val;
-                          });
-                        },
-                        // selectedSubCategory: subCategorySelectedName,
-                        // subCategories: categories
-                        //     .firstWhere((Category element) =>
-                        //         element.name == categorySelectedName)
-                        //     .subCategories,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Images (optional)',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _onImageButtonPressed(
-                                ImageSource.gallery,
-                                context: context,
-                              );
-                            },
-                            child: Container(
-                              height: 35,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                  child: Icon(
-                                Icons.add_a_photo,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 20,
-                              )),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              HapticFeedback.heavyImpact();
-                              setState(() {
-                                _mediaFileList.clear();
-                              });
-                            },
-                            child: Container(
-                              height: 35,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Reset',
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h3,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
+                                      size: 20,
+                                    )),
                                   ),
                                 ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        height: _mediaFileList.isEmpty ? 20 : 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          key: UniqueKey(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Semantics(
-                                label: 'image_picker_example_picked_image',
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Image.file(
-                                    File(_mediaFileList[index].path),
-                                    errorBuilder: (BuildContext context,
-                                        Object error, StackTrace? stackTrace) {
-                                      return const Center(
-                                          child: Text(
-                                              'This image type is not supported'));
-                                    },
-                                  ),
-                                ));
-                          },
-                          itemCount: _mediaFileList.length,
-                        ),
-                      ),
-                      Text(
-                        'Message',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.b1,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'Description',
-                          labelStyle: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.b1,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                        controller: _messageController,
-                        maxLines: 5,
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          HapticFeedback.heavyImpact();
-                          _raiseSupportTicket();
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 120,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: supportRef.generatingSupportTicket
-                                ? Lottie.asset(
-                                    "assets/animations/loading_spinner.json",
-                                    height: 50,
-                                    width: 50,
-                                  )
-                                : Text(
-                                    'Raise Ticket',
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.h3,
+                                GestureDetector(
+                                  onTap: () {
+                                    HapticFeedback.heavyImpact();
+                                    setState(() {
+                                      _mediaFileList.clear();
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 35,
+                                    width: 80,
+                                    decoration: BoxDecoration(
                                       color:
                                           Theme.of(context).colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Reset',
+                                        style: TextStyle(
+                                          fontFamily: fontFamily,
+                                          fontSize: AppFontSizes.h3,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                          ),
+                                )
+                              ],
+                            ),
+                            const SpacerWidget(height: 10),
+                            SizedBox(
+                              height: _mediaFileList.isEmpty ? 20 : 100,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                key: UniqueKey(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Semantics(
+                                      label:
+                                          'image_picker_example_picked_image',
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Image.file(
+                                          File(_mediaFileList[index].path),
+                                          errorBuilder: (BuildContext context,
+                                              Object error,
+                                              StackTrace? stackTrace) {
+                                            return const Center(
+                                                child: Text(
+                                                    'This image type is not supported'));
+                                          },
+                                        ),
+                                      ));
+                                },
+                                itemCount: _mediaFileList.length,
+                              ),
+                            ),
+                            Text(
+                              'Message',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.h3,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            const SpacerWidget(height: 10),
+                            TextField(
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: 'Description',
+                                labelStyle: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                border: const OutlineInputBorder(),
+                              ),
+                              controller: _messageController,
+                              maxLines: 5,
+                            ),
+                            const SpacerWidget(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    HapticFeedback.heavyImpact();
+                                    _raiseSupportTicket();
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: RelativeSize.width(252, width),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: supportRef.generatingSupportTicket
+                                          ? Lottie.asset(
+                                              "assets/animations/loading_spinner.json",
+                                              height: 50,
+                                              width: 50,
+                                            )
+                                          : Text(
+                                              'Raise Ticket',
+                                              style: TextStyle(
+                                                fontFamily: fontFamily,
+                                                fontSize: AppFontSizes.h3,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                          ],
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -486,8 +537,12 @@ class _PCRaiseNewTicketScreenState extends ConsumerState<PCRaiseNewTicketScreen>
 
 class SubCategorySelector extends StatefulWidget {
   final Function(String) onSubCategorySelected;
+  final String selectedSubCategory;
+  final List<PlSubcategory> subCategories;
   const SubCategorySelector({
     required this.onSubCategorySelected,
+    required this.selectedSubCategory,
+    required this.subCategories,
     super.key,
   });
 
@@ -495,39 +550,12 @@ class SubCategorySelector extends StatefulWidget {
   State<SubCategorySelector> createState() => _SubCategorySelectorState();
 }
 
-List<String> subCategories = [
-  "Not able to complete the KYC",
-  "Not able to set up E-mandate",
-  "OTP not received during the e-sign of agreement",
-  "Not able to view the agreement",
-  "Need to update the e-mandate details",
-  "Feedback on collection call",
-  "Stop Marketing Communications",
-  "Request for documents",
-  "Need to update personal details",
-  "revoke consent already granted to collect personal data",
-  "delete/forget existing data against my profile",
-  "Fees/Charges related issues",
-  "Cibil Related",
-  "Delay in disbursement/not disbursed",
-  "Incorrect amount disbursed"
-      "EMI not executed",
-  "EMI wrongly executed",
-  "EMI payment not getting reflected",
-  "Preclosure/Part payment related",
-  "NOC/Loan completion Related",
-  "RoI related issues",
-  "Loan Servicing"
-];
-
 class _SubCategorySelectorState extends State<SubCategorySelector> {
-  String selectedSubCategory = subCategories[0];
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton2<String>(
       isExpanded: true,
-      underline: const SizedBox(),
+      underline: const SpacerWidget(),
       iconStyleData: IconStyleData(
         icon: Icon(
           Icons.catching_pokemon,
@@ -547,7 +575,7 @@ class _SubCategorySelectorState extends State<SubCategorySelector> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
-              "Sub Category",
+              "Sub PlSupportCategory",
               style: TextStyle(
                 fontFamily: fontFamily,
                 fontSize: AppFontSizes.b1,
@@ -558,11 +586,11 @@ class _SubCategorySelectorState extends State<SubCategorySelector> {
           ],
         ),
       ),
-      items: subCategories
-          .map((String item) => DropdownMenuItem<String>(
-                value: item,
+      items: widget.subCategories
+          .map((PlSubcategory item) => DropdownMenuItem<String>(
+                value: item.name,
                 child: Text(
-                  item,
+                  item.name,
                   style: TextStyle(
                     fontSize: AppFontSizes.b1,
                     fontWeight: AppFontWeights.bold,
@@ -572,13 +600,9 @@ class _SubCategorySelectorState extends State<SubCategorySelector> {
                 ),
               ))
           .toList(),
-      value: selectedSubCategory,
+      value: widget.selectedSubCategory,
       onChanged: (String? value) {
-        setState(() {
-          selectedSubCategory = value ?? "";
-        });
-
-        widget.onSubCategorySelected(selectedSubCategory);
+        widget.onSubCategorySelected(value ?? "");
       },
       buttonStyleData: ButtonStyleData(
         height: 40,

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_l
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -45,12 +45,10 @@ class _PCNewLoanRepaymentSetupState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message:
-              "Loan Repayment Setup Failed. Refetch Repayment Setup URL or Restart the journey",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Loan repayment setup failed. Refetch URL or Restart the Journey",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 10),
       );
 
@@ -94,11 +92,9 @@ class _PCNewLoanRepaymentSetupState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Repayment Setup. Contact Support",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Repayment setup unsuccessful",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -140,11 +136,9 @@ class _PCNewLoanRepaymentSetupState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to fetch Repayment Setup URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch repayment setup Url",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -177,11 +171,9 @@ class _PCNewLoanRepaymentSetupState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to refetch Repayment Setup URL. Contact Support.",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to refetch repayment setup url",
+              notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 15),
         );
 
@@ -196,8 +188,7 @@ class _PCNewLoanRepaymentSetupState
     }
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -9,6 +8,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/support/
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -53,11 +53,9 @@ class _InvoiceLoanRaiseNewTicketState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to select images",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "unable to select images",
+              notifType: SnackbarNotificationType.error),
         );
 
         if (context.mounted) {
@@ -112,11 +110,9 @@ class _InvoiceLoanRaiseNewTicketState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Success!',
-          message: "Support Ticket Raised. View in 'My Tickets'",
-          contentType: ContentType.success,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Support Ticket Raised. View in 'My Tickets'",
+            notifType: SnackbarNotificationType.success),
       );
 
       ScaffoldMessenger.of(context)
@@ -129,11 +125,9 @@ class _InvoiceLoanRaiseNewTicketState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       if (context.mounted) {
@@ -469,23 +463,21 @@ class _InvoiceLoanRaiseNewTicketState
                               style: TextStyle(
                                 fontFamily: fontFamily,
                                 fontSize: AppFontSizes.b1,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               decoration: InputDecoration(
                                 labelText: 'Description',
                                 labelStyle: TextStyle(
                                   fontFamily: fontFamily,
                                   fontSize: AppFontSizes.b1,
-                                  color:
-                                      Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                                 border: const OutlineInputBorder(),
                               ),
                               controller: _messageController,
                               maxLines: 5,
                             ),
-                          const SpacerWidget(height: 20),
+                            const SpacerWidget(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -498,7 +490,8 @@ class _InvoiceLoanRaiseNewTicketState
                                     height: 40,
                                     width: RelativeSize.width(252, width),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: Center(

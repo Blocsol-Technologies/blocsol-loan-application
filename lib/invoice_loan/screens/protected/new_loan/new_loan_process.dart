@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/l
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -78,11 +78,9 @@ class _NewLoanProcessState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'On Snap!',
-            message: "Invalid State! Contact Support",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Invalid State! Contact Support",
+              notifType: SnackbarNotificationType.error),
         );
 
         ScaffoldMessenger.of(context)

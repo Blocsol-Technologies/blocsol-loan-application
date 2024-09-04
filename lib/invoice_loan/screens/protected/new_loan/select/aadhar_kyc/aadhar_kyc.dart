@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/alert_dialog.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
@@ -11,6 +10,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/l
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -47,12 +47,10 @@ class _InvoiceNewLoanAadharKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Aadhar KYC Unsuccessful. Refetch the KYC URL",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message: "Aadhar KYC Unsuccessful. Refetch the KYC URL",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -73,12 +71,10 @@ class _InvoiceNewLoanAadharKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Aadhar KYC Unsuccessful. Contact Support",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message: "Aadhar KYC Unsuccessful. Contact Support",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -111,12 +107,10 @@ class _InvoiceNewLoanAadharKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to fetch Aadhar KYC URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch Aadhar KYC URL. Contact Support.",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)

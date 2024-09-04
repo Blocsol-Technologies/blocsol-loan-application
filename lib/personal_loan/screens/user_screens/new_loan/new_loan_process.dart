@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
@@ -11,6 +10,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_l
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,8 +29,7 @@ class _PCNewLoanProcessScreenState
     extends ConsumerState<PCNewLoanProcessScreen> {
   late Timer _timer;
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   void _performLoanAction() async {
     HapticFeedback.heavyImpact();
@@ -74,11 +73,9 @@ class _PCNewLoanProcessScreenState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'On Snap!',
-            message: "Invalid State! Contact Support",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Invalid State. Contact Support",
+              notifType: SnackbarNotificationType.error),
         );
 
         ScaffoldMessenger.of(context)

@@ -1,10 +1,10 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,8 @@ class _PCNewLoanUpdateLoanOfferState
   final _cancelToken = CancelToken();
 
   void _getAmountSelected() {
-    final selectedOffer = ref.read(personalNewLoanRequestProvider).selectedOffer;
+    final selectedOffer =
+        ref.read(personalNewLoanRequestProvider).selectedOffer;
     final maxAmount = num.parse(selectedOffer.deposit);
 
     setState(() {
@@ -48,12 +49,10 @@ class _PCNewLoanUpdateLoanOfferState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message:
-              "Update Loan Amount cannot be less than half of the loan offer amount",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Update loan amount cannot be less than half of the loan offer amount",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -80,11 +79,9 @@ class _PCNewLoanUpdateLoanOfferState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -108,11 +105,9 @@ class _PCNewLoanUpdateLoanOfferState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -129,7 +124,8 @@ class _PCNewLoanUpdateLoanOfferState
 
   @override
   void initState() {
-    final selectedOffer = ref.read(personalNewLoanRequestProvider).selectedOffer;
+    final selectedOffer =
+        ref.read(personalNewLoanRequestProvider).selectedOffer;
     final maxAmount = num.parse(selectedOffer.deposit);
     final minAmount = num.parse(selectedOffer.deposit) * 0.5;
     setState(() {

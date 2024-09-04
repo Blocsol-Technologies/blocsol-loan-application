@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
@@ -11,6 +10,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -2019,12 +2019,10 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'On Snap!',
-          message:
-              "Unable to select the offer. Contact support or Please try again later.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Unable to select the offer. Please select any other offer",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 10),
       );
 
@@ -2062,13 +2060,10 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'On Snap!',
-          message:
-              "Unable to select the offer. Contact support or Please try again later.",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 10),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to select the offer. Please select any other offer",
+            notifType: SnackbarNotificationType.error), 
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)

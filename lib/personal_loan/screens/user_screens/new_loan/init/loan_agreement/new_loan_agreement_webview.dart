@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_l
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -67,11 +67,9 @@ class _PCNewLoanAgreementWebviewState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Loan Repayment Setup Unsuccessful. Contact Support",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Loan repayment setup unsuccessful.",
+              notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 15),
         );
 
@@ -112,11 +110,9 @@ class _PCNewLoanAgreementWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to refetch Loan Agreement URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to refetch loan agreement Url",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -134,8 +130,7 @@ class _PCNewLoanAgreementWebviewState
     }
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   initState() {

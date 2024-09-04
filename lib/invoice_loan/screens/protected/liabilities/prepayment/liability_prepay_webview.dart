@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -9,6 +8,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_e
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -54,12 +54,10 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Prepayment Unsuccessful. Contact Support",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message: "Prepayment Unsuccessful. Contact Support",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -72,11 +70,9 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Success!',
-        message: "Prepayment Successful",
-        contentType: ContentType.success,
-      ),
+      content: getSnackbarNotificationWidget(
+          message: "Prepayment Successful",
+          notifType: SnackbarNotificationType.success),
       duration: const Duration(seconds: 5),
     );
 

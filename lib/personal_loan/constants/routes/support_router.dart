@@ -13,11 +13,11 @@ class PersonalLoanSupportRouter {
 List<GoRoute> personalLoanSupportRoutes = [
     GoRoute(
     path: PersonalLoanSupportRouter.support_ticket_details,
-    builder: (context, state) => const PCSingleTicketDetails(),
+    builder: (context, state) => const PersonalLoanSingleTicketDetails(),
   ),
 
    GoRoute(
     path: PersonalLoanSupportRouter.raise_new_ticket,
-    builder: (context, state) => const PCRaiseNewTicketScreen(),
+    builder: (context, state) => const PersonalLoanRaiseNewTicket(),
   ),
 ];

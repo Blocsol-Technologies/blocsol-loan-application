@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/account_aggregator/account_aggregator_box.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
@@ -7,6 +6,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/account_detail
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +19,10 @@ class PlProfileAASelect extends ConsumerStatefulWidget {
   const PlProfileAASelect({super.key, required this.aaList});
 
   @override
-  ConsumerState<PlProfileAASelect> createState() =>
-      _PlprofileAASelectState();
+  ConsumerState<PlProfileAASelect> createState() => _PlprofileAASelectState();
 }
 
-class _PlprofileAASelectState
-    extends ConsumerState<PlProfileAASelect> {
+class _PlprofileAASelectState extends ConsumerState<PlProfileAASelect> {
   final _cancelToken = CancelToken();
 
   bool _updatingAA = false;
@@ -36,11 +34,9 @@ class _PlprofileAASelectState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Please select an account aggregator to continue",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Please select an account aggregator to continue",
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -65,11 +61,9 @@ class _PlprofileAASelectState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -80,11 +74,9 @@ class _PlprofileAASelectState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Success!',
-          message: response.message,
-          contentType: ContentType.success,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.success),
       );
 
       ScaffoldMessenger.of(context)

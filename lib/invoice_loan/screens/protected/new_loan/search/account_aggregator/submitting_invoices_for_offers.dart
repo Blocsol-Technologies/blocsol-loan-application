@@ -8,6 +8,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/s
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class InvoiceLoanRequestSubmittingSearchForm extends ConsumerStatefulWidget {
   const InvoiceLoanRequestSubmittingSearchForm({super.key});
@@ -37,11 +37,10 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'On Snap!',
-        message: "Unable to fetch offers on invoices. Please contact support.",
-        contentType: ContentType.failure,
-      ),
+      content: getSnackbarNotificationWidget(
+          message:
+              "Unable to fetch offers on invoices. Please contact support.",
+          notifType: SnackbarNotificationType.error),
       duration: const Duration(seconds: 10),
     );
 
@@ -51,7 +50,6 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
   }
 
   void performActions() async {
-
     if (ref.read(invoiceNewLoanRequestProvider).submittingInvoicesForOffers) {
       return;
     }

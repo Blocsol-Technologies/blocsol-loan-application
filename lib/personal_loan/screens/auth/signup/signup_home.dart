@@ -4,13 +4,13 @@ import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_r
 import 'package:blocsol_loan_application/personal_loan/state/auth/signup/signup.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PCSignupHome extends ConsumerStatefulWidget {
@@ -89,11 +89,7 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: errorMessage,
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(message: errorMessage, notifType: SnackbarNotificationType.error), 
           duration: const Duration(seconds: 5),
         );
 

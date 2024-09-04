@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/inward_curve_painter.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/state/support_state.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/support.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +20,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-class PCSingleTicketDetails extends ConsumerStatefulWidget {
-  const PCSingleTicketDetails({super.key});
+class PersonalLoanSingleTicketDetails extends ConsumerStatefulWidget {
+  const PersonalLoanSingleTicketDetails({super.key});
 
   @override
-  ConsumerState<PCSingleTicketDetails> createState() =>
-      _PCSingleTicketDetailsState();
+  ConsumerState<PersonalLoanSingleTicketDetails> createState() =>
+      _PersonalLoanSingleTicketDetailsState();
 }
 
-class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
+class _PersonalLoanSingleTicketDetailsState
+    extends ConsumerState<PersonalLoanSingleTicketDetails> {
   final CancelToken _cancelToken = CancelToken();
   bool _closingTicket = false;
 
@@ -43,11 +47,9 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -58,11 +60,9 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: "Success",
-          message: "Update Request Sent to Lender",
-          contentType: ContentType.success,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "update request sent to lender",
+            notifType: SnackbarNotificationType.success),
       );
 
       ScaffoldMessenger.of(context)
@@ -79,7 +79,7 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
   Future<void> pollForSupportTicketsBackground() async {
     if (!mounted) return;
 
-    if (ref.read(personalLoanSupportStateProvider).fetchingAllSupportTickets) {
+    if (ref.read(personalLoanSupportStateProvider).fetchingSingleSupportTicket) {
       return;
     }
 
@@ -128,10 +128,7 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
     var response = await ref
         .read(personalLoanSupportStateProvider.notifier)
         .raiseSupportIssue(
-            ref
-                .read(personalLoanSupportStateProvider)
-                .selectedSupportTicket
-                .category,
+            ref.read(personalLoanSupportStateProvider).selectedSupportTicket.category,
             ref
                 .read(personalLoanSupportStateProvider)
                 .selectedSupportTicket
@@ -152,11 +149,7 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -184,218 +177,281 @@ class _PCSingleTicketDetailsState extends ConsumerState<PCSingleTicketDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final supportRef = ref.watch(personalLoanSupportStateProvider);
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Container(
+            width: width,
+            padding: EdgeInsets.fromLTRB(
+                RelativeSize.width(35, width),
+                RelativeSize.height(20, height),
+                RelativeSize.width(35, width),
+                0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    HapticFeedback.mediumImpact();
-                    ref.read(routerProvider).pop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 25,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        ref
+                            .read(routerProvider)
+                            .push(PersonalLoanSupportRouter.raise_new_ticket);
+                      },
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        _closeTicket();
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 90,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: _closingTicket
+                              ? Lottie.asset(
+                                  "assets/animations/loading_spinner.json",
+                                  height: 50,
+                                  width: 50,
+                                )
+                              : Text(
+                                  'Mark as Solved',
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: AppFontSizes.b2,
+                                    fontWeight: AppFontWeights.medium,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                    const SpacerWidget(
+                      width: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        _handleStatusRequest();
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 90,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: supportRef.sendingStatusRequest
+                              ? Lottie.asset(
+                                  "assets/animations/loading_spinner.json",
+                                  height: 50,
+                                  width: 50,
+                                )
+                              : Text(
+                                  'Request Update',
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: AppFontSizes.b2,
+                                    fontWeight: AppFontWeights.medium,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SpacerWidget(
+                  height: 45,
+                ),
+                Text(
+                  'Ticket Details',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: AppFontSizes.h1,
+                    fontWeight: AppFontWeights.bold,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                const Expanded(
-                  child: SizedBox(),
+                const SpacerWidget(
+                  height: 5,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.heavyImpact();
-                    _closeTicket();
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Center(
-                      child: _closingTicket
-                          ? Lottie.asset(
-                              "assets/animations/loading_spinner.json",
-                              height: 50,
-                              width: 50,
-                            )
-                          : Text(
-                              'Close',
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                    ),
+                Text(
+                  'Ticket ID: ${supportRef.selectedSupportTicket.id}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: AppFontSizes.b1,
+                    fontWeight: AppFontWeights.medium,
+                    color: const Color.fromRGBO(80, 80, 80, 1),
                   ),
                 ),
-                const SpacerWidget(
-                  width: 15,
+                const SizedBox(
+                  height: 20,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.heavyImpact();
-                    _handleStatusRequest();
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 135,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Center(
-                      child: supportRef.sendingStatusRequest
-                          ? Lottie.asset(
-                              "assets/animations/loading_spinner.json",
-                              height: 50,
-                              width: 50,
-                            )
-                          : Text(
-                              'Request Update',
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
+                SizedBox(
+                  height: RelativeSize.height(500, height),
+                  width: width,
+                  child: CustomPaint(
+                    painter: PlInwardCurvePainter(
+                        color: Theme.of(context).colorScheme.surface),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: Stack(
+                        children: [
+                          ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 100),
+                            shrinkWrap: true,
+                            itemCount: supportRef
+                                .selectedSupportTicket.conversations.length,
+                            itemBuilder: (context, index) {
+                              final conversation = supportRef
+                                  .selectedSupportTicket.conversations[index];
+
+                              final bool isCustomerMessage =
+                                  conversation.isCustomerMessage();
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color: isCustomerMessage
+                                              ? Colors.red
+                                              : Colors.blue,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: isCustomerMessage
+                                            ? CrossAxisAlignment.start
+                                            : CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            isCustomerMessage
+                                                ? "You"
+                                                : "Support",
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.b2,
+                                              fontWeight: AppFontWeights.medium,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            conversation.message,
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.b1,
+                                              fontWeight: AppFontWeights.normal,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            "Updated At: ${conversation.getReadableTime()}",
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.b2,
+                                              fontWeight: AppFontWeights.medium,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SpacerWidget(
+                                      height: 10,
+                                    ),
+                                    conversation.images.isEmpty
+                                        ? const SizedBox()
+                                        : SizedBox(
+                                            height: 100,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              key: UniqueKey(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int imageIndex) {
+                                                final image = conversation
+                                                    .images[imageIndex];
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 5),
+                                                  child:
+                                                      Base64ImageWidget(image),
+                                                );
+                                              },
+                                              itemCount:
+                                                  conversation.images.length,
+                                            ),
+                                          )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: NewMessageBar(
+                                category:
+                                    supportRef.selectedSupportTicket.category,
+                                subCategory: supportRef
+                                    .selectedSupportTicket.subCategory),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Ticket ID: ${supportRef.selectedSupportTicket.id}',
-              softWrap: true,
-              style: TextStyle(
-                fontFamily: fontFamily,
-                fontSize: AppFontSizes.h3,
-                fontWeight: AppFontWeights.medium,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: supportRef.selectedSupportTicket.conversations.length,
-              itemBuilder: (context, index) {
-                final bool isCustomerMessage = supportRef
-                    .selectedSupportTicket.conversations[index]
-                    .isCustomerMessage();
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: isCustomerMessage ? Colors.red : Colors.blue,
-                            width: 0.5,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: isCustomerMessage
-                              ? CrossAxisAlignment.start
-                              : CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              isCustomerMessage ? "You" : "Support",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              supportRef.selectedSupportTicket
-                                  .conversations[index].message,
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.normal,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Updated At: ${supportRef.selectedSupportTicket.conversations[index].getReadableTime()}",
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SpacerWidget(
-                        height: 10,
-                      ),
-                      supportRef.selectedSupportTicket.conversations[index]
-                              .images.isEmpty
-                          ? const SizedBox()
-                          : SizedBox(
-                              height: 100,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                key: UniqueKey(),
-                                itemBuilder:
-                                    (BuildContext context, int imageIndex) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Base64ImageWidget(supportRef
-                                        .selectedSupportTicket
-                                        .conversations[index]
-                                        .images[imageIndex]),
-                                  );
-                                },
-                                itemCount: supportRef.selectedSupportTicket
-                                    .conversations[index].images.length,
-                              ),
-                            )
-                    ],
-                  ),
-                );
-              },
-            ),
-            NewMessageBar(
-                category: supportRef.selectedSupportTicket.category,
-                subCategory: supportRef.selectedSupportTicket.subCategory),
-          ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -406,13 +462,11 @@ class Base64ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Decode the base64 string into bytes
     if (isBase64(base64String)) {
       Uint8List bytes = base64Decode(base64String);
-      // Create an Image.memory widget with the decoded bytes
       return Image.memory(
         bytes,
-        fit: BoxFit.cover, // Adjust the fit as needed
+        fit: BoxFit.cover,
       );
     }
 
@@ -459,11 +513,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to select images",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(message: "unable to select images", notifType: SnackbarNotificationType.error),
         );
 
         if (context.mounted) {
@@ -476,9 +526,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
   }
 
   Future<void> _sendMessage() async {
-    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket) {
-      return;
-    }
+    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket) return;
 
     List<String> imageBase64 = [];
 
@@ -490,11 +538,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
     }
 
     DateTime now = DateTime.now();
-
-    // Define the format
     DateFormat formatter = DateFormat('yyyyMMddTHHmmss');
-
-    // Format the date
     String formattedDate = formatter.format(now);
 
     ref
@@ -521,11 +565,9 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -548,10 +590,11 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Container(
-      height: _mediaFileList.isEmpty ? 145 : 190,
+      height: _mediaFileList.isEmpty ? 90 : 130,
       padding: const EdgeInsets.all(10),
-      width: MediaQuery.of(context).size.width,
+      width: width * 0.85,
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -559,108 +602,137 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
           _mediaFileList.isEmpty
               ? const SizedBox()
               : SizedBox(
-                  height: 50,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    key: UniqueKey(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Semantics(
-                          label: 'image_picker_example_picked_image',
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Image.file(
-                              File(_mediaFileList[index].path),
-                              errorBuilder: (BuildContext context, Object error,
-                                  StackTrace? stackTrace) {
-                                return const Center(
-                                    child: Text(
-                                        'This image type is not supported'));
-                              },
-                            ),
-                          ));
-                    },
-                    itemCount: _mediaFileList.length,
+                  height: 40,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          key: UniqueKey(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Semantics(
+                                label: 'image_picker_example_picked_image',
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Image.file(
+                                    File(_mediaFileList[index].path),
+                                    errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stackTrace) {
+                                      return const Center(
+                                          child: Text(
+                                              'This image type is not supported'));
+                                    },
+                                  ),
+                                ));
+                          },
+                          itemCount: _mediaFileList.length,
+                        ),
+                      ),
+                      const SpacerWidget(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          setState(() {
+                            _mediaFileList.clear();
+                          });
+                        },
+                        child: Icon(
+                          Icons.close,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 22,
+                        ),
+                      )
+                    ],
                   ),
                 ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextField(
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: AppFontSizes.b1,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: _messageController,
-                  maxLines: 1,
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.mediumImpact();
-                  _onImageButtonPressed(ImageSource.gallery, context: context);
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.image,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      size: 30,
+          Container(
+            height: 40,
+            width: width * 0.85,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(237, 237, 237, 1),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: TextField(
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: AppFontSizes.b1,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      controller: _messageController,
+                      maxLines: 1,
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-          const SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              HapticFeedback.heavyImpact();
-              _sendMessage();
-            },
-            child: Container(
-              height: 40,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: ref
-                        .read(personalLoanSupportStateProvider)
-                        .generatingSupportTicket
-                    ? Lottie.asset(
-                        "assets/animations/loading_spinner.json",
-                        height: 50,
-                        width: 50,
-                      )
-                    : Text(
-                        'Send Message',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: AppFontSizes.h3,
-                          fontWeight: AppFontWeights.medium,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-              ),
+                const SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    _onImageButtonPressed(ImageSource.gallery,
+                        context: context);
+                  },
+                  child: Center(
+                    child: Icon(
+                      Icons.image,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 22,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                    _sendMessage();
+                  },
+                  child: Center(
+                    child: ref
+                            .read(personalLoanSupportStateProvider)
+                            .generatingSupportTicket
+                        ? Lottie.asset(
+                            "assets/animations/loading_spinner.json",
+                            height: 25,
+                            width: 25,
+                          )
+                        : Icon(
+                            Icons.send,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 25,
+                          ),
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -11,6 +10,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/l
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -57,11 +57,9 @@ class _NewLoanAccountAggregatorWebviewScreenState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'On Snap!',
-            message: "Unable to confirm consent creation.",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to confirm consent creation.",
+              notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 10),
         );
 
@@ -88,11 +86,9 @@ class _NewLoanAccountAggregatorWebviewScreenState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'On Snap!',
-            message: "Unable to confirm consent creation.",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to confirm consent creation.",
+              notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 20),
         );
 
@@ -247,9 +243,8 @@ class _NewLoanAccountAggregatorWebviewScreenState
                                     fontFamily: fontFamily,
                                     fontSize: AppFontSizes.h3,
                                     fontWeight: AppFontWeights.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                   ),
                                   softWrap: true,
                                 ),
@@ -263,16 +258,15 @@ class _NewLoanAccountAggregatorWebviewScreenState
                                       .read(invoiceNewLoanRequestProvider
                                           .notifier)
                                       .reset();
-                                  context.go(InvoiceNewLoanRequestRouter
-                                      .dashboard);
+                                  context.go(
+                                      InvoiceNewLoanRequestRouter.dashboard);
                                 },
                                 child: Container(
                                   height: 40,
                                   width: 120,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
@@ -295,8 +289,7 @@ class _NewLoanAccountAggregatorWebviewScreenState
                         : _checkingConsentSuccess
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   const SpacerWidget(height: 50),
                                   Lottie.asset(
@@ -346,22 +339,20 @@ class _NewLoanAccountAggregatorWebviewScreenState
                                       initialUrlRequest: URLRequest(
                                         url: WebUri(widget.url),
                                       ),
-                                      shouldOverrideUrlLoading: (controller,
-                                          navigationAction) async {
-                                        var uri =
-                                            navigationAction.request.url;
-                  
+                                      shouldOverrideUrlLoading:
+                                          (controller, navigationAction) async {
+                                        var uri = navigationAction.request.url;
+
                                         if (uri != null &&
                                             uri.toString().contains(
                                                 'https://ondc.invoicepe.in/aa-redirect')) {
                                           // Extract query parameters
                                           String? ecres =
                                               uri.queryParameters['ecres'];
-                                          String? resdate = uri
-                                              .queryParameters['resdate'];
-                  
-                                          _checkConsentSuccess(
-                                              ecres, resdate);
+                                          String? resdate =
+                                              uri.queryParameters['resdate'];
+
+                                          _checkConsentSuccess(ecres, resdate);
                                         }
                                         return NavigationActionPolicy.ALLOW;
                                       },

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_l
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -44,13 +44,11 @@ class _PCNewLoanAadharKYCWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message:
-              "Aadhar KYC Failed. Refetch Aadhar KYC URL or Restart the journey",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 10),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Aadhay KYC failed. Refetch Aadhar KYC Url or Restart the journey",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -93,12 +91,10 @@ class _PCNewLoanAadharKYCWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Aadhar KYC Unsuccessful. Contact Support",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message: "Aadhar KYC unsuccessful",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -130,12 +126,10 @@ class _PCNewLoanAadharKYCWebviewState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to fetch Aadhar KYC URL. Contact Support.",
-            contentType: ContentType.failure,
-          ),
-          duration: const Duration(seconds: 15),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to fetch Aadhar KYC Url.",
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
         );
 
         ScaffoldMessenger.of(context)
@@ -168,11 +162,9 @@ class _PCNewLoanAadharKYCWebviewState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: "Unable to refetch Aadhar KYC URL. Contact Support.",
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: "Unable to refetch Aadhar KYC Url",
+              notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 15),
         );
 
@@ -187,8 +179,7 @@ class _PCNewLoanAadharKYCWebviewState
     }
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {

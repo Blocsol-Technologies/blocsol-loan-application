@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/init/utils.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state
 import 'package:blocsol_loan_application/utils/common_misc.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -67,11 +67,9 @@ class _PCNewLoanBankAccountDetailsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: verifyBankDetailsAndSubmitForm.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: verifyBankDetailsAndSubmitForm.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)

@@ -28,7 +28,7 @@ List<GoRoute> personalLoanIndexRoutes = [
   ),
   GoRoute(
     path: PersonalLoanIndexRouter.support_home,
-    builder: (context, state) => const PCAllSupportTickets(),
+    builder: (context, state) => const PersonalLoanAllSupportTickets(),
   ),
   GoRoute(
     path: PersonalLoanIndexRouter.profile_screen,

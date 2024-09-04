@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
@@ -13,6 +12,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/l
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -48,13 +48,11 @@ class _InvoiceNewLoanAgreementWebviewState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message:
-              "Loan Aggrement Signature Unsuccessful. Refetch the Agreement URL",
-          contentType: ContentType.failure,
-        ),
-        duration: const Duration(seconds: 15),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Loan Aggrement Signature Unsuccessful. Refetch the Agreement URL",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
       );
 
       ScaffoldMessenger.of(context)
@@ -77,7 +75,6 @@ class _InvoiceNewLoanAgreementWebviewState
       return;
     }
   }
-
 
   Future<void> _refresh() async {
     _webViewController?.loadUrl(
@@ -192,72 +189,68 @@ class _InvoiceNewLoanAgreementWebviewState
                           _refresh();
                         },
                         children: [
-                        newLoanStateRef.verifyingLoanAgreementSuccess
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        const SpacerWidget(height: 50),
-                                        Lottie.asset(
-                                            "assets/animations/loading_spinner.json",
-                                            height: 180,
-                                            width: 180),
-                                        const SpacerWidget(height: 35),
-                                        Text(
-                                          "Verifying Agreement Success...",
-                                          style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h2,
-                                            fontWeight: AppFontWeights.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Please do not click back or close the app",
-                                          style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.b1,
-                                            fontWeight: AppFontWeights.medium,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Stack(
-                                      children: [
-                                        SizedBox(
-                                          width: width,
-                                          height: 1000,
-                                          child: InAppWebView(
-                                            key: _agreementWebviewKey,
-                                            gestureRecognizers: const <Factory<
-                                                VerticalDragGestureRecognizer>>{},
-                                            initialSettings:
-                                                InAppWebViewSettings(
-                                              javaScriptEnabled: true,
-                                              verticalScrollBarEnabled: true,
-                                              disableHorizontalScroll: true,
-                                              disableVerticalScroll: false,
-                                            ),
-                                            initialUrlRequest: URLRequest(
-                                                url: WebUri(_currentUrl)),
-                                            onWebViewCreated:
-                                                (controller) async {
-                                              _webViewController = controller;
-                                              _webViewController?.loadUrl(
-                                                  urlRequest: URLRequest(
-                                                      url: WebUri(widget.url)));
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                          newLoanStateRef.verifyingLoanAgreementSuccess
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    const SpacerWidget(height: 50),
+                                    Lottie.asset(
+                                        "assets/animations/loading_spinner.json",
+                                        height: 180,
+                                        width: 180),
+                                    const SpacerWidget(height: 35),
+                                    Text(
+                                      "Verifying Agreement Success...",
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.h2,
+                                        fontWeight: AppFontWeights.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
                                     ),
+                                    Text(
+                                      "Please do not click back or close the app",
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.b1,
+                                        fontWeight: AppFontWeights.medium,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: width,
+                                      height: 1000,
+                                      child: InAppWebView(
+                                        key: _agreementWebviewKey,
+                                        gestureRecognizers: const <Factory<
+                                            VerticalDragGestureRecognizer>>{},
+                                        initialSettings: InAppWebViewSettings(
+                                          javaScriptEnabled: true,
+                                          verticalScrollBarEnabled: true,
+                                          disableHorizontalScroll: true,
+                                          disableVerticalScroll: false,
+                                        ),
+                                        initialUrlRequest: URLRequest(
+                                            url: WebUri(_currentUrl)),
+                                        onWebViewCreated: (controller) async {
+                                          _webViewController = controller;
+                                          _webViewController?.loadUrl(
+                                              urlRequest: URLRequest(
+                                                  url: WebUri(widget.url)));
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),

@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
@@ -6,6 +5,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/events/server_
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -54,15 +54,13 @@ class _PCNewLoanFinalProcessingState
             elevation: 0,
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.transparent,
-            content: AwesomeSnackbarContent(
-              title: 'Error!',
-              message: (confirmationSuccessResponse
-                          .data['loan_sanctioned_error'] as String)
-                      .isEmpty
-                  ? confirmationSuccessResponse.data['loan_sanctioned_error']
-                  : "Loan not sanctioned by the lender. Try again or contact support",
-              contentType: ContentType.failure,
-            ),
+            content: getSnackbarNotificationWidget(
+                message: (confirmationSuccessResponse
+                            .data['loan_sanctioned_error'] as String)
+                        .isEmpty
+                    ? confirmationSuccessResponse.data['loan_sanctioned_error']
+                    : "Loan not sanctioned by the lender. Try again or contact support",
+                notifType: SnackbarNotificationType.error),
           );
 
           ScaffoldMessenger.of(context)
@@ -79,7 +77,8 @@ class _PCNewLoanFinalProcessingState
       if (!mounted) return;
 
       if (response.success) {
-        context.go(PersonalNewLoanRequestRouter.new_loan_loan_monitoring_webview,
+        context.go(
+            PersonalNewLoanRequestRouter.new_loan_loan_monitoring_webview,
             extra: response.data['url']);
         return;
       } else {
@@ -87,11 +86,9 @@ class _PCNewLoanFinalProcessingState
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Error!',
-            message: response.message,
-            contentType: ContentType.failure,
-          ),
+          content: getSnackbarNotificationWidget(
+              message: response.message,
+              notifType: SnackbarNotificationType.error),
         );
 
         ScaffoldMessenger.of(context)
@@ -104,12 +101,10 @@ class _PCNewLoanFinalProcessingState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message:
-              "Unable to fetch loan monitoring consent url. Please try again later.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message:
+                "Unable to fetch loan monitoring consent url. Please try again later.",
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -139,7 +134,7 @@ class _PCNewLoanFinalProcessingState
   Widget build(BuildContext context) {
     ref.watch(personalNewLoanRequestProvider);
     ref.watch(personalLoanEventsProvider);
-     ref.watch(personalLoanServerSentEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(

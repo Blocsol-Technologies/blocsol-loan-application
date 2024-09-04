@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/repayment_setup/new_loan_repayment_setup.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -50,11 +50,9 @@ class _InvoiceLoanAllSupportTicketsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -152,17 +150,15 @@ class _InvoiceLoanAllSupportTicketsState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          
                           const SpacerWidget(
                             height: 70,
                           ),
-                          
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: RelativeSize.width(15, width),
                                 vertical: RelativeSize.height(25, height)),
                             decoration: BoxDecoration(
-                              color: const Color.fromRGBO(235,243,246,1),
+                              color: const Color.fromRGBO(235, 243, 246, 1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
@@ -210,7 +206,7 @@ class _InvoiceLoanAllSupportTicketsState
                                     HapticFeedback.mediumImpact();
                                     const whatsappUrl =
                                         "https://wa.me/918360458365";
-                                        
+
                                     await launchUrl(Uri.parse(whatsappUrl));
                                   },
                                   child: Container(
@@ -293,7 +289,7 @@ class _InvoiceLoanAllSupportTicketsState
                                       ),
                                       decoration: BoxDecoration(
                                         color: const Color.fromRGBO(
-                                            235,243,246,1),
+                                            235, 243, 246, 1),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Column(
@@ -430,7 +426,7 @@ class _InvoiceLoanAllSupportTicketsState
                                             decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: const Color.fromRGBO(
-                                                      235,243,246,1),
+                                                      235, 243, 246, 1),
                                                   width: 1,
                                                 ),
                                                 borderRadius:

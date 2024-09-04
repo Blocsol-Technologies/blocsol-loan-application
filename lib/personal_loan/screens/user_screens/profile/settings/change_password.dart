@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/text_field.dart';
@@ -7,6 +6,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/account_detail
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +41,9 @@ class _PlProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "invalid old password",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Invalid old password",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 3),
       );
 
@@ -62,11 +60,9 @@ class _PlProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "invalid new password",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Invalid old password",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 3),
       );
 
@@ -83,11 +79,9 @@ class _PlProfileChangePasswordState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "passwords do not match",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Passwords do not match",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 3),
       );
 
@@ -100,7 +94,8 @@ class _PlProfileChangePasswordState
 
     var response = await ref
         .read(personalLoanAccountDetailsProvider.notifier)
-        .changeAccountPassword(_oldPasswordTextController.text, _newPasswordTextController.text, _cancelToken);
+        .changeAccountPassword(_oldPasswordTextController.text,
+            _newPasswordTextController.text, _cancelToken);
 
     if (!mounted || !context.mounted) {
       return;
@@ -116,11 +111,11 @@ class _PlProfileChangePasswordState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: response.success ? 'Success!' : 'Error!',
-        message: response.message,
-        contentType: response.success ? ContentType.success : ContentType.failure,
-      ),
+      content: getSnackbarNotificationWidget(
+          message: response.message,
+          notifType: response.success
+              ? SnackbarNotificationType.success
+              : SnackbarNotificationType.error),
       duration: const Duration(seconds: 3),
     );
 
@@ -144,7 +139,7 @@ class _PlProfileChangePasswordState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-ref.watch(personalLoanAccountDetailsProvider);
+    ref.watch(personalLoanAccountDetailsProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,

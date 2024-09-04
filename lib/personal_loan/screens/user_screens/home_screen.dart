@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -12,6 +11,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,11 +46,9 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -469,11 +467,9 @@ class _GetNewLoanButtonState extends ConsumerState<_GetNewLoanButton> {
                               elevation: 0,
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.transparent,
-                              content: AwesomeSnackbarContent(
-                                title: 'Error!',
-                                message: newResponse.message,
-                                contentType: ContentType.failure,
-                              ),
+                              content: getSnackbarNotificationWidget(
+                                  message: response.message,
+                                  notifType: SnackbarNotificationType.error),
                             );
 
                             ScaffoldMessenger.of(context)
@@ -593,11 +589,9 @@ class _GetNewLoanButtonState extends ConsumerState<_GetNewLoanButton> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: response.message,
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)

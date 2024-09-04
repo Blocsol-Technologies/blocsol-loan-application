@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/profile_router.dart';
@@ -9,6 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/account_detail
 import 'package:blocsol_loan_application/utils/text_formatters.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -54,13 +54,12 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: response.success ? 'Success' : 'Error!',
-        message: response.message,
-        contentType:
-            response.success ? ContentType.success : ContentType.failure,
-      ),
-      duration: const Duration(seconds: 3),
+      content: getSnackbarNotificationWidget(
+          message: response.message,
+          notifType: response.success
+              ? SnackbarNotificationType.success
+              : SnackbarNotificationType.error),
+      duration: const Duration(seconds: 5),
     );
 
     ScaffoldMessenger.of(context)

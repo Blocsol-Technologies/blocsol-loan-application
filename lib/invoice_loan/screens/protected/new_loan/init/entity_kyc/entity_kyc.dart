@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/alert_dialog.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
@@ -10,6 +9,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_e
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -46,11 +46,9 @@ class _InvoiceNewLoanEntityKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Entity KYC Unsuccessful. Refetch the KYC URL",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Entity KYC Unsuccessful. Refetch the KYC URL",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -72,11 +70,9 @@ class _InvoiceNewLoanEntityKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Entity KYC Unsuccessful. Contact Support",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Entity KYC Unsuccessful. Contact Support",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
@@ -115,11 +111,9 @@ class _InvoiceNewLoanEntityKycState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: "Unable to fetch Entity Kyc KYC URL. Contact Support.",
-          contentType: ContentType.failure,
-        ),
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch Entity Kyc KYC URL. Contact Support.",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 15),
       );
 
