@@ -20,7 +20,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lottie/lottie.dart';
-import 'package:swipe_refresh/swipe_refresh.dart';
+// import 'package:swipe_refresh/swipe_refresh.dart';
 
 class InvoiceNewLoanMonitoringConsentWebview extends ConsumerStatefulWidget {
   final String url;
@@ -35,7 +35,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     extends ConsumerState<InvoiceNewLoanMonitoringConsentWebview> {
   final _cancelToken = CancelToken();
   final GlobalKey _webviewKey = GlobalKey();
-  final _controller = StreamController<SwipeRefreshState>.broadcast();
+  // final _controller = StreamController<SwipeRefreshState>.broadcast();
 
   // Stream<SwipeRefreshState> get _stream => _controller.stream;
   InAppWebViewController? _webViewController;
@@ -68,19 +68,19 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     }
   }
 
-  Future<void> _refresh() async {
-    setState(() {
-      _loading = true;
-    });
+  // Future<void> _refresh() async {
+  //   setState(() {
+  //     _loading = true;
+  //   });
 
-    _webViewController?.loadUrl(
-        urlRequest: URLRequest(url: WebUri(widget.url)));
+  //   _webViewController?.loadUrl(
+  //       urlRequest: URLRequest(url: WebUri(widget.url)));
 
-    setState(() {
-      _loading = false;
-    });
-    _controller.sink.add(SwipeRefreshState.hidden);
-  }
+  //   setState(() {
+  //     _loading = false;
+  //   });
+  //   _controller.sink.add(SwipeRefreshState.hidden);
+  // }
 
   @override
   void initState() {

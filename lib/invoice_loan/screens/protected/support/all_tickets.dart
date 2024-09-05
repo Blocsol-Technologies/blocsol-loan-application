@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/init/repayment_setup/new_loan_repayment_setup.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/inward_curve_painter.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -145,13 +145,15 @@ class _InvoiceLoanAllSupportTicketsState
                   child: CustomPaint(
                     painter: InwardCurvePainter(
                         color: Theme.of(context).colorScheme.surface),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Container(
+                      height: RelativeSize.height(600, height),
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 50),
+                      child: ListView(
+                        shrinkWrap: true,
                         children: [
                           const SpacerWidget(
-                            height: 70,
+                            height: 20,
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -254,9 +256,8 @@ class _InvoiceLoanAllSupportTicketsState
                                   _fetchingSupportTickets
                               ? SizedBox(
                                   width: width,
-                                  height: 200,
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [

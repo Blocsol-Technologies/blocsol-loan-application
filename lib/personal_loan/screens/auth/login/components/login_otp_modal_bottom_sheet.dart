@@ -29,8 +29,8 @@ class LoginOTPModalBottomSheet extends ConsumerStatefulWidget {
 
 class _LoginOTPModalBottomSheetState
     extends ConsumerState<LoginOTPModalBottomSheet> with CodeAutoFill {
-  bool _isAndroid = false;
-  bool _codeAutoFilled = false;
+  // bool _isAndroid = false;
+  // bool _codeAutoFilled = false;
   String _signature = "";
 
   bool _verifyingOTP = false;
@@ -53,7 +53,7 @@ class _LoginOTPModalBottomSheetState
       _verifyingOTP = true;
       _errorOccured = false;
       _errorString = "";
-      _codeAutoFilled = true;
+      // _codeAutoFilled = true;
     });
 
     var response = await ref
@@ -110,7 +110,7 @@ class _LoginOTPModalBottomSheetState
       _resendingOtpString = "Sending OTP ...";
       _errorOccured = false;
       _errorString = "";
-      _codeAutoFilled = true;
+      // _codeAutoFilled = true;
     });
 
     var response = await ref
@@ -149,12 +149,12 @@ class _LoginOTPModalBottomSheetState
     String sign = await SmsAutoFill().getAppSignature;
     if (Platform.isAndroid) {
       setState(() {
-        _isAndroid = true;
+        // _isAndroid = true;
         _signature = sign;
       });
     } else {
       setState(() {
-        _isAndroid = false;
+        // _isAndroid = false;
         _signature = sign;
       });
     }
@@ -166,7 +166,7 @@ class _LoginOTPModalBottomSheetState
   void codeUpdated() {
     _otpTextInputController.text = code!;
     setState(() {
-      _codeAutoFilled = true;
+      // _codeAutoFilled = true;
     });
   }
 
@@ -236,7 +236,7 @@ class _LoginOTPModalBottomSheetState
             maxLength: 6,
             onChanged: (val) {
               setState(() {
-                _codeAutoFilled = true;
+                // _codeAutoFilled = true;
                 _errorOccured = false;
               });
             },

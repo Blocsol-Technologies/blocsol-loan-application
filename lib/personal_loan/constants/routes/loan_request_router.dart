@@ -214,8 +214,6 @@ List<GoRoute> personalNewLoanRequestRoutes = [
 
   // Common
 
-
-
   GoRoute(
     path: PersonalNewLoanRequestRouter.loan_service_error,
     builder: (context, state) {

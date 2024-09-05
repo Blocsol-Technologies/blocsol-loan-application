@@ -35,10 +35,10 @@ class BorrowerBottomNavigationBar extends ConsumerWidget {
                   .changeItem(BorrowerBottomNavItems.loans);
               context.go(PersonalLoanIndexRouter.liabilities_screen);
             case 2:
-              ref
-                  .read(personalLoanBottomNavStateProvider.notifier)
-                  .changeItem(BorrowerBottomNavItems.profile);
-              context.go(PersonalLoanIndexRouter.support_home);
+              // ref
+              //     .read(personalLoanBottomNavStateProvider.notifier)
+              //     .changeItem(BorrowerBottomNavItems.profile);
+              // context.go(PersonalLoanIndexRouter.support_home);
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -106,30 +106,30 @@ class BorrowerBottomNavigationBar extends ConsumerWidget {
             ),
             label: "Loans",
           ),
-          BottomNavigationBarItem(
-            activeIcon: const SizedBox(
-              height: 25,
-              width: 40,
-              child: ActiveNavigationItem(
-                key: Key("msme_profile_bottom_nav_item"),
-                icon: Icon(
-                  Icons.support_agent,
-                  size: 25,
-                ),
-                label: "Support",
-              ),
-            ),
-            icon: SizedBox(
-              height: 25,
-              width: 40,
-              child: Icon(
-                Icons.supervised_user_circle_outlined,
-                size: 25,
-                color: Theme.of(context).colorScheme.onTertiary,
-              ),
-            ),
-            label: "Support",
-          ),
+          // BottomNavigationBarItem(
+          //   activeIcon: const SizedBox(
+          //     height: 25,
+          //     width: 40,
+          //     child: ActiveNavigationItem(
+          //       key: Key("msme_profile_bottom_nav_item"),
+          //       icon: Icon(
+          //         Icons.support_agent,
+          //         size: 25,
+          //       ),
+          //       label: "Support",
+          //     ),
+          //   ),
+          //   icon: SizedBox(
+          //     height: 25,
+          //     width: 40,
+          //     child: Icon(
+          //       Icons.supervised_user_circle_outlined,
+          //       size: 25,
+          //       color: Theme.of(context).colorScheme.onTertiary,
+          //     ),
+          //   ),
+          //   label: "Support",
+          // ),
         ],
       ),
     );

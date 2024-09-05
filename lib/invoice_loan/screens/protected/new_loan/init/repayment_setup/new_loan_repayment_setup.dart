@@ -560,13 +560,3 @@ String getRepaymentTime(int start, int days) {
   return formattedEndDate;
 }
 
-String getFormattedTime(String time) {
-  try {
-    DateTime dateTime = DateTime.parse(time);
-
-    String formattedEndDate = DateFormat('d MMM, yyyy hh:mm').format(dateTime);
-    return formattedEndDate;
-  } catch (e) {
-    return 'NA';
-  }
-}

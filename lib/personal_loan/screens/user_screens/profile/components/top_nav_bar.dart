@@ -1,6 +1,7 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
+import 'package:blocsol_loan_application/personal_loan/state/nav/user/bottom_nav_bar/bottom_nav_bar_state.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,7 @@ class PlProfileTopNav extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDetailsRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
+    final userDetailsRef = ref.watch(personalLoanAccountDetailsProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,7 +24,8 @@ class PlProfileTopNav extends ConsumerWidget {
             try {
               ref.read(routerProvider).pop();
             } catch (e) {
-              context.go(InvoiceLoanIndexRouter.dashboard);
+              ref.read(personalLoanBottomNavStateProvider.notifier).changeItem(BorrowerBottomNavItems.home);
+              context.go(PersonalLoanIndexRouter.dashboard);
             }
           },
           child: Icon(
@@ -40,8 +42,8 @@ class PlProfileTopNav extends ConsumerWidget {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  ref.read(invoiceLoanUserProfileDetailsProvider.notifier).setNotificationSeen(true);
-                  context.go(InvoiceLoanIndexRouter.notifications);
+                  ref.read(personalLoanAccountDetailsProvider.notifier).setNotificationSeen(true);
+                  context.go(PersonalLoanIndexRouter.notifications);
                 },
                 child: Icon(
                   Icons.notifications_active,
@@ -55,7 +57,7 @@ class PlProfileTopNav extends ConsumerWidget {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  context.go(InvoiceLoanIndexRouter.support);
+                  context.go(PersonalLoanIndexRouter.support_home);
                 },
                 child: Icon(
                   Icons.support_agent_rounded,
