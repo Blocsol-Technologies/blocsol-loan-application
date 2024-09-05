@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
@@ -28,8 +28,6 @@ class PCNewLoanProcessScreen extends ConsumerStatefulWidget {
 class _PCNewLoanProcessScreenState
     extends ConsumerState<PCNewLoanProcessScreen> {
   late Timer _timer;
-
-  void _handleNotificationBellPress() {}
 
   void _performLoanAction() async {
     HapticFeedback.heavyImpact();
@@ -117,10 +115,6 @@ class _PCNewLoanProcessScreenState
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final loanStateRef = ref.watch(personalNewLoanRequestProvider);
-
-    final borrowerAccountDetailsRef =
-        ref.watch(personalLoanAccountDetailsProvider);
-
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
 
@@ -153,80 +147,17 @@ class _PCNewLoanProcessScreenState
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.go(PersonalLoanIndexRouter.dashboard);
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 20,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: PersonalNewLoanRequestTopNav(
+                            onBackClick: () {
+                              context.go(PersonalLoanIndexRouter.dashboard);
+                            }),
                       ),
                       const SpacerWidget(
                         height: 30,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -265,7 +196,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _SharePersonalDetails(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -274,7 +205,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _SelectOffer(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -283,7 +214,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _CompleteKYC(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -292,7 +223,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _BankAccount(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -301,7 +232,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _RepaymentSetup(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -310,7 +241,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _LoanAgreement(
                             loanProgressState: loanStateRef.currentState),
                       ),
@@ -319,7 +250,7 @@ class _PCNewLoanProcessScreenState
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(50, width)),
+                            horizontal: RelativeSize.width(30, width)),
                         child: _LoanDisbursed(
                             loanProgressState: loanStateRef.currentState),
                       ),

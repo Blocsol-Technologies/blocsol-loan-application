@@ -71,7 +71,7 @@ class _PersonalLoanUnableToSelectOfferState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "The lender is unable to move ahead with your offer selection",
+                      "The lender is unable to move ahead with your loan offer application",
                       style: TextStyle(
                         fontFamily: fontFamily,
                         color: Theme.of(context).colorScheme.onSurface,

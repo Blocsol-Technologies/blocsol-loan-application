@@ -1,7 +1,7 @@
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/search/utils.dart';
-import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
@@ -33,9 +33,6 @@ class _PCNewLoanPersonalDetailsFormState
   String _selectedEndUseVal = "";
   String _selectedEndUse = "";
 
-  void _handleNotificationBellPress() {
-  }
-
   @override
   void initState() {
     _selectedEmploymentType = SearchUtils.employmentType[0].text;
@@ -56,8 +53,6 @@ class _PCNewLoanPersonalDetailsFormState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final borrowerAccountDetailsRef =
-        ref.watch(personalLoanAccountDetailsProvider);
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
 
@@ -90,72 +85,11 @@ class _PCNewLoanPersonalDetailsFormState
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 20,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: PersonalNewLoanRequestTopNav(
+                          onBackClick: () {
+                            context.go(
+                                PersonalNewLoanRequestRouter.new_loan_process);
+                          },
                         ),
                       ),
                       const SpacerWidget(
@@ -318,7 +252,8 @@ class _PCNewLoanPersonalDetailsFormState
                                     .value;
 
                                 ref
-                                    .read(personalNewLoanRequestProvider.notifier)
+                                    .read(
+                                        personalNewLoanRequestProvider.notifier)
                                     .updateEmploymentType(
                                         _selectedEmploymentVal);
 
@@ -422,7 +357,8 @@ class _PCNewLoanPersonalDetailsFormState
                                       .value;
 
                                   ref
-                                      .read(personalNewLoanRequestProvider.notifier)
+                                      .read(personalNewLoanRequestProvider
+                                          .notifier)
                                       .updateEndUse(_selectedEndUseVal);
                                   _selectedEndUse = value ?? "";
                                 });
@@ -501,8 +437,10 @@ class _PCNewLoanPersonalDetailsFormState
 
                               ref
                                   .read(personalNewLoanRequestProvider.notifier)
-                                  .updateState(PersonalLoanRequestProgress.formGenerated);
-                              context.go(PersonalNewLoanRequestRouter.new_loan_process);
+                                  .updateState(PersonalLoanRequestProgress
+                                      .formGenerated);
+                              context.go(PersonalNewLoanRequestRouter
+                                  .new_loan_process);
                               return;
                             },
                             child: Container(

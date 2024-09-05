@@ -19,6 +19,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_select.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_webview.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/fetch_consent_handler.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/loan_offers/key_fact_sheet.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/loan_offers/loan_offer_details.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/loan_offers/loan_offers_home.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/loan_offers/update_loan_offer_details.dart';
@@ -51,6 +52,9 @@ class PersonalNewLoanRequestRouter {
 
   static const String new_loan_offer_details =
       "/personal-credit/new-loan/offer-details";
+
+    static const String new_loan_key_fact_sheet =
+      "/personal-credit/new-loan/key-fact-sheet";
 
   static const String new_loan_update_offer_screen =
       "/personal-credit/new-loan/update-offer-screen";
@@ -147,6 +151,12 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   GoRoute(
     path: PersonalNewLoanRequestRouter.new_loan_offers_home,
     builder: (context, state) => const PCNewLoanOfferHome(),
+  ),
+
+
+  GoRoute(
+    path: PersonalNewLoanRequestRouter.new_loan_key_fact_sheet,
+    builder: (context, state) => const PCNewLoanKeyFactSheet(),
   ),
 
   GoRoute(

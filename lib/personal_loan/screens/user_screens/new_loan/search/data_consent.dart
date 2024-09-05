@@ -1,6 +1,6 @@
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
@@ -29,9 +29,6 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
 
   bool _consentProvided = false;
   bool _addingConsentArtifact = false;
-
-  void _handleNotificationBellPress() {
-  }
 
   Future<void> _provideConsent() async {
     if (_addingConsentArtifact) return;
@@ -72,8 +69,7 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: getSnackbarNotificationWidget(
-            message: response.message,
-            notifType: SnackbarNotificationType.error),
+          message: response.message, notifType: SnackbarNotificationType.error),
     );
 
     ScaffoldMessenger.of(context)
@@ -93,10 +89,8 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final borrowerAccountDetailsRef =
-        ref.watch(personalLoanAccountDetailsProvider);
-   ref.watch(personalLoanServerSentEventsProvider);
-   ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
+    ref.watch(personalLoanEventsProvider);
     return PopScope(
       canPop: false,
       child: SafeArea(
@@ -126,72 +120,11 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.go(PersonalNewLoanRequestRouter.new_loan_process);
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 20,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: PersonalNewLoanRequestTopNav(
+                          onBackClick: () {
+                            context.go(
+                                PersonalNewLoanRequestRouter.new_loan_process);
+                          },
                         ),
                       ),
                       const SpacerWidget(
@@ -275,9 +208,8 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontFamily: fontFamily,
                                   fontSize: AppFontSizes.h3,
                                   fontWeight: AppFontWeights.bold,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   letterSpacing: 0.13,
                                 ),
                               ),
@@ -290,9 +222,8 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontFamily: fontFamily,
                                   fontSize: AppFontSizes.b1,
                                   fontWeight: AppFontWeights.normal,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   letterSpacing: 0.1,
                                 ),
                               )
@@ -311,15 +242,12 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Checkbox(
-                              fillColor:
-                                  WidgetStateProperty.resolveWith<Color>(
-                                      (Set<WidgetState> states) {
+                              fillColor: WidgetStateProperty.resolveWith<Color>(
+                                  (Set<WidgetState> states) {
                                 if (!states.contains(WidgetState.selected)) {
                                   return Colors.red;
                                 }
-                                return Theme.of(context)
-                                    .colorScheme
-                                    .primary; 
+                                return Theme.of(context).colorScheme.primary;
                               }),
                               checkColor:
                                   Theme.of(context).colorScheme.onPrimary,
@@ -340,9 +268,8 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
                                   fontFamily: fontFamily,
                                   fontSize: AppFontSizes.b1,
                                   fontWeight: AppFontWeights.normal,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                                 softWrap: true,
                               ),

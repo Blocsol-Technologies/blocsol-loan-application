@@ -1,8 +1,9 @@
-import 'dart:math';
-
+import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/error_codes.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/timer.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
@@ -15,7 +16,6 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -30,30 +30,6 @@ class PCNewLoanOfferDetails extends ConsumerStatefulWidget {
 }
 
 class _PCNewLoanOfferDetailsState extends ConsumerState<PCNewLoanOfferDetails> {
-  int _endTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900;
-  final _cancelToken = CancelToken();
-
-  void _handleNotificationBellPress() {}
-
-  @override
-  void initState() {
-    int properEndTime = max(
-        900 -
-            (DateTime.now().millisecondsSinceEpoch ~/ 1000 -
-                ref.read(personalNewLoanRequestProvider).offersFetchTime),
-        0);
-
-    setState(() {
-      _endTime = DateTime.now().millisecondsSinceEpoch + (properEndTime) * 1000;
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _cancelToken.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +37,6 @@ class _PCNewLoanOfferDetailsState extends ConsumerState<PCNewLoanOfferDetails> {
     final width = MediaQuery.of(context).size.width;
     final newLoanStateRef = ref.watch(personalNewLoanRequestProvider);
     final selectedOffer = newLoanStateRef.selectedOffer;
-    final borrowerAccountDetailsRef =
-        ref.watch(personalLoanAccountDetailsProvider);
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
     return PopScope(
@@ -95,73 +69,12 @@ class _PCNewLoanOfferDetailsState extends ConsumerState<PCNewLoanOfferDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.go(PersonalNewLoanRequestRouter
+                        child: PersonalNewLoanRequestTopNav(
+                          onBackClick: () async {
+                            ref.read(routerProvider).push(
+                                PersonalNewLoanRequestRouter
                                     .new_loan_offers_home);
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 20,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                          },
                         ),
                       ),
                       const SpacerWidget(
@@ -232,56 +145,11 @@ class _PCNewLoanOfferDetailsState extends ConsumerState<PCNewLoanOfferDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 150,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: const Color.fromRGBO(233, 248, 238, 1),
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: CountdownTimer(
-                                  endTime: _endTime,
-                                  widgetBuilder:
-                                      (_, CurrentRemainingTime? time) {
-                                    String text =
-                                        "${time?.min ?? "00"}m : ${time?.sec ?? "00"}s";
-
-                                    if (ref
-                                        .read(personalNewLoanRequestProvider)
-                                        .fetchingOffers) {
-                                      text = "Fetching...";
-                                    }
-
-                                    if (time == null) {
-                                      text = "Time's up!";
-                                    }
-
-                                    return Text(
-                                      "Valid for: $text",
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.b1,
-                                        fontWeight: AppFontWeights.medium,
-                                        color: const Color.fromRGBO(
-                                            39, 188, 92, 1),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
+                            PersonalNewLoanRequestCountdownTimer(),
                           ],
                         ),
                       ),
@@ -2039,7 +1907,7 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
   }
 
   Future<void> _performNextActionsAfterOfferSelection() async {
-    // if (_performingNextActions) return;
+    if (_performingNextActions) return;
 
     setState(() {
       _performingNextActions = true;
@@ -2056,19 +1924,8 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
     });
 
     if (!response.success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Unable to select the offer. Please select any other offer",
-            notifType: SnackbarNotificationType.error), 
-        duration: const Duration(seconds: 5),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
+      
+      ref.read(routerProvider).push(PersonalNewLoanRequestRouter.loan_service_error, extra: PersonalLoanServiceErrorCodes.unable_to_select_offer);
 
       return;
     }

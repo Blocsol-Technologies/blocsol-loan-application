@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
-import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/alert_dialog.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
@@ -188,8 +189,6 @@ class _PCNewLoanRepaymentSetupState
     }
   }
 
-  void _handleNotificationBellPress() {}
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -208,9 +207,6 @@ class _PCNewLoanRepaymentSetupState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
-    final borrowerAccountDetailsRef =
-        ref.watch(personalLoanAccountDetailsProvider);
     ref.watch(personalNewLoanRequestProvider);
     ref.watch(personalLoanEventsProvider);
     ref.watch(personalLoanServerSentEventsProvider);
@@ -245,154 +241,23 @@ class _PCNewLoanRepaymentSetupState
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () async {
-                                HapticFeedback.mediumImpact();
-                                await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          title: Text(
-                                            'Confirm',
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.h2,
-                                              fontWeight: AppFontWeights.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'Have you setup Repayment Mandate successfully?',
-                                            style: TextStyle(
-                                              fontFamily: fontFamily,
-                                              fontSize: AppFontSizes.b1,
-                                              fontWeight: AppFontWeights.medium,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                HapticFeedback.mediumImpact();
-                                                context.go(
-                                                    PersonalNewLoanRequestRouter
-                                                        .new_loan_process);
-                                              },
-                                              child: Text('Go Back',
-                                                  style: TextStyle(
-                                                    fontFamily: fontFamily,
-                                                    fontSize: AppFontSizes.h3,
-                                                    fontWeight:
-                                                        AppFontWeights.bold,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                  )),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                HapticFeedback.mediumImpact();
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: Text('No',
-                                                  style: TextStyle(
-                                                    fontFamily: fontFamily,
-                                                    fontSize: AppFontSizes.h3,
-                                                    fontWeight:
-                                                        AppFontWeights.bold,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                  )),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                HapticFeedback.mediumImpact();
-                                                Navigator.of(context).pop(true);
-                                                _checkRepaymentSetupSuccess();
-                                              },
-                                              child: Text('Yes',
-                                                  style: TextStyle(
-                                                    fontFamily: fontFamily,
-                                                    fontSize: AppFontSizes.h3,
-                                                    fontWeight:
-                                                        AppFontWeights.bold,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                  )),
-                                            ),
-                                          ]);
-                                    });
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 20,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: PersonalNewLoanRequestTopNav(
+                          onBackClick: () async {
+                            await showDialog(
+                                context: context,
+                                barrierColor: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.5),
+                                builder: (BuildContext context) {
+                                  return PersonalNewLoanRequestAlertDialog(
+                                      text:
+                                          "Have you completed your E-Mandate setup?",
+                                      onConfirm: () async {
+                                        await _checkRepaymentSetupSuccess();
+                                      });
+                                });
+                          },
                         ),
                       ),
                       const SpacerWidget(

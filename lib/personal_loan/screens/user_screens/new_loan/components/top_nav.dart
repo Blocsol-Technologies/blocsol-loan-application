@@ -14,8 +14,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class PersonalNewLoanRequestTopNav extends ConsumerWidget {
   final bool showBackButton;
   final Function onBackClick;
-  const PersonalNewLoanRequestTopNav(
-      {super.key, required this.onBackClick, this.showBackButton = true});
+  const PersonalNewLoanRequestTopNav({
+    super.key,
+    required this.onBackClick,
+    this.showBackButton = true,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,19 +37,20 @@ class PersonalNewLoanRequestTopNav extends ConsumerWidget {
                 child: Icon(
                   Icons.arrow_back_outlined,
                   size: 20,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               )
             : const SizedBox(),
         const Expanded(
           child: SizedBox(),
         ),
-        newLoanStateRef.index >= PersonalLoanRequestProgress.loanOfferSelect.index
+        newLoanStateRef.index >=
+                PersonalLoanRequestProgress.loanOfferSelect.index
             ? GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  ref.read(routerProvider).push(PersonalNewLoanRequestRouter.new_loan_offer_details);
+                  ref.read(routerProvider).push(
+                      PersonalNewLoanRequestRouter.new_loan_key_fact_sheet);
                 },
                 child: Container(
                   height: 25,
