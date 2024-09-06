@@ -255,9 +255,19 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
       if (response.data['redirection']) {
         var invoiceWithOffer = response.data['invoiceWithOffer'] as LoanDetails;
+
+        String currentState = invoiceWithOffer.offerDetails.state.isEmpty
+            ? invoiceWithOffer.offerDetailsList.isNotEmpty
+                ? invoiceWithOffer.offerDetailsList[0].state
+                : ""
+            : invoiceWithOffer.offerDetails.state;
+
+        var updatedState = getState(currentState);
+
         state = state.copyWith(
           selectedInvoice: invoiceWithOffer,
           selectedOffer: invoiceWithOffer.offerDetails,
+          currentState: updatedState,
         );
       }
     }
@@ -994,4 +1004,50 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
 
     return response;
   }
+}
+
+LoanRequestProgress getState(String currentState) {
+  switch (currentState) {
+    case "general_search_pending" || "general_search_complete":
+      {
+        return LoanRequestProgress.started;
+      }
+    case "search_01_pending" || "search_01_complete":
+      {
+        return LoanRequestProgress.invoiceSelect;
+      }
+    case "search_complete" ||
+          "select_01_pending" ||
+          "select_02_pending" ||
+          "select_02_complete":
+      {
+        return LoanRequestProgress.customerDetailsProvided;
+      }
+    case "init_01_pending" || "init_01_complete":
+      {
+        return LoanRequestProgress.aadharKycCompleted;
+      }
+    case "init_02_pending" || "init_02_complete":
+      {
+        return LoanRequestProgress.entityKycCompleted;
+      }
+    case "init_03_pending" || "init_03_complete":
+      {
+        LoanRequestProgress.bankAccountDetailsProvided;
+      }
+    case "init_04_pending" || "init_04_complete":
+      {
+        LoanRequestProgress.repaymentSetupCompleted;
+      }
+    case "confirm_01_pending" || "confirm_01_complete":
+      {
+        LoanRequestProgress.loanAgreementCompleted;
+      }
+    default:
+      {
+        return LoanRequestProgress.started;
+      }
+  }
+
+  return LoanRequestProgress.started;
 }

@@ -83,7 +83,7 @@ class PLProfileDashboard extends ConsumerWidget {
                         padding: const EdgeInsets.only(
                             top: 17, bottom: 17, left: 17, right: 9),
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(228, 247, 255, 1),
+                          color: Theme.of(context).colorScheme.tertiary,
                           borderRadius: BorderRadius.circular(3),
                         ),
                         child: Row(

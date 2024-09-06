@@ -2,7 +2,6 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/ui/nav/bottom_nav_bar/bottom_nav_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
-import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +23,9 @@ class InvoiceLoanProfileTopNav extends ConsumerWidget {
             try {
               ref.read(routerProvider).pop();
             } catch (e) {
-               ref.read(invoiceLoanBottomNavStateProvider.notifier).changeItem(BottomNavItems.home);
+              ref
+                  .read(invoiceLoanBottomNavStateProvider.notifier)
+                  .changeItem(BottomNavItems.home);
               context.go(InvoiceLoanIndexRouter.dashboard);
             }
           },
@@ -42,26 +43,16 @@ class InvoiceLoanProfileTopNav extends ConsumerWidget {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  ref.read(invoiceLoanUserProfileDetailsProvider.notifier).setNotificationSeen(true);
+                  ref
+                      .read(invoiceLoanUserProfileDetailsProvider.notifier)
+                      .setNotificationSeen(true);
                   context.go(InvoiceLoanIndexRouter.notifications);
                 },
                 child: Icon(
                   Icons.notifications_active,
-                  color: userDetailsRef.notificationSeen ? Theme.of(context).colorScheme.onSurface : Colors.amber.shade300,
-                  size: 22,
-                ),
-              ),
-              const SpacerWidget(
-                width: 25,
-              ),
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.mediumImpact();
-                  context.go(InvoiceLoanIndexRouter.support);
-                },
-                child: Icon(
-                  Icons.support_agent_rounded,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: userDetailsRef.notificationSeen
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Colors.amber.shade300,
                   size: 22,
                 ),
               ),

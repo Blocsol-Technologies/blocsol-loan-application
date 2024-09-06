@@ -1,4 +1,5 @@
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/http_controllers/confirm_controller.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/http_controllers/init_controller.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/http_controllers/search_controller.dart';
@@ -113,9 +114,9 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   // Search
   Future<ServerResponse> performGeneralSearch(
       bool foreceNew, CancelToken cancelToken) async {
-    var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
-
     reset();
+
+    var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await PersonalLoanRequestSearchHttpController()
         .performGeneralSearch(foreceNew, authToken, cancelToken);
@@ -128,10 +129,16 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
       // This will only be true if redirection is true
       if (redirection && response.data['offer'] != null) {
+        // Restore the State Based on the offer state
+
         PersonalLoanDetails offer =
             PersonalLoanDetails.fromJson(response.data['offer']);
+
+        var currentState = getState(offer.state);
+        
         state = state.copyWith(
           selectedOffer: offer,
+          currentState: currentState,
         );
       }
 
@@ -152,6 +159,16 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   Future<ServerResponse> submitFormsAndGenerateAAURL(
       CancelToken cancelToken) async {
     var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
+
+
+    var accountAggregatorId =
+        ref.read(personalLoanAccountDetailsProvider).accountAggregatorId;
+
+    var accountAggregatorName = accountAggregatorId.split("@").elementAt(1);
+
+    var selectedAA = getAccountAggregatorInfo(accountAggregatorName);
+
+    selectedAA.setId(ref.read(personalLoanAccountDetailsProvider).phone);
 
     var response = await PersonalLoanRequestSearchHttpController()
         .submitFormsAndGenerateAAURL(
@@ -525,4 +542,50 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
     return response;
   }
+}
+
+PersonalLoanRequestProgress getState(String currentState) {
+  switch (currentState) {
+    case "search_00" || "onSearch_00" || "form_submitted":
+      {
+        return PersonalLoanRequestProgress.started;
+      }
+    case "select_01" || "approved":
+      {
+        return PersonalLoanRequestProgress.formGenerated;
+      }
+    case "consent_success" ||
+          "select_02" ||
+          "on_select_02" ||
+          "form_s01_submitted":
+      {
+        return PersonalLoanRequestProgress.bankConsent;
+      }
+    case "select_03" || "on_select_03":
+      {
+        return PersonalLoanRequestProgress.loanOfferSelect;
+      }
+    case "form_s02_submitted" || "init_01" || "on_init_01":
+      {
+        PersonalLoanRequestProgress.aadharKYC;
+      }
+    case "form_i01_submitted" || "init_02" || "on_init_02":
+      {
+        PersonalLoanRequestProgress.bankAccountDetails;
+      }
+    case "form_i02_submitted" || "init_03" || "on_init_03":
+      {
+        PersonalLoanRequestProgress.repaymentSetup;
+      }
+    case "form_i03_submitted" || "confirm_01" || "on_confirm_01":
+      {
+        PersonalLoanRequestProgress.loanAgreement;
+      }
+    default:
+      {
+        return PersonalLoanRequestProgress.started;
+      }
+  }
+
+  return PersonalLoanRequestProgress.started;
 }

@@ -66,8 +66,6 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    await Future.delayed(const Duration(seconds: 3));
-
     if (!mounted) return;
 
     ref
@@ -149,99 +147,96 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                     const SpacerWidget(
                       height: 16,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: RelativeSize.width(30, width)),
-                      child: DropdownButton2<String>(
-                        isExpanded: true,
-                        underline: const SizedBox(),
-                        iconStyleData: IconStyleData(
-                          icon: Icon(
-                            Icons.account_balance,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            size: 20,
-                          ),
-                        ),
-                        hint: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          height: 40,
-                          width: width,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .scrim
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                _accountType,
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.b1,
-                                  fontWeight: AppFontWeights.bold,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        items: _accountTypes
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontSize: AppFontSizes.b1,
-                                      fontWeight: AppFontWeights.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: _accountType,
-                        onChanged: (String? value) {
-                          if (value == null) return;
-
-                          setState(() {
-                            _accountType = value;
-                          });
-                        },
-                        buttonStyleData: ButtonStyleData(
-                          height: 40,
-                          width: width,
-                          padding: const EdgeInsets.only(left: 14, right: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          offset: const Offset(0, 0),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(5),
-                            thumbVisibility:
-                                WidgetStateProperty.all<bool>(true),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 10, right: 10),
+                    DropdownButton2<String>(
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      iconStyleData: IconStyleData(
+                        icon: Icon(
+                          Icons.account_balance,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 20,
                         ),
                       ),
+                      hint: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        height: 40,
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .scrim
+                              .withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              _accountType,
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b1,
+                                fontWeight: AppFontWeights.bold,
+                                color:
+                                    Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      items: _accountTypes
+                          .map((item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                    fontSize: AppFontSizes.b1,
+                                    fontWeight: AppFontWeights.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
+                      value: _accountType,
+                      onChanged: (String? value) {
+                        if (value == null) return;
+                    
+                        setState(() {
+                          _accountType = value;
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 40,
+                        width: width,
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        offset: const Offset(0, 0),
+                        scrollbarTheme: ScrollbarThemeData(
+                          radius: const Radius.circular(5),
+                          thumbVisibility:
+                              WidgetStateProperty.all<bool>(true),
+                        ),
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                      ),
                     ),
+                    const SpacerWidget(height: 20,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -2,8 +2,8 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/prof
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/account_info/index.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/bank_account/add_bank_account.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/bank_account/index.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/change_password.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/dashboard/account_settings.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/dashboard/dashboard.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,7 +64,7 @@ List<GoRoute> personalLoanProfileRoutes = [
   ),
   GoRoute(
     path: PersonalLoanProfileRouter.changePassword,
-    builder: (context, state) => const PlProfileChangePassword(),
+    builder: (context, state) => const PlProfileSettingsDashboard(),
   ),
 ];
 

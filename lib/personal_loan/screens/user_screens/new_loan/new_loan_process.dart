@@ -40,7 +40,7 @@ class _PCNewLoanProcessScreenState
         break;
       case PersonalLoanRequestProgress.formGenerated:
         context
-            .go(PersonalNewLoanRequestRouter.new_loan_account_aggregator_info);
+            .go(PersonalNewLoanRequestRouter.new_loan_generate_offers_and_aa_consent);
         break;
       case PersonalLoanRequestProgress.bankConsent:
         context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);

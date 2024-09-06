@@ -9,7 +9,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/on_select_02_error.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/on_update_01_failed.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/repayment_setup_failed.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/request_timeout,.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/request_timeout.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/common/loan_service_error/unable_to_select_offer.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:flutter/material.dart';

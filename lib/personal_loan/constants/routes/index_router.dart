@@ -1,5 +1,5 @@
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/app_permissions.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/home_screen.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/dashboard/home_screen.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liabilities_home.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/notifications/notifications_home.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/profile_dashboard/dashboard.dart';
@@ -14,7 +14,7 @@ class PersonalLoanIndexRouter {
   static const String support_home = "/personal-credit/support/home";
 
   static const String profile_screen = "/personal-credit/profile";
-    static const notifications = "/personal-credit/notifications";
+  static const notifications = "/personal-credit/notifications";
 }
 
 List<GoRoute> personalLoanIndexRoutes = [
@@ -38,8 +38,7 @@ List<GoRoute> personalLoanIndexRoutes = [
     path: PersonalLoanIndexRouter.liabilities_screen,
     builder: (context, state) => const PCLiabilityHome(),
   ),
-
-    GoRoute(
+  GoRoute(
     path: PersonalLoanIndexRouter.notifications,
     builder: (context, state) => const PlNotifications(),
   ),

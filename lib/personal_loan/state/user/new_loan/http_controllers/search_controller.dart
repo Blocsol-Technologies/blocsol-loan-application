@@ -109,7 +109,6 @@ class PersonalLoanRequestSearchHttpController {
         "employment_type": selectedEmploymentType,
         "income": income,
         "end_use": endUse,
-        "aa_id": selectedAA.aaId,
         "transaction_id": transactionId,
       });
 

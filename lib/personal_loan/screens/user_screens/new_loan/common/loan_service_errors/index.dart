@@ -8,7 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/on_select_03_error.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/on_update_01_failed.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/repayment_setup_failed.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/request_timeout,.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/request_timeout.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/unable_to_select_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

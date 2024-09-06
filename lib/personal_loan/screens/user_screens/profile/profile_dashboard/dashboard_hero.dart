@@ -27,7 +27,6 @@ class PLProfileDashboardHero extends ConsumerWidget {
           padding: const EdgeInsets.all(15),
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: Color.fromRGBO(228, 247, 255, 1),
           ),
           child: Center(
             child: Image.network(

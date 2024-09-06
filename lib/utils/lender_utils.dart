@@ -103,6 +103,10 @@ List<LenderDetails> lenderDetailsList = [
       name: "SIDBI",
       assetPath: "assets/images/lender_logos/sidbi.png",
       connectedAA: accountAggregatorInfoList),
+       LenderDetails(
+      name: "State Bank of India",
+      assetPath: "assets/images/lender_logos/sbi.webp",
+      connectedAA: accountAggregatorInfoList),
   LenderDetails(
       name: "DMI FINANCE PRIVATE LIMITED",
       assetPath: "assets/images/lender_logos/dmi.png",

@@ -14,9 +14,6 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/search/data_consent.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/search/peronal_details_form.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/aadhar_kyc.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_bank_select.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_info.dart';
-import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_select.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/account_aggregator_webview.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/account_aggregator/fetch_consent_handler.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/select/loan_offers/key_fact_sheet.dart';
@@ -36,12 +33,6 @@ class PersonalNewLoanRequestRouter {
       "/personal-credit/new-loan/personal-details-form";
 
   /* select */
-  static const String new_loan_account_aggregator_info =
-      "/personal-credit/new-loan/account-aggregator-info";
-  static const String new_loan_account_aggregator_bank_select =
-      "/personal-credit/new-loan/account-aggregator-bank-select";
-  static const String new_loan_account_aggregator_select =
-      "/personal-credit/new-loan/account-aggregator-select";
   static const String new_loan_generate_offers_and_aa_consent =
       "/personal-credit/new-loan/generate-offers-and-aa-consent";
   static const String new_loan_aa_webview =
@@ -117,21 +108,6 @@ List<GoRoute> personalNewLoanRequestRoutes = [
   GoRoute(
     path: PersonalNewLoanRequestRouter.new_loan_personal_details_form,
     builder: (context, state) => const PCNewLoanPersonalDetailsForm(),
-  ),
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_account_aggregator_info,
-    builder: (context, state) => const PCNewLoanAAInfo(),
-  ),
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_account_aggregator_bank_select,
-    builder: (context, state) => const PCNewLoanAABankSelect(),
-  ),
-
-  GoRoute(
-    path: PersonalNewLoanRequestRouter.new_loan_account_aggregator_select,
-    builder: (context, state) => const PCNewLoanAASelect(),
   ),
 
   GoRoute(
