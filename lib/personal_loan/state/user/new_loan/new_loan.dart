@@ -166,19 +166,24 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
 
     var accountAggregatorName = accountAggregatorId.split("@").elementAt(1);
 
-    var selectedAA = getAccountAggregatorInfo(accountAggregatorName);
+    var selectedAccountAggregator = getAccountAggregatorInfo(accountAggregatorName);
 
-    selectedAA.setId(ref.read(personalLoanAccountDetailsProvider).phone);
+    selectedAccountAggregator.setId(ref.read(personalLoanAccountDetailsProvider).phone);
+
 
     var response = await PersonalLoanRequestSearchHttpController()
         .submitFormsAndGenerateAAURL(
             state.selectedEmploymentType,
             state.annualIncome,
             state.selectedEndUse,
-            state.selectedAA,
+            selectedAccountAggregator,
             state.transactionId,
             authToken,
             cancelToken);
+
+    if (response.success) {
+      state = state.copyWith(selectedAA: selectedAccountAggregator);
+    }
 
     return response;
   }
@@ -371,8 +376,8 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
     var response = await PersonalLoanRequestInitController()
         .verifyBankAccountDetails(
             bankType,
-            state.bankAccountNumber,
-            state.bankIFSC,
+            bankAccountNumber,
+            ifscCode,
             state.transactionId,
             state.selectedOffer.offerProviderId,
             authToken,

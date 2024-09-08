@@ -118,7 +118,7 @@ class PLProfileDashboard extends ConsumerWidget {
               GestureDetector(
                 onTap: () async {
                   HapticFeedback.heavyImpact();
-                  await ref.read(authProvider.notifier).logoutInvoiceLoanUser();
+                  await ref.read(authProvider.notifier).logoutPersonalLoanUser();
 
                   if (!context.mounted) return;
 

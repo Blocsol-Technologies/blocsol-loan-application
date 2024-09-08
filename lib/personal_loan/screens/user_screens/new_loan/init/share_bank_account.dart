@@ -58,7 +58,7 @@ class _PCNewLoanBankAccountDetailsState
 
     if (!mounted) return;
 
-    if (!verifyBankDetailsAndSubmitForm.success) {
+    if (!(verifyBankDetailsAndSubmitForm.success)) {
       setState(() {
         _bankVerificationError = true;
         _verifyingBankAccount = false;
@@ -76,7 +76,9 @@ class _PCNewLoanBankAccountDetailsState
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
+
       return;
+
     } else {
       setState(() {
         _bankVerificationError = false;

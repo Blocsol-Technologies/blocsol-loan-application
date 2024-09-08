@@ -7,7 +7,7 @@ part of 'new_loan.dart';
 // **************************************************************************
 
 String _$personalNewLoanRequestHash() =>
-    r'87f6052db6b51493471dd065d7160ede67aaf871';
+    r'a827ba3aa94a38ddc9a8054296db9e6744fd050e';
 
 /// See also [PersonalNewLoanRequest].
 @ProviderFor(PersonalNewLoanRequest)

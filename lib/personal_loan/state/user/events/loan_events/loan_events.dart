@@ -164,7 +164,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
         //     ref.read(routerProvider).push(PersonalNewLoanRequestRouter.new_loan_error,
         //         extra: "Error when fetching the loan update form");
 
-        //     return;
+        //     break;
         //   }
         // }
 
@@ -182,10 +182,10 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
               ref
                   .read(routerProvider)
                   .push(PersonalNewLoanRequestRouter.new_loan_process);
-              return;
+              break;
             }
 
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -200,7 +200,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             ref
                 .read(routerProvider)
                 .push(PersonalNewLoanRequestRouter.kyc_verified);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -221,7 +221,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             ref
                 .read(routerProvider)
                 .push(PersonalNewLoanRequestRouter.new_loan_process);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -239,7 +239,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             ref
                 .read(routerProvider)
                 .push(PersonalNewLoanRequestRouter.new_loan_process);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -264,12 +264,12 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
                   PersonalNewLoanRequestRouter.new_loan_error,
                   extra:
                       "Error when checking loan repayment success ${response.message}");
-              return;
+              break;
             }
             ref
                 .read(personalNewLoanRequestProvider.notifier)
                 .updateRepaymentSetupFailure(false);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -288,7 +288,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             ref
                 .read(routerProvider)
                 .push(PersonalNewLoanRequestRouter.new_loan_process);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -309,12 +309,12 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
               ref
                   .read(personalNewLoanRequestProvider.notifier)
                   .updateLoanAgreementFailure(true);
-              return;
+              break;
             }
             ref
                 .read(personalNewLoanRequestProvider.notifier)
                 .updateLoanAgreementFailure(false);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,
@@ -335,7 +335,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             ref
                 .read(routerProvider)
                 .push(PersonalNewLoanRequestRouter.new_loan_process);
-            return;
+            break;
           } else {
             ref.read(routerProvider).push(
                   PersonalNewLoanRequestRouter.loan_service_error,

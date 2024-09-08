@@ -84,7 +84,6 @@ class _PCNewLoanProcessScreenState
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final loanStateRef = ref.watch(personalNewLoanRequestProvider);
-    print("transaction id is: ${loanStateRef.transactionId}");
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
 
@@ -624,7 +623,7 @@ class _SelectOffer extends StatelessWidget {
                           fontFamily: fontFamily,
                           fontSize: AppFontSizes.h3,
                           fontWeight: AppFontWeights.extraBold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: Theme.of(context).colorScheme.surface,
                           letterSpacing: 0.2,
                         ),
                       ),
@@ -704,12 +703,12 @@ class _SelectOffer extends StatelessWidget {
                       fontFamily: fontFamily,
                       fontSize: AppFontSizes.b1,
                       fontWeight: loanProgressState.index >=
-                              PersonalLoanRequestProgress.bankConsent.index
+                              PersonalLoanRequestProgress.loanOfferSelect.index
                           ? AppFontWeights.bold
                           : AppFontWeights.medium,
                       color: loanProgressState.index >=
-                              PersonalLoanRequestProgress.bankConsent.index
-                          ? Theme.of(context).colorScheme.primary
+                              PersonalLoanRequestProgress.loanOfferSelect.index
+                          ? Theme.of(context).colorScheme.surface
                           : Theme.of(context)
                               .colorScheme
                               .onSurface
