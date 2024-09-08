@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/constants.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/common/loan_service_errors/error_codes.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/state/loan_events_state.dart';
@@ -21,7 +22,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
   PersonalLoanEventState build() {
     ref.keepAlive();
 
-    var timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    var timer = Timer.periodic(Duration(seconds: refetchPersonalLoanEventInterval), (timer) async {
       await fetchLatestEventForConsumption();
     });
 

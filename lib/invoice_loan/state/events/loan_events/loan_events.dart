@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/constants.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/state/loan_events_state.dart';
@@ -22,7 +23,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   LoanEvent build() {
     ref.keepAlive();
 
-    var timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    var timer = Timer.periodic(Duration(seconds: refetchInvoiceLoanEventsInterval), (timer) async {
       await fetchLatestEventForConsumption();
     });
 

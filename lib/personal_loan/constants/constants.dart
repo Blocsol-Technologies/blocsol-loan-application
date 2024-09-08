@@ -1,0 +1,1 @@
+int refetchPersonalLoanEventInterval = 10;

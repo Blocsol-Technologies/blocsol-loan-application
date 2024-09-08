@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
@@ -27,7 +25,6 @@ class PCNewLoanProcessScreen extends ConsumerStatefulWidget {
 
 class _PCNewLoanProcessScreenState
     extends ConsumerState<PCNewLoanProcessScreen> {
-  late Timer _timer;
 
   void _performLoanAction() async {
     HapticFeedback.heavyImpact();
@@ -82,39 +79,12 @@ class _PCNewLoanProcessScreenState
     }
   }
 
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 60), (timer) {
-      ref.read(personalNewLoanRequestProvider.notifier).reset();
-    });
-  }
-
-  @override
-  void initState() {
-    startTimer();
-
-    int lastOfferFetchtime =
-        ref.read(personalNewLoanRequestProvider).offersFetchTime;
-
-    if (lastOfferFetchtime != 0 &&
-        ((DateTime.now().millisecondsSinceEpoch ~/ 1000) - lastOfferFetchtime >
-            900)) {
-      ref.read(personalNewLoanRequestProvider.notifier).reset();
-    }
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final loanStateRef = ref.watch(personalNewLoanRequestProvider);
+    print("transaction id is: ${loanStateRef.transactionId}");
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
 

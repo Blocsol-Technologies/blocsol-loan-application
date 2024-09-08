@@ -360,6 +360,7 @@ class _GetNewPersonalLoanButtonState
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(personalNewLoanRequestProvider);
     return GestureDetector(
       onTap: () {
         HapticFeedback.mediumImpact();
