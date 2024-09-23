@@ -54,7 +54,7 @@ class LiabilityCard extends ConsumerWidget {
             children: [
               SizedBox(
                 height: 35,
-                width: 42,
+                width: 35,
                 child: getLenderDetailsAssetURL(
                     oldLoanDetails.offerDetails.bankName,
                     oldLoanDetails.offerDetails.bankLogoURL),
@@ -66,43 +66,42 @@ class LiabilityCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 130,
-                            child: Text(
-                              oldLoanDetails.offerDetails.bankName,
-                              softWrap: true,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: fontFamily,
-                                fontSize: AppFontSizes.h3,
-                                fontWeight: AppFontWeights.bold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                          const SpacerWidget(
-                            width: 6,
-                          ),
-                          Text(
-                            "₹ ${oldLoanDetails.offerDetails.totalRepayment}",
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 130,
+                          child: Text(
+                            oldLoanDetails.offerDetails.bankName,
+                            softWrap: true,
+                            textAlign: TextAlign.left,
                             style: TextStyle(
                               fontFamily: fontFamily,
-                              fontSize: AppFontSizes.h3,
+                              fontSize: AppFontSizes.b1,
                               fontWeight: AppFontWeights.bold,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        const SpacerWidget(
+                          width: 6,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "₹ ${oldLoanDetails.offerDetails.getRoundedLoanValue()}",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SpacerWidget(
-                      height: 10,
+                      height: 7,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,7 +137,7 @@ class LiabilityCard extends ConsumerWidget {
                       ],
                     ),
                     const SpacerWidget(
-                      height: 10,
+                      height: 7,
                     ),
                     Text(
                       "Repayment: ${oldLoanDetails.offerDetails.getNextDueDate()}",

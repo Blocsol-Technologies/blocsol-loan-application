@@ -71,7 +71,7 @@ class _LiabilityPrepayState
     }
 
     ref.read(routerProvider).push(
-        InvoiceLoanLiabilitiesRouter.singleLiabilityDetails,
+        InvoiceLoanLiabilitiesRouter.prepayment_webview,
         extra: response.data['url']);
   }
 

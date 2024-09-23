@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/inward_curve_painter.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/ui/nav/bottom_nav_bar/bottom_nav_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -15,6 +17,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -104,6 +107,8 @@ class _InvoiceLoanAllSupportTicketsState
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final supportRef = ref.watch(invoiceLoanSupportProvider);
+    final userDetailsRef = ref.watch(invoiceLoanUserProfileDetailsProvider);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -115,7 +120,51 @@ class _InvoiceLoanAllSupportTicketsState
               horizontal: RelativeSize.width(25, width)),
           child: Column(
             children: [
-              const InvoiceLoanProfileTopNav(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      ref
+                          .read(invoiceLoanBottomNavStateProvider.notifier)
+                          .changeItem(BottomNavItems.home);
+                      context.go(InvoiceLoanIndexRouter.dashboard);
+                    },
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: 22,
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            HapticFeedback.mediumImpact();
+                            ref
+                                .read(invoiceLoanUserProfileDetailsProvider
+                                    .notifier)
+                                .setNotificationSeen(true);
+                            context.go(InvoiceLoanIndexRouter.notifications);
+                          },
+                          child: Icon(
+                            Icons.notifications_active,
+                            color: userDetailsRef.notificationSeen
+                                ? Theme.of(context).colorScheme.onSurface
+                                : Colors.amber.shade300,
+                            size: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               const SpacerWidget(
                 height: 45,
               ),

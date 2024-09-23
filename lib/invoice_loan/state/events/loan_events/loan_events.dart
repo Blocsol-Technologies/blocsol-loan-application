@@ -124,6 +124,8 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
       return;
     }
 
+    print("s28882s");
+
     switch (context) {
       case "select":
         // on_select_01
@@ -411,7 +413,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         break;
       case "payments":
-        if (stepNumber == 2) {}
+        if (stepNumber == 2)
         {
           if (success) {
             await ref
@@ -444,6 +446,8 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         timeStamp: event.timeStamp,
         priority: event.priority);
 
+
+    print("setting event consumned");
     await setEventConsumed(event.messageId);
     return;
   }

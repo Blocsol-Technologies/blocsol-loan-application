@@ -1353,7 +1353,7 @@ class InactiveStep extends StatelessWidget {
                 fontWeight:
                     stepCompleted ? AppFontWeights.bold : AppFontWeights.medium,
                 color: stepCompleted
-                    ? Colors.red
+                    ? Colors.green.shade500
                     : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 letterSpacing: 0.2,
               ),

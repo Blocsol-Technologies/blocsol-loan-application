@@ -809,12 +809,32 @@ class OfferDetails {
     );
   }
 
+  String getRoundedLoanValue() {
+    try {
+      num numValue = num.parse(totalRepayment);
+
+      int roundedValue = numValue.round();
+      return "$roundedValue";
+    } catch (exception, stackTrace) {
+      ErrorInstance(
+        message: "Error in getRoundedLoanValue",
+        exception: exception,
+        trace: stackTrace,
+      ).reportError();
+      return "0";
+    }
+  }
+
   bool isLoanDisbursed() {
-    return fulfillmentStatus == "DISBURSED";
+    return fulfillmentStatus == "DISBURSED" || fulfillmentStatus == "COMPLETED" || fulfillmentStatus == "COMPLETE";
   }
 
   bool isLoanClosed() {
-    return fulfillmentStatus == "COMPLETED";
+    if (fulfillmentStatus == "COMPLETED") {
+      return true;
+    }
+
+    return getBalanceLeft() == "0";
   }
 
   num getNumericalValue(String value) {

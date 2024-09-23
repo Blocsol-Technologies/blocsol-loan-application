@@ -185,7 +185,7 @@ class _LiabilityPaymentHistoryState
                           height: 10,
                         ),
                         Text(
-                          selectedLiability.offerDetails.offerProviderId,
+                          selectedLiability.offerDetails.transactionId,
                           style: TextStyle(
                             fontFamily: fontFamily,
                             fontSize: AppFontSizes.b1,
@@ -653,9 +653,9 @@ class _LiabilityPaymentHistoryState
                                   ),
                                 ],
                               ),
-                              !(selectedLiability.offerDetails.payments
+                              selectedLiability.offerDetails.payments
                                           .paymentDetails[index].status ==
-                                      LoanPaymentStatus.missed)
+                                      LoanPaymentStatus.missed
                                   ? Positioned(
                                       bottom: 15,
                                       left: 0,

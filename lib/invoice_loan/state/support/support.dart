@@ -21,7 +21,7 @@ class InvoiceLoanSupport extends _$InvoiceLoanSupport {
   }
 
   void setSelectSupportTicket(SupportTicket supportTicket) {
-    state = state.copyWith(selectedSupportTicket: supportTicket);
+    state = state.copyWith(selectedSupportTicket: supportTicket, transactionId: supportTicket.transactionId, providerId: supportTicket.providerId, issueId: supportTicket.id);
   }
 
   void addMessageToSelectedSupportTicket(Message message) {

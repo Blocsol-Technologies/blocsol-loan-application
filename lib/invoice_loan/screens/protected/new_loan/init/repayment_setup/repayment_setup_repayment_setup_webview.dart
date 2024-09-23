@@ -119,7 +119,20 @@ class _InvoiceNewLoanRepaymentSetupWebviewState
                           verticalScrollBarEnabled: true,
                           disableHorizontalScroll: true,
                           disableVerticalScroll: false,
+                          javaScriptCanOpenWindowsAutomatically: true,
+                          supportMultipleWindows: true,
                         ),
+                        onCreateWindow: (controller, createWindowAction) async {
+                          print("action is ${createWindowAction.request.url}");
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return WindowPopup(
+                                  createWindowAction: createWindowAction);
+                            },
+                          );
+                          return true;
+                        },
                         onLoadStop: (controller, url) {
                           setState(() {
                             _loadingRepaymentURL = false;
@@ -144,6 +157,63 @@ class _InvoiceNewLoanRepaymentSetupWebviewState
                   ],
                 ),
         ],
+      ),
+    );
+  }
+}
+
+
+class WindowPopup extends StatefulWidget {
+  final CreateWindowAction createWindowAction;
+
+  const WindowPopup({super.key, required this.createWindowAction});
+
+  @override
+  State<WindowPopup> createState() => _WindowPopupState();
+}
+
+class _WindowPopupState extends State<WindowPopup> {
+  String title = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(mainAxisSize: MainAxisSize.max, children: [
+              Expanded(
+                child:
+                    Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close))
+            ]),
+            Expanded(
+              child: InAppWebView(
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                  Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer(),
+                  ),
+                },
+                windowId: widget.createWindowAction.windowId,
+                onTitleChanged: (controller, title) {
+                  setState(() {
+                    this.title = title ?? '';
+                  });
+                },
+                onCloseWindow: (controller) {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

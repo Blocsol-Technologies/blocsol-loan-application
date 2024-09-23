@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -110,6 +112,34 @@ class NewLoanAlertDialog extends ConsumerWidget {
                         child: Center(
                           child: Text(
                             "GO BACK",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                     const SpacerWidget(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        ref.read(routerProvider).pushReplacement(InvoiceNewLoanRequestRouter.loan_offer_select);
+                      },
+                      child: Container(
+                        height: 32,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Select other offer",
                             style: TextStyle(
                               fontFamily: fontFamily,
                               fontSize: AppFontSizes.b1,

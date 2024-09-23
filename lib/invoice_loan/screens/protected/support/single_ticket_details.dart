@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
-import 'package:blocsol_loan_application/invoice_loan/constants/routes/support_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/inward_curve_painter.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/state/support_ticket.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
@@ -204,7 +204,7 @@ class _InvoiceLoanSingleTicketDetailsState
                         HapticFeedback.mediumImpact();
                         ref
                             .read(routerProvider)
-                            .push(InvoiceLoanSupportRouter.raise_new_ticket);
+                            .push(InvoiceLoanIndexRouter.support);
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
