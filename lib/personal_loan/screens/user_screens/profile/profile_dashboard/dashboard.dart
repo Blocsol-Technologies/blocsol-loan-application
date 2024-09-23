@@ -115,10 +115,16 @@ class PLProfileDashboard extends ConsumerWidget {
                 text: "Settings",
                 route: PersonalLoanProfileRouter.settings,
               ),
+              const PlProfileNavItem(
+                text: "Privacy Policy",
+                route: PersonalLoanProfileRouter.privacyPolicy,
+              ),
               GestureDetector(
                 onTap: () async {
                   HapticFeedback.heavyImpact();
-                  await ref.read(authProvider.notifier).logoutPersonalLoanUser();
+                  await ref
+                      .read(authProvider.notifier)
+                      .logoutPersonalLoanUser();
 
                   if (!context.mounted) return;
 

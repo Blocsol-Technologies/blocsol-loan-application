@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/account_info/index.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/bank_account/add_bank_account.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/bank_account/index.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/privacy_policy_webview.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/settings/change_password.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/settings/dashboard/dashboard.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -17,7 +18,10 @@ class InvoiceLoanProfileRouter {
       '/invoice-loan/profile/account-aggregator-setup';
 
   static const settings = '/invoice-loan/profile/settings';
-  static const changePassword = '/invoice-loan/profile/settings/change-password';
+  static const changePassword =
+      '/invoice-loan/profile/settings/change-password';
+
+  static const privacyPolicy = '/invoice-loan/profile/privacy-policy';
 }
 
 List<GoRoute> invoiceLoanProfileRoutes = [
@@ -61,10 +65,13 @@ List<GoRoute> invoiceLoanProfileRoutes = [
     path: InvoiceLoanProfileRouter.settings,
     builder: (context, state) => const InvoiceLoanProfileSettingsDashboard(),
   ),
-
-    GoRoute(
+  GoRoute(
     path: InvoiceLoanProfileRouter.changePassword,
     builder: (context, state) => const InvoiceLoanProfileChangePassword(),
+  ),
+  GoRoute(
+    path: InvoiceLoanProfileRouter.privacyPolicy,
+    builder: (context, state) => const InvoiceLoanPrivacyPolicyWebview(),
   ),
 ];
 

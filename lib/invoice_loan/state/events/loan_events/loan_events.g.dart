@@ -6,7 +6,7 @@ part of 'loan_events.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$invoiceLoanEventsHash() => r'3d99bb50afffeab8b52b85d5666700475e071337';
+String _$invoiceLoanEventsHash() => r'e93125563bb383851a770fbbeb480b3da905ad62';
 
 /// See also [InvoiceLoanEvents].
 @ProviderFor(InvoiceLoanEvents)

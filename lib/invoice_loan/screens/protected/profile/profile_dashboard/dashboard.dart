@@ -115,6 +115,10 @@ class InvoiceLoanProfileDashboard extends ConsumerWidget {
                 text: "Settings",
                 route: InvoiceLoanProfileRouter.settings,
               ),
+              const ProfileNavItem(
+                text: "Privacy Policy",
+                route: InvoiceLoanProfileRouter.privacyPolicy,
+              ),
               GestureDetector(
                 onTap: () async {
                   HapticFeedback.heavyImpact();
