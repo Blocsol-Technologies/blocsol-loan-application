@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/auth/login/http_cont
 import 'package:blocsol_loan_application/invoice_loan/state/auth/login/state/login_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -13,6 +14,7 @@ part 'login.g.dart';
 class InvoiceLoanLogin extends _$InvoiceLoanLogin {
   @override
   InvoiceLoanLoginState build() {
+    ref.cacheFor(const Duration(seconds: 10), (){});
     return InvoiceLoanLoginState.initialize();
   }
 

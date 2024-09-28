@@ -174,6 +174,8 @@ class SupportTicket {
         return Colors.black;
     }
   }
+
+  static SupportTicket demo = SupportTicket(transactionId: "", providerId: "", pan: "", conversations: [], chatLink: "", id: "", category: "", subCategory: "", createdAt: "", updatedAt: "", status: "");
 }
 
 @freezed
@@ -190,4 +192,7 @@ class PersonalLoanSupportStateData with _$PersonalLoanSupportStateData {
     required SupportTicket selectedSupportTicket,
     required bool sendingStatusRequest,
   }) = _PersonalLoanSupportStateData;
+
+
+  static PersonalLoanSupportStateData initial = PersonalLoanSupportStateData(transactionId: "", providerId: "", issueId: "", pan: "", generatingSupportTicket: false, fetchingAllSupportTickets: false, fetchingSingleSupportTicket: false, supportTickets: [], selectedSupportTicket: SupportTicket.demo, sendingStatusRequest: false);
 }

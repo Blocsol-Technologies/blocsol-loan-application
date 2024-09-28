@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/personal_loan/state/auth/login/http_con
 import 'package:blocsol_loan_application/personal_loan/state/auth/login/state/login_state_data.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,7 +13,7 @@ part 'login.g.dart';
 class PersonalLoginState extends _$PersonalLoginState {
   @override
   LoginStateData build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 10), (){});
     return const LoginStateData(pan: "", phoneNumber: "");
   }
 

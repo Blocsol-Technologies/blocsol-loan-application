@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/global_state/auth/auth.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/http_controller.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/state/support_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +12,7 @@ part 'support.g.dart';
 class PersonalLoanSupportState extends _$PersonalLoanSupportState {
   @override
   PersonalLoanSupportStateData build() {
-    ref.keepAlive();
+   ref.cacheFor(const Duration(seconds: 30), (){});
     return PersonalLoanSupportStateData(
       transactionId: '',
       providerId: '',

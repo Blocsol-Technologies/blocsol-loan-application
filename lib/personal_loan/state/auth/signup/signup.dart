@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/personal_loan/state/auth/signup/http_co
 import 'package:blocsol_loan_application/personal_loan/state/auth/signup/state/signup_state.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,33 +13,8 @@ part 'signup.g.dart';
 class PersonalLoanSignup extends _$PersonalLoanSignup {
   @override
   SignupStateData build() {
-    ref.keepAlive();
-    return const SignupStateData(
-      email: "",
-      imageURL: "",
-
-      // Phone Auth
-      phoneNumber: "",
-
-      // Personal details
-      firstName: "",
-      lastName: "",
-      dob: "",
-      gender: "",
-      pan: "",
-
-      // Address details
-      address: "",
-      city: "",
-      state: "",
-      pincode: "",
-      udyam: "",
-      companyName: "",
-
-      udyamValidationRequired: false,
-      udyamValidated: false,
-      personalDetailsValidated: false,
-    );
+   ref.cacheFor(const Duration(seconds: 10), (){});
+    return  SignupStateData.initial;
   }
 
 

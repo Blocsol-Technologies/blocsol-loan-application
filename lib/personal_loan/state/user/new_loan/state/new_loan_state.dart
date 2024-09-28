@@ -76,7 +76,7 @@ class NewLoanStateData with _$NewLoanStateData {
     offers: [],
     offersFetchTime: 0,
     offerSelected: false,
-    selectedOffer: PersonalLoanDetails.newOffer(),
+    selectedOffer: PersonalLoanDetails.demoOffer(),
     loanOfferUpdated: false,
     //
     fetchingAadharKYCURl: false,

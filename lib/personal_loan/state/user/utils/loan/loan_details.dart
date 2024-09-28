@@ -511,35 +511,8 @@ class PersonalLoanDetails {
         trace: stackTrace,
       ).reportError();
 
-      return newOffer();
+      return demoOffer();
     }
-  }
-
-  static PersonalLoanDetails newOffer() {
-    return PersonalLoanDetails(
-      offerId: "",
-      state: "",
-      endUse: EndUse.other,
-      offerProviderId: "",
-      bankName: "",
-      bankLogoURL: "",
-      transactionId: "",
-      interestRate: "",
-      disbursementErr: false,
-      interestRateType: "",
-      processingFee: "",
-      tenure: "",
-      deposit: "",
-      lateCharge: "",
-      prepaymentPenalty: "",
-      loanStatus: LoanRepaymentStatus.pending,
-      loanPayments: LoanPaymentDetails.demoPayment(),
-      docList: [],
-      cancellationTerms: CancellationTerm.demoCancellationTerm(),
-      paymentsMade: [],
-      contactDetails: ContactInfo.demoContactInfo(),
-      lspContactDetails: LSPContactInfo.demoContactInfo(),
-    );
   }
 
   String extractNumericValue(String input) {

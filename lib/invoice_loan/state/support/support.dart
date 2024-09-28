@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/support/state/suppor
 import 'package:blocsol_loan_application/invoice_loan/state/support/state/support_ticket.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support_http_controller.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,7 +13,7 @@ part 'support.g.dart';
 class InvoiceLoanSupport extends _$InvoiceLoanSupport {
   @override
   SupportStateData build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 30), (){});
     return SupportStateData.initial;
   }
 

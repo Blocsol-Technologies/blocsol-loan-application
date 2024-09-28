@@ -20,4 +20,18 @@ class LiabilityStateData with _$LiabilityStateData {
     required bool initiatingMissedEmiPayment,
     required String missedEmiPaymentId,
   }) = _LiabilityStateData;
+
+  static LiabilityStateData initial = LiabilityStateData(
+      oldLoans: [],
+      selectedOldOffer: PersonalLoanDetails.demoOffer(),
+      fetchingOldOffers: false,
+      oldOffersFetchTime: 0,
+      loanForeclosureFailed: false,
+      initiatingForeclosure: false,
+      prepaymentFailed: false,
+      initiatingPrepayment: false,
+      prepaymentId: "",
+      missedEmiPaymentFailed: false,
+      initiatingMissedEmiPayment: false,
+      missedEmiPaymentId: "");
 }

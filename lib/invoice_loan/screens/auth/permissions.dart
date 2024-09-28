@@ -25,8 +25,6 @@ class _InvoiceLoanAppPermissionsState
       Permission.locationWhenInUse,
       Permission.camera,
       Permission.mediaLibrary,
-      Permission.notification,
-      Permission.sms
     ].request();
 
     var allGranted = true;

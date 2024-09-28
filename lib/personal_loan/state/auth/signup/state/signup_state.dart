@@ -25,4 +25,23 @@ class SignupStateData with _$SignupStateData {
     required bool udyamValidated,
     required bool personalDetailsValidated,
   }) = _SignupStateData;
+
+  static SignupStateData initial = const SignupStateData(
+      email: "",
+      imageURL: "",
+      phoneNumber: "",
+      firstName: "",
+      lastName: "",
+      dob: "",
+      gender: "",
+      pan: "",
+      address: "",
+      city: "",
+      state: "",
+      pincode: "",
+      udyam: "",
+      companyName: "",
+      udyamValidationRequired: false,
+      udyamValidated: false,
+      personalDetailsValidated: false);
 }

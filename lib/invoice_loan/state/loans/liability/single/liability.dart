@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/sing
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/state/liability_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,7 +13,7 @@ part 'liability.g.dart';
 class InvoiceLoanLiability extends _$InvoiceLoanLiability {
   @override
   LiabilityState build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 30), (){});
     return LiabilityState.initial;
   }
 

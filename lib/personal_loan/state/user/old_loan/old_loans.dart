@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/http_
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/state/liability_state.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/utils/loan/loan_details.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,25 +15,9 @@ part 'old_loans.g.dart';
 class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
   @override
   LiabilityStateData build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 30), (){});
 
-    Timer.periodic(const Duration(seconds: 10), (_) async {
-      await fetchOffers(CancelToken());
-    });
-
-    return LiabilityStateData(
-        oldLoans: [],
-        selectedOldOffer: PersonalLoanDetails.demoOffer(),
-        fetchingOldOffers: false,
-        oldOffersFetchTime: 0,
-        initiatingForeclosure: false,
-        initiatingPrepayment: false,
-        prepaymentId: "",
-        initiatingMissedEmiPayment: false,
-        missedEmiPaymentId: "",
-        missedEmiPaymentFailed: false,
-        loanForeclosureFailed: false,
-        prepaymentFailed: false);
+    return LiabilityStateData.initial;
   }
 
   void updateSelectedOffer(PersonalLoanDetails offer) {

@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_ev
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 
 import 'package:eventflux/eventflux.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,13 +16,16 @@ part 'sse.g.dart';
 class PersonalLoanServerSentEvents extends _$PersonalLoanServerSentEvents {
   @override
   void build() {
-    ref.keepAlive();
+    var eventFlux = EventFlux.instance;
 
+    ref.cacheFor(const Duration(seconds: 30), () {
+      eventFlux.disconnect();
+    });
     var (_, token) = ref.read(authProvider.notifier).getAuthTokens();
 
     logger.w("Starting SSE Connection");
 
-    EventFlux.instance.connect(
+    eventFlux.connect(
       EventFluxConnectionType.get,
       '$personalLoanServerUrl/ondc/events',
       header: {"Authorization": token, "Keep-Alive": "true"},

@@ -88,20 +88,6 @@ class _InvoiceLoanLiabilitiesHomeState
       return;
     }
 
-    await ref
-        .read(invoiceLoanLiabilitiesProvider.notifier)
-        .fetchAllLiabilities(_cancelToken);
-
-    await ref
-        .read(invoiceLoanLiabilitiesProvider.notifier)
-        .fetchAllClosedLiabilities(_cancelToken);
-  }
-
-  void _onInvoiceRefresh() async {
-    if (ref.read(invoiceLoanLiabilitiesProvider).fetchingLiabilitiess) {
-      return;
-    }
-
     var response = await ref
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllLiabilities(_cancelToken);
@@ -121,10 +107,27 @@ class _InvoiceLoanLiabilitiesHomeState
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
-    } else {
-      setState(() {
-        _filteredLoans = response.data;
-      });
+    }
+
+    response = await ref
+        .read(invoiceLoanLiabilitiesProvider.notifier)
+        .fetchAllClosedLiabilities(_cancelToken);
+
+    if (!mounted) return;
+
+    if (!response.success) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch closed loans. Please try again later.",
+            notifType: SnackbarNotificationType.error),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
   }
 
@@ -285,7 +288,7 @@ class _InvoiceLoanLiabilitiesHomeState
                           ),
                           LoanSearch(
                             onRefrersh: () {
-                              _onInvoiceRefresh();
+                              _handleRefresh();
                             },
                             refreshingLoans:
                                 liabiliiesStateRef.fetchingLiabilitiess,

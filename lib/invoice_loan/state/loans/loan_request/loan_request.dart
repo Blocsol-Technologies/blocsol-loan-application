@@ -10,6 +10,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -19,7 +20,7 @@ part 'loan_request.g.dart';
 class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   @override
   LoanRequestStateData build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 30), (){});
     return LoanRequestStateData.initial;
   }
 

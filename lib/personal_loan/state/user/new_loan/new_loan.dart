@@ -8,6 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state
 import 'package:blocsol_loan_application/personal_loan/state/user/utils/loan/loan_details.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,7 +18,7 @@ part 'new_loan.g.dart';
 class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
   @override
   NewLoanStateData build() {
-    ref.keepAlive();
+    ref.cacheFor(const Duration(seconds: 30), (){});
     return NewLoanStateData.initial;
   }
 

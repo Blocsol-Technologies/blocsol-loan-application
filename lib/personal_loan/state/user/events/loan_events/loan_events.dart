@@ -11,6 +11,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_l
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -20,13 +21,12 @@ part 'loan_events.g.dart';
 class PersonalLoanEvents extends _$PersonalLoanEvents {
   @override
   PersonalLoanEventState build() {
-    ref.keepAlive();
-
-    var timer = Timer.periodic(Duration(seconds: refetchPersonalLoanEventInterval), (timer) async {
+    var timer = Timer.periodic(
+        Duration(seconds: refetchPersonalLoanEventInterval), (timer) async {
       await fetchLatestEventForConsumption();
     });
 
-    ref.onDispose(() {
+    ref.cacheFor(const Duration(seconds: 30), () {
       timer.cancel();
     });
 

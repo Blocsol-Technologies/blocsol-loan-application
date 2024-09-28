@@ -12,29 +12,30 @@ import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/s
 import 'package:blocsol_loan_application/utils/errors.dart';
 import 'package:blocsol_loan_application/utils/http_service.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
+import 'package:blocsol_loan_application/utils/riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'loan_events.g.dart';
 
+
 @riverpod
 class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   @override
   LoanEvent build() {
-    ref.keepAlive();
-
-    var timer = Timer.periodic(Duration(seconds: refetchInvoiceLoanEventsInterval), (timer) async {
+    var timer = Timer.periodic(
+        Duration(seconds: refetchInvoiceLoanEventsInterval), (timer) async {
       await fetchLatestEventForConsumption();
     });
 
-    ref.onDispose(() {
+    ref.cacheFor(const Duration(seconds: 30), () {
       timer.cancel();
     });
 
     return LoanEvent.demo();
   }
 
-  void reset () {
+  void reset() {
     ref.invalidateSelf();
   }
 
@@ -123,8 +124,6 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
     if (prevEvent.priority > event.priority) {
       return;
     }
-
-    print("s28882s");
 
     switch (context) {
       case "select":
@@ -413,8 +412,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         break;
       case "payments":
-        if (stepNumber == 2)
-        {
+        if (stepNumber == 2) {
           if (success) {
             await ref
                 .read(invoiceLoanLiabilityProvider.notifier)
@@ -446,8 +444,6 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         timeStamp: event.timeStamp,
         priority: event.priority);
 
-
-    print("setting event consumned");
     await setEventConsumed(event.messageId);
     return;
   }
