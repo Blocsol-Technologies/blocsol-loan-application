@@ -6,7 +6,7 @@ part of 'login.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$invoiceLoanLoginHash() => r'f75e8922fb5684937d4ee12c8a938b98f7de1105';
+String _$invoiceLoanLoginHash() => r'c2d183011d09acd159c366dfbe7d30aafe4a49b8';
 
 /// See also [InvoiceLoanLogin].
 @ProviderFor(InvoiceLoanLogin)
