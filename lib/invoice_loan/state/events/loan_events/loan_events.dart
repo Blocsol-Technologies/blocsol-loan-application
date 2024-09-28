@@ -419,10 +419,10 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
                 .fetchSingleLiabilityDetails(cancelToken);
             ref
                 .read(routerProvider)
-                .go(InvoiceLoanLiabilitiesRouter.singleLiabilityDetails);
+                .go(InvoiceLoanLiabilitiesRouter.payment_success_overview, extra: true);
           } else {
             ref.read(routerProvider).pushReplacement(
-                InvoiceLoanLiabilitiesRouter.payment_error_page);
+                InvoiceLoanLiabilitiesRouter.payment_success_overview, extra: false);
           }
         }
       default:

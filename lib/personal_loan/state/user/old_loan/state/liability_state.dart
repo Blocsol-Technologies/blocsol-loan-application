@@ -11,6 +11,7 @@ class LiabilityStateData with _$LiabilityStateData {
     required bool fetchingOldOffers,
     required int oldOffersFetchTime,
     // Actions
+    required PersonalLoanInitiatedActionType initiatedActionType,
     required bool loanForeclosureFailed,
     required bool initiatingForeclosure,
     required bool prepaymentFailed,
@@ -26,6 +27,7 @@ class LiabilityStateData with _$LiabilityStateData {
       selectedOldOffer: PersonalLoanDetails.demoOffer(),
       fetchingOldOffers: false,
       oldOffersFetchTime: 0,
+      initiatedActionType: PersonalLoanInitiatedActionType.none ,
       loanForeclosureFailed: false,
       initiatingForeclosure: false,
       prepaymentFailed: false,

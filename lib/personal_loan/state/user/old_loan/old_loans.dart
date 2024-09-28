@@ -15,7 +15,7 @@ part 'old_loans.g.dart';
 class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
   @override
   LiabilityStateData build() {
-    ref.cacheFor(const Duration(seconds: 30), (){});
+    ref.cacheFor(const Duration(seconds: 30), () {});
 
     return LiabilityStateData.initial;
   }
@@ -30,6 +30,20 @@ class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
 
   void reset() {
     ref.invalidateSelf();
+  }
+
+  PaymentDetails getPaymentSuccessDetails() {
+    var id = "";
+
+    if (state.initiatedActionType ==
+        PersonalLoanInitiatedActionType.missedEmi) {
+      id = state.missedEmiPaymentId;
+    } else if (state.initiatedActionType ==
+        PersonalLoanInitiatedActionType.prepayment) {
+      id = state.prepaymentId;
+    }
+    return state.selectedOldOffer.loanPayments
+        .getOfferPaymentDetails(state.initiatedActionType, id);
   }
 
   // Fetch Old Loans

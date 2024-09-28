@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liab
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_full_details.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_general_webview.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_missed_emi_payment_webview.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_payment_status.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_prepay.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/liability_prepay_webview.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,8 @@ class PersonalLoanLiabilitiesRouter {
       "/personal-credit/old-loans/prepayment";
   static const String liability_general_webview =
       "/personal-credit/old-loans/general-webview";
+
+  static const String liability_payment_success_overview =  "/personal-credit/old-loans/payment-success-overview";
 }
 
 List<GoRoute> personalLoanLiabilitiesRoutes = [
@@ -74,6 +77,14 @@ List<GoRoute> personalLoanLiabilitiesRoutes = [
       final url = state.extra as String;
 
       return PCLiabilityGeneralWebview(url: url);
+    },
+  ),
+   GoRoute(
+    path: PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+    builder: (context, state) {
+      bool ok = state.extra as bool;
+
+      return PersonalLoanliabilityPaymentStatus(success: ok,);
     },
   ),
 ];

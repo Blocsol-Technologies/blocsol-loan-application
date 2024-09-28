@@ -3,6 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'liability_state.freezed.dart';
 
+
+
 @freezed
 class LiabilityState with _$LiabilityState {
   const factory LiabilityState({
@@ -12,7 +14,7 @@ class LiabilityState with _$LiabilityState {
     required bool fetchingSingleLiabilityDetails,
 
     // Actions
-
+    required InvoiceLoanInitiatedActionType initiatedActionType,
     // Foreclosure
     required bool initiatingForeclosure,
     required bool verifyingForeclosure,
@@ -37,6 +39,8 @@ class LiabilityState with _$LiabilityState {
     liabilitiessFetchTime: 0,
     fetchingSingleLiabilityDetails: false,
     // Actions
+
+    initiatedActionType: InvoiceLoanInitiatedActionType.none,
 
     // Foreclosure
     initiatingForeclosure: false,

@@ -26,12 +26,6 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
     await ref
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllLiabilities(_cancelToken);
-
-    // await Future.delayed(const Duration(seconds: 5));
-
-    // if (mounted && context.mounted) {
-    //   await _fetchLiabilities();
-    // }
   }
 
   @override
@@ -121,6 +115,7 @@ class _DashboardLiabilitiesState extends ConsumerState<DashboardLiabilities> {
                   itemBuilder: (ctx, idx) {
                     return LiabilityCard(
                       oldLoanDetails: liabilitiesRef.liabilities[idx],
+                      seperatorColor: const Color.fromRGBO(220, 220, 220, 1)
                     );
                   },
                 )

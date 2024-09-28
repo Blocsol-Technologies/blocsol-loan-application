@@ -69,19 +69,9 @@ class _PCLiabilityMissedEMIPaymentWebviewState
     if (!mounted) return;
 
     if (!success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Missed Emi Payment unsuccessful",
-            notifType: SnackbarNotificationType.error),
-        duration: const Duration(seconds: 15),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
+      ref.read(routerProvider).pushReplacement(
+          PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+          extra: false);
       return;
     }
 
@@ -89,31 +79,14 @@ class _PCLiabilityMissedEMIPaymentWebviewState
       _verifyingMissedEMIPayment = false;
     });
 
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(
-          message: "Missed EMI Payment successful",
-          notifType: SnackbarNotificationType.success),
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-
     var _ = await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    await Future.delayed(const Duration(seconds: 5));
-
     if (!mounted) return;
-
-    ref
-        .read(routerProvider)
-        .pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
+    ref.read(routerProvider).pushReplacement(
+        PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+        extra: true);
 
     return;
   }

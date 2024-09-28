@@ -212,6 +212,7 @@ class PaymentDetails {
   final LoanPaymentStatus status;
   final String dueDate;
   final String paymentURL;
+  final String timeLabel;
 
   PaymentDetails({
     required this.id,
@@ -220,6 +221,7 @@ class PaymentDetails {
     required this.dueDate,
     required this.paymentURL,
     required this.type,
+    required this.timeLabel,
   });
 
   factory PaymentDetails.fromJson(Map<String, dynamic> json) {
@@ -248,6 +250,7 @@ class PaymentDetails {
       dueDate: json['time']?['range']['end'] ?? "",
       paymentURL: json['url'] ?? "",
       type: json['type'] ?? "",
+      timeLabel: json['time']?['label'] ?? "",
     );
   }
 
@@ -259,6 +262,7 @@ class PaymentDetails {
       dueDate: "",
       paymentURL: "",
       type: "",
+      timeLabel: "",
     );
   }
 }
@@ -312,6 +316,52 @@ class LoanPaymentDetails {
       paymentDetails: [],
     );
   }
+
+  PaymentDetails getOfferPaymentDetails(PersonalLoanInitiatedActionType initiatedAction, String id ) {
+    if (initiatedAction == PersonalLoanInitiatedActionType.none) {
+      return PaymentDetails.demoPayment();
+    }
+
+    if (initiatedAction == PersonalLoanInitiatedActionType.missedEmi) {
+      for (var payment in paymentDetails) {
+        if (payment.id == id && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return PaymentDetails.demoPayment();
+      }
+    }
+
+    if (initiatedAction == PersonalLoanInitiatedActionType.prepayment) {
+      for (var payment in paymentDetails) {
+        if (payment.id == id && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return PaymentDetails.demoPayment();
+      }
+    }
+
+     if (initiatedAction == PersonalLoanInitiatedActionType.foreclosure) {
+      for (var payment in paymentDetails) {
+        if (payment.timeLabel == "FORECLOSURE" && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return PaymentDetails.demoPayment();
+      }
+    }
+     return PaymentDetails.demoPayment();
+  }
+
+  
+}
+
+enum PersonalLoanInitiatedActionType {
+  none,
+  prepayment,
+  foreclosure,
+  missedEmi,
 }
 
 String extractNumericValue(String input) {

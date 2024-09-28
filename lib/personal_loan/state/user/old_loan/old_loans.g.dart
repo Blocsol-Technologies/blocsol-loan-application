@@ -7,7 +7,7 @@ part of 'old_loans.dart';
 // **************************************************************************
 
 String _$personalLoanLiabilitiesHash() =>
-    r'6cf2065bb7b7de21c4f6d3f75382cba672b7706c';
+    r'a16b18596305eca9273b03711474acfd3b64e486';
 
 /// See also [PersonalLoanLiabilities].
 @ProviderFor(PersonalLoanLiabilities)

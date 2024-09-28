@@ -6,6 +6,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilit
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/single-liability-details/single_liability_details_payment_history.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/single-liability-details/single_liability_full_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/single-liability-details/single_liability_general_webview.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/single_liability_payment_status.dart';
 import 'package:go_router/go_router.dart';
 
 class InvoiceLoanLiabilitiesRouter {
@@ -17,8 +18,6 @@ class InvoiceLoanLiabilitiesRouter {
       '/invoice-loan/liabilities/payment-history';
   static const String general_webview =
       '/invoice-loan/liabilities/general-webview';  
-
-  static const String payment_error_page = '/invoice-loan/liabilities/error-page';
 
   // Foreclosure
   static const String liability_foreclosure_webview =
@@ -33,6 +32,8 @@ class InvoiceLoanLiabilitiesRouter {
       '/invoice-loan/liabilities/prepayment-amount-selection';
   static const String prepayment_webview =
       '/invoice-loan/liabilities/prepayment-webview';
+
+  static const String payment_success_overview = '/invoice-loan/liabilities/payment-success-overview';
 }
 
 List<GoRoute> invoiceLoanLiabilitiesRoutes = [
@@ -87,4 +88,14 @@ List<GoRoute> invoiceLoanLiabilitiesRoutes = [
       return InvoiceLoanLiabilityPrepaymentWebview(url: url);
     },
   ),
+
+   GoRoute(
+    path: InvoiceLoanLiabilitiesRouter.payment_success_overview,
+    builder: (context, state) {
+      bool ok = state.extra as bool;
+
+      return InvoiceLoanliabilityPaymentStatus(success: ok,);
+    },
+  ),
+
 ];

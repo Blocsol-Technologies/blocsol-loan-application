@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:blocsol_loan_application/utils/logger.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 const String invoiceLoanServerUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
@@ -49,7 +49,7 @@ class HttpService {
       logger.d(
           "Sending GET Request to enpoint: $endpoint \n Query Params: $queryParams");
 
-      bool isConnected = await InternetConnectionChecker().hasConnection;
+      bool isConnected = await InternetConnection().hasInternetAccess;
 
       if (!isConnected) {
         throw DioException(
@@ -94,7 +94,7 @@ class HttpService {
       logger.d(
           "Sending POST Request to enpoint: $endpoint \n Body Params: $data");
 
-      bool isConnected = await InternetConnectionChecker().hasConnection;
+      bool isConnected = await InternetConnection().hasInternetAccess;
 
       if (!isConnected) {
         throw DioException(

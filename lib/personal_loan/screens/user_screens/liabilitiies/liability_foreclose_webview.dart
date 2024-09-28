@@ -69,17 +69,7 @@ class _PCLiabilityForeclosureWebviewState
     if (!mounted) return;
 
     if (!success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: "Loan foreclosure unsuccessful. ", notifType: SnackbarNotificationType.error), 
-        duration: const Duration(seconds: 15),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
+       ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_payment_success_overview, extra: false);
       return;
     }
 
@@ -87,25 +77,13 @@ class _PCLiabilityForeclosureWebviewState
       _verifyingForeclosure = false;
     });
 
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(message: "Foreclosure successful", notifType: SnackbarNotificationType.success), 
-      duration: const Duration(seconds: 5),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-
     var _ = await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
     if (!mounted) return;
 
-    ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
+    ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_payment_success_overview, extra: true);
 
     return;
   }

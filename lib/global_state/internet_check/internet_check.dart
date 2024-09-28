@@ -1,4 +1,4 @@
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'internet_check.g.dart';
@@ -9,9 +9,9 @@ class InternetCheck extends _$InternetCheck {
   bool build() {
     ref.keepAlive();
 
-    final subscription = InternetConnectionChecker().onStatusChange.listen(
-      (InternetConnectionStatus status) {
-        if (status == InternetConnectionStatus.connected) {
+    final subscription = InternetConnection().onStatusChange.listen(
+      (InternetStatus status) {
+        if (status == InternetStatus.connected) {
           state = true;
         } else {
           state = false;

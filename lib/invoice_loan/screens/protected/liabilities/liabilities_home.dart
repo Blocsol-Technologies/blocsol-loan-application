@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/shared_components/liability_card.dart';
@@ -81,8 +82,6 @@ class _InvoiceLoanLiabilitiesHomeState
     });
   }
 
-  void _handleNotificationBellPress() {}
-
   Future<void> _handleRefresh() async {
     if (ref.read(invoiceLoanLiabilitiesProvider).fetchingLiabilitiess) {
       return;
@@ -109,26 +108,9 @@ class _InvoiceLoanLiabilitiesHomeState
         ..showSnackBar(snackBar);
     }
 
-    response = await ref
+    await ref
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllClosedLiabilities(_cancelToken);
-
-    if (!mounted) return;
-
-    if (!response.success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Unable to fetch closed loans. Please try again later.",
-            notifType: SnackbarNotificationType.error),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    }
   }
 
   @override
@@ -158,7 +140,8 @@ class _InvoiceLoanLiabilitiesHomeState
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      top: RelativeSize.height(30, height),
+                      top: RelativeSize.height(
+                          RelativeSize.height(30, height), height),
                       left: RelativeSize.width(25, width),
                       right: RelativeSize.width(25, width)),
                   child: Row(
@@ -184,23 +167,12 @@ class _InvoiceLoanLiabilitiesHomeState
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          IconButton(
-                            onPressed: () {
-                              HapticFeedback.mediumImpact();
-                              _handleNotificationBellPress();
-                            },
-                            icon: Icon(
-                              Icons.notifications_active,
-                              size: 25,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          const SpacerWidget(
-                            width: 15,
-                          ),
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.mediumImpact();
+                              ref
+                                  .read(routerProvider)
+                                  .push(InvoiceLoanIndexRouter.profile);
                             },
                             child: Container(
                               height: 28,
@@ -232,7 +204,7 @@ class _InvoiceLoanLiabilitiesHomeState
                   ),
                 ),
                 const SpacerWidget(
-                  height: 25,
+                  height: 20,
                 ),
                 Expanded(
                   child: Padding(
@@ -296,7 +268,7 @@ class _InvoiceLoanLiabilitiesHomeState
                             lenFilteredOffers: _filteredLoans.length,
                           ),
                           const SpacerWidget(
-                            height: 15,
+                            height: 10,
                           ),
                           Expanded(
                             child: SizedBox(
@@ -401,6 +373,10 @@ class _InvoiceLoanLiabilitiesHomeState
                                                 oldLoanDetails:
                                                     liabiliiesStateRef
                                                         .liabilities[index],
+                                                seperatorColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .tertiary,
                                               );
                                             },
                                           ),
@@ -462,11 +438,6 @@ class _LoanSearchState extends State<LoanSearch> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(
-                color:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.35),
-                width: 1,
-              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

@@ -6,7 +6,7 @@ part of 'internet_check.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$internetCheckHash() => r'4c8fbe04da099f9cb80248d0f88c6b3ee1ffe055';
+String _$internetCheckHash() => r'fbf18a6e92e7e25c557a89e483a7776699635036';
 
 /// See also [InternetCheck].
 @ProviderFor(InternetCheck)

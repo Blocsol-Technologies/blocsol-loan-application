@@ -21,7 +21,8 @@ mixin _$LiabilityState {
   int get liabilitiessFetchTime => throw _privateConstructorUsedError;
   bool get fetchingSingleLiabilityDetails =>
       throw _privateConstructorUsedError; // Actions
-// Foreclosure
+  InvoiceLoanInitiatedActionType get initiatedActionType =>
+      throw _privateConstructorUsedError; // Foreclosure
   bool get initiatingForeclosure => throw _privateConstructorUsedError;
   bool get verifyingForeclosure => throw _privateConstructorUsedError;
   bool get loanForeclosureFailed =>
@@ -53,6 +54,7 @@ abstract class $LiabilityStateCopyWith<$Res> {
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
+      InvoiceLoanInitiatedActionType initiatedActionType,
       bool initiatingForeclosure,
       bool verifyingForeclosure,
       bool loanForeclosureFailed,
@@ -83,6 +85,7 @@ class _$LiabilityStateCopyWithImpl<$Res, $Val extends LiabilityState>
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
     Object? fetchingSingleLiabilityDetails = null,
+    Object? initiatedActionType = null,
     Object? initiatingForeclosure = null,
     Object? verifyingForeclosure = null,
     Object? loanForeclosureFailed = null,
@@ -112,6 +115,10 @@ class _$LiabilityStateCopyWithImpl<$Res, $Val extends LiabilityState>
           ? _value.fetchingSingleLiabilityDetails
           : fetchingSingleLiabilityDetails // ignore: cast_nullable_to_non_nullable
               as bool,
+      initiatedActionType: null == initiatedActionType
+          ? _value.initiatedActionType
+          : initiatedActionType // ignore: cast_nullable_to_non_nullable
+              as InvoiceLoanInitiatedActionType,
       initiatingForeclosure: null == initiatingForeclosure
           ? _value.initiatingForeclosure
           : initiatingForeclosure // ignore: cast_nullable_to_non_nullable
@@ -173,6 +180,7 @@ abstract class _$$LiabilityStateImplCopyWith<$Res>
       bool fetchingLiabilitiess,
       int liabilitiessFetchTime,
       bool fetchingSingleLiabilityDetails,
+      InvoiceLoanInitiatedActionType initiatedActionType,
       bool initiatingForeclosure,
       bool verifyingForeclosure,
       bool loanForeclosureFailed,
@@ -201,6 +209,7 @@ class __$$LiabilityStateImplCopyWithImpl<$Res>
     Object? fetchingLiabilitiess = null,
     Object? liabilitiessFetchTime = null,
     Object? fetchingSingleLiabilityDetails = null,
+    Object? initiatedActionType = null,
     Object? initiatingForeclosure = null,
     Object? verifyingForeclosure = null,
     Object? loanForeclosureFailed = null,
@@ -230,6 +239,10 @@ class __$$LiabilityStateImplCopyWithImpl<$Res>
           ? _value.fetchingSingleLiabilityDetails
           : fetchingSingleLiabilityDetails // ignore: cast_nullable_to_non_nullable
               as bool,
+      initiatedActionType: null == initiatedActionType
+          ? _value.initiatedActionType
+          : initiatedActionType // ignore: cast_nullable_to_non_nullable
+              as InvoiceLoanInitiatedActionType,
       initiatingForeclosure: null == initiatingForeclosure
           ? _value.initiatingForeclosure
           : initiatingForeclosure // ignore: cast_nullable_to_non_nullable
@@ -286,6 +299,7 @@ class _$LiabilityStateImpl implements _LiabilityState {
       required this.fetchingLiabilitiess,
       required this.liabilitiessFetchTime,
       required this.fetchingSingleLiabilityDetails,
+      required this.initiatedActionType,
       required this.initiatingForeclosure,
       required this.verifyingForeclosure,
       required this.loanForeclosureFailed,
@@ -307,6 +321,8 @@ class _$LiabilityStateImpl implements _LiabilityState {
   @override
   final bool fetchingSingleLiabilityDetails;
 // Actions
+  @override
+  final InvoiceLoanInitiatedActionType initiatedActionType;
 // Foreclosure
   @override
   final bool initiatingForeclosure;
@@ -335,7 +351,7 @@ class _$LiabilityStateImpl implements _LiabilityState {
 
   @override
   String toString() {
-    return 'LiabilityState(selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, initiatingForeclosure: $initiatingForeclosure, verifyingForeclosure: $verifyingForeclosure, loanForeclosureFailed: $loanForeclosureFailed, prepaymentId: $prepaymentId, initiatingPrepayment: $initiatingPrepayment, verifyingPrepaymentSuccess: $verifyingPrepaymentSuccess, prepaymentFailed: $prepaymentFailed, missedEmiPaymentId: $missedEmiPaymentId, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, verifyingMissedEmiPaymentSuccess: $verifyingMissedEmiPaymentSuccess, missedEmiPaymentFailed: $missedEmiPaymentFailed)';
+    return 'LiabilityState(selectedLiability: $selectedLiability, fetchingLiabilitiess: $fetchingLiabilitiess, liabilitiessFetchTime: $liabilitiessFetchTime, fetchingSingleLiabilityDetails: $fetchingSingleLiabilityDetails, initiatedActionType: $initiatedActionType, initiatingForeclosure: $initiatingForeclosure, verifyingForeclosure: $verifyingForeclosure, loanForeclosureFailed: $loanForeclosureFailed, prepaymentId: $prepaymentId, initiatingPrepayment: $initiatingPrepayment, verifyingPrepaymentSuccess: $verifyingPrepaymentSuccess, prepaymentFailed: $prepaymentFailed, missedEmiPaymentId: $missedEmiPaymentId, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, verifyingMissedEmiPaymentSuccess: $verifyingMissedEmiPaymentSuccess, missedEmiPaymentFailed: $missedEmiPaymentFailed)';
   }
 
   @override
@@ -353,6 +369,8 @@ class _$LiabilityStateImpl implements _LiabilityState {
                     fetchingSingleLiabilityDetails) ||
                 other.fetchingSingleLiabilityDetails ==
                     fetchingSingleLiabilityDetails) &&
+            (identical(other.initiatedActionType, initiatedActionType) ||
+                other.initiatedActionType == initiatedActionType) &&
             (identical(other.initiatingForeclosure, initiatingForeclosure) ||
                 other.initiatingForeclosure == initiatingForeclosure) &&
             (identical(other.verifyingForeclosure, verifyingForeclosure) ||
@@ -390,6 +408,7 @@ class _$LiabilityStateImpl implements _LiabilityState {
       fetchingLiabilitiess,
       liabilitiessFetchTime,
       fetchingSingleLiabilityDetails,
+      initiatedActionType,
       initiatingForeclosure,
       verifyingForeclosure,
       loanForeclosureFailed,
@@ -416,6 +435,7 @@ abstract class _LiabilityState implements LiabilityState {
       required final bool fetchingLiabilitiess,
       required final int liabilitiessFetchTime,
       required final bool fetchingSingleLiabilityDetails,
+      required final InvoiceLoanInitiatedActionType initiatedActionType,
       required final bool initiatingForeclosure,
       required final bool verifyingForeclosure,
       required final bool loanForeclosureFailed,
@@ -437,7 +457,8 @@ abstract class _LiabilityState implements LiabilityState {
   @override
   bool get fetchingSingleLiabilityDetails;
   @override // Actions
-// Foreclosure
+  InvoiceLoanInitiatedActionType get initiatedActionType;
+  @override // Foreclosure
   bool get initiatingForeclosure;
   @override
   bool get verifyingForeclosure;

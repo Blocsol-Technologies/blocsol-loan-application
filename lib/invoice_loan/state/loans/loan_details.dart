@@ -260,6 +260,52 @@ class OfferPaymentDetails {
       paymentId: "",
     );
   }
+
+  OfferPayments getOfferPaymentDetails(InvoiceLoanInitiatedActionType initiatedAction, String id ) {
+    if (initiatedAction == InvoiceLoanInitiatedActionType.none) {
+      return OfferPayments.demo();
+    }
+
+    if (initiatedAction == InvoiceLoanInitiatedActionType.missedEmi) {
+      for (var payment in paymentDetails) {
+        if (payment.id == id && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return OfferPayments.demo();
+      }
+    }
+
+    if (initiatedAction == InvoiceLoanInitiatedActionType.prepayment) {
+      for (var payment in paymentDetails) {
+        if (payment.id == id && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return OfferPayments.demo();
+      }
+    }
+
+     if (initiatedAction == InvoiceLoanInitiatedActionType.foreclosure) {
+      for (var payment in paymentDetails) {
+        if (payment.timeLabel == "FORECLOSURE" && payment.status == LoanPaymentStatus.success) {
+            return payment;
+        }
+
+        return OfferPayments.demo();
+      }
+    }
+     return OfferPayments.demo();
+  }
+
+  
+}
+
+enum InvoiceLoanInitiatedActionType {
+  none,
+  prepayment,
+  foreclosure,
+  missedEmi,
 }
 
 class OfferPayments {

@@ -22,8 +22,11 @@ class PCMobilePermissions extends ConsumerStatefulWidget {
 class _PCSignupMobilePermissionsState
     extends ConsumerState<PCMobilePermissions> {
   Future<void> _requestPermissions() async {
-    Map<Permission, PermissionStatus> statuses =
-        await [Permission.locationWhenInUse, Permission.camera].request();
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.locationWhenInUse,
+      Permission.camera,
+      Permission.mediaLibrary,
+    ].request();
 
     var allGranted = true;
     statuses.forEach((permission, status) {

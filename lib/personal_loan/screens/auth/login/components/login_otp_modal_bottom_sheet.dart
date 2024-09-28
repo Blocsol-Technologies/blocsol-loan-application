@@ -75,8 +75,6 @@ class _LoginOTPModalBottomSheetState
       Permission.locationWhenInUse,
       Permission.camera,
       Permission.mediaLibrary,
-      Permission.notification,
-      Permission.sms,
     ];
 
     // Check if all permissions are granted

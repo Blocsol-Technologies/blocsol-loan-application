@@ -14,7 +14,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LiabilityCard extends ConsumerWidget {
   final LoanDetails oldLoanDetails;
-  const LiabilityCard({super.key, required this.oldLoanDetails});
+  final Color bgColor;
+  final Color seperatorColor;
+  const LiabilityCard({super.key, required this.oldLoanDetails, this.bgColor = Colors.white, this.seperatorColor = Colors.transparent});
 
   void _handleDetailsClickHandler(BuildContext context, WidgetRef ref) {
     ref
@@ -41,10 +43,11 @@ class LiabilityCard extends ConsumerWidget {
             horizontal: RelativeSize.width(20, width),
             vertical: RelativeSize.height(15, height),
           ),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            color: bgColor,
             border: Border(
               bottom: BorderSide(
-                color: Color.fromRGBO(220, 220, 220, 1),
+                color: seperatorColor,
                 width: 5,
               ),
             ),

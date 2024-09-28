@@ -21,6 +21,8 @@ mixin _$LiabilityStateData {
       throw _privateConstructorUsedError;
   bool get fetchingOldOffers => throw _privateConstructorUsedError;
   int get oldOffersFetchTime => throw _privateConstructorUsedError; // Actions
+  PersonalLoanInitiatedActionType get initiatedActionType =>
+      throw _privateConstructorUsedError;
   bool get loanForeclosureFailed => throw _privateConstructorUsedError;
   bool get initiatingForeclosure => throw _privateConstructorUsedError;
   bool get prepaymentFailed => throw _privateConstructorUsedError;
@@ -46,6 +48,7 @@ abstract class $LiabilityStateDataCopyWith<$Res> {
       PersonalLoanDetails selectedOldOffer,
       bool fetchingOldOffers,
       int oldOffersFetchTime,
+      PersonalLoanInitiatedActionType initiatedActionType,
       bool loanForeclosureFailed,
       bool initiatingForeclosure,
       bool prepaymentFailed,
@@ -73,6 +76,7 @@ class _$LiabilityStateDataCopyWithImpl<$Res, $Val extends LiabilityStateData>
     Object? selectedOldOffer = null,
     Object? fetchingOldOffers = null,
     Object? oldOffersFetchTime = null,
+    Object? initiatedActionType = null,
     Object? loanForeclosureFailed = null,
     Object? initiatingForeclosure = null,
     Object? prepaymentFailed = null,
@@ -99,6 +103,10 @@ class _$LiabilityStateDataCopyWithImpl<$Res, $Val extends LiabilityStateData>
           ? _value.oldOffersFetchTime
           : oldOffersFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
+      initiatedActionType: null == initiatedActionType
+          ? _value.initiatedActionType
+          : initiatedActionType // ignore: cast_nullable_to_non_nullable
+              as PersonalLoanInitiatedActionType,
       loanForeclosureFailed: null == loanForeclosureFailed
           ? _value.loanForeclosureFailed
           : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
@@ -148,6 +156,7 @@ abstract class _$$LiabilityStateDataImplCopyWith<$Res>
       PersonalLoanDetails selectedOldOffer,
       bool fetchingOldOffers,
       int oldOffersFetchTime,
+      PersonalLoanInitiatedActionType initiatedActionType,
       bool loanForeclosureFailed,
       bool initiatingForeclosure,
       bool prepaymentFailed,
@@ -173,6 +182,7 @@ class __$$LiabilityStateDataImplCopyWithImpl<$Res>
     Object? selectedOldOffer = null,
     Object? fetchingOldOffers = null,
     Object? oldOffersFetchTime = null,
+    Object? initiatedActionType = null,
     Object? loanForeclosureFailed = null,
     Object? initiatingForeclosure = null,
     Object? prepaymentFailed = null,
@@ -199,6 +209,10 @@ class __$$LiabilityStateDataImplCopyWithImpl<$Res>
           ? _value.oldOffersFetchTime
           : oldOffersFetchTime // ignore: cast_nullable_to_non_nullable
               as int,
+      initiatedActionType: null == initiatedActionType
+          ? _value.initiatedActionType
+          : initiatedActionType // ignore: cast_nullable_to_non_nullable
+              as PersonalLoanInitiatedActionType,
       loanForeclosureFailed: null == loanForeclosureFailed
           ? _value.loanForeclosureFailed
           : loanForeclosureFailed // ignore: cast_nullable_to_non_nullable
@@ -243,6 +257,7 @@ class _$LiabilityStateDataImpl implements _LiabilityStateData {
       required this.selectedOldOffer,
       required this.fetchingOldOffers,
       required this.oldOffersFetchTime,
+      required this.initiatedActionType,
       required this.loanForeclosureFailed,
       required this.initiatingForeclosure,
       required this.prepaymentFailed,
@@ -269,6 +284,8 @@ class _$LiabilityStateDataImpl implements _LiabilityStateData {
   final int oldOffersFetchTime;
 // Actions
   @override
+  final PersonalLoanInitiatedActionType initiatedActionType;
+  @override
   final bool loanForeclosureFailed;
   @override
   final bool initiatingForeclosure;
@@ -287,7 +304,7 @@ class _$LiabilityStateDataImpl implements _LiabilityStateData {
 
   @override
   String toString() {
-    return 'LiabilityStateData(oldLoans: $oldLoans, selectedOldOffer: $selectedOldOffer, fetchingOldOffers: $fetchingOldOffers, oldOffersFetchTime: $oldOffersFetchTime, loanForeclosureFailed: $loanForeclosureFailed, initiatingForeclosure: $initiatingForeclosure, prepaymentFailed: $prepaymentFailed, initiatingPrepayment: $initiatingPrepayment, prepaymentId: $prepaymentId, missedEmiPaymentFailed: $missedEmiPaymentFailed, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, missedEmiPaymentId: $missedEmiPaymentId)';
+    return 'LiabilityStateData(oldLoans: $oldLoans, selectedOldOffer: $selectedOldOffer, fetchingOldOffers: $fetchingOldOffers, oldOffersFetchTime: $oldOffersFetchTime, initiatedActionType: $initiatedActionType, loanForeclosureFailed: $loanForeclosureFailed, initiatingForeclosure: $initiatingForeclosure, prepaymentFailed: $prepaymentFailed, initiatingPrepayment: $initiatingPrepayment, prepaymentId: $prepaymentId, missedEmiPaymentFailed: $missedEmiPaymentFailed, initiatingMissedEmiPayment: $initiatingMissedEmiPayment, missedEmiPaymentId: $missedEmiPaymentId)';
   }
 
   @override
@@ -302,6 +319,8 @@ class _$LiabilityStateDataImpl implements _LiabilityStateData {
                 other.fetchingOldOffers == fetchingOldOffers) &&
             (identical(other.oldOffersFetchTime, oldOffersFetchTime) ||
                 other.oldOffersFetchTime == oldOffersFetchTime) &&
+            (identical(other.initiatedActionType, initiatedActionType) ||
+                other.initiatedActionType == initiatedActionType) &&
             (identical(other.loanForeclosureFailed, loanForeclosureFailed) ||
                 other.loanForeclosureFailed == loanForeclosureFailed) &&
             (identical(other.initiatingForeclosure, initiatingForeclosure) ||
@@ -329,6 +348,7 @@ class _$LiabilityStateDataImpl implements _LiabilityStateData {
       selectedOldOffer,
       fetchingOldOffers,
       oldOffersFetchTime,
+      initiatedActionType,
       loanForeclosureFailed,
       initiatingForeclosure,
       prepaymentFailed,
@@ -352,6 +372,7 @@ abstract class _LiabilityStateData implements LiabilityStateData {
       required final PersonalLoanDetails selectedOldOffer,
       required final bool fetchingOldOffers,
       required final int oldOffersFetchTime,
+      required final PersonalLoanInitiatedActionType initiatedActionType,
       required final bool loanForeclosureFailed,
       required final bool initiatingForeclosure,
       required final bool prepaymentFailed,
@@ -370,6 +391,8 @@ abstract class _LiabilityStateData implements LiabilityStateData {
   @override
   int get oldOffersFetchTime;
   @override // Actions
+  PersonalLoanInitiatedActionType get initiatedActionType;
+  @override
   bool get loanForeclosureFailed;
   @override
   bool get initiatingForeclosure;

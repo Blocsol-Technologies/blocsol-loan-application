@@ -13,7 +13,7 @@ part 'liability.g.dart';
 class InvoiceLoanLiability extends _$InvoiceLoanLiability {
   @override
   LiabilityState build() {
-    ref.cacheFor(const Duration(seconds: 30), (){});
+    ref.cacheFor(const Duration(seconds: 30), () {});
     return LiabilityState.initial;
   }
 
@@ -29,6 +29,18 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
     state = state.copyWith(missedEmiPaymentId: id);
   }
 
+  OfferPayments getPaymentSuccessDetails() {
+    var id = "";
+
+    if (state.initiatedActionType == InvoiceLoanInitiatedActionType.missedEmi) {
+      id = state.missedEmiPaymentId;
+    } else if (state.initiatedActionType ==
+        InvoiceLoanInitiatedActionType.prepayment) {
+      id = state.prepaymentId;
+    }
+    return state.selectedLiability.offerDetails.payments
+        .getOfferPaymentDetails(state.initiatedActionType, id);
+  }
 
   Future<ServerResponse> fetchSingleLiabilityDetails(
       CancelToken cancelToken) async {
@@ -46,8 +58,9 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
 
     state = state.copyWith(fetchingSingleLiabilityDetails: true);
 
-    var response = await LiabilitiesHttpController().fetchSingleLiabilityDetails(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LiabilitiesHttpController()
+        .fetchSingleLiabilityDetails(
+            transactionId, providerId, authToken, cancelToken);
 
     state = state.copyWith(fetchingSingleLiabilityDetails: false);
 
@@ -92,12 +105,16 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    state = state.copyWith(initiatingForeclosure: true);
+    state = state.copyWith(
+      initiatingForeclosure: true,
+    );
 
-    var response = await LiabilitiesHttpController().initiateForeclosure(
-        transactionId, providerId, authToken, cancelToken);
+    var response = await LiabilitiesHttpController()
+        .initiateForeclosure(transactionId, providerId, authToken, cancelToken);
 
-    state = state.copyWith(initiatingForeclosure: false);
+    state = state.copyWith(
+        initiatingForeclosure: false,
+        initiatedActionType: InvoiceLoanInitiatedActionType.foreclosure);
 
     return response;
   }
@@ -116,7 +133,8 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    state = state.copyWith(loanForeclosureFailed: false, verifyingForeclosure: true);
+    state = state.copyWith(
+        loanForeclosureFailed: false, verifyingForeclosure: true);
 
     var response = await LiabilitiesHttpController().checkForeclosureSuccess(
         transactionId, providerId, authToken, cancelToken);
@@ -146,7 +164,9 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
     var response = await LiabilitiesHttpController().initiatePartPrepayment(
         amount, transactionId, providerId, authToken, cancelToken);
 
-    state = state.copyWith(initiatingPrepayment: false);
+    state = state.copyWith(
+        initiatingPrepayment: false,
+        initiatedActionType: InvoiceLoanInitiatedActionType.prepayment);
 
     if (response.success) {
       state = state.copyWith(prepaymentId: response.data['id']);
@@ -205,7 +225,9 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
         authToken,
         cancelToken);
 
-    state = state.copyWith(initiatingMissedEmiPayment: false);
+    state = state.copyWith(
+        initiatingMissedEmiPayment: false,
+        initiatedActionType: InvoiceLoanInitiatedActionType.missedEmi);
 
     if (response.success) {
       state = state.copyWith(missedEmiPaymentId: response.data['id']);
@@ -231,18 +253,15 @@ class InvoiceLoanLiability extends _$InvoiceLoanLiability {
           data: null);
     }
 
-    state = state.copyWith(missedEmiPaymentFailed: false, verifyingMissedEmiPaymentSuccess: true);
+    state = state.copyWith(
+        missedEmiPaymentFailed: false, verifyingMissedEmiPaymentSuccess: true);
 
-    var response =
-        await LiabilitiesHttpController().checkMissedEmiRepaymentSuccess(
-            missedEmiPaymentId,
-            transactionId,
-            providerId,
-            authToken,
-            cancelToken);
+    var response = await LiabilitiesHttpController()
+        .checkMissedEmiRepaymentSuccess(missedEmiPaymentId, transactionId,
+            providerId, authToken, cancelToken);
 
     state = state.copyWith(verifyingMissedEmiPaymentSuccess: false);
-    
+
     return response;
   }
 }
