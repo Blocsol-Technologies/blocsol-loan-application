@@ -41,6 +41,30 @@ class WebviewTopBar extends StatelessWidget {
             ),
             IconButton(
               onPressed: () async {
+                if (controller == null) {
+                  return;
+                }
+
+                bool canGoForward = await controller!.canGoForward();
+
+                if (canGoForward) {
+                  await controller!.goForward();
+                }
+              },
+              icon: Icon(
+                Icons.arrow_forward,
+                size: 20,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            const SpacerWidget(
+              width: 30,
+            ),
+            IconButton(
+              onPressed: () async {
+                if (controller == null) {
+                  return;
+                }
                 await controller!.reload();
               },
               icon: Icon(
