@@ -12,6 +12,8 @@ import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -52,7 +54,8 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     if (ecres == null || resdate == null) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: InvoiceLoanServiceErrorCodes.monitoring_consent_verification_failed);
+          extra: InvoiceLoanServiceErrorCodes
+              .monitoring_consent_verification_failed);
       return;
     }
 
@@ -63,7 +66,8 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     if (!checkSuccessResponse.success) {
       ref.read(routerProvider).push(
           InvoiceNewLoanRequestRouter.loan_service_error,
-          extra: InvoiceLoanServiceErrorCodes.monitoring_consent_verification_failed);
+          extra: InvoiceLoanServiceErrorCodes
+              .monitoring_consent_verification_failed);
       return;
     }
   }
@@ -230,50 +234,69 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
                               SizedBox(
                                 width: width,
                                 height: 900,
-                                child: InAppWebView(
-                                  key: _webviewKey,
-                                  gestureRecognizers: const <Factory<
-                                      VerticalDragGestureRecognizer>>{},
-                                  initialSettings: InAppWebViewSettings(
-                                    javaScriptEnabled: true,
-                                    verticalScrollBarEnabled: true,
-                                    disableHorizontalScroll: true,
-                                    disableVerticalScroll: false,
-                                  ),
-                                  initialUrlRequest: URLRequest(
-                                    url: WebUri(widget.url),
-                                  ),
-                                  onLoadStop: (controller, url) {
-                                    setState(() {
-                                      _loading = false;
-                                    });
-                                  },
-                                  // initialize webview controller
-                                  onWebViewCreated: (controller) {
-                                    setState(() {
-                                      _webViewController = controller;
-                                    });
-                                  },
-                                  shouldOverrideUrlLoading:
-                                      (controller, navigationAction) async {
-                                    var uri = navigationAction.request.url;
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: InAppWebView(
+                                    key: _webviewKey,
+                                    gestureRecognizers: const <Factory<
+                                        VerticalDragGestureRecognizer>>{},
+                                    initialSettings: InAppWebViewSettings(
+                                      javaScriptEnabled: true,
+                                      verticalScrollBarEnabled: true,
+                                      disableHorizontalScroll: true,
+                                      disableVerticalScroll: false,
+                                      javaScriptCanOpenWindowsAutomatically:
+                                          true,
+                                      supportMultipleWindows: true,
+                                    ),
+                                    onCreateWindow:
+                                        (controller, createWindowAction) async {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return WindowPopup(
+                                              createWindowAction:
+                                                  createWindowAction);
+                                        },
+                                      );
+                                      return true;
+                                    },
+                                    initialUrlRequest: URLRequest(
+                                      url: WebUri(widget.url),
+                                    ),
+                                    onLoadStop: (controller, url) {
+                                      setState(() {
+                                        _loading = false;
+                                      });
+                                    },
+                                    // initialize webview controller
+                                    onWebViewCreated: (controller) {
+                                      setState(() {
+                                        _webViewController = controller;
+                                      });
+                                    },
+                                    shouldOverrideUrlLoading:
+                                        (controller, navigationAction) async {
+                                      var uri = navigationAction.request.url;
 
-                                    if (uri != null &&
-                                        uri.toString().contains(
-                                            'https://ondc.invoicepe.in/aa-redirect')) {
-                                      // Extract query parameters
-                                      String? ecres =
-                                          uri.queryParameters['ecres'];
-                                      String? resdate =
-                                          uri.queryParameters['resdate'];
+                                      if (uri != null &&
+                                          uri.toString().contains(
+                                              'https://ondc.invoicepe.in/aa-redirect')) {
+                                        // Extract query parameters
+                                        String? ecres =
+                                            uri.queryParameters['ecres'];
+                                        String? resdate =
+                                            uri.queryParameters['resdate'];
 
-                                      _checkMonitoringConsentSuccess(
-                                          ecres, resdate);
-                                    }
-                                    return NavigationActionPolicy.ALLOW;
-                                  },
+                                        _checkMonitoringConsentSuccess(
+                                            ecres, resdate);
+                                      }
+                                      return NavigationActionPolicy.ALLOW;
+                                    },
+                                  ),
                                 ),
                               ),
+                              WebviewTopBar(controller: _webViewController),
                               _loading
                                   ? const LinearProgressIndicator()
                                   : Container(),

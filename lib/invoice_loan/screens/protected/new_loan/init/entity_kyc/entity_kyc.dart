@@ -11,6 +11,8 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -291,21 +293,40 @@ class _InvoiceNewLoanEntityKycState
                                   SizedBox(
                                     width: width,
                                     height: 900,
-                                    child: InAppWebView(
-                                      key: _webViewKey,
-                                      gestureRecognizers: const <Factory<
-                                          VerticalDragGestureRecognizer>>{},
-                                      initialSettings: InAppWebViewSettings(
-                                        javaScriptEnabled: true,
-                                        verticalScrollBarEnabled: true,
-                                        disableHorizontalScroll: true,
-                                        disableVerticalScroll: false,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 50),
+                                      child: InAppWebView(
+                                        key: _webViewKey,
+                                        gestureRecognizers: const <Factory<
+                                            VerticalDragGestureRecognizer>>{},
+                                        initialSettings: InAppWebViewSettings(
+                                          javaScriptEnabled: true,
+                                          verticalScrollBarEnabled: true,
+                                          disableHorizontalScroll: true,
+                                          disableVerticalScroll: false,
+                                          javaScriptCanOpenWindowsAutomatically:
+                                              true,
+                                          supportMultipleWindows: true,
+                                        ),
+                                        onCreateWindow: (controller,
+                                            createWindowAction) async {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return WindowPopup(
+                                                  createWindowAction:
+                                                      createWindowAction);
+                                            },
+                                          );
+                                          return true;
+                                        },
+                                        onWebViewCreated: (controller) async {
+                                          _webViewController = controller;
+                                        },
                                       ),
-                                      onWebViewCreated: (controller) async {
-                                        _webViewController = controller;
-                                      },
                                     ),
                                   ),
+                                  WebviewTopBar(controller: _webViewController),
                                   _loading
                                       ? const LinearProgressIndicator()
                                       : Container(),

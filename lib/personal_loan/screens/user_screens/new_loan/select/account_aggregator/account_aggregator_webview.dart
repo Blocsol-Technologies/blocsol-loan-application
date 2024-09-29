@@ -9,6 +9,8 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -160,11 +162,11 @@ class _PCNewLoanAAWebviewState extends ConsumerState<PCNewLoanAAWebview> {
                       padding: EdgeInsets.symmetric(
                           horizontal: RelativeSize.width(30, width)),
                       child: PersonalNewLoanRequestTopNav(
-                          onBackClick: () {
-                            context.go(
-                                PersonalNewLoanRequestRouter.new_loan_process);
-                          },
-                        ),
+                        onBackClick: () {
+                          context.go(
+                              PersonalNewLoanRequestRouter.new_loan_process);
+                        },
+                      ),
                     ),
                     const SpacerWidget(
                       height: 30,
@@ -326,65 +328,90 @@ class _PCNewLoanAAWebviewState extends ConsumerState<PCNewLoanAAWebview> {
                                                 .width,
                                             child: Stack(
                                               children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 50),
+                                                  child: InAppWebView(
+                                                    key: _webViewKey,
+                                                    gestureRecognizers: const <Factory<
+                                                        VerticalDragGestureRecognizer>>{},
+                                                    initialSettings:
+                                                        InAppWebViewSettings(
+                                                      javaScriptEnabled: true,
+                                                      verticalScrollBarEnabled:
+                                                          true,
+                                                      disableHorizontalScroll:
+                                                          true,
+                                                      disableVerticalScroll:
+                                                          false,
+                                                      javaScriptCanOpenWindowsAutomatically:
+                                                          true,
+                                                      supportMultipleWindows:
+                                                          true,
+                                                    ),
+                                                    onCreateWindow: (controller,
+                                                        createWindowAction) async {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return WindowPopup(
+                                                              createWindowAction:
+                                                                  createWindowAction);
+                                                        },
+                                                      );
+                                                      return true;
+                                                    },
+                                                    onWebViewCreated:
+                                                        (controller) {
+                                                      _webViewController =
+                                                          controller;
+                                                    },
+                                                    onLoadStop:
+                                                        (controller, url) {
+                                                      setState(() {
+                                                        _loading = false;
+                                                        _currentUrl =
+                                                            url.toString();
+                                                        _urlController.text =
+                                                            _currentUrl;
+                                                      });
+                                                    },
+                                                    initialUrlRequest:
+                                                        URLRequest(
+                                                      url: WebUri(_currentUrl),
+                                                    ),
+                                                    shouldOverrideUrlLoading:
+                                                        (controller,
+                                                            navigationAction) async {
+                                                      var uri = navigationAction
+                                                          .request.url;
+
+                                                      if (uri != null &&
+                                                          uri.toString().contains(
+                                                              'https://ondc.invoicepe.in/aa-redirect')) {
+                                                        // Extract query parameters
+                                                        String? ecres =
+                                                            uri.queryParameters[
+                                                                'ecres'];
+                                                        String? resdate =
+                                                            uri.queryParameters[
+                                                                'resdate'];
+
+                                                        _checkConsentSuccess(
+                                                            ecres, resdate);
+                                                      }
+                                                      return NavigationActionPolicy
+                                                          .ALLOW;
+                                                    },
+                                                  ),
+                                                ),
+                                                WebviewTopBar(
+                                                    controller:
+                                                        _webViewController),
                                                 _loading
                                                     ? const LinearProgressIndicator()
                                                     : Container(),
-                                                InAppWebView(
-                                                  key: _webViewKey,
-                                                  gestureRecognizers: const <Factory<
-                                                      VerticalDragGestureRecognizer>>{},
-                                                  initialSettings:
-                                                      InAppWebViewSettings(
-                                                    javaScriptEnabled: true,
-                                                    verticalScrollBarEnabled:
-                                                        true,
-                                                    disableHorizontalScroll:
-                                                        true,
-                                                    disableVerticalScroll:
-                                                        false,
-                                                  ),
-                                                  onWebViewCreated:
-                                                      (controller) {
-                                                    _webViewController =
-                                                        controller;
-                                                  },
-                                                  onLoadStop:
-                                                      (controller, url) {
-                                                    setState(() {
-                                                      _loading = false;
-                                                      _currentUrl =
-                                                          url.toString();
-                                                      _urlController.text =
-                                                          _currentUrl;
-                                                    });
-                                                  },
-                                                  initialUrlRequest: URLRequest(
-                                                    url: WebUri(_currentUrl),
-                                                  ),
-                                                  shouldOverrideUrlLoading:
-                                                      (controller,
-                                                          navigationAction) async {
-                                                    var uri = navigationAction
-                                                        .request.url;
-
-                                                    if (uri != null &&
-                                                        uri.toString().contains(
-                                                            'https://ondc.invoicepe.in/aa-redirect')) {
-                                                      // Extract query parameters
-                                                      String? ecres =
-                                                          uri.queryParameters[
-                                                              'ecres'];
-                                                      String? resdate =
-                                                          uri.queryParameters[
-                                                              'resdate'];
-
-                                                      _checkConsentSuccess(
-                                                          ecres, resdate);
-                                                    }
-                                                    return NavigationActionPolicy
-                                                        .ALLOW;
-                                                  },
-                                                ),
                                               ],
                                             ),
                                           ),

@@ -12,6 +12,8 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -242,8 +244,7 @@ class _PCNewLoanAadharKYCWebviewState
                                     .withOpacity(0.5),
                                 builder: (BuildContext context) {
                                   return PersonalNewLoanRequestAlertDialog(
-                                      text:
-                                          "Have you completed your KYC?",
+                                      text: "Have you completed your KYC?",
                                       onConfirm: () async {
                                         await _checkAadharKYCSuccess();
                                       });
@@ -439,38 +440,61 @@ class _PCNewLoanAadharKYCWebviewState
                                       )
                                     : Stack(
                                         children: [
-                                          newLoanStateRef.fetchingAadharKYCURl
-                                              ? const LinearProgressIndicator()
-                                              : Container(),
                                           ClipRRect(
                                             borderRadius:
                                                 const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20),
                                             ),
-                                            child: InAppWebView(
-                                              key: aadharWebviewKey,
-                                              gestureRecognizers: const <Factory<
-                                                  VerticalDragGestureRecognizer>>{},
-                                              initialSettings:
-                                                  InAppWebViewSettings(
-                                                javaScriptEnabled: true,
-                                                verticalScrollBarEnabled: true,
-                                                disableHorizontalScroll: true,
-                                                disableVerticalScroll: false,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 50),
+                                              child: InAppWebView(
+                                                key: aadharWebviewKey,
+                                                gestureRecognizers: const <Factory<
+                                                    VerticalDragGestureRecognizer>>{},
+                                                initialSettings:
+                                                    InAppWebViewSettings(
+                                                  javaScriptEnabled: true,
+                                                  verticalScrollBarEnabled:
+                                                      true,
+                                                  disableHorizontalScroll: true,
+                                                  disableVerticalScroll: false,
+                                                  javaScriptCanOpenWindowsAutomatically:
+                                                      true,
+                                                  supportMultipleWindows: true,
+                                                ),
+                                                onCreateWindow: (controller,
+                                                    createWindowAction) async {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return WindowPopup(
+                                                          createWindowAction:
+                                                              createWindowAction);
+                                                    },
+                                                  );
+                                                  return true;
+                                                },
+                                                initialUrlRequest: URLRequest(
+                                                    url: WebUri(_currentURL)),
+                                                onWebViewCreated:
+                                                    (controller) async {
+                                                  _webViewController =
+                                                      controller;
+                                                  _webViewController!.loadUrl(
+                                                      urlRequest: URLRequest(
+                                                          url: WebUri(
+                                                              _currentURL)));
+                                                },
                                               ),
-                                              initialUrlRequest: URLRequest(
-                                                  url: WebUri(_currentURL)),
-                                              onWebViewCreated:
-                                                  (controller) async {
-                                                _webViewController = controller;
-                                                _webViewController!.loadUrl(
-                                                    urlRequest: URLRequest(
-                                                        url: WebUri(
-                                                            _currentURL)));
-                                              },
                                             ),
                                           ),
+                                          WebviewTopBar(
+                                              controller: _webViewController),
+                                          newLoanStateRef.fetchingAadharKYCURl
+                                              ? const LinearProgressIndicator()
+                                              : Container(),
                                         ],
                                       ),
                           ),

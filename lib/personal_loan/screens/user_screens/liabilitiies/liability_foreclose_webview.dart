@@ -9,6 +9,8 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -69,7 +71,9 @@ class _PCLiabilityForeclosureWebviewState
     if (!mounted) return;
 
     if (!success) {
-       ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_payment_success_overview, extra: false);
+      ref.read(routerProvider).pushReplacement(
+          PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+          extra: false);
       return;
     }
 
@@ -83,7 +87,9 @@ class _PCLiabilityForeclosureWebviewState
 
     if (!mounted) return;
 
-    ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_payment_success_overview, extra: true);
+    ref.read(routerProvider).pushReplacement(
+        PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+        extra: true);
 
     return;
   }
@@ -128,7 +134,9 @@ class _PCLiabilityForeclosureWebviewState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(message: "Foreclosure successful", notifType: SnackbarNotificationType.success), 
+      content: getSnackbarNotificationWidget(
+          message: "Foreclosure successful",
+          notifType: SnackbarNotificationType.success),
       duration: const Duration(seconds: 5),
     );
 
@@ -142,7 +150,9 @@ class _PCLiabilityForeclosureWebviewState
 
     if (!mounted) return;
 
-     ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
+    ref
+        .read(routerProvider)
+        .pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
   }
 
   void _startPollingForSuccess() {
@@ -152,8 +162,7 @@ class _PCLiabilityForeclosureWebviewState
     });
   }
 
-  void _handleNotificationBellPress() {
-  }
+  void _handleNotificationBellPress() {}
 
   @override
   void initState() {
@@ -176,8 +185,9 @@ class _PCLiabilityForeclosureWebviewState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final borrowerAccountDetailsRef = ref.watch(personalLoanAccountDetailsProvider);
-       final liabilityRef = ref.watch(personalLoanLiabilitiesProvider);
+    final borrowerAccountDetailsRef =
+        ref.watch(personalLoanAccountDetailsProvider);
+    final liabilityRef = ref.watch(personalLoanLiabilitiesProvider);
 
     return PopScope(
       canPop: false,
@@ -402,8 +412,7 @@ class _PCLiabilityForeclosureWebviewState
                                 topRight: Radius.circular(20),
                               ),
                             ),
-                            child: liabilityRef
-                                    .loanForeclosureFailed
+                            child: liabilityRef.loanForeclosureFailed
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -432,7 +441,11 @@ class _PCLiabilityForeclosureWebviewState
                                       GestureDetector(
                                         onTap: () {
                                           HapticFeedback.mediumImpact();
-                                          ref.read(routerProvider).pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
+                                          ref
+                                              .read(routerProvider)
+                                              .pushReplacement(
+                                                  PersonalLoanLiabilitiesRouter
+                                                      .liability_details_home);
                                         },
                                         child: Container(
                                           height: 40,
@@ -501,47 +514,70 @@ class _PCLiabilityForeclosureWebviewState
                                       )
                                     : Stack(
                                         children: [
-                                          _fetchingURL
-                                              ? const LinearProgressIndicator()
-                                              : Container(),
                                           ClipRRect(
                                             borderRadius:
                                                 const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20),
                                             ),
-                                            child: InAppWebView(
-                                              key: _foreclosureWebviewKey,
-                                              gestureRecognizers: const <Factory<
-                                                  VerticalDragGestureRecognizer>>{},
-                                              initialSettings:
-                                                  InAppWebViewSettings(
-                                                javaScriptEnabled: true,
-                                                verticalScrollBarEnabled: true,
-                                                disableHorizontalScroll: true,
-                                                disableVerticalScroll: false,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 50),
+                                              child: InAppWebView(
+                                                key: _foreclosureWebviewKey,
+                                                gestureRecognizers: const <Factory<
+                                                    VerticalDragGestureRecognizer>>{},
+                                                initialSettings:
+                                                    InAppWebViewSettings(
+                                                  javaScriptEnabled: true,
+                                                  verticalScrollBarEnabled:
+                                                      true,
+                                                  disableHorizontalScroll: true,
+                                                  disableVerticalScroll: false,
+                                                  javaScriptCanOpenWindowsAutomatically:
+                                                      true,
+                                                  supportMultipleWindows: true,
+                                                ),
+                                                onCreateWindow: (controller,
+                                                    createWindowAction) async {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return WindowPopup(
+                                                          createWindowAction:
+                                                              createWindowAction);
+                                                    },
+                                                  );
+                                                  return true;
+                                                },
+                                                initialUrlRequest: URLRequest(
+                                                    url: WebUri(_currentURL)),
+                                                onLoadStop: (controller, url) {
+                                                  setState(() {
+                                                    _fetchingURL = false;
+                                                  });
+                                                },
+                                                onWebViewCreated:
+                                                    (controller) async {
+                                                  _webViewController =
+                                                      controller;
+                                                  setState(() {
+                                                    _currentURL = widget.url;
+                                                    _fetchingURL = false;
+                                                  });
+                                                  _webViewController!.loadUrl(
+                                                      urlRequest: URLRequest(
+                                                          url: WebUri(
+                                                              _currentURL)));
+                                                },
                                               ),
-                                              initialUrlRequest: URLRequest(
-                                                  url: WebUri(_currentURL)),
-                                              onLoadStop: (controller, url) {
-                                                setState(() {
-                                                  _fetchingURL = false;
-                                                });
-                                              },
-                                              onWebViewCreated:
-                                                  (controller) async {
-                                                _webViewController = controller;
-                                                setState(() {
-                                                  _currentURL = widget.url;
-                                                  _fetchingURL = false;
-                                                });
-                                                _webViewController!.loadUrl(
-                                                    urlRequest: URLRequest(
-                                                        url: WebUri(
-                                                            _currentURL)));
-                                              },
                                             ),
                                           ),
+                                          WebviewTopBar(
+                                              controller: _webViewController),
+                                          _fetchingURL
+                                              ? const LinearProgressIndicator()
+                                              : Container(),
                                         ],
                                       ),
                           ),

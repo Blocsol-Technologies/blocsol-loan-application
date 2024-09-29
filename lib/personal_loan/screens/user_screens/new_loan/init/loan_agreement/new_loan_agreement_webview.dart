@@ -12,6 +12,8 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -189,7 +191,7 @@ class _PCNewLoanAgreementWebviewState
                             horizontal: RelativeSize.width(30, width)),
                         child: PersonalNewLoanRequestTopNav(
                           onBackClick: () async {
-                              await showDialog(
+                            await showDialog(
                                 context: context,
                                 barrierColor: Theme.of(context)
                                     .colorScheme
@@ -386,46 +388,71 @@ class _PCNewLoanAgreementWebviewState
                                       )
                                     : Stack(
                                         children: [
-                                          _loadingAgreementURL
-                                              ? const LinearProgressIndicator()
-                                              : Container(),
                                           ClipRRect(
                                             borderRadius:
                                                 const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20),
                                             ),
-                                            child: InAppWebView(
-                                              key: _loanAgreementWebviewKey,
-                                              gestureRecognizers: const <Factory<
-                                                  VerticalDragGestureRecognizer>>{},
-                                              initialSettings:
-                                                  InAppWebViewSettings(
-                                                javaScriptEnabled: true,
-                                                verticalScrollBarEnabled: true,
-                                                disableHorizontalScroll: true,
-                                                disableVerticalScroll: false,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 50),
+                                              child: InAppWebView(
+                                                key: _loanAgreementWebviewKey,
+                                                gestureRecognizers: const <Factory<
+                                                    VerticalDragGestureRecognizer>>{},
+                                                initialSettings:
+                                                    InAppWebViewSettings(
+                                                  javaScriptEnabled: true,
+                                                  verticalScrollBarEnabled:
+                                                      true,
+                                                  disableHorizontalScroll: true,
+                                                  disableVerticalScroll: false,
+                                                  javaScriptCanOpenWindowsAutomatically:
+                                                      true,
+                                                  supportMultipleWindows: true,
+                                                ),
+                                                onCreateWindow: (controller,
+                                                    createWindowAction) async {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return WindowPopup(
+                                                          createWindowAction:
+                                                              createWindowAction);
+                                                    },
+                                                  );
+                                                  return true;
+                                                },
+                                                initialUrlRequest: URLRequest(
+                                                    url: WebUri(_currentUrl)),
+                                                onLoadStop: (_, __) {
+                                                  setState(() {
+                                                    _loadingAgreementURL =
+                                                        false;
+                                                  });
+                                                },
+                                                onWebViewCreated:
+                                                    (controller) async {
+                                                  _webViewController =
+                                                      controller;
+                                                  _webViewController!.loadUrl(
+                                                      urlRequest: URLRequest(
+                                                          url: WebUri(
+                                                              _currentUrl)));
+                                                  setState(() {
+                                                    _loadingAgreementURL =
+                                                        false;
+                                                  });
+                                                },
                                               ),
-                                              initialUrlRequest: URLRequest(
-                                                  url: WebUri(_currentUrl)),
-                                              onLoadStop: (_, __) {
-                                                setState(() {
-                                                  _loadingAgreementURL = false;
-                                                });
-                                              },
-                                              onWebViewCreated:
-                                                  (controller) async {
-                                                _webViewController = controller;
-                                                _webViewController!.loadUrl(
-                                                    urlRequest: URLRequest(
-                                                        url: WebUri(
-                                                            _currentUrl)));
-                                                setState(() {
-                                                  _loadingAgreementURL = false;
-                                                });
-                                              },
                                             ),
                                           ),
+                                          WebviewTopBar(
+                                              controller: _webViewController),
+                                          _loadingAgreementURL
+                                              ? const LinearProgressIndicator()
+                                              : Container(),
                                         ],
                                       ),
                           ),

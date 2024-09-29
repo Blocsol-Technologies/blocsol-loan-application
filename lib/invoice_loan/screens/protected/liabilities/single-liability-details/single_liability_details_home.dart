@@ -192,6 +192,7 @@ class _SingleLiabilityDetailsHomeState
                             GestureDetector(
                               onTap: () async {
                                 HapticFeedback.mediumImpact();
+                                // ref.read(routerProvider).push(InvoiceLoanLiabilitiesRouter.general_webview, extra: "https://webbrowsertools.com/popup-blocker/")
                                 await _performStatusCheck();
                               },
                               child: Container(

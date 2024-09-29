@@ -10,6 +10,9 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
+import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -30,7 +33,6 @@ class InvoiceLoanLiabilityForeclosureWebview extends ConsumerStatefulWidget {
 
 class _InvoiceLoanLiabilityForeclosureWebviewState
     extends ConsumerState<InvoiceLoanLiabilityForeclosureWebview> {
-  final GlobalKey _foreclosureWebviewKey = GlobalKey();
   final _cancelToken = CancelToken();
 
   InAppWebViewController? _webViewController;
@@ -349,43 +351,66 @@ class _InvoiceLoanLiabilityForeclosureWebviewState
                                   )
                                 : Stack(
                                     children: [
-                                      _fetchingURL
-                                          ? const LinearProgressIndicator()
-                                          : Container(),
                                       ClipRRect(
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(20),
                                           topRight: Radius.circular(20),
                                         ),
-                                        child: InAppWebView(
-                                          key: _foreclosureWebviewKey,
-                                          gestureRecognizers: const <Factory<
-                                              VerticalDragGestureRecognizer>>{},
-                                          initialSettings: InAppWebViewSettings(
-                                            javaScriptEnabled: true,
-                                            verticalScrollBarEnabled: true,
-                                            disableHorizontalScroll: true,
-                                            disableVerticalScroll: false,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 50),
+                                          child: InAppWebView(
+                                            gestureRecognizers: const <Factory<
+                                                VerticalDragGestureRecognizer>>{},
+                                            initialSettings:
+                                                InAppWebViewSettings(
+                                              javaScriptEnabled: true,
+                                              verticalScrollBarEnabled: true,
+                                              disableHorizontalScroll: true,
+                                              disableVerticalScroll: false,
+                                              javaScriptCanOpenWindowsAutomatically:
+                                                  true,
+                                              supportMultipleWindows: true,
+                                            ),
+                                            onCreateWindow: (controller,
+                                                createWindowAction) async {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return WindowPopup(
+                                                      createWindowAction:
+                                                          createWindowAction);
+                                                },
+                                              );
+                                              return true;
+                                            },
+                                            initialUrlRequest: URLRequest(
+                                                url: WebUri(_currentURL)),
+                                            onLoadStop: (controller, url) {
+                                              setState(() {
+                                                _fetchingURL = false;
+                                              });
+                                            },
+                                            onWebViewCreated:
+                                                (controller) async {
+                                              _webViewController = controller;
+                                              setState(() {
+                                                _currentURL = widget.url;
+                                                _fetchingURL = false;
+                                              });
+                                              _webViewController!.loadUrl(
+                                                  urlRequest: URLRequest(
+                                                      url:
+                                                          WebUri(_currentURL)));
+                                            },
                                           ),
-                                          initialUrlRequest: URLRequest(
-                                              url: WebUri(_currentURL)),
-                                          onLoadStop: (controller, url) {
-                                            setState(() {
-                                              _fetchingURL = false;
-                                            });
-                                          },
-                                          onWebViewCreated: (controller) async {
-                                            _webViewController = controller;
-                                            setState(() {
-                                              _currentURL = widget.url;
-                                              _fetchingURL = false;
-                                            });
-                                            _webViewController!.loadUrl(
-                                                urlRequest: URLRequest(
-                                                    url: WebUri(_currentURL)));
-                                          },
                                         ),
                                       ),
+                                      WebviewTopBar(
+                                          controller: _webViewController),
+                                      _fetchingURL
+                                          ? const LinearProgressIndicator()
+                                          : Container(),
                                     ],
                                   ),
                           ),
