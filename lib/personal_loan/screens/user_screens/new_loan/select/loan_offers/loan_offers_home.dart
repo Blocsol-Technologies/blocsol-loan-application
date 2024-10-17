@@ -320,7 +320,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
                         ),
                       ),
                       const SpacerWidget(
-                        height: 5,
+                        height: 25,
                       ),
                       Expanded(
                         child: SizedBox(
@@ -328,7 +328,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
                           height: height,
                           child: CustomScrollView(
                             slivers: <Widget>[
-                              newLoanStateRef.fetchingOffers ||
+                              newLoanStateRef.fetchingOffers &&
                                       _filteredOffers.isEmpty
                                   ? SliverToBoxAdapter(
                                       child: Container(
@@ -376,18 +376,19 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
                                                     CrossAxisAlignment.center,
                                                 children: <Widget>[
                                                   Lottie.asset(
-                                                      "assets/animations/error.json",
+                                                      "assets/animations/404.json",
                                                       height: 150,
                                                       width: 150),
                                                   const SpacerWidget(
                                                     height: 15,
                                                   ),
                                                   Text(
-                                                    "No offers found ...",
+                                                    "No offers found. Your profile does not meet the minimum criteria by the lenders",
+                                                   textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontFamily: fontFamily,
                                                         fontSize:
-                                                            AppFontSizes.h2,
+                                                            AppFontSizes.h3,
                                                         fontWeight:
                                                             AppFontWeights.bold,
                                                         color: Theme.of(context)

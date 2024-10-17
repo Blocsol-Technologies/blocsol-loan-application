@@ -1,7 +1,7 @@
 name: blocsol_loan_application
 description: "All in one loan application on ONDC FS"
 publish_to: "none"
-version: 0.4.0
+version: 0.1.0
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
@@ -80,6 +80,8 @@ flutter:
     - assets/images/lender_logos/union.png
     - assets/images/lender_logos/dmi.png
     - assets/images/lender_logos/sbi.webp
+    - assets/images/lender_logos/kbank.png
+    - assets/images/lender_logos/ftcash.png
 
     - assets/images/aa_logos/anumati.png
     - assets/images/aa_logos/finvu.png
@@ -87,6 +89,8 @@ flutter:
     - assets/images/aa_logos/sahamati.png
     - assets/images/aa_logos/sahamati_certified.png
     - assets/images/aa_logos/account_aggregator_process.png
+
+    - assets/images/3rd_party/google_logo.png
 
     - assets/images/invoice_loan/bottom_nav_bar/home_active.png
     - assets/images/invoice_loan/bottom_nav_bar/home_inactive.png

@@ -56,10 +56,10 @@ class InvoiceLoanUserProfileDetailsHttpController {
                   response.data['data']?['accountAggregatorSetup'] ?? false,
               "bankAccounts": bankAccountsList,
               "primaryBankAccount": primaryBankAccount,
-              "accountAggregatorId": response.data['data']
-                  ?['accountAggregatorId'] ?? "",
-                  "notifications": notifications,
-                  "notificationsSeen": response.data['data']['notificationsSeen'],
+              "accountAggregatorId":
+                  response.data['data']?['accountAggregatorId'] ?? "",
+              "notifications": notifications,
+              "notificationsSeen": response.data['data']['notificationsSeen'],
             });
       } else {
         return ServerResponse(
@@ -102,7 +102,14 @@ class InvoiceLoanUserProfileDetailsHttpController {
 
       if (response.data['success']) {
         return ServerResponse(
-            success: true, message: "bank account details updated");
+            success: true,
+            message: "bank account details updated",
+            data: {
+              "bankName": response.data['data']['bankName'],
+              "accountNumber": response.data['data']['accountNumber'],
+              "ifscCode": response.data['data']['ifscCode'],
+              "accountHolderName": response.data['data']['accountHolderName']
+            });
       } else {
         return ServerResponse(
             success: false, message: response.data['message']);

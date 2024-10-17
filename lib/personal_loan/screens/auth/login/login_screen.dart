@@ -1,4 +1,6 @@
 import 'package:blocsol_loan_application/global_state/internet_check/internet_check.dart';
+import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/login/components/login_otp_modal_bottom_sheet.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/login/login.dart';
@@ -57,7 +59,9 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -243,6 +247,8 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
                   ),
                 ),
               ),
+              const SpacerWidget(height: 5),
+
               const SpacerWidget(height: 30),
 
               // Confirm Password
@@ -331,7 +337,33 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
                   ],
                 ),
               ),
-
+              const SpacerWidget(height: 15),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.mediumImpact();
+                  ref.read(routerProvider).push(PersonalLoanSignupRouter.intro);
+                },
+                child: Container(
+                  height: 30,
+                  width: RelativeSize.width(120, width),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context).colorScheme.primary
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Signup ?",
+                      softWrap: true,
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: AppFontSizes.b1,
+                        fontWeight: AppFontWeights.normal,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               const Expanded(child: SizedBox()),
 
               Row(

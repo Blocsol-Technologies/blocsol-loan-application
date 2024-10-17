@@ -23,14 +23,15 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
 
   void addBankAccount(BankAccountDetails bankAccount) {
     var accountNumber = bankAccount.accountNumber;
-    var bankAccounts =
-        List.from(state.bankAccounts) as List<BankAccountDetails>;
+    var bankAccounts = state.bankAccounts.map((e) => e).toList();
 
     var accountIndex = bankAccounts
         .indexWhere((element) => element.accountNumber == accountNumber);
 
     if (accountIndex == -1) {
-      return;
+      bankAccounts.add(bankAccount);
+    } else {
+      bankAccounts[accountIndex] = bankAccount;
     }
 
     bankAccounts[accountIndex] = bankAccount;

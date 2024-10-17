@@ -898,7 +898,8 @@ class OfferDetails {
 
   num getLoanPercentOfTotalValue(num invoiceAmount) {
     try {
-      return (((num.parse(deposit) / invoiceAmount) * 10000).round()) / 100;
+      var val =  (((num.parse(deposit) / invoiceAmount) * 10000).round()) / 100;
+      return val;
     } catch (e, stackTrace) {
       ErrorInstance(
         message: "Error in getLoanPercentOfTotalValue",

@@ -121,11 +121,11 @@ class PersonalLoanSignup extends _$PersonalLoanSignup {
     var response = await PersonalLoanSignupHttpController()
         .verifyUdyamNumber(state.phoneNumber, udyam, cancelToken);
 
-    if (response.data['success']) {
+    if (response.success) {
       state = state.copyWith(
         udyamValidated: true,
         udyam: udyam,
-        companyName: response.data['companyName'] ?? "",
+        companyName: response.data ?? "",
       );
     }
 

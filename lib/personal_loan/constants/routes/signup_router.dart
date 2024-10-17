@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/mobile_otp_auth.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/mobile_verification.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/password_setup.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/personal_details.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/signup_home.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +35,6 @@ List<GoRoute> personalLoanSignupRoutes = [
 
    GoRoute(
     path: PersonalLoanSignupRouter.password,
-    builder: (context, state) => const PCSignupPersonalDetails(),
+    builder: (context, state) => const PCSignupPasswordSetup(),
   ),
 ];

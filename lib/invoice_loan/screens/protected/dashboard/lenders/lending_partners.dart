@@ -10,18 +10,20 @@ import 'package:flutter/services.dart';
 enum AnimationDirection { LtR, RtL }
 
 List<String> lenders = [
-  "assets/images/lender_logos/axis.png",
-  "assets/images/lender_logos/central-bank.png",
+  // "assets/images/lender_logos/axis.png",
+  // "assets/images/lender_logos/central-bank.png",
   "assets/images/lender_logos/kotak.png",
   "assets/images/lender_logos/dmi.png",
-  "assets/images/lender_logos/hdfc.png",
-  "assets/images/lender_logos/icici.png",
-  "assets/images/lender_logos/idfc.jpeg",
-  "assets/images/lender_logos/indusind.png",
-  "assets/images/lender_logos/punjab-national.png",
-  "assets/images/lender_logos/sidbi.png",
-  "assets/images/lender_logos/uco.png",
-  "assets/images/lender_logos/union.png",
+  "assets/images/lender_logos/kbank.png",
+  "assets/images/lender_logos/ftcash.png",
+  // "assets/images/lender_logos/hdfc.png",
+  // "assets/images/lender_logos/icici.png",
+  // "assets/images/lender_logos/idfc.jpeg",
+  // "assets/images/lender_logos/indusind.png",
+  // "assets/images/lender_logos/punjab-national.png",
+  // "assets/images/lender_logos/sidbi.png",
+  // "assets/images/lender_logos/uco.png",
+  // "assets/images/lender_logos/union.png",
 ];
 
 class LendersOnBoard extends StatefulWidget {
@@ -40,100 +42,100 @@ class _LendersOnBoardState extends State<LendersOnBoard>
   AnimationDirection _direction = AnimationDirection.RtL;
   int _scrollPosition = 0;
 
-  void playAnimation() async {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
+  // void playAnimation() async {
+  //   _animationController = AnimationController(
+  //     vsync: this,
+  //     duration: const Duration(seconds: 1),
+  //   );
 
-    _animation = CurvedAnimation(
-        parent:
-            Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
-              ..addListener(() {
-                if (_scrollController.hasClients) {
-                  if (_direction == AnimationDirection.LtR) {
-                    _scrollController
-                        .jumpTo(_scrollPosition - _animation.value * 100);
-                  } else {
-                    _scrollController
-                        .jumpTo(_scrollPosition + _animation.value * 100);
-                  }
-                }
-              })
-              ..addStatusListener((status) {
-                if (_direction == AnimationDirection.LtR) {
-                  if (_scrollPosition == 0) {
-                    setState(() {
-                      _direction = AnimationDirection.RtL;
-                    });
+  //   _animation = CurvedAnimation(
+  //       parent:
+  //           Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
+  //             ..addListener(() {
+  //               if (_scrollController.hasClients) {
+  //                 if (_direction == AnimationDirection.LtR) {
+  //                   _scrollController
+  //                       .jumpTo(_scrollPosition - _animation.value * 100);
+  //                 } else {
+  //                   _scrollController
+  //                       .jumpTo(_scrollPosition + _animation.value * 100);
+  //                 }
+  //               }
+  //             })
+  //             ..addStatusListener((status) {
+  //               if (_direction == AnimationDirection.LtR) {
+  //                 if (_scrollPosition == 0) {
+  //                   setState(() {
+  //                     _direction = AnimationDirection.RtL;
+  //                   });
 
-                    if (status == AnimationStatus.completed) {
-                      _scrollPosition += 100;
-                      _animationController.reset();
-                      Future.delayed(const Duration(seconds: 1), () {
-                        if (mounted) {
-                          _animationController.forward();
-                        }
-                      });
-                    }
+  //                   if (status == AnimationStatus.completed) {
+  //                     _scrollPosition += 100;
+  //                     _animationController.reset();
+  //                     Future.delayed(const Duration(seconds: 1), () {
+  //                       if (mounted) {
+  //                         _animationController.forward();
+  //                       }
+  //                     });
+  //                   }
 
-                    return;
-                  } else {
-                    if (status == AnimationStatus.completed) {
-                      _scrollPosition -= 100;
-                      _animationController.reset();
-                      Future.delayed(const Duration(seconds: 1), () {
-                        if (mounted) {
-                          _animationController.forward();
-                        }
-                      });
-                    }
+  //                   return;
+  //                 } else {
+  //                   if (status == AnimationStatus.completed) {
+  //                     _scrollPosition -= 100;
+  //                     _animationController.reset();
+  //                     Future.delayed(const Duration(seconds: 1), () {
+  //                       if (mounted) {
+  //                         _animationController.forward();
+  //                       }
+  //                     });
+  //                   }
 
-                    return;
-                  }
-                }
+  //                   return;
+  //                 }
+  //               }
 
-                if (_direction == AnimationDirection.RtL) {
-                  if (_scrollPosition == 1000) {
-                    setState(() {
-                      _direction = AnimationDirection.LtR;
-                    });
+  //               if (_direction == AnimationDirection.RtL) {
+  //                 if (_scrollPosition == 1000) {
+  //                   setState(() {
+  //                     _direction = AnimationDirection.LtR;
+  //                   });
 
-                    if (status == AnimationStatus.completed) {
-                      _scrollPosition -= 100;
-                      _animationController.reset();
-                      Future.delayed(const Duration(seconds: 1), () {
-                        if (mounted) {
-                          _animationController.forward();
-                        }
-                      });
-                    }
+  //                   if (status == AnimationStatus.completed) {
+  //                     _scrollPosition -= 100;
+  //                     _animationController.reset();
+  //                     Future.delayed(const Duration(seconds: 1), () {
+  //                       if (mounted) {
+  //                         _animationController.forward();
+  //                       }
+  //                     });
+  //                   }
 
-                    return;
-                  } else {
-                    if (status == AnimationStatus.completed) {
-                      _scrollPosition += 100;
-                      _animationController.reset();
-                      Future.delayed(const Duration(seconds: 1), () {
-                        if (mounted) {
-                          _animationController.forward();
-                        }
-                      });
-                    }
+  //                   return;
+  //                 } else {
+  //                   if (status == AnimationStatus.completed) {
+  //                     _scrollPosition += 100;
+  //                     _animationController.reset();
+  //                     Future.delayed(const Duration(seconds: 1), () {
+  //                       if (mounted) {
+  //                         _animationController.forward();
+  //                       }
+  //                     });
+  //                   }
 
-                    return;
-                  }
-                }
-              }),
-        curve: Curves.easeInOut);
+  //                   return;
+  //                 }
+  //               }
+  //             }),
+  //       curve: Curves.easeInOut);
 
-    _animationController.forward();
-  }
+  //   _animationController.forward();
+  // }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      playAnimation();
+      // playAnimation();
     });
     super.initState();
   }
@@ -169,7 +171,7 @@ class _LendersOnBoardState extends State<LendersOnBoard>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -181,11 +183,6 @@ class _LendersOnBoardState extends State<LendersOnBoard>
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Theme.of(context).colorScheme.onSurface,
-                  size: 17,
-                )
               ],
             ),
             const SpacerWidget(

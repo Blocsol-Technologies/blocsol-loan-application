@@ -23,22 +23,22 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
 
   void addBankAccount(PlBankAccountDetails bankAccount) {
     var accountNumber = bankAccount.accountNumber;
-    var bankAccounts =
-        List.from(state.bankAccounts) as List<PlBankAccountDetails>;
+    var bankAccounts = state.bankAccounts.map((e) => e).toList();
 
     var accountIndex = bankAccounts
         .indexWhere((element) => element.accountNumber == accountNumber);
 
     if (accountIndex == -1) {
-      return;
+      bankAccounts.add(bankAccount);
+    } else {
+      bankAccounts[accountIndex] = bankAccount;
     }
 
-    bankAccounts[accountIndex] = bankAccount;
-
+    
     state = state.copyWith(bankAccounts: bankAccounts);
   }
 
-    bool setNotificationSeen(bool seen) {
+  bool setNotificationSeen(bool seen) {
     state = state.copyWith(notificationSeen: seen);
 
     return true;
@@ -91,21 +91,25 @@ class PersonalLoanAccountDetails extends _$PersonalLoanAccountDetails {
     return response;
   }
 
-  Future<ServerResponse> updateCompanyBankAccountDetails(String accountNumber,
-      String ifscCode, bool setPrimary, int accountType, CancelToken cancelToken) async {
+  Future<ServerResponse> updateCompanyBankAccountDetails(
+      String accountNumber,
+      String ifscCode,
+      bool setPrimary,
+      int accountType,
+      CancelToken cancelToken) async {
     var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
 
     var response = await PersonalLoanAccountDetailsHttpController()
-        .updateBankAccountDetails(
-            accountNumber, ifscCode, setPrimary, accountType, authToken, cancelToken);
+        .updateBankAccountDetails(accountNumber, ifscCode, setPrimary,
+            accountType, authToken, cancelToken);
 
     if (response.success) {
       if (setPrimary) {
         var bankAccount = PlBankAccountDetails(
-          bankName: response.data['bankName'],
-          accountNumber: response.data['accountNumber'],
-          ifscCode: response.data['ifscCode'],
-          accountHolderName: response.data['accountHolderName'],
+          bankName: response.data['bankName'] ?? "",
+          accountNumber: response.data['accountNumber'] ?? "",
+          ifscCode: response.data['ifscCode'] ?? "",
+          accountHolderName: response.data['accountHolderName'] ?? "",
         );
 
         setPrimaryBankAccount(bankAccount);

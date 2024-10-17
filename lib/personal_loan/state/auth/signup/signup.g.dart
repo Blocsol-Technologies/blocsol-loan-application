@@ -7,7 +7,7 @@ part of 'signup.dart';
 // **************************************************************************
 
 String _$personalLoanSignupHash() =>
-    r'd08b4d5166e44d64db516ae27bdf12dd3d708758';
+    r'60f8b045c0ad0af9cf86997689f9d6ff5f262717';
 
 /// See also [PersonalLoanSignup].
 @ProviderFor(PersonalLoanSignup)

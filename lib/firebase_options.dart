@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCQuJ13jPCRhxtl1SRaypN3Di0XAFTLRug',
-    appId: '1:409557116547:android:42212e21dea4f329835db6',
-    messagingSenderId: '409557116547',
-    projectId: 'loan-application-9a07e',
-    storageBucket: 'loan-application-9a07e.appspot.com',
+    apiKey: 'AIzaSyCVtP7WP_Lja4fOgDu6yiy7PxnFHVaimNE',
+    appId: '1:397572321624:android:f847e910fa3a4d09b0f52d',
+    messagingSenderId: '397572321624',
+    projectId: 'financial-services-55edc',
+    storageBucket: 'financial-services-55edc.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyChfxjywYQBSz_APJOSZOZiy5DL2JPcu-Q',
-    appId: '1:409557116547:ios:75b03c5656921673835db6',
-    messagingSenderId: '409557116547',
-    projectId: 'loan-application-9a07e',
-    storageBucket: 'loan-application-9a07e.appspot.com',
-    iosBundleId: 'com.example.blocsolLoanApplication',
+    apiKey: 'AIzaSyC72hEpZdQQJPOEFxYwRXXVf-_cTAbi1yM',
+    appId: '1:397572321624:ios:7c4beb1cbcdea848b0f52d',
+    messagingSenderId: '397572321624',
+    projectId: 'financial-services-55edc',
+    storageBucket: 'financial-services-55edc.appspot.com',
+    iosBundleId: 'blocsol.loanapp.com',
   );
+
 }

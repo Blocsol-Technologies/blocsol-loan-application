@@ -414,21 +414,21 @@ class _InvoiceLoanKeyFactSheetState
                                 letterSpacing: 0.165,
                               ),
                             ),
-                            const SpacerWidget(
-                              height: 3,
-                            ),
-                            Text(
-                              "${selectedOffer.getLoanPercentOfTotalValue(selectedInvoice.amount)}% of order value",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.4),
-                                fontSize: AppFontSizes.b2,
-                                fontWeight: AppFontWeights.normal,
-                                fontFamily: fontFamily,
-                              ),
-                            ),
+                            // const SpacerWidget(
+                            //   height: 3,
+                            // ),
+                            // Text(
+                            //   "${selectedOffer.getLoanPercentOfTotalValue(selectedInvoice.amount)}% of order value",
+                            //   style: TextStyle(
+                            //     color: Theme.of(context)
+                            //         .colorScheme
+                            //         .onSurface
+                            //         .withOpacity(0.4),
+                            //     fontSize: AppFontSizes.b2,
+                            //     fontWeight: AppFontWeights.normal,
+                            //     fontFamily: fontFamily,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],

@@ -92,7 +92,9 @@ class _PCSignupPersonalDetailsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -117,7 +119,9 @@ class _PCSignupPersonalDetailsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: "please verify msme number first", notifType: SnackbarNotificationType.warning), 
+        content: getSnackbarNotificationWidget(
+            message: "please verify msme number first",
+            notifType: SnackbarNotificationType.warning),
         duration: const Duration(seconds: 3),
       );
 
@@ -153,7 +157,9 @@ class _PCSignupPersonalDetailsState
             elevation: 0,
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.transparent,
-            content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+            content: getSnackbarNotificationWidget(
+                message: response.message,
+                notifType: SnackbarNotificationType.error),
             duration: const Duration(seconds: 5),
           );
 
@@ -187,7 +193,8 @@ class _PCSignupPersonalDetailsState
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error),  
+      content: getSnackbarNotificationWidget(
+          message: response.message, notifType: SnackbarNotificationType.error),
       duration: const Duration(seconds: 5),
     );
 
@@ -300,7 +307,7 @@ class _PCSignupPersonalDetailsState
               ),
               const SpacerWidget(height: 5),
               Text(
-                "These detais will be used by the lenders to generate loan offers. Please ensure that the details are accurate and up to date.",
+                "These details will be used by the lenders to generate loan offers. Please ensure that they are accurate and up to date.",
                 softWrap: true,
                 style: TextStyle(
                   fontFamily: fontFamily,
@@ -820,14 +827,24 @@ class _PCSignupPersonalDetailsState
                                 .setUdyamValidationRequired(value.isNotEmpty);
                           },
                           decoration: InputDecoration(
-                            border: InputBorder.none,
                             counterText: "",
                             hintText: 'MSME Udyam No. (Optional)',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 15),
                             hintStyle: TextStyle(
                               fontFamily: fontFamily,
                               fontSize: AppFontSizes.b1,
                               fontWeight: AppFontWeights.normal,
                               color: Theme.of(context).colorScheme.scrim,
+                            ),
+                            fillColor: Colors.transparent,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
                             ),
                           ),
                         ),

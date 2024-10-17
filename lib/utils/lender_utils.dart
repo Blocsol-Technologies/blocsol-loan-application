@@ -103,7 +103,7 @@ List<LenderDetails> lenderDetailsList = [
       name: "SIDBI",
       assetPath: "assets/images/lender_logos/sidbi.png",
       connectedAA: accountAggregatorInfoList),
-       LenderDetails(
+  LenderDetails(
       name: "State Bank of India",
       assetPath: "assets/images/lender_logos/sbi.webp",
       connectedAA: accountAggregatorInfoList),
@@ -155,6 +155,14 @@ List<LenderDetails> lenderDetailsList = [
   LenderDetails(
       name: "Union Bank",
       assetPath: "assets/images/lender_logos/union.png",
+      connectedAA: accountAggregatorInfoList),
+  LenderDetails(
+      name: "Karnataka Bank",
+      assetPath: "assets/images/lender_logos/kbank.png",
+      connectedAA: accountAggregatorInfoList),
+  LenderDetails(
+      name: "FT Cash",
+      assetPath: "assets/images/lender_logos/ftcash.png",
       connectedAA: accountAggregatorInfoList),
 ];
 

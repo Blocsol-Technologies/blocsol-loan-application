@@ -70,7 +70,7 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
 
     ref
         .read(routerProvider)
-        .pushReplacement(PersonalLoanProfileRouter.bankAccountSettings);
+        .replace(PersonalLoanProfileRouter.bankAccountSettings);
 
     return;
   }

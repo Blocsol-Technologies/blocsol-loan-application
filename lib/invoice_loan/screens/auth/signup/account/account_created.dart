@@ -28,8 +28,6 @@ class _SignupAccountCreatedState extends ConsumerState<SignupAccountCreated> {
       Permission.locationWhenInUse,
       Permission.camera,
       Permission.mediaLibrary,
-      Permission.notification,
-      Permission.sms,
     ];
 
     bool allGranted = true;

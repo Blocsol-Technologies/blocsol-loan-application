@@ -101,9 +101,16 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
       logger.d(
           "response.success is after generating aa response ${generateAccountAggregatorResponse.success}");
 
-      context.go(InvoiceNewLoanRequestRouter.loan_service_unavailable,
-          extra:
-              "Could not generate account aggregator url. Please contact support.");
+      ref
+          .read(invoiceNewLoanRequestProvider.notifier)
+          .updateState(LoanRequestProgress.customerDetailsProvided);
+
+      ref
+          .read(routerProvider)
+          .pushReplacement(InvoiceNewLoanRequestRouter.loan_offer_select);
+      // context.go(InvoiceNewLoanRequestRouter.loan_service_unavailable,
+      //     extra:
+      //         "Could not generate account aggregator url. Please contact support.");
 
       return;
     }

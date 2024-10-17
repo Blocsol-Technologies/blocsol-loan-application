@@ -1,26 +1,51 @@
 {
   "project_info": {
-    "project_number": "409557116547",
-    "project_id": "loan-application-9a07e",
-    "storage_bucket": "loan-application-9a07e.appspot.com"
+    "project_number": "397572321624",
+    "project_id": "financial-services-55edc",
+    "storage_bucket": "financial-services-55edc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:409557116547:android:42212e21dea4f329835db6",
+        "mobilesdk_app_id": "1:397572321624:android:f847e910fa3a4d09b0f52d",
         "android_client_info": {
-          "package_name": "blocsol.loanapplication.com"
+          "package_name": "blocsol.loanapp.com"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "397572321624-499l7dsh05fl40h5jgon8iqusdf1oet8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "blocsol.loanapp.com",
+            "certificate_hash": "e9095db0d4950234e6cd8d33613b3562b00689bc"
+          }
+        },
+        {
+          "client_id": "397572321624-a71ejbnnps0n29du1vlc4id849u866h2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCQuJ13jPCRhxtl1SRaypN3Di0XAFTLRug"
+          "current_key": "AIzaSyCVtP7WP_Lja4fOgDu6yiy7PxnFHVaimNE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397572321624-a71ejbnnps0n29du1vlc4id849u866h2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "397572321624-448418qetuc7jv3sjdga8jechlei0pu5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "blocsol.loanapp.com"
+              }
+            }
+          ]
         }
       }
     }

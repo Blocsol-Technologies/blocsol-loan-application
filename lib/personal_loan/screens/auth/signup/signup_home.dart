@@ -6,6 +6,7 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,17 +22,18 @@ class PCSignupHome extends ConsumerStatefulWidget {
 }
 
 class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
+  bool signingIn = false;
+
   Future<void> _googleSignIn() async {
-    final googleAccount = await GoogleSignIn().signIn();
-
-    final googleAuth = await googleAccount?.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
     try {
+      final googleAccount = await GoogleSignIn().signIn();
+
+      final googleAuth = await googleAccount?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         credential,
       );
@@ -89,7 +91,8 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(message: errorMessage, notifType: SnackbarNotificationType.error), 
+          content: getSnackbarNotificationWidget(
+              message: errorMessage, notifType: SnackbarNotificationType.error),
           duration: const Duration(seconds: 5),
         );
 
@@ -260,7 +263,17 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                       GestureDetector(
                         onTap: () async {
                           HapticFeedback.mediumImpact();
+
+                          setState(() {
+                            signingIn = true;
+                          });
                           await _googleSignIn();
+
+                          if (mounted) {
+                            setState(() {
+                              signingIn = false;
+                            });
+                          }
                         },
                         child: Container(
                           height: 40,
@@ -272,41 +285,48 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
                             ),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              const SpacerWidget(
-                                width: 50,
-                              ),
-                              Container(
-                                height: 25,
-                                width: 25,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                          child: signingIn
+                              ? Lottie.asset(
+                                  'assets/animations/loading_spinner.json',
+                                  height: 40,
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    const SpacerWidget(
+                                      width: 50,
+                                    ),
+                                    Container(
+                                      height: 25,
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
+                                      child: Image.asset(
+                                        "assets/images/3rd_party/google_logo.png",
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    const SpacerWidget(
+                                      width: 30,
+                                    ),
+                                    Text(
+                                      "Continue with Google",
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontSize: AppFontSizes.b2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontWeight: AppFontWeights.normal,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                clipBehavior: Clip.hardEdge,
-                                child: Image.asset(
-                                  "assets/images/3rd_party/google_logo.png",
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              const SpacerWidget(
-                                width: 30,
-                              ),
-                              Text(
-                                "Continue with Google",
-                                style: TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontSize: AppFontSizes.b2,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontWeight: AppFontWeights.normal,
-                                ),
-                              )
-                            ],
-                          ),
                         ),
                       ),
                       const SpacerWidget(

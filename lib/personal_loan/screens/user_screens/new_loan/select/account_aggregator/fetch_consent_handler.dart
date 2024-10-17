@@ -65,25 +65,23 @@ class _PCNewLoanGenerateOfferConsentState
     if (!response.success) {
       _controller.disposeTimer();
 
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Unable to submit personal details to lenders",
-            notifType: SnackbarNotificationType.error),
-        duration: const Duration(seconds: 5),
-      );
+      // final snackBar = SnackBar(
+      //   elevation: 0,
+      //   behavior: SnackBarBehavior.floating,
+      //   backgroundColor: Colors.transparent,
+      //   content: getSnackbarNotificationWidget(
+      //       message: "Unable to submit personal details to lenders",
+      //       notifType: SnackbarNotificationType.error),
+      //   duration: const Duration(seconds: 5),
+      // );
 
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
+      // ScaffoldMessenger.of(context)
+      //   ..hideCurrentSnackBar()
+      //   ..showSnackBar(snackBar);
 
-      await Future.delayed(const Duration(seconds: 5));
+      // await Future.delayed(const Duration(seconds: 5));
 
-      if (mounted) {
-        context.go(PersonalNewLoanRequestRouter.new_loan_process);
-      }
+      context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
 
       return;
     }

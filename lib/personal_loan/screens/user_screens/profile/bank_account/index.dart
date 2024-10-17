@@ -68,7 +68,7 @@ class PlProfileBankAccount extends ConsumerWidget {
                             ref.read(routerProvider).push(
                                 PersonalLoanProfileRouter.addBankAccount,
                                 extra: AddBankAccountRouterDetails(
-                                    accountNumber: "", ifscCode: ""));
+                                    accountNumber: bankAccount.accountNumber, ifscCode: bankAccount.ifscCode));
                           },
                           child: PlBankDetailsCard(
                             bankName: bankAccount.bankName,

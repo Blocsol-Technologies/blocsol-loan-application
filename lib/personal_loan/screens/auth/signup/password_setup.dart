@@ -50,7 +50,9 @@ class _PCSignupPasswordSetupState extends ConsumerState<PCSignupPasswordSetup> {
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content:getSnackbarNotificationWidget(message: "passwords do not match", notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: "passwords do not match",
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -76,8 +78,6 @@ class _PCSignupPasswordSetupState extends ConsumerState<PCSignupPasswordSetup> {
         Permission.locationWhenInUse,
         Permission.camera,
         Permission.mediaLibrary,
-        Permission.notification,
-        Permission.sms,
       ];
 
       // Check if all permissions are granted
@@ -105,7 +105,8 @@ class _PCSignupPasswordSetupState extends ConsumerState<PCSignupPasswordSetup> {
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+      content: getSnackbarNotificationWidget(
+          message: response.message, notifType: SnackbarNotificationType.error),
       duration: const Duration(seconds: 5),
     );
 

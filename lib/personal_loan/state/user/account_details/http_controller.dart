@@ -101,12 +101,20 @@ class PersonalLoanAccountDetailsHttpController {
         "accountNumber": accountNumber,
         "ifscCode": ifscCode,
         "setPrimary": setPrimary,
-        "accountType": accountType,
+        "bankAccountType": accountType,
       });
+      
 
       if (response.data['success']) {
         return ServerResponse(
-            success: true, message: "bank account details updated");
+            success: true,
+            message: "bank account details updated",
+            data: {
+              "bankName": response.data['data']['bankName'],
+              "accountNumber": response.data['data']['accountNumber'],
+              "ifscCode": response.data['data']['ifscCode'],
+              "accountHolderName": response.data['data']['accountHolderName']
+            });
       } else {
         return ServerResponse(
             success: false, message: response.data['message']);
