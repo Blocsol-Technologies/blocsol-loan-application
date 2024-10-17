@@ -57,9 +57,9 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
       ref
           .read(personalLoanSignupProvider.notifier)
           .updateEmailDetails(email, imageURL);
-
       ref.read(routerProvider).push(PersonalLoanSignupRouter.mobile_auth);
     } catch (e) {
+
       var errorMessage = "An error occurred. Please try again later.";
 
       if (e is FirebaseAuthException) {

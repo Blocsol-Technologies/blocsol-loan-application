@@ -1,40 +1,48 @@
 {
   "project_info": {
-    "project_number": "397572321624",
-    "project_id": "financial-services-55edc",
-    "storage_bucket": "financial-services-55edc.appspot.com"
+    "project_number": "322285078885",
+    "project_id": "credit-app-a24e3",
+    "storage_bucket": "credit-app-a24e3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:397572321624:android:46d6a28833640612b0f52d",
+        "mobilesdk_app_id": "1:322285078885:android:c197e78fd06f790021398c",
         "android_client_info": {
           "package_name": "blocsol.credit.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "397572321624-a71ejbnnps0n29du1vlc4id849u866h2.apps.googleusercontent.com",
+          "client_id": "322285078885-qfad7mr7e8hbvnd754m91vl7kg67lif9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "blocsol.credit.app",
+            "certificate_hash": "e9095db0d4950234e6cd8d33613b3562b00689bc"
+          }
+        },
+        {
+          "client_id": "322285078885-8la72ti7e4fe2b4d3g251fp8tp8karq1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVtP7WP_Lja4fOgDu6yiy7PxnFHVaimNE"
+          "current_key": "AIzaSyDh0XYwFUEY0xLlZ4L2BG_b4VeWT9ip7AM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "397572321624-a71ejbnnps0n29du1vlc4id849u866h2.apps.googleusercontent.com",
+              "client_id": "322285078885-8la72ti7e4fe2b4d3g251fp8tp8karq1.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "397572321624-448418qetuc7jv3sjdga8jechlei0pu5.apps.googleusercontent.com",
+              "client_id": "322285078885-kq8ne6lursts08dnosg375mkloo4p6q9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "blocsol.loanapp.com"
+                "bundle_id": "blocsol.credit.app"
               }
             }
           ]

@@ -50,21 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVtP7WP_Lja4fOgDu6yiy7PxnFHVaimNE',
-    appId: '1:397572321624:android:46d6a28833640612b0f52d',
-    messagingSenderId: '397572321624',
-    projectId: 'financial-services-55edc',
-    storageBucket: 'financial-services-55edc.appspot.com',
+    apiKey: 'AIzaSyDh0XYwFUEY0xLlZ4L2BG_b4VeWT9ip7AM',
+    appId: '1:322285078885:android:c197e78fd06f790021398c',
+    messagingSenderId: '322285078885',
+    projectId: 'credit-app-a24e3',
+    storageBucket: 'credit-app-a24e3.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC72hEpZdQQJPOEFxYwRXXVf-_cTAbi1yM',
-    appId: '1:397572321624:ios:9f2bda482a78f5b1b0f52d',
-    messagingSenderId: '397572321624',
-    projectId: 'financial-services-55edc',
-    storageBucket: 'financial-services-55edc.appspot.com',
-    androidClientId: '397572321624-499l7dsh05fl40h5jgon8iqusdf1oet8.apps.googleusercontent.com',
-    iosClientId: '397572321624-4uendgt2av0665noeltcpa7gm0eron20.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDeG1NvasV7-hYpRgsESvRmUnuDwABLQ1o',
+    appId: '1:322285078885:ios:28056bde5ed12cd821398c',
+    messagingSenderId: '322285078885',
+    projectId: 'credit-app-a24e3',
+    storageBucket: 'credit-app-a24e3.appspot.com',
     iosBundleId: 'blocsol.credit.app',
   );
 
