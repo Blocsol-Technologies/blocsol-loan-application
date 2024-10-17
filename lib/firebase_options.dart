@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCVtP7WP_Lja4fOgDu6yiy7PxnFHVaimNE',
-    appId: '1:397572321624:android:f847e910fa3a4d09b0f52d',
+    appId: '1:397572321624:android:46d6a28833640612b0f52d',
     messagingSenderId: '397572321624',
     projectId: 'financial-services-55edc',
     storageBucket: 'financial-services-55edc.appspot.com',
@@ -59,11 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC72hEpZdQQJPOEFxYwRXXVf-_cTAbi1yM',
-    appId: '1:397572321624:ios:7c4beb1cbcdea848b0f52d',
+    appId: '1:397572321624:ios:9f2bda482a78f5b1b0f52d',
     messagingSenderId: '397572321624',
     projectId: 'financial-services-55edc',
     storageBucket: 'financial-services-55edc.appspot.com',
-    iosBundleId: 'blocsol.loanapp.com',
+    androidClientId: '397572321624-499l7dsh05fl40h5jgon8iqusdf1oet8.apps.googleusercontent.com',
+    iosClientId: '397572321624-4uendgt2av0665noeltcpa7gm0eron20.apps.googleusercontent.com',
+    iosBundleId: 'blocsol.credit.app',
   );
 
 }

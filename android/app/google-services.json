@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:397572321624:android:f847e910fa3a4d09b0f52d",
+        "mobilesdk_app_id": "1:397572321624:android:46d6a28833640612b0f52d",
         "android_client_info": {
-          "package_name": "blocsol.loanapp.com"
+          "package_name": "blocsol.credit.app"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "397572321624-499l7dsh05fl40h5jgon8iqusdf1oet8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "blocsol.loanapp.com",
-            "certificate_hash": "e9095db0d4950234e6cd8d33613b3562b00689bc"
-          }
-        },
         {
           "client_id": "397572321624-a71ejbnnps0n29du1vlc4id849u866h2.apps.googleusercontent.com",
           "client_type": 3
