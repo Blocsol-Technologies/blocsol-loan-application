@@ -10,6 +10,7 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +54,9 @@ class _PCLiabilityDetailsHomeState
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         duration: const Duration(seconds: 10),
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -80,7 +83,9 @@ class _PCLiabilityDetailsHomeState
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         duration: const Duration(seconds: 10),
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -429,7 +434,73 @@ class DisbursedLoanDetails extends ConsumerStatefulWidget {
 }
 
 class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
-  void _handlerAddReminder() {}
+  void _handlerAddReminder(String bankName, String amount, String transactionId,
+      DateTime date, String error) async {
+    if (error.isNotEmpty) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: const Duration(seconds: 5),
+        content: getSnackbarNotificationWidget(
+            message: error, notifType: SnackbarNotificationType.error),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      return;
+    }
+
+    final Event event = Event(
+      title: 'Loan Installment Due',
+      description:
+          'Your next installment of $amount for $bankName is due. Transaction ID: $transactionId',
+      startDate: date.add(const Duration(days: 360)),
+      endDate: date.add(const Duration(hours: 1)),
+      iosParams: const IOSParams(
+        reminder: Duration(hours: 1),
+      ),
+    );
+
+    var eventAdded = await Add2Calendar.addEvent2Cal(event);
+
+    if (!mounted) {
+      return;
+    }
+
+    if (eventAdded) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: const Duration(seconds: 5),
+        content: getSnackbarNotificationWidget(
+            message: "Reminder added to your calendar",
+            notifType: SnackbarNotificationType.success),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    } else {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: const Duration(seconds: 5),
+        content: getSnackbarNotificationWidget(
+            message: "Failed to add reminder to your calendar",
+            notifType: SnackbarNotificationType.error),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+
+    return;
+  }
 
   void _handlePrepayClick() {
     ref
@@ -725,7 +796,14 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
               GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
-                  _handlerAddReminder();
+                  var (date, error) = selectedOldOffer.getNextDueDatetime();
+
+                  _handlerAddReminder(
+                      selectedOldOffer.bankName,
+                      "₹ ${selectedOldOffer.getNextPayment()}",
+                      selectedOldOffer.transactionId,
+                      date,
+                      error);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,

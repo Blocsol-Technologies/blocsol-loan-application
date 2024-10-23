@@ -35,7 +35,7 @@ class _InvoiceLoanKeyFactSheetState
     final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
-    final selectedInvoice = newLoanStateRef.selectedInvoice;
+    // final selectedInvoice = newLoanStateRef.selectedInvoice;
     final selectedOffer = newLoanStateRef.selectedOffer;
     return PopScope(
       canPop: false,

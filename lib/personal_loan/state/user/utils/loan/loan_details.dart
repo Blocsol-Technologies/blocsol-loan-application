@@ -684,6 +684,40 @@ class PersonalLoanDetails {
     return amountPaid.toString();
   }
 
+  (DateTime, String) getNextDueDatetime () {
+      try {
+      bool isClosed = isLoanClosed();
+
+      if (isClosed) {
+        return (DateTime.now(), "Loan is closed");
+      }
+
+      var allPayments = loanPayments.paymentDetails;
+
+      allPayments.sort((a, b) {
+        return parseDateTimeString(a.dueDate)
+            .compareTo(parseDateTimeString(b.dueDate));
+      });
+
+      DateTime date = DateTime.now();
+
+      for (var payment in allPayments) {
+        if (payment.type == "ON_ORDER") {
+          continue;
+        }
+
+        if (payment.status == LoanPaymentStatus.pending) {
+          date = parseDateTimeString(payment.dueDate);
+          break;
+        }
+      }
+
+      return (date, "");
+    } catch (e) {
+      return (DateTime.now(), "unable to parse date");
+    }
+  }
+
   String getNextDueDate() {
     try {
       bool isClosed = isLoanClosed();
@@ -910,15 +944,14 @@ class PersonalLoanDetails {
 }
 
 DateTime parseDateTimeString(String dateTime) {
-  try {
-    // Try a normal parse
+  try {    // Try a normal parse
     try {
       return DateTime.parse(dateTime);
     } catch (e) {
-      // If it fails, try to remove the milliseconds
-      return DateTime.parse(dateTime.substring(0, dateTime.indexOf('.')));
+      final format = DateFormat("yyyy-MM-ddTHH:mm:ss.SSS'Z'");
+      return format.parseUtc(dateTime);
     }
   } catch (e) {
-    return DateTime.now().add(const Duration(days: 36500));
+    return DateTime.now();
   }
 }

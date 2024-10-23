@@ -69,6 +69,10 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
           extra: InvoiceLoanServiceErrorCodes
               .monitoring_consent_verification_failed);
       return;
+    } else {
+      ref
+          .read(routerProvider)
+          .pushReplacement(InvoiceNewLoanRequestRouter.dashboard);
     }
   }
 

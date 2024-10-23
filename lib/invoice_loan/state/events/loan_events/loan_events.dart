@@ -18,7 +18,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'loan_events.g.dart';
 
-
 @riverpod
 class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   @override
@@ -390,19 +389,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         // Loan Sanctioned
         if (stepNumber == 3 || stepNumber == 4) {
-          if (success) {
-            ref
-                .read(invoiceNewLoanRequestProvider.notifier)
-                .updateState(LoanRequestProgress.loanStepsCompleted);
-
-            await ref
-                .read(invoiceNewLoanRequestProvider.notifier)
-                .refetchSelectedOfferDetails(cancelToken);
-
-            ref.read(routerProvider).go(InvoiceNewLoanRequestRouter.dashboard);
-
-            break;
-          } else {
+          if (!success) {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
                 extra: InvoiceLoanServiceErrorCodes.confirm_01_failed);
@@ -417,12 +404,13 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
             await ref
                 .read(invoiceLoanLiabilityProvider.notifier)
                 .fetchSingleLiabilityDetails(cancelToken);
-            ref
-                .read(routerProvider)
-                .go(InvoiceLoanLiabilitiesRouter.payment_success_overview, extra: true);
+            ref.read(routerProvider).go(
+                InvoiceLoanLiabilitiesRouter.payment_success_overview,
+                extra: true);
           } else {
             ref.read(routerProvider).pushReplacement(
-                InvoiceLoanLiabilitiesRouter.payment_success_overview, extra: false);
+                InvoiceLoanLiabilitiesRouter.payment_success_overview,
+                extra: false);
           }
         }
       default:
