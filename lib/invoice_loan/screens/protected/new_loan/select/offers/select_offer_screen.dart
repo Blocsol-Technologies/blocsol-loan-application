@@ -7,7 +7,9 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -268,6 +270,14 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
             _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "selecting_search_offer",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       ref

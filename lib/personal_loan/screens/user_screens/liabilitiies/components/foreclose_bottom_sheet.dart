@@ -1,7 +1,9 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +43,14 @@ class _PersonalLoanForecloseLoanModalBottomSheet
 
     if (!mounted) return;
 
+    logFirebaseEvent("personal_loan_liabilities", {
+      "step": "sending_foreclose_loan_request",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
+
     if (!response.success) {
       setState(() {
         _errorOccured = true;
@@ -50,7 +60,9 @@ class _PersonalLoanForecloseLoanModalBottomSheet
       return;
     }
 
-    ref.read(routerProvider).push(PersonalLoanLiabilitiesRouter.liability_foreclose_webview, extra: response.data['url']);
+    ref.read(routerProvider).push(
+        PersonalLoanLiabilitiesRouter.liability_foreclose_webview,
+        extra: response.data['url']);
   }
 
   @override

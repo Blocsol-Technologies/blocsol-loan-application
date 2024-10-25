@@ -1,10 +1,12 @@
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -75,6 +77,14 @@ class _PCNewLoanAAWebviewState extends ConsumerState<PCNewLoanAAWebview> {
         .checkConsentSuccess(ecres!, resdate!, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("personal_loan_application_process", {
+      "step": "checking_aa_consent_success",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": checkConsentResponse.success,
+      "message": checkConsentResponse.message,
+      "data": checkConsentResponse.data ?? {},
+    });
 
     if (!checkConsentResponse.success) {
       final snackBar = SnackBar(

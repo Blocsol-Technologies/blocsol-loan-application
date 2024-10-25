@@ -8,6 +8,7 @@ import 'package:blocsol_loan_application/personal_loan/state/user/events/server_
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/state/new_loan_state.dart';
 import 'package:blocsol_loan_application/utils/common_misc.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -58,6 +59,14 @@ class _PCNewLoanBankAccountDetailsState
 
     if (!mounted) return;
 
+    logFirebaseEvent("personal_loan_application_process", {
+      "step": "verify_bank_account_details",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": verifyBankDetailsAndSubmitForm.success,
+      "message": verifyBankDetailsAndSubmitForm.message,
+      "data": verifyBankDetailsAndSubmitForm.data ?? {},
+    });
+
     if (!(verifyBankDetailsAndSubmitForm.success)) {
       setState(() {
         _bankVerificationError = true;
@@ -78,7 +87,6 @@ class _PCNewLoanBankAccountDetailsState
         ..showSnackBar(snackBar);
 
       return;
-
     } else {
       setState(() {
         _bankVerificationError = false;
@@ -133,7 +141,8 @@ class _PCNewLoanBankAccountDetailsState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final borrowerAccountDetailsRef = ref.watch(personalLoanAccountDetailsProvider);
+    final borrowerAccountDetailsRef =
+        ref.watch(personalLoanAccountDetailsProvider);
     ref.watch(personalLoanServerSentEventsProvider);
     ref.watch(personalLoanEventsProvider);
     ref.watch(personalNewLoanRequestProvider);
@@ -167,8 +176,8 @@ class _PCNewLoanBankAccountDetailsState
                             horizontal: RelativeSize.width(30, width)),
                         child: PersonalNewLoanRequestTopNav(
                           onBackClick: () {
-                            context.go(
-                                PersonalNewLoanRequestRouter.new_loan_offers_home);
+                            context.go(PersonalNewLoanRequestRouter
+                                .new_loan_offers_home);
                           },
                         ),
                       ),

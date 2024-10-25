@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/compon
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/signup.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -36,6 +37,14 @@ class _SignupMobileOtpValidationState
         .verifyMobileOTP(_textController.text, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_customer_signup", {
+      "step": "verify_mobile_otp",
+      "phone": ref.read(invoiceLoanSignupStateProvider).phoneNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       context.go(InvoiceLoanSignupRouter.email_validation);

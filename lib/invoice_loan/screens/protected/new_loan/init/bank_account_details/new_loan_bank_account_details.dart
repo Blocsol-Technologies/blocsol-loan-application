@@ -6,6 +6,8 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/text_formatters.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -51,6 +53,14 @@ class _InvoiceNewLoanBankAccountDetailsState
         .submitBankAccountDetails(_ifscCodeReadOnly, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "submitting_bank_account_details",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": bankVerificationResponse.success,
+      "message": bankVerificationResponse.message,
+      "data": bankVerificationResponse.data ?? {},
+    });
 
     if (!bankVerificationResponse.success) {
       setState(() {

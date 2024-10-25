@@ -5,6 +5,8 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilit
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -52,6 +54,14 @@ class _LiabilityPrepayState
         .initiatePartPrepayment('$_amountSelected', _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_liabilities", {
+      "step": "sending_prepayment_request",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       final snackBar = SnackBar(

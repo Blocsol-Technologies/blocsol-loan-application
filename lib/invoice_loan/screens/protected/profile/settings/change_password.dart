@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/text_field.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -103,6 +104,14 @@ class _InvoiceLoanProfileChangePasswordState
     if (!mounted || !context.mounted) {
       return;
     }
+
+    logFirebaseEvent("invoice_loan_profile", {
+      "step": "changing_account_password",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       _oldPasswordTextController.clear();

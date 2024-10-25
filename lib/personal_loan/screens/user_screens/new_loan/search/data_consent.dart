@@ -1,9 +1,11 @@
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -49,6 +51,10 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
       return;
     }
 
+    setState(() {
+      _addingConsentArtifact = true;
+    });
+
     var response = await ref
         .read(personalNewLoanRequestProvider.notifier)
         .provideDataConsent(_cancelToken);
@@ -56,7 +62,15 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
     if (!mounted) return;
 
     setState(() {
-      _addingConsentArtifact = true;
+      _addingConsentArtifact = false;
+    });
+
+    logFirebaseEvent("personal_loan_application_process", {
+      "step": "giving_data_consent",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
     });
 
     if (response.success) {

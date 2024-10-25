@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -49,6 +50,14 @@ class _GetNewPersonalLoanButtonState
         .performGeneralSearch(false, cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("personal_loan_application_process", {
+      "step": "applying_for_loan",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     setState(() {
       _sendingSearchRequest = false;

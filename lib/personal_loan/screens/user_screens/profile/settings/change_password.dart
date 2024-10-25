@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/prof
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/text_field.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -100,6 +101,14 @@ class _PlProfileChangePasswordState
     if (!mounted || !context.mounted) {
       return;
     }
+
+    logFirebaseEvent("personal_loan_profile", {
+      "step": "chaning_account_password",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       _oldPasswordTextController.clear();

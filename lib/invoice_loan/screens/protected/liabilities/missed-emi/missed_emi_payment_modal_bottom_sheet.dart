@@ -3,15 +3,19 @@ import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class InvoiceLoanMissedEmiPaymentModalBottomSheet extends ConsumerStatefulWidget {
+class InvoiceLoanMissedEmiPaymentModalBottomSheet
+    extends ConsumerStatefulWidget {
   final String url;
-  const InvoiceLoanMissedEmiPaymentModalBottomSheet({super.key, required this.url});
+  const InvoiceLoanMissedEmiPaymentModalBottomSheet(
+      {super.key, required this.url});
 
   @override
   ConsumerState<InvoiceLoanMissedEmiPaymentModalBottomSheet> createState() =>
@@ -20,9 +24,13 @@ class InvoiceLoanMissedEmiPaymentModalBottomSheet extends ConsumerStatefulWidget
 
 class _MissedEmiPaymentModalBottomSheet
     extends ConsumerState<InvoiceLoanMissedEmiPaymentModalBottomSheet> {
-
   Future<void> _continue() async {
-    context.go(InvoiceLoanLiabilitiesRouter.missed_emi_payment, extra: widget.url);
+    logFirebaseEvent("invoice_loan_liabilities", {
+      "step": "navigating_to_missed_emi_payment",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+    });
+    context.go(InvoiceLoanLiabilitiesRouter.missed_emi_payment,
+        extra: widget.url);
   }
 
   @override

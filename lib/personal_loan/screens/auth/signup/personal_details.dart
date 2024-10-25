@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/auth/signup/utils.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/signup/signup.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -82,6 +83,14 @@ class _PCSignupPersonalDetailsState
         .verifyUdyamNumber(_udyamController.text, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("personal_loan_signup", {
+      "step": "validating_personal_details",
+      "phoneNumber": ref.read(personalLoanSignupProvider).phoneNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     setState(() {
       _verifyingUdyam = false;

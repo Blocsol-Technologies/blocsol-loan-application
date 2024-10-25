@@ -2,6 +2,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
@@ -42,6 +44,14 @@ class _InvoiceLoanForecloseLoanModalBottomSheet
         .initiateForeclosure(_cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_liabilities", {
+      "step": "sending_foreclosure_request",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       setState(() {

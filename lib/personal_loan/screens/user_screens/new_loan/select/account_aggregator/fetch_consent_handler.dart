@@ -1,10 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -61,24 +64,32 @@ class _PCNewLoanGenerateOfferConsentState
 
     if (!mounted) return;
 
+    logFirebaseEvent("personal_loan_application_process", {
+      "step": "submit_form_and_generate_aa_url",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
+
     if (!response.success) {
       _controller.disposeTimer();
 
-      // final snackBar = SnackBar(
-      //   elevation: 0,
-      //   behavior: SnackBarBehavior.floating,
-      //   backgroundColor: Colors.transparent,
-      //   content: getSnackbarNotificationWidget(
-      //       message: "Unable to submit personal details to lenders",
-      //       notifType: SnackbarNotificationType.error),
-      //   duration: const Duration(seconds: 5),
-      // );
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to submit personal details to lenders",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
+      );
 
-      // ScaffoldMessenger.of(context)
-      //   ..hideCurrentSnackBar()
-      //   ..showSnackBar(snackBar);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
 
-      // await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
 
       context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
 

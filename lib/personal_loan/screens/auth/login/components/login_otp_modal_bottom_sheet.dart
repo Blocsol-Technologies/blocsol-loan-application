@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/login/login.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -61,6 +62,14 @@ class _LoginOTPModalBottomSheetState
         .verifyMobileOTP(_otpTextInputController.text, _otpCancelToken);
 
     if (!mounted || !context.mounted) return;
+
+    logFirebaseEvent("personal_loan_login", {
+      "step": "verifying_otp",
+      "phoneNumber": widget.phoneNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       setState(() {

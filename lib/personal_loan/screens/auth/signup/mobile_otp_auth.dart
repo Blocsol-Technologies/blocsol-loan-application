@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/signup/signup.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -46,11 +47,19 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
         .verifyMobileOTP(ref.read(personalLoanSignupProvider).phoneNumber,
             _otpTextInputController.text, _cancelToken);
 
+    if (!mounted) return;
+
     setState(() {
       _verifyingOTP = false;
     });
 
-    if (!mounted) return;
+    logFirebaseEvent("personal_loan_signup", {
+      "step": "verifying_otp",
+      "phoneNumber": ref.read(personalLoanSignupProvider).phoneNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       ref.read(routerProvider).push(PersonalLoanSignupRouter.personal_details);

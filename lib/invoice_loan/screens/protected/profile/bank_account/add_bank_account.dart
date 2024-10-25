@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/text_formatters.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -42,6 +43,14 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
             _ifscCodeTextController.text, _setPrimaryBank, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_profile", {
+      "step": "adding_bank_details",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     final snackBar = SnackBar(
       elevation: 0,

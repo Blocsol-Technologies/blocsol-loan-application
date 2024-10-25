@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_ro
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/signup.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -34,6 +35,15 @@ class _SignupGstOtpValidationState
         .verifyGSTOTP(_textController.text, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_customer_signup", {
+      "step": "verifying_gst_otp",
+      "gst": ref.read(invoiceLoanSignupStateProvider).gstNumber,
+      "gstUsername": _textController.text,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       context.go(InvoiceLoanSignupRouter.udyam_validation);

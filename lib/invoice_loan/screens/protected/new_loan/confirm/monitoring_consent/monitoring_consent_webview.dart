@@ -9,7 +9,9 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_e
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -63,6 +65,18 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
     var checkSuccessResponse = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkLoanMonitoringConsentSuccess(_cancelToken, ecres, resdate);
+
+    if (!mounted) {
+      return;
+    }
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "checking_loan_monitoring_consent_success",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": checkSuccessResponse.success,
+      "message": checkSuccessResponse.message,
+      "data": checkSuccessResponse.data ?? {},
+    });
 
     if (!checkSuccessResponse.success) {
       ref.read(routerProvider).push(

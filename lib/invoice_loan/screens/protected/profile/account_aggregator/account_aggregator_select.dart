@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -57,6 +58,14 @@ class _InvoiceLoanprofileAASelectState
     if (!mounted || !context.mounted) {
       return;
     }
+
+    logFirebaseEvent("invoice_loan_profile", {
+      "step": "updating_account_aggregator",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       final snackBar = SnackBar(

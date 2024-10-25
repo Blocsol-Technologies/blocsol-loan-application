@@ -6,6 +6,8 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/support/utils.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/support/support.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -99,6 +101,14 @@ class _InvoiceLoanRaiseNewTicketState
             );
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_liabilities", {
+      "step": "raising_support_ticket_request",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       _mediaFileList.clear();

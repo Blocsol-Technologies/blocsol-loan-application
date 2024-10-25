@@ -6,6 +6,8 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -33,6 +35,14 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
         .generateLoanMonitoringConsentRequest(_cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "generating_monitoring_consent",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": generateConsentResponse.success,
+      "message": generateConsentResponse.message,
+      "data": generateConsentResponse.data ?? {},
+    });
 
     if (!generateConsentResponse.success) {
       ref.read(routerProvider).push(

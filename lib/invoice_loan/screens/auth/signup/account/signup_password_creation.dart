@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/compon
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main_background.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/signup.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -43,6 +44,14 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
         .setAccountPassword(_textEditingController.text, _cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_customer_signup", {
+      "step": "setting_account_password",
+      "gst": ref.read(invoiceLoanSignupStateProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       context.go(InvoiceLoanSignupRouter.account_created);

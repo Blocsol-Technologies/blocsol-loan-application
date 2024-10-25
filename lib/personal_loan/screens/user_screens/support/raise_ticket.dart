@@ -5,7 +5,9 @@ import 'package:blocsol_loan_application/personal_loan/constants/routes/index_ro
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/inward_curve_painter.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/support/utils.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/support.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -100,6 +102,16 @@ class _PersonalLoanRaiseNewTicketState
             );
 
     if (!mounted) return;
+
+
+    logFirebaseEvent("personal_loan_liabilities", {
+      "step": "raising_support_ticket",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
+
 
     if (response.success) {
       _mediaFileList.clear();

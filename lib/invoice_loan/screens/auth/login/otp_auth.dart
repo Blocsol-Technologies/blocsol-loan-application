@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/compone
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/login/login.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -36,6 +37,16 @@ class _LoginMobileOtpValidationState
     var response = await ref
         .read(invoiceLoanLoginProvider.notifier)
         .validateLoginOTP(_textController.text, _cancelToken);
+
+    logFirebaseEvent(
+      "invoice_loan_customer_login",
+      {
+        "phone": ref.read(invoiceLoanLoginProvider).phoneNumber,
+        "success": response.success,
+        "message": response.message,
+        "data": response.data ?? {},
+      },
+    );
 
     if (!mounted) return;
 

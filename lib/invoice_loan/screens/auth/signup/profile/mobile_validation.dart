@@ -48,6 +48,8 @@ class _SignupMobileValidationState
       "step": "send_mobile_otp",
       "phone": _textController.text,
       "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
     });
 
     if (!mounted) return;

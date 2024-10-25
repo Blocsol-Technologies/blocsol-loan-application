@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/prof
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -55,6 +56,14 @@ class _PlprofileAASelectState extends ConsumerState<PlProfileAASelect> {
     if (!mounted || !context.mounted) {
       return;
     }
+
+    logFirebaseEvent("personal_loan_profile", {
+      "step": "update_account_aggregator",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (!response.success) {
       final snackBar = SnackBar(

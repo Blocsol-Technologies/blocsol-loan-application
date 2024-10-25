@@ -15,8 +15,12 @@ var logger = Logger(
 );
 
 void logFirebaseEvent(String eventName, Map<String, Object> parameters) async {
-  await FirebaseAnalytics.instance.logEvent(
-    name: "invoice_loan_customer_signup",
-    parameters: parameters,
-  );
+  try {
+    await FirebaseAnalytics.instance.logEvent(
+      name: eventName,
+      parameters: parameters,
+    );
+  } catch (e) {
+    logger.e("error logging firebase event: $e");
+  }
 }

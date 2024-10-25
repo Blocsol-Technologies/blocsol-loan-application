@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/auth/signup/signup.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -54,12 +55,17 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
 
       if (!mounted) return;
 
+      logFirebaseEvent("personal_loan_signup", {
+        "step": "email_validation",
+        "email": email,
+        "success": email.isNotEmpty,
+      });
+
       ref
           .read(personalLoanSignupProvider.notifier)
           .updateEmailDetails(email, imageURL);
       ref.read(routerProvider).push(PersonalLoanSignupRouter.mobile_auth);
     } catch (e) {
-
       var errorMessage = "An error occurred. Please try again later.";
 
       if (e is FirebaseAuthException) {

@@ -8,6 +8,8 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -82,37 +84,42 @@ class _NewLoanAccountAggregatorWebviewScreenState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkConsentSuccess(ecres!, resdate!, _cancelToken);
 
+    if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "checking_account_aggregator_consent_success",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": checkConsentResponse.success,
+      "message": checkConsentResponse.message,
+      "data": checkConsentResponse.data ?? {},
+    });
+
     if (!checkConsentResponse.success) {
-      if (mounted) {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(
-              message: "Unable to confirm consent creation.",
-              notifType: SnackbarNotificationType.error),
-          duration: const Duration(seconds: 20),
-        );
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to confirm consent creation.",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 20),
+      );
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
 
-        setState(() {
-          _checkingConsentSuccess = false;
-          _checkConsentError = true;
-        });
+      setState(() {
+        _checkingConsentSuccess = false;
+        _checkConsentError = true;
+      });
 
-        return;
-      }
+      return;
     }
 
     ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .updateState(LoanRequestProgress.customerDetailsProvided);
-
-    if (!mounted) return;
-
 
     ref.read(routerProvider).pushReplacement(
           InvoiceNewLoanRequestRouter.loan_offer_select,

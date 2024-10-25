@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/personal_loan/screens/user_screens/prof
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/text_field.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/text_formatters.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -50,6 +51,14 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
 
     if (!mounted) return;
 
+    logFirebaseEvent("personal_loan_profile", {
+      "step": "adding_bank_account_information",
+      "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
+
     final snackBar = SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
@@ -65,8 +74,6 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
-
-    if (!mounted) return;
 
     ref
         .read(routerProvider)
@@ -177,8 +184,7 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                                 fontFamily: fontFamily,
                                 fontSize: AppFontSizes.b1,
                                 fontWeight: AppFontWeights.bold,
-                                color:
-                                    Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                           ],
@@ -192,9 +198,8 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                                   style: TextStyle(
                                     fontSize: AppFontSizes.b1,
                                     fontWeight: AppFontWeights.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -203,7 +208,7 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                       value: _accountType,
                       onChanged: (String? value) {
                         if (value == null) return;
-                    
+
                         setState(() {
                           _accountType = value;
                         });
@@ -227,8 +232,7 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                         offset: const Offset(0, 0),
                         scrollbarTheme: ScrollbarThemeData(
                           radius: const Radius.circular(5),
-                          thumbVisibility:
-                              WidgetStateProperty.all<bool>(true),
+                          thumbVisibility: WidgetStateProperty.all<bool>(true),
                         ),
                       ),
                       menuItemStyleData: const MenuItemStyleData(
@@ -236,7 +240,9 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
                         padding: EdgeInsets.only(left: 10, right: 10),
                       ),
                     ),
-                    const SpacerWidget(height: 20,),
+                    const SpacerWidget(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,

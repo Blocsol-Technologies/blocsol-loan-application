@@ -84,7 +84,7 @@ class PersonalLoanRequestSearchHttpController {
       if (e is DioException) {
         return ServerResponse(
           success: false,
-          message: e.response?.data['message'],
+          message: e.response?.data['message'] ?? "",
         );
       }
 

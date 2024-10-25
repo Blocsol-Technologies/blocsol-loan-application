@@ -5,6 +5,8 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -35,6 +37,14 @@ class _GstDataFetchingScreenState extends ConsumerState<GstDataDownloadScreen> {
         .downloadGstData(_cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "downloading_gst_data",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       ref

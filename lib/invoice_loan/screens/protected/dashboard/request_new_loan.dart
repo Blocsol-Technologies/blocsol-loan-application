@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_r
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -34,6 +35,14 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
         .performGeneralSearch(false, cancelToken);
 
     if (!mounted) return;
+
+    logFirebaseEvent("invoice_loan_application_process", {
+      "step": "request_new_loan",
+      "gst": ref.read(invoiceLoanUserProfileDetailsProvider).gstNumber,
+      "success": response.success,
+      "message": response.message,
+      "data": response.data ?? {},
+    });
 
     if (response.success) {
       if (response.data['redirection']) {
