@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -35,12 +33,12 @@ class LendersOnBoard extends StatefulWidget {
 
 class _LendersOnBoardState extends State<LendersOnBoard>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-  final ScrollController _scrollController = ScrollController();
+  // late AnimationController _animationController;
+  // late Animation<double> _animation;
+  // final ScrollController _scrollController = ScrollController();
 
-  AnimationDirection _direction = AnimationDirection.RtL;
-  int _scrollPosition = 0;
+  // AnimationDirection _direction = AnimationDirection.RtL;
+  // int _scrollPosition = 0;
 
   // void playAnimation() async {
   //   _animationController = AnimationController(
@@ -143,7 +141,7 @@ class _LendersOnBoardState extends State<LendersOnBoard>
   @override
   void dispose() {
     // _animationController.dispose();
-    _scrollController.dispose();
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -192,7 +190,7 @@ class _LendersOnBoardState extends State<LendersOnBoard>
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
-                controller: _scrollController,
+                // controller: _scrollController,
                 itemBuilder: (ctx, idx) {
                   return GestureDetector(
                     onTap: () {

@@ -95,6 +95,8 @@ class _PCLiabilityForeclosureWebviewState
   }
 
   Future<void> _checkForeclosureSuccessBackground() async {
+     if (!mounted || _foreclosureSuccessTimer == null) return;
+     
     if (ref.read(personalLoanLiabilitiesProvider).loanForeclosureFailed) {
       return;
     }
@@ -158,6 +160,7 @@ class _PCLiabilityForeclosureWebviewState
   void _startPollingForSuccess() {
     _foreclosureSuccessTimer =
         Timer.periodic(Duration(seconds: _interval), (timer) async {
+     
       await _checkForeclosureSuccessBackground();
     });
   }

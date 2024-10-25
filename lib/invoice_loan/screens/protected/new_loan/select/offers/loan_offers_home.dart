@@ -97,6 +97,8 @@ class _InvoiceNewLoanOffersSelectState
 
   void _startFetching() {
     _invoicePoll = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      if (!mounted || _invoicePoll == null) return;
+
       await ref
           .read(invoiceNewLoanRequestProvider.notifier)
           .fetchLoanOffers(_cancelToken);

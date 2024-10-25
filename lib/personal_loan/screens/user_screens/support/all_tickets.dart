@@ -35,6 +35,7 @@ class _PersonalLoanAllSupportTicketsState
   bool _fetchingSupportTickets = false;
 
   Future<void> pollForSupportTicketsBackground() async {
+     if (!mounted || _supportTicktesPollTimer == null) return;
     if (ref.read(personalLoanSupportStateProvider).fetchingAllSupportTickets) {
       return;
     }

@@ -94,6 +94,8 @@ class _PCLiabilityMissedEMIPaymentWebviewState
   }
 
   Future<void> _checkMissedEmiPaymentSuccessBackground() async {
+     if (!mounted || _missedEMIPaymentSuccessTimer == null) return;
+     
     if (ref.read(personalLoanLiabilitiesProvider).missedEmiPaymentFailed) {
       return;
     }
@@ -159,6 +161,7 @@ class _PCLiabilityMissedEMIPaymentWebviewState
   void _startPollingForSuccess() {
     _missedEMIPaymentSuccessTimer =
         Timer.periodic(Duration(seconds: _interval), (timer) async {
+     
       await _checkMissedEmiPaymentSuccessBackground();
     });
   }

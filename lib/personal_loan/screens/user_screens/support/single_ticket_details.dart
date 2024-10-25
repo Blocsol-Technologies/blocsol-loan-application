@@ -77,7 +77,7 @@ class _PersonalLoanSingleTicketDetailsState
   final _interval = 10;
 
   Future<void> pollForSupportTicketsBackground() async {
-    if (!mounted) return;
+     if (!mounted || _supportTicktesMessagesPollTimer == null) return;
 
     if (ref.read(personalLoanSupportStateProvider).fetchingSingleSupportTicket) {
       return;

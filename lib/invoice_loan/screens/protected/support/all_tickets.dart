@@ -38,6 +38,8 @@ class _InvoiceLoanAllSupportTicketsState
   bool _fetchingSupportTickets = false;
 
   Future<void> pollForSupportTicketsBackground() async {
+    if (!mounted || _supportTicktesPollTimer == null) return;
+
     if (ref.read(invoiceLoanSupportProvider).fetchingAllSupportTickets) {
       return;
     }

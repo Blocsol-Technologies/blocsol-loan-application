@@ -57,6 +57,8 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
 
   void startFetching() {
     _offerPoll = Timer.periodic(Duration(seconds: _interval), (timer) async {
+      if (!mounted || _offerPoll == null) return;
+      
       if (_numFeteched >= 3) {
         ref
             .read(personalNewLoanRequestProvider.notifier)
@@ -384,7 +386,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
                                                   ),
                                                   Text(
                                                     "No offers found. Your profile does not meet the minimum criteria by the lenders",
-                                                   textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontFamily: fontFamily,
                                                         fontSize:

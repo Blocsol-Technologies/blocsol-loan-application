@@ -95,6 +95,8 @@ class _PCLiabilityPrepaymentWebviewState
   }
 
   Future<void> _checkPrepaymentSuccessBackground() async {
+    if (!mounted || _prepaymentSuccessTimer == null) return;
+    
     if (ref.read(personalLoanLiabilitiesProvider).prepaymentFailed) {
       return;
     }
