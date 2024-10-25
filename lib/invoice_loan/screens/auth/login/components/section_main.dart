@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class SectionMain extends StatefulWidget {
@@ -20,6 +21,7 @@ class SectionMain extends StatefulWidget {
   final String hintText;
   final bool isObscure;
   final bool hasErrored;
+  final bool showBackButton;
 
   final double gap;
 
@@ -36,6 +38,7 @@ class SectionMain extends StatefulWidget {
       required this.textController,
       required this.inputFormatters,
       this.regex,
+      this.showBackButton = false,
       this.gap = 40});
 
   @override
@@ -217,51 +220,102 @@ class _SectionMainState extends State<SectionMain>
                             );
                           },
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            HapticFeedback.heavyImpact();
-                            _performAction();
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 105,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color.fromRGBO(128, 128, 128, 1),
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                if (_performingAction)
-                                  Lottie.asset(
-                                      'assets/animations/loading_spinner.json',
+                        Row(
+                          children: [
+                            widget.showBackButton
+                                ? GestureDetector(
+                                    onTap: () async {
+                                      HapticFeedback.mediumImpact();
+                                      context.pop();
+                                    },
+                                    child: Container(
                                       height: 40,
-                                      width: 40)
-                                else ...[
-                                  Text(
-                                    "Continue",
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.h3,
-                                      fontWeight: AppFontWeights.medium,
-                                      color: const Color.fromRGBO(
-                                          104, 104, 104, 1),
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color.fromRGBO(
+                                              128, 128, 128, 1),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.arrow_back,
+                                            size: 21,
+                                            color: Color.fromRGBO(
+                                                104, 104, 104, 1),
+                                          ),
+                                          const SpacerWidget(width: 3),
+                                          Text(
+                                            "Back",
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.h3,
+                                              fontWeight: AppFontWeights.medium,
+                                              color: const Color.fromRGBO(
+                                                  104, 104, 104, 1),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SpacerWidget(width: 3),
-                                  const Icon(
-                                    Icons.arrow_forward_rounded,
-                                    size: 21,
-                                    color: Color.fromRGBO(104, 104, 104, 1),
                                   )
-                                ]
-                              ],
+                                : const SizedBox(),
+                            SpacerWidget(width: widget.showBackButton ? 20 : 0),
+                            GestureDetector(
+                              onTap: () {
+                                HapticFeedback.heavyImpact();
+                                _performAction();
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 105,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromRGBO(128, 128, 128, 1),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    if (_performingAction)
+                                      Lottie.asset(
+                                          'assets/animations/loading_spinner.json',
+                                          height: 40,
+                                          width: 40)
+                                    else ...[
+                                      Text(
+                                        "Continue",
+                                        style: TextStyle(
+                                          fontFamily: fontFamily,
+                                          fontSize: AppFontSizes.h3,
+                                          fontWeight: AppFontWeights.medium,
+                                          color: const Color.fromRGBO(
+                                              104, 104, 104, 1),
+                                        ),
+                                      ),
+                                      const SpacerWidget(width: 3),
+                                      const Icon(
+                                        Icons.arrow_forward_rounded,
+                                        size: 21,
+                                        color: Color.fromRGBO(104, 104, 104, 1),
+                                      )
+                                    ]
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),

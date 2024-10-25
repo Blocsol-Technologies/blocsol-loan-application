@@ -614,7 +614,7 @@ class _OfferSearchState extends State<OfferSearch> {
                     ),
                     decoration: InputDecoration(
                       counterText: "",
-                      hintText: 'Search Company Name',
+                      hintText: 'Search Name',
                       contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
                       hintStyle: TextStyle(
                         fontFamily: fontFamily,

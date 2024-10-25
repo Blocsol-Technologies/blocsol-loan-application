@@ -49,6 +49,7 @@ class _InvoiceNewLoanIndependedtKeyFactSheetState
                   padding: EdgeInsets.symmetric(
                       horizontal: RelativeSize.width(20, width)),
                   child: InvoiceNewLoanRequestTopNav(
+                    showKFSButton: false,
                     onBackClick: () {
                       ref.read(routerProvider).pop();
                     },

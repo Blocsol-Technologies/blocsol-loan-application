@@ -36,14 +36,14 @@ class PersonalLoanLiabilityCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: EdgeInsets.only(bottom: RelativeSize.height(20, screenHeight)),
-      height: RelativeSize.height(210, screenHeight),
+      height: RelativeSize.height(190, screenHeight),
       width: screenWidth,
       child: Stack(
         children: [
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              height: RelativeSize.height(200, screenHeight),
+              height: RelativeSize.height(180, screenHeight),
               padding: EdgeInsets.symmetric(
                 horizontal: RelativeSize.width(20, screenWidth),
                 vertical: RelativeSize.height(15, screenHeight),

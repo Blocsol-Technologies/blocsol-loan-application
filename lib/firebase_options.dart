@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '322285078885',
     projectId: 'credit-app-a24e3',
     storageBucket: 'credit-app-a24e3.appspot.com',
+    androidClientId: '322285078885-qfad7mr7e8hbvnd754m91vl7kg67lif9.apps.googleusercontent.com',
+    iosClientId: '322285078885-kq8ne6lursts08dnosg375mkloo4p6q9.apps.googleusercontent.com',
     iosBundleId: 'blocsol.credit.app',
   );
 

@@ -12,10 +12,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
+  final bool showKFSButton;
   final bool showBackButton;
   final Function onBackClick;
   const InvoiceNewLoanRequestTopNav(
-      {super.key, required this.onBackClick, this.showBackButton = true});
+      {super.key, required this.onBackClick, this.showBackButton = true, this.showKFSButton = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +43,7 @@ class InvoiceNewLoanRequestTopNav extends ConsumerWidget {
         const Expanded(
           child: SizedBox(),
         ),
-        newLoanStateRef.index >= LoanRequestProgress.loanOfferSelected.index
+        showKFSButton && newLoanStateRef.index >= LoanRequestProgress.loanOfferSelected.index
             ? GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();

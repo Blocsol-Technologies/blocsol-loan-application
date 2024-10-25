@@ -52,7 +52,7 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
           double similarityScore =
               normalizedName.similarityTo(normalizedSearchText);
 
-          return similarityScore > 0.3;
+          return similarityScore > 0.1;
         }).toList();
 
         matchingInvoices.sort((a, b) {

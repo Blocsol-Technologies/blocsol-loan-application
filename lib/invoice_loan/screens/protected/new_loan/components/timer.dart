@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 // import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
+import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,8 +45,9 @@ class _InvoiceNewLoanRequestCountdownTimerState
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Container(
-      width: 155,
+      width: RelativeSize.width(170, width),
       padding: const EdgeInsets.symmetric(
         horizontal: 8,
         vertical: 8,

@@ -1,5 +1,6 @@
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/global_state/router/router.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
@@ -44,7 +45,7 @@ class _InvoiceNewLoanProcessingState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 InvoiceNewLoanRequestTopNav(onBackClick: () {
-                  ref.read(routerProvider).pop();
+                  ref.read(routerProvider).pushReplacement(InvoiceNewLoanRequestRouter.dashboard);
                 }),
                 const SpacerWidget(
                   height: 80,

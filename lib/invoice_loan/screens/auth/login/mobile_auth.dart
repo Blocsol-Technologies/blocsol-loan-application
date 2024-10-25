@@ -145,6 +145,7 @@ class _LoginMobileValidationState extends ConsumerState<LoginMobileValidation> {
                   ),
                   SectionMain(
                       textController: _textController,
+                      showBackButton: true,
                       textInputChild: GestureDetector(
                         onTap: () {
                           HapticFeedback.mediumImpact();

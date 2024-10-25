@@ -18,12 +18,10 @@ class PCKycVerified extends ConsumerStatefulWidget {
   const PCKycVerified({super.key});
 
   @override
-  ConsumerState<PCKycVerified> createState() =>
-      _PCKycVerifiedScreenState();
+  ConsumerState<PCKycVerified> createState() => _PCKycVerifiedScreenState();
 }
 
-class _PCKycVerifiedScreenState
-    extends ConsumerState<PCKycVerified> {
+class _PCKycVerifiedScreenState extends ConsumerState<PCKycVerified> {
   final _cancelToken = CancelToken();
 
   void _performNextSteps() async {
@@ -33,16 +31,16 @@ class _PCKycVerifiedScreenState
 
     await Future.delayed(const Duration(seconds: 5));
 
-     var response = await ref
-          .read(personalNewLoanRequestProvider.notifier)
-          .checkAadharKYCSuccess(_cancelToken);
+    var response = await ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .checkAadharKYCSuccess(_cancelToken);
 
-      if (!response.success) {
-        ref.read(routerProvider).push(
-            PersonalNewLoanRequestRouter.loan_service_error,
-            extra: PersonalLoanServiceErrorCodes.aadhar_kyc_failed);
-      }
-      return;
+    if (!response.success) {
+      ref.read(routerProvider).push(
+          PersonalNewLoanRequestRouter.loan_service_error,
+          extra: PersonalLoanServiceErrorCodes.aadhar_kyc_failed);
+    }
+    return;
   }
 
   @override
@@ -124,6 +122,11 @@ class _PCKycVerifiedScreenState
                         textAlign: TextAlign.center,
                         softWrap: true,
                       ),
+                      const SpacerWidget(
+                        width: 10,
+                      ),
+                      Lottie.asset("assets/animations/loading_spinner.json",
+                          width: 30),
                     ],
                   ),
                 ),

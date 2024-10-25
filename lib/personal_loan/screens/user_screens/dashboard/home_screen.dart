@@ -34,6 +34,10 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
   }
 
   Future<void> _fetchBorrowerData() async {
+
+    // Adding slight delay to properly sync data fetch on the dashboard
+    await Future.delayed(const Duration(seconds: 2));
+
     var response = await ref
         .read(personalLoanAccountDetailsProvider.notifier)
         .getBorrowerDetails(_cancelToken);

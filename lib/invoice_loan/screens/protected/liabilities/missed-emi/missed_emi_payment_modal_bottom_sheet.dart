@@ -33,7 +33,7 @@ class _MissedEmiPaymentModalBottomSheet
     ref.watch(invoiceLoanServerSentEventsProvider);
 
     return Container(
-      height: 260,
+      height: 290,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(25, 25, 25, 40),
       color: Theme.of(context).colorScheme.primary,

@@ -54,7 +54,7 @@ class _InvoiceLoanLiabilitiesHomeState
         double similarityScore =
             normalizedName.similarityTo(normalizedSearchText);
 
-        return similarityScore > 0.3;
+        return similarityScore > 0.1;
       }).toList();
 
       matchingLoans.sort((a, b) {
@@ -116,6 +116,11 @@ class _InvoiceLoanLiabilitiesHomeState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref.read(invoiceLoanLiabilitiesProvider).liabilities.isNotEmpty) {
+        setState(() {
+          _filteredLoans = ref.read(invoiceLoanLiabilitiesProvider).liabilities;
+        });
+      }
       _handleRefresh();
       _textInputController.addListener(_onTextChanged);
     });
@@ -364,15 +369,13 @@ class _InvoiceLoanLiabilitiesHomeState
                                           )
                                         : ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: liabiliiesStateRef
-                                                .liabilities.length,
+                                            itemCount: _filteredLoans.length,
                                             physics:
                                                 const NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, index) {
                                               return LiabilityCard(
                                                 oldLoanDetails:
-                                                    liabiliiesStateRef
-                                                        .liabilities[index],
+                                                    _filteredLoans[index],
                                                 seperatorColor:
                                                     Theme.of(context)
                                                         .colorScheme

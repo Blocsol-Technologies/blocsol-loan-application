@@ -116,7 +116,11 @@ class Invoice {
   String getInvoiceId() {
     String val = irn.isNotEmpty ? irn : inum;
 
-    return val.substring(0, 15);
+    if (val.length > 15) {
+      return val.substring(0, 15);
+    }
+
+    return val;
   }
 }
 

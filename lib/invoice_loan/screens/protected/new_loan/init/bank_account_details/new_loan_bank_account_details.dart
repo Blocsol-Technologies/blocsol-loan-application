@@ -1,7 +1,6 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
-import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/continue_button.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
@@ -14,6 +13,7 @@ import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.da
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -224,6 +224,8 @@ class BankAccountDetailsForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -362,11 +364,34 @@ class BankAccountDetailsForm extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ContinueButton(
-                onPressed: () async {
+              GestureDetector(
+                onTap: () async {
+                  HapticFeedback.heavyImpact();
                   await verifyBankAccountDetails();
                 },
-              ),
+                child: Container(
+                  width: RelativeSize.width(250, width),
+                  height: RelativeSize.height(38, height),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: verifyingBankAccount
+                        ? Lottie.asset('assets/animations/loading_spinner.json',
+                            height: 50, width: 50)
+                        : Text(
+                            "Continue",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontSize: AppFontSizes.b1,
+                              fontWeight: AppFontWeights.medium,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                  ),
+                ),
+              )
             ],
           )
         ],

@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/compon
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/signup/components/section_main.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/signup/signup.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -42,6 +43,12 @@ class _SignupMobileValidationState
     var response = await ref
         .read(invoiceLoanSignupStateProvider.notifier)
         .sendMobileOTP(_textController.text, _deviceSignature, _cancelToken);
+
+    logFirebaseEvent("invoice_loan_customer_signup", {
+      "step": "send_mobile_otp",
+      "phone": _textController.text,
+      "success": response.success,
+    });
 
     if (!mounted) return;
 
@@ -177,16 +184,18 @@ class _SignupMobileValidationState
                   ),
                   SectionMain(
                       textController: _textController,
-                      textInputChild: _phoneVerificationError ? Text(
-                        _errMessage,
-                        textAlign: TextAlign.start,
-                        softWrap: true,
-                        style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontSize: AppFontSizes.b1,
-                            fontWeight: AppFontWeights.medium,
-                            color: Colors.red),
-                      ) : const SizedBox(),
+                      textInputChild: _phoneVerificationError
+                          ? Text(
+                              _errMessage,
+                              textAlign: TextAlign.start,
+                              softWrap: true,
+                              style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.medium,
+                                  color: Colors.red),
+                            )
+                          : const SizedBox(),
                       maxInputLength: 10,
                       keyboardType: TextInputType.number,
                       hintText: "MOBILE NUMBER",

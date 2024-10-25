@@ -111,7 +111,7 @@ class NewLoanAlertDialog extends ConsumerWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "GO BACK",
+                            "Go Back",
                             style: TextStyle(
                               fontFamily: fontFamily,
                               fontSize: AppFontSizes.b1,

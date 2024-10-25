@@ -28,7 +28,8 @@ class _InvoiceLoanKycVerifiedScreenState
   final _cancelToken = CancelToken();
 
   void _performNextSteps() async {
-    if (ref.read(invoiceNewLoanRequestProvider).verifyingAadharKYC || ref.read(invoiceNewLoanRequestProvider).verifyingEntityKYC) {
+    if (ref.read(invoiceNewLoanRequestProvider).verifyingAadharKYC ||
+        ref.read(invoiceNewLoanRequestProvider).verifyingEntityKYC) {
       return;
     }
 
@@ -126,17 +127,28 @@ class _InvoiceLoanKycVerifiedScreenState
                       const SpacerWidget(
                         height: 5,
                       ),
-                      Text(
-                        "Performing next steps",
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          color: const Color.fromRGBO(130, 130, 130, 1),
-                          fontSize: AppFontSizes.h3,
-                          fontWeight: AppFontWeights.medium,
-                          letterSpacing: 0.14,
-                        ),
-                        textAlign: TextAlign.center,
-                        softWrap: true,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Performing next steps",
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              color: const Color.fromRGBO(130, 130, 130, 1),
+                              fontSize: AppFontSizes.h3,
+                              fontWeight: AppFontWeights.medium,
+                              letterSpacing: 0.14,
+                            ),
+                            textAlign: TextAlign.center,
+                            softWrap: true,
+                          ),
+                          const SpacerWidget(
+                            width: 10,
+                          ),
+                          Lottie.asset("assets/animations/loading_spinner.json",
+                              width: 30),
+                        ],
                       ),
                     ],
                   ),

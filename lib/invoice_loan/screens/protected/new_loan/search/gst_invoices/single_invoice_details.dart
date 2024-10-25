@@ -9,15 +9,12 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SingleInvoiceDetailsScreen extends ConsumerWidget {
   final Invoice invoice;
 
   const SingleInvoiceDetailsScreen({super.key, required this.invoice});
-
-  Future<void> _shareInvoice() async {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -607,50 +604,6 @@ class SingleInvoiceDetailsScreen extends ConsumerWidget {
                           }),
                       const SpacerWidget(
                         height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              HapticFeedback.heavyImpact();
-                              _shareInvoice();
-                            },
-                            child: Container(
-                              height: 40,
-                              width: RelativeSize.width(252, width),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surface,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Share Invoice",
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontSize: AppFontSizes.h3,
-                                      fontWeight: AppFontWeights.medium,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 8,
-                                  ),
-                                  Icon(
-                                    Icons.share_outlined,
-                                    size: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
                       ),
                     ],
                   ),

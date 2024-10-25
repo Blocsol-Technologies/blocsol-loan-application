@@ -221,7 +221,7 @@ class _InvoiceNewLoanRepaymentSetupState
                   padding: EdgeInsets.symmetric(
                       horizontal: RelativeSize.width(20, width)),
                   child: Text(
-                    "Allow lender to auto-deduct repayment from your ${newLoanStateRef.bankName} ending ****${newLoanStateRef.bankAccountNumber.substring(newLoanStateRef.bankAccountNumber.length - 4)}",
+                    "Allow lender to auto-deduct repayment from your bank account ****${newLoanStateRef.bankAccountNumber.substring(newLoanStateRef.bankAccountNumber.length - 4)}",
                     style: TextStyle(
                         fontFamily: fontFamily,
                         color: Theme.of(context).colorScheme.onSurface,

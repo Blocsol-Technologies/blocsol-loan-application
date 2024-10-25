@@ -8,6 +8,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/error_codes.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/state/loan_request_state.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -70,6 +71,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
               .monitoring_consent_verification_failed);
       return;
     } else {
+      ref.read(invoiceNewLoanRequestProvider.notifier).updateState(LoanRequestProgress.loanStepsCompleted);
       ref
           .read(routerProvider)
           .pushReplacement(InvoiceNewLoanRequestRouter.dashboard);

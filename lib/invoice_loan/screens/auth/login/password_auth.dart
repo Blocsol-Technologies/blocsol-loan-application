@@ -3,6 +3,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/compone
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_heading.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/auth/login/login.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
@@ -43,6 +44,14 @@ class _LoginPasswordValidationState
         .read(invoiceLoanLoginProvider.notifier)
         .validatePassword(ref.read(invoiceLoanLoginProvider).phoneNumber,
             _textController.text, _cancelToken);
+
+    logFirebaseEvent(
+      "invoice_loan_customer_login",
+      {
+        "phone": ref.read(invoiceLoanLoginProvider).phoneNumber,
+        "success": response.success,
+      },
+    );
 
     if (!mounted) return;
 

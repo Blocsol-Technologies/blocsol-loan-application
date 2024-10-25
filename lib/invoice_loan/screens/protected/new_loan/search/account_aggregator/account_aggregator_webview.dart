@@ -113,9 +113,6 @@ class _NewLoanAccountAggregatorWebviewScreenState
 
     if (!mounted) return;
 
-    setState(() {
-      _checkingConsentSuccess = true;
-    });
 
     ref.read(routerProvider).pushReplacement(
           InvoiceNewLoanRequestRouter.loan_offer_select,

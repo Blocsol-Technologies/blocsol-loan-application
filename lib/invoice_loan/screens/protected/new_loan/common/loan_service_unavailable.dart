@@ -1,6 +1,7 @@
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/top_nav.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -67,7 +68,7 @@ class _InvoiceLoanServiceUnavailableScreenState
                           style: TextStyle(
                             fontFamily: fontFamily,
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: AppFontSizes.heading,
+                            fontSize: AppFontSizes.h1,
                             fontWeight: AppFontWeights.bold,
                             letterSpacing: 0.14,
                           ),
@@ -82,7 +83,7 @@ class _InvoiceLoanServiceUnavailableScreenState
                           style: TextStyle(
                             fontFamily: fontFamily,
                             color: const Color.fromRGBO(130, 130, 130, 1),
-                            fontSize: AppFontSizes.h3,
+                            fontSize: AppFontSizes.b1,
                             fontWeight: AppFontWeights.medium,
                             letterSpacing: 0.14,
                           ),
@@ -95,11 +96,12 @@ class _InvoiceLoanServiceUnavailableScreenState
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.heavyImpact();
+                            ref.read(invoiceNewLoanRequestProvider.notifier).reset();
                             context.go(InvoiceLoanIndexRouter.dashboard);
                           },
                           child: Container(
                             height: 40,
-                            width: RelativeSize.width(252, width),
+                            width: RelativeSize.width(150, width),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Theme.of(context).colorScheme.surface,

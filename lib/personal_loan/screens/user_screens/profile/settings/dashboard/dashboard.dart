@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/curved_background.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/components/top_nav_bar.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/dashboard/account_settings.dart';
+import 'package:blocsol_loan_application/personal_loan/screens/user_screens/profile/settings/dashboard/privacy_settings.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -72,7 +73,7 @@ class PlProfileSettingsDashboard extends ConsumerWidget {
                         SpacerWidget(
                           height: 40,
                         ),
-                        PlAccountSettings(),
+                        PlPrivacySettings(),
                       ],
                     ),
                   ),

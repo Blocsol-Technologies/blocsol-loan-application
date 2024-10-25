@@ -161,9 +161,20 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
               SizedBox(
                 width: width,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        ref.read(routerProvider).pop();
+                      },
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        size: 20,
+                      ),
+                    ),
                     IconButton(
                       icon: Icon(
                         Icons.support_agent_outlined,
@@ -180,7 +191,7 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
                   ],
                 ),
               ),
-              const SpacerWidget(height: 45),
+              const SpacerWidget(height: 30),
               Text(
                 "Login",
                 style: TextStyle(
@@ -343,24 +354,17 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
                   HapticFeedback.mediumImpact();
                   ref.read(routerProvider).push(PersonalLoanSignupRouter.intro);
                 },
-                child: Container(
-                  height: 30,
-                  width: RelativeSize.width(120, width),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Theme.of(context).colorScheme.primary
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Signup ?",
-                      softWrap: true,
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontSize: AppFontSizes.b1,
-                        fontWeight: AppFontWeights.normal,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    ),
+                child: Text(
+                  "Want to create an account? Signup!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: AppFontSizes.b2,
+                    fontWeight: AppFontWeights.medium,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.6),
                   ),
                 ),
               ),

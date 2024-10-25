@@ -4,6 +4,9 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,11 +16,20 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   if (Firebase.apps.isEmpty) {
+  if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   Intl.defaultLocale = 'en_IN';
   await initializeDateFormatting('en_IN', null);
@@ -53,6 +65,11 @@ class LoanApplication extends ConsumerStatefulWidget {
 class _LoanApplicationState extends ConsumerState<LoanApplication> {
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam
+        .optIntoSchematicRecordings(); // Confirm that you have user permission for screen recording
+    FlutterUxConfig config = FlutterUxConfig(
+        userAppKey: "a9foi7aihqro4x5", enableAutomaticScreenNameTagging: false);
+    FlutterUxcam.startWithConfiguration(config);
     final theme = ref.watch(appThemeProvider);
     final _ = ref.watch(authProvider);
     final router = ref.watch(routerProvider);

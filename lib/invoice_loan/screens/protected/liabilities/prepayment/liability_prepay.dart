@@ -119,13 +119,15 @@ class _LiabilityPrepayState
             physics: const BouncingScrollPhysics(),
             child: Stack(
               children: [
-                const LiabilityTopDecoration(),
+                const LiabilityTopDecoration(
+                  decorHeight: 150,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          top: RelativeSize.height(60, height),
+                          top: RelativeSize.height(30, height),
                           left: RelativeSize.width(30, width),
                           right: RelativeSize.width(30, width)),
                       child: Row(

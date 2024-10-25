@@ -3,7 +3,8 @@ import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:flutter/material.dart';
 
 class LiabilityTopDecoration extends StatelessWidget {
-  const LiabilityTopDecoration({super.key});
+  final double decorHeight;
+  const LiabilityTopDecoration({super.key,  this.decorHeight = 188});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class LiabilityTopDecoration extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Container(
       width: width,
-      height: RelativeSize.height(188, height),
+      height: RelativeSize.height(decorHeight, height),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
       ),

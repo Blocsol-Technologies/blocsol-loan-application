@@ -20,7 +20,7 @@ part 'loan_request.g.dart';
 class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
   @override
   LoanRequestStateData build() {
-    ref.cacheFor(const Duration(seconds: 30), (){});
+    ref.cacheFor(const Duration(seconds: 30), () {});
     return LoanRequestStateData.initial;
   }
 
@@ -771,8 +771,6 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
         .checkRepaymentSetupSuccess(
             transactionId, providerId, authToken, cancelToken);
 
-    state = state.copyWith(checkingRepaymentSetupSuccess: false);
-
     return response;
   }
 
@@ -863,8 +861,6 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
     var response = await LoanRequestInitHttpController()
         .checkLoanAgreementSuccess(
             transactionId, providerId, authToken, cancelToken);
-
-    state = state.copyWith(verifyingLoanAgreementSuccess: false);
 
     return response;
   }
@@ -974,8 +970,7 @@ class InvoiceNewLoanRequest extends _$InvoiceNewLoanRequest {
         .checkMonitoringConsentSuccess(ecres, resdate, state.selectedAA.key,
             transactionId, offerProviderId, authToken, cancelToken);
 
-    state = state.copyWith(
-        loanId: response.data, validatingMonitoringConsentSuccess: false);
+    state = state.copyWith(loanId: response.data);
 
     return response;
   }

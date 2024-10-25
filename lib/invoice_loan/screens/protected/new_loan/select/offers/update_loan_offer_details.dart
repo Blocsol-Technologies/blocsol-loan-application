@@ -87,6 +87,11 @@ class _InvoiceNewLoanUpdateOfferState
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
+
+      if (ref.read(routerProvider).canPop()) {
+        ref.read(routerProvider).pop();
+      }
+
       return;
     }
 
@@ -116,7 +121,7 @@ class _InvoiceNewLoanUpdateOfferState
       return;
     }
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 10));
 
     if (!mounted) return;
 

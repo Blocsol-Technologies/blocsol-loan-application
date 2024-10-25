@@ -10,6 +10,7 @@ import 'package:blocsol_loan_application/utils/regex.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -57,37 +58,45 @@ class _InvoiceLoanDashboardState extends ConsumerState<InvoiceLoanDashboard> {
         bottomNavigationBar: const InvoiceLoanBottomNavBar(),
         body: Stack(
           children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(
-                bottom: RelativeSize.height(40, height),
-              ),
-              physics: RegexProvider.gstRegex
-                          .hasMatch(profileDetailsRef.gstNumber) &&
-                      !profileDetailsRef.dataConsentProvided
-                  ? const NeverScrollableScrollPhysics()
-                  : const BouncingScrollPhysics(),
-              child: Stack(
-                children: [
-                  const Column(
-                    children: [
-                      SpacerWidget(
-                        height: 35,
-                      ),
-                      DashboardHeader(),
-                      SpacerWidget(
-                        height: 20,
-                      ),
-                      LendersOnBoard(),
-                      RequestNewLoanButton(),
-                      DashboardLiabilities(),
-                    ],
-                  ),
-                  RegexProvider.gstRegex
-                              .hasMatch(profileDetailsRef.gstNumber) &&
-                          !profileDetailsRef.dataConsentProvided
-                      ? const GstConsentSheet()
-                      : const SizedBox()
-                ],
+            LiquidPullToRefresh(
+              color: Theme.of(context).colorScheme.surface,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              showChildOpacityTransition: false,
+              onRefresh: () async {
+                await _handleRefresh();
+              },
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: RelativeSize.height(40, height),
+                ),
+                physics: RegexProvider.gstRegex
+                            .hasMatch(profileDetailsRef.gstNumber) &&
+                        !profileDetailsRef.dataConsentProvided
+                    ? const NeverScrollableScrollPhysics()
+                    : const BouncingScrollPhysics(),
+                child: Stack(
+                  children: [
+                    const Column(
+                      children: [
+                        SpacerWidget(
+                          height: 35,
+                        ),
+                        DashboardHeader(),
+                        SpacerWidget(
+                          height: 20,
+                        ),
+                        LendersOnBoard(),
+                        RequestNewLoanButton(),
+                        DashboardLiabilities(),
+                      ],
+                    ),
+                    RegexProvider.gstRegex
+                                .hasMatch(profileDetailsRef.gstNumber) &&
+                            !profileDetailsRef.dataConsentProvided
+                        ? const GstConsentSheet()
+                        : const SizedBox()
+                  ],
+                ),
               ),
             ),
             Positioned(

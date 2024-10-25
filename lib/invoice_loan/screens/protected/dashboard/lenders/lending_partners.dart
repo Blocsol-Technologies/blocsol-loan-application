@@ -142,7 +142,7 @@ class _LendersOnBoardState extends State<LendersOnBoard>
 
   @override
   void dispose() {
-    _animationController.dispose();
+    // _animationController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
