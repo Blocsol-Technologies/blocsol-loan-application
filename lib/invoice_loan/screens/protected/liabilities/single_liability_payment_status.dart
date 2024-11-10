@@ -3,7 +3,6 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabiliti
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
-import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -98,18 +97,6 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                   ),
                 ),
                 const SpacerWidget(
-                  height: 10,
-                ),
-                Text(
-                  getFormattedTime(selectedPaymentDetails.endTime),
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    color: const Color.fromRGBO(100, 100, 100, 1),
-                    fontWeight: AppFontWeights.bold,
-                    fontSize: AppFontSizes.h3,
-                  ),
-                ),
-                const SpacerWidget(
                   height: 22,
                 ),
                 Padding(
@@ -163,7 +150,7 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                                     style: TextStyle(
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b2,
-                                        fontWeight: AppFontWeights.medium,
+                                        fontWeight: AppFontWeights.bold,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onTertiary),
@@ -219,7 +206,7 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                     clipper: TopClipper(),
                     child: Container(
                       width: width,
-                      height: 240,
+                      height: 280,
                       padding: EdgeInsets.only(
                           left: RelativeSize.width(25, width),
                           right: RelativeSize.width(25, width),

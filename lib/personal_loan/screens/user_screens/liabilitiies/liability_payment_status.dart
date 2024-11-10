@@ -3,7 +3,6 @@ import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilit
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
-import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
@@ -100,18 +99,6 @@ class PersonalLoanliabilityPaymentStatus extends ConsumerWidget {
                 const SpacerWidget(
                   height: 10,
                 ),
-                Text(
-                  getFormattedTime(selectedPaymentDetails.dueDate),
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    color: const Color.fromRGBO(100, 100, 100, 1),
-                    fontWeight: AppFontWeights.bold,
-                    fontSize: AppFontSizes.h3,
-                  ),
-                ),
-                const SpacerWidget(
-                  height: 22,
-                ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: RelativeSize.width(50, width),
@@ -163,7 +150,7 @@ class PersonalLoanliabilityPaymentStatus extends ConsumerWidget {
                                     style: TextStyle(
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b2,
-                                        fontWeight: AppFontWeights.medium,
+                                        fontWeight: AppFontWeights.bold,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onTertiary),

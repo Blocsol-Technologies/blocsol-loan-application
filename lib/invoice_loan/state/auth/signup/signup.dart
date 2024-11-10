@@ -125,6 +125,7 @@ class InvoiceLoanSignupState extends _$InvoiceLoanSignupState {
       String otp, CancelToken cancelToken) async {
     String email = state.email;
     String otpId = state.emailOtpId;
+    String phone = state.phoneNumber;
 
     if (!RegexProvider.emailRegex.hasMatch(email)) {
       return ServerResponse(
@@ -140,7 +141,7 @@ class InvoiceLoanSignupState extends _$InvoiceLoanSignupState {
       );
     }
 
-    return SignupHttpController().verifyEmailOtp(email, otp, otpId, cancelToken);
+    return SignupHttpController().verifyEmailOtp(email, otp, otpId, phone, cancelToken);
   }
 
   /* Create Preliminary Profile */

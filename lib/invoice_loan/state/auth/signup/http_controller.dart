@@ -115,13 +115,13 @@ class SignupHttpController {
   }
 
   Future<ServerResponse> verifyEmailOtp(
-      String email, otp, otpId, CancelToken cancelToken) async {
+      String email,String otp, String otpId, String phoneNumber, CancelToken cancelToken) async {
     try {
       var response = await httpService.get(
           "/signup/email-validation/verify-otp",
           "",
           cancelToken,
-          {"email": email, "otp": otp, "id": otpId});
+          {"email": email, "otp": otp, "id": otpId, "phone": phoneNumber});
 
       if (response.data['success']) {
         return ServerResponse(

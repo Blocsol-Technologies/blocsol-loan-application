@@ -34,8 +34,6 @@ class InvoiceLoanUserProfileDetails extends _$InvoiceLoanUserProfileDetails {
       bankAccounts[accountIndex] = bankAccount;
     }
 
-    bankAccounts[accountIndex] = bankAccount;
-
     state = state.copyWith(bankAccounts: bankAccounts);
   }
 

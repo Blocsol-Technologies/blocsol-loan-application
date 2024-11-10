@@ -38,11 +38,22 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "blocsol.credit.app"
     compileSdk = 34
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    // Optional: JVM Toolchain
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17) // Change to 17 if needed
+        }
     }
 
     defaultConfig {
@@ -86,6 +97,8 @@ dependencies {
   implementation platform('com.google.firebase:firebase-bom:33.4.0')
   implementation 'com.google.firebase:firebase-analytics'
   implementation 'com.google.firebase:firebase-auth'
+  implementation 'com.google.firebase:firebase-perf'
+  implementation 'com.google.firebase:firebase-crashlytics'
 }
 
 flutter {

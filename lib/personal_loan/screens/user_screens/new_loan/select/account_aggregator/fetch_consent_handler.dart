@@ -91,7 +91,9 @@ class _PCNewLoanGenerateOfferConsentState
 
       await Future.delayed(const Duration(seconds: 5));
 
-      context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
+      if (mounted) {
+        context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
+      }
 
       return;
     }

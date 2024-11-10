@@ -168,7 +168,7 @@ class _SignupGstUsernameValidationState
                     heading: "Enter your GST Username",
                   ),
                   const SpacerWidget(
-                    height: 50,
+                    height: 45,
                   ),
                   SectionMain(
                     textController: _textController,
