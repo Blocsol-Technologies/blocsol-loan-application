@@ -201,6 +201,7 @@ class _SignupMobileValidationState
                       maxInputLength: 10,
                       keyboardType: TextInputType.number,
                       hintText: "MOBILE NUMBER",
+                      showBackButton: true,
                       onTextChanged: (val) {
                         setState(() {
                           _phoneVerificationError = false;

@@ -185,6 +185,7 @@ class _SignupGstOtpValidationState
                                 color: Colors.red),
                           )
                         : const SizedBox(),
+                    showBackButton: true,
                     maxInputLength: 15,
                     keyboardType: TextInputType.number,
                     hintText: "6-DIGIT OTP",

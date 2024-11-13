@@ -61,7 +61,7 @@ class _LoginPasswordValidationState
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: getSnackbarNotificationWidget(
-          message: response.message, notifType: SnackbarNotificationType.error),
+          message: "invalid phone number or password provided", notifType: SnackbarNotificationType.error),
       duration: const Duration(seconds: 5),
     );
 

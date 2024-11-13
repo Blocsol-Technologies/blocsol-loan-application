@@ -193,6 +193,7 @@ class _SignupUdyamValidationState extends ConsumerState<SignupUdyamValidation> {
                             ),
                           ),
                     maxInputLength: 20,
+                    showBackButton: true,
                     keyboardType: TextInputType.text,
                     hintText: "UDYAM",
                     onTextChanged: (val) {

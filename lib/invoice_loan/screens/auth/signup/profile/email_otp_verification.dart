@@ -185,6 +185,7 @@ class _SignupEmailOtpValidationState
                                 color: Colors.red),
                           )
                         : const SizedBox(),
+                    showBackButton: true,
                     maxInputLength: 6,
                     keyboardType: TextInputType.number,
                     hintText: "6-DIGIT OTP",

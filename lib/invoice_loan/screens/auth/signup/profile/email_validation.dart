@@ -182,6 +182,7 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
                                 color: Colors.red),
                           )
                         : const SizedBox(),
+                    showBackButton: true,
                     maxInputLength: 50,
                     keyboardType: TextInputType.emailAddress,
                     hintText: "OFFICIAL EMAIL",
