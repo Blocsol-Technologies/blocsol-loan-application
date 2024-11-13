@@ -14,6 +14,7 @@ import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/account_aggregator/account_aggregator_webview.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/account_aggregator/submitting_invoices_for_offers.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/download_gst_invoices.dart';
+import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/enable_gst_api.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/fetching_gst_invoices.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_invoices.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/search/gst_invoices/gst_otp.dart';
@@ -34,6 +35,7 @@ class InvoiceNewLoanRequestRouter {
   // Search
   static const fetching_gst_invoices =
       "/invoice-loan/new-loan-request/fetching-gst-invoices";
+  static const enable_gst_api_access = "/invoice-loan/new-loan-request/enable-gst-api-access";
   static const verify_gst_otp = "/invoice-loan/new-loan-request/verify-gst-otp";
   static const downloading_gst_invoices =
       "/invoice-loan/new-loan-request/downloading-gst-invoices";
@@ -101,6 +103,10 @@ List<GoRoute> invoiceLoanRequestRoutes = [
   GoRoute(
     path: InvoiceNewLoanRequestRouter.verify_gst_otp,
     builder: (context, state) => const GstOtpValidation(),
+  ),
+    GoRoute(
+    path: InvoiceNewLoanRequestRouter.enable_gst_api_access,
+    builder: (context, state) => const EnableGSTAPI(),
   ),
   GoRoute(
     path: InvoiceNewLoanRequestRouter.downloading_gst_invoices,

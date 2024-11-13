@@ -30,25 +30,24 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
   final _otpTextController = TextEditingController();
   final _textInputFocusNode = FocusNode();
 
-  bool _verifyingOTP = false;
-  bool _otpVerificationError = false;
 
   Future<void> verifyGSTOTP() async {
     if (!RegexProvider.otpRegex.hasMatch(_otpTextController.text)) {
-      setState(() {
-        _otpVerificationError = true;
-      });
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "invalid OTP", notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
       return;
     }
-
-    if (_verifyingOTP) {
-      return;
-    }
-
-    setState(() {
-      _verifyingOTP = true;
-      _otpVerificationError = false;
-    });
 
     var response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
@@ -62,10 +61,6 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
       "success": response.success,
       "message": response.message,
       "data": response.data ?? {},
-    });
-
-    setState(() {
-      _verifyingOTP = false;
     });
 
     if (response.success) {
@@ -222,11 +217,6 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
                         child: TextField(
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.start,
-                          onChanged: (_) {
-                            setState(() {
-                              _otpVerificationError = false;
-                            });
-                          },
                           maxLength: 6,
                           controller: _otpTextController,
                           style: TextStyle(
@@ -247,11 +237,9 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: _otpVerificationError
-                                    ? Theme.of(context).colorScheme.error
-                                    : const Color.fromRGBO(76, 76, 76, 1),
+                                color:  Color.fromRGBO(76, 76, 76, 1),
                               ),
                             ),
                           ),

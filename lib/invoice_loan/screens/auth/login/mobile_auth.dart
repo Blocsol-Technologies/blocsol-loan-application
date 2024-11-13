@@ -1,3 +1,4 @@
+import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/login_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/signup_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/auth/login/components/section_heading.dart';
@@ -149,7 +150,7 @@ class _LoginMobileValidationState extends ConsumerState<LoginMobileValidation> {
                       textInputChild: GestureDetector(
                         onTap: () {
                           HapticFeedback.mediumImpact();
-                          context.go(InvoiceLoanSignupRouter.mobile_validation);
+                          ref.read(routerProvider).push(InvoiceLoanSignupRouter.mobile_validation);
                         },
                         child: Text(
                           "Want to create an account? Signup!",

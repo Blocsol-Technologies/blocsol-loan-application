@@ -46,7 +46,7 @@ class _InvoicesFetchingScreenState
         if (!mounted) return;
 
         if (!response.success) {
-          context.go(InvoiceNewLoanRequestRouter.loan_service_unavailable);
+          context.go(InvoiceNewLoanRequestRouter.enable_gst_api_access);
           return;
         }
 

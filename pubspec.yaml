@@ -50,6 +50,7 @@ dependencies:
   firebase_analytics: ^11.3.3
   flutter_uxcam: ^2.5.4
   firebase_performance: ^0.10.0+8
+  video_player: ^2.9.2
 
 flutter_native_splash:
   android_12:
@@ -127,6 +128,9 @@ flutter:
 
     # Invoice New Loan Request
     - assets/images/invoice_loan/new_loan_request/invoice.png
+
+    # Videos
+    - assets/videos/enable_gst_api_access.mp4
 
     # Animation Assets
     - assets/animations/loading_spinner.json

@@ -39,7 +39,7 @@ class SectionMain extends StatefulWidget {
       required this.inputFormatters,
       this.regex,
       this.showBackButton = false,
-      this.gap = 40});
+      this.gap = 35});
 
   @override
   State<SectionMain> createState() => _SectionMainState();
