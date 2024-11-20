@@ -10,7 +10,7 @@ class PersonalLoanRequestSelectHttpController {
   Future<ServerResponse> fetchOffers(
       String transactionId, String authToken, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get("/ondc/fetch-offers", authToken,
+      var response = await httpService.post("/ondc/fetch-offers", authToken,
           cancelToken, {"transaction_id": transactionId});
 
       if (response.data['success']) {

@@ -96,7 +96,7 @@ class LoanRequestAccountHttpController {
       String otp, String authToken, CancelToken cancelToken) async {
     try {
       var response = await httpService
-          .get("/ondc/verify-gst-otp", authToken, cancelToken, {"otp": otp});
+          .post("/ondc/verify-gst-otp", authToken, cancelToken, {"otp": otp});
 
       if (response.data['success']) {
         return ServerResponse(

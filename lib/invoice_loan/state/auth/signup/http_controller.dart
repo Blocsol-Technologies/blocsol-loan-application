@@ -8,7 +8,7 @@ class SignupHttpController {
   Future<ServerResponse> sendMobileOtp(
       String phoneNumber, signature, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get(
+      var response = await httpService.post(
           "/signup/mobile-validation/send-otp",
           "",
           cancelToken,
@@ -44,7 +44,7 @@ class SignupHttpController {
   Future<ServerResponse> verifyMobileOtp(
       String phoneNumber, otp, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get(
+      var response = await httpService.post(
           "/signup/mobile-validation/verify-otp",
           "",
           cancelToken,
@@ -82,7 +82,7 @@ class SignupHttpController {
   Future<ServerResponse> sendEmailOtp(
       String email, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get("/signup/email-validation/send-otp",
+      var response = await httpService.post("/signup/email-validation/send-otp",
           "", cancelToken, {"email": email});
 
       if (response.data['success']) {
@@ -117,7 +117,7 @@ class SignupHttpController {
   Future<ServerResponse> verifyEmailOtp(
       String email,String otp, String otpId, String phoneNumber, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get(
+      var response = await httpService.post(
           "/signup/email-validation/verify-otp",
           "",
           cancelToken,
@@ -341,7 +341,7 @@ class SignupHttpController {
   Future<ServerResponse> checkGstDataDownloadCompletion(
       String gst, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get(
+      var response = await httpService.post(
           "/signup/gst-validation-completion-check",
           "",
           CancelToken(),

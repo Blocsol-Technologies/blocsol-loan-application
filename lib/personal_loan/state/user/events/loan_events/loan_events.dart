@@ -78,7 +78,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
       var httpService = HttpService(service: ServiceType.PersonalLoan);
 
       var response = await httpService
-          .get("/ondc/get-latest-event", authToken, cancelToken, {
+          .post("/ondc/get-latest-event", authToken, cancelToken, {
         "transaction_id": transactionId,
         "provider_id": providerId,
       });

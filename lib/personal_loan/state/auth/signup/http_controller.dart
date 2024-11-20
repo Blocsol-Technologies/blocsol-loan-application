@@ -9,7 +9,7 @@ class PersonalLoanSignupHttpController {
   Future<ServerResponse> sendMobileOtp(
       String phoneNumber, String deviceId, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get("/signup/mobile-validation/send-otp",
+      var response = await httpService.post("/signup/mobile-validation/send-otp",
           "", cancelToken, {"phoneNumber": phoneNumber, "signature": deviceId});
 
       if (response.data['success']) {
@@ -45,7 +45,7 @@ class PersonalLoanSignupHttpController {
   Future<ServerResponse> verifyMobileOTP(String phoneNumber, String otp,
       String email, String imageURL, CancelToken cancelToken) async {
     try {
-      var response = await httpService.get(
+      var response = await httpService.post(
           "/signup/mobile-validation/verify-otp", "", cancelToken, {
         "phoneNumber": phoneNumber,
         "otp": otp,

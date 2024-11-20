@@ -233,7 +233,7 @@ class LoanRequestSearchHttpController {
       String transactionId, String authToken, CancelToken cancelToken) async {
     try {
       var response = await httpService
-          .get("/ondc/fetch-invoice-offers", authToken, cancelToken, {
+          .post("/ondc/fetch-invoice-offers", authToken, cancelToken, {
         "transaction_id": transactionId,
       });
 
