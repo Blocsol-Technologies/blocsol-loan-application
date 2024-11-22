@@ -75,7 +75,7 @@ class _LoanApplicationState extends ConsumerState<LoanApplication> {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Invoicepe',
+      title: 'Invoicepar',
       theme: theme.valueOrNull ?? AppThemeData.defaultTheme,
       debugShowCheckedModeBanner: false,
       locale: const Locale('en'),
