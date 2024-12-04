@@ -211,6 +211,8 @@ class LiabilitiesHttpController {
         );
       }
 
+      await Future.delayed(const Duration(seconds: 10));
+
       response = await httpService
           .post("/ondc/fetch-prepayment-url", authToken, cancelToken, {
         "transaction_id": transactionId,

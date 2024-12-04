@@ -1,4 +1,3 @@
-import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
 
 class InvoiceLoanRepaymentSetupFailed extends ConsumerStatefulWidget {
   const InvoiceLoanRepaymentSetupFailed({super.key});
@@ -90,8 +90,7 @@ class _InvoiceLoanRepaymentSetupFailedState
             children: <Widget>[
               InvoiceNewLoanRequestTopNav(
                 onBackClick: () {
-                  ref.read(routerProvider).pushReplacement(
-                      InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                 context.go(InvoiceNewLoanRequestRouter.loan_offer_select);
                 },
               ),
               const SpacerWidget(height: 35),
@@ -199,9 +198,7 @@ class _InvoiceLoanRepaymentSetupFailedState
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).push(
-                            InvoiceNewLoanRequestRouter
-                                .single_bank_offer_select);
+                        context.go(InvoiceNewLoanRequestRouter.loan_offer_select);
                       },
                       child: Container(
                         height: 40,

@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
+
 class PersonalLoanOnInit02Error extends ConsumerStatefulWidget {
   const PersonalLoanOnInit02Error({super.key});
 
@@ -107,8 +108,7 @@ class _PersonalLoanOnInit02ErrorState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).pushReplacement(
-                            PersonalNewLoanRequestRouter.new_loan_offers_home);
+                        context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
                         height: 40,

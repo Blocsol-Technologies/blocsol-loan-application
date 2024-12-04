@@ -173,9 +173,9 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
               ref
                   .read(invoiceNewLoanRequestProvider.notifier)
                   .setSkipAadharKyc(false);
-              ref
-                  .read(routerProvider)
-                  .pushReplacement(InvoiceNewLoanRequestRouter.aadhar_kyc);
+              // ref
+              //     .read(routerProvider)
+              //     .pushReplacement(InvoiceNewLoanRequestRouter.aadhar_kyc);
               break;
             }
 

@@ -86,13 +86,14 @@ class _InvoiceNewLoanOffersSelectState
   }
 
   Future<void> onInvoiceOffersRefresh() async {
-    if (ref.read(invoiceNewLoanRequestProvider).fetchingInvoiceWithOffers) {
-      return;
-    }
-
     var _ = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchLoanOffers(_cancelToken);
+
+    setState(() {
+      _filteredOffers =
+          ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
+    });
   }
 
   void _startFetching() {
@@ -102,6 +103,15 @@ class _InvoiceNewLoanOffersSelectState
       await ref
           .read(invoiceNewLoanRequestProvider.notifier)
           .fetchLoanOffers(_cancelToken);
+
+      var invoiceWithOffers = ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
+
+      if (_textInputController.text.isEmpty && invoiceWithOffers.length != _filteredOffers.length) {
+        setState(() {
+          _filteredOffers = invoiceWithOffers;
+        });
+      }
+      
       _adjustInterval();
     });
   }
@@ -127,7 +137,6 @@ class _InvoiceNewLoanOffersSelectState
         _filteredOffers =
             ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
       });
-
       _startFetching();
     });
 
@@ -148,7 +157,7 @@ class _InvoiceNewLoanOffersSelectState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final newLoanStateRef = ref.read(invoiceNewLoanRequestProvider);
+    final newLoanStateRef = ref.watch(invoiceNewLoanRequestProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
     ref.watch(invoiceLoanEventsProvider);
 
@@ -666,10 +675,6 @@ class _OfferSearchState extends State<OfferSearch> {
               ),
               GestureDetector(
                 onTap: () async {
-                  if (refreshingInvoices) {
-                    return;
-                  }
-
                   setState(() {
                     refreshingInvoices = true;
                   });
@@ -681,7 +686,7 @@ class _OfferSearchState extends State<OfferSearch> {
                   });
                 },
                 child: Container(
-                  height: 25,
+                  height: 30,
                   width: 90,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(

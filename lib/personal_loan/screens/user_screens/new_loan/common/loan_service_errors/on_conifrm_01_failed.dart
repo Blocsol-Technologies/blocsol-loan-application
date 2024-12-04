@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
+
 class PersonalLoanOnConfirm01Error extends ConsumerStatefulWidget {
   const PersonalLoanOnConfirm01Error({super.key});
 
@@ -119,8 +120,7 @@ class _PersonalLoanOnConfirm01ErrorState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).pushReplacement(
-                            PersonalNewLoanRequestRouter.new_loan_offers_home);
+                        context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
                         height: 40,
@@ -135,7 +135,7 @@ class _PersonalLoanOnConfirm01ErrorState
                         ),
                         child: Center(
                           child: Text(
-                            "Select Other Offer",
+                            "Select Another Offer",
                             style: TextStyle(
                               fontFamily: fontFamily,
                               color: Theme.of(context).colorScheme.primary,

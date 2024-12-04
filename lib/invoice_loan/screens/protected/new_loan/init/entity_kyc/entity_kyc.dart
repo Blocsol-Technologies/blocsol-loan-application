@@ -243,17 +243,16 @@ class _InvoiceNewLoanEntityKycState
                   ),
                 ),
                 Expanded(
-                  child: SwipeRefresh.adaptive(
-                    shrinkWrap: true,
-                    stateStream: _stream,
-                    onRefresh: () {
-                      _refresh();
-                    },
-                    children: [
-                      SizedBox(
-                        height: RelativeSize.height(530, height),
-                        width: width,
-                        child: newLoanStateRef.verifyingEntityKYC
+                  child: SizedBox(
+                    width: width,
+                    child: SwipeRefresh.adaptive(
+                      shrinkWrap: true,
+                      stateStream: _stream,
+                      onRefresh: () {
+                        _refresh();
+                      },
+                      children: [
+                        newLoanStateRef.verifyingEntityKYC
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -292,7 +291,7 @@ class _InvoiceNewLoanEntityKycState
                                 children: [
                                   SizedBox(
                                     width: width,
-                                    height: 900,
+                                    height: 1000,
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 50),
                                       child: InAppWebView(
@@ -320,8 +319,13 @@ class _InvoiceNewLoanEntityKycState
                                           );
                                           return true;
                                         },
+                                        initialUrlRequest:
+                                            URLRequest(url: WebUri(_url)),
                                         onWebViewCreated: (controller) async {
                                           _webViewController = controller;
+                                          _webViewController?.loadUrl(
+                                              urlRequest: URLRequest(
+                                                  url: WebUri(_url)));
                                         },
                                       ),
                                     ),
@@ -332,10 +336,10 @@ class _InvoiceNewLoanEntityKycState
                                       : Container(),
                                 ],
                               ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),

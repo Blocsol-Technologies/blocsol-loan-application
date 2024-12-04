@@ -248,17 +248,16 @@ class _InvoiceNewLoanAadharKycState
                       ),
                     ),
                     Expanded(
-                      child: SwipeRefresh.adaptive(
-                        shrinkWrap: true,
-                        stateStream: _stream,
-                        onRefresh: () {
-                          _refresh();
-                        },
-                        children: [
-                          SizedBox(
-                            height: RelativeSize.height(480, height),
-                            width: width,
-                            child: newLoanStateRef.verifyingAadharKYC
+                      child: SizedBox(
+                        width: width,
+                        child: SwipeRefresh.adaptive(
+                          shrinkWrap: true,
+                          stateStream: _stream,
+                          onRefresh: () {
+                            _refresh();
+                          },
+                          children: [
+                            newLoanStateRef.verifyingAadharKYC
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -298,7 +297,7 @@ class _InvoiceNewLoanAadharKycState
                                     children: [
                                       SizedBox(
                                         width: width,
-                                        height: 900,
+                                        height: 1000,
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 50),
@@ -311,6 +310,7 @@ class _InvoiceNewLoanAadharKycState
                                               javaScriptEnabled: true,
                                               verticalScrollBarEnabled: true,
                                               disableHorizontalScroll: true,
+                                              disableVerticalScroll: false,
                                               javaScriptCanOpenWindowsAutomatically:
                                                   true,
                                               supportMultipleWindows: true,
@@ -327,9 +327,15 @@ class _InvoiceNewLoanAadharKycState
                                               );
                                               return true;
                                             },
+                                            initialUrlRequest: URLRequest(
+                                                url: WebUri(_aadharKycUrl)),
                                             onWebViewCreated:
                                                 (controller) async {
                                               _webViewController = controller;
+                                              _webViewController?.loadUrl(
+                                                  urlRequest: URLRequest(
+                                                      url: WebUri(
+                                                          _aadharKycUrl)));
                                             },
                                           ),
                                         ),
@@ -341,10 +347,10 @@ class _InvoiceNewLoanAadharKycState
                                           : Container(),
                                     ],
                                   ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

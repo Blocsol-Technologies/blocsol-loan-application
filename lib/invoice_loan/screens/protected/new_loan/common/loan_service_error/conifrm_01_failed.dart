@@ -1,4 +1,3 @@
-import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/index_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -48,8 +47,7 @@ class _InvoiceLoanConfirm01ErrorState
               InvoiceNewLoanRequestTopNav(
                 showBackButton: false,
                 onBackClick: () {
-                  ref.read(routerProvider).pushReplacement(
-                      InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                  context.go(InvoiceNewLoanRequestRouter.loan_offer_select);
                 },
               ),
               const SpacerWidget(height: 35),
@@ -119,9 +117,7 @@ class _InvoiceLoanConfirm01ErrorState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).pushReplacement(
-                            InvoiceNewLoanRequestRouter
-                                .single_bank_offer_select);
+                        context.go(InvoiceNewLoanRequestRouter.loan_offer_select);
                       },
                       child: Container(
                         height: 40,

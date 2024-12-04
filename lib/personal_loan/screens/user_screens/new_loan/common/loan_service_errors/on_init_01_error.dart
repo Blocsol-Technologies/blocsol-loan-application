@@ -107,7 +107,7 @@ class _PersonalLoanOnInit01ErrorState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).pushReplacement(
+                        context.go(
                             PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(

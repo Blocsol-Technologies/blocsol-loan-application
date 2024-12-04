@@ -305,7 +305,9 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
       return;
     }
 
-    await Future.delayed(const Duration(seconds: 15));
+    await Future.delayed(const Duration(seconds: 30));
+    if (!mounted) return;
+
 
     if (ref
             .read(invoiceNewLoanRequestProvider)
@@ -315,7 +317,6 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
       return;
     }
 
-    if (!mounted) return;
 
     response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)

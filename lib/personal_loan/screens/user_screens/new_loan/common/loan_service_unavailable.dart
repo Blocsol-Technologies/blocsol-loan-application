@@ -96,7 +96,9 @@ class _PersonalLoanServiceUnavailableScreenState
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.heavyImpact();
-                            ref.read(personalNewLoanRequestProvider.notifier).reset();
+                            ref
+                                .read(personalNewLoanRequestProvider.notifier)
+                                .reset();
                             context.go(PersonalLoanIndexRouter.dashboard);
                           },
                           child: Container(

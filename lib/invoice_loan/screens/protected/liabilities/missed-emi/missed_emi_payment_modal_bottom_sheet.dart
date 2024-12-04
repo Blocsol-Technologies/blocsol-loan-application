@@ -2,6 +2,7 @@ import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabiliti
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
@@ -37,6 +38,8 @@ class _MissedEmiPaymentModalBottomSheet
   Widget build(BuildContext context) {
     final oldLoanStateRef = ref.watch(invoiceLoanLiabilityProvider);
     final selectedLiability = oldLoanStateRef.selectedLiability;
+    
+    ref.watch(invoiceLoanLiabilitiesProvider);
     ref.watch(invoiceLoanEventsProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
 
@@ -62,7 +65,7 @@ class _MissedEmiPaymentModalBottomSheet
             height: 30,
           ),
           Text(
-            "When making missed EMI payment, you agree to pay Missed EMI Penalty charges which are ${selectedLiability..offerDetails.lateCharge}",
+            "When making missed EMI payment, you agree to pay Missed EMI Penalty charges which are ${selectedLiability.offerDetails.lateCharge}",
             style: TextStyle(
               fontFamily: fontFamily,
               fontSize: AppFontSizes.b1,

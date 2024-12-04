@@ -1,4 +1,3 @@
-import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/new_loan/components/timer.dart';
@@ -11,6 +10,7 @@ import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
 
 class InvoiceLoanOnSelect02Error extends ConsumerStatefulWidget {
   const InvoiceLoanOnSelect02Error({super.key});
@@ -44,8 +44,7 @@ class _InvoiceLoanOnSelect02ErrorState
             children: <Widget>[
               InvoiceNewLoanRequestTopNav(
                 onBackClick: () {
-                  ref.read(routerProvider).pushReplacement(
-                      InvoiceNewLoanRequestRouter.single_bank_offer_select);
+                  context.go(InvoiceNewLoanRequestRouter.loan_offer_select);
                 },
               ),
               const SpacerWidget(height: 35),

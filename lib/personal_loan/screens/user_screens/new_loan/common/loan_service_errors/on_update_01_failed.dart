@@ -119,7 +119,7 @@ class _PersonalLoanOnUpdate01ErrorState
                     GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).pushReplacement(
+                        context.go(
                             PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
@@ -135,7 +135,7 @@ class _PersonalLoanOnUpdate01ErrorState
                         ),
                         child: Center(
                           child: Text(
-                            "Select Other Offer",
+                            "Select Another Offer",
                             style: TextStyle(
                               fontFamily: fontFamily,
                               color: Theme.of(context).colorScheme.primary,

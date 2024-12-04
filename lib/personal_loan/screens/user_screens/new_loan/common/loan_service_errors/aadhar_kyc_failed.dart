@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
+
 
 class PersonalLoanAadharKycFailed extends ConsumerStatefulWidget {
   const PersonalLoanAadharKycFailed({super.key});
@@ -199,8 +201,7 @@ class _PersonalLoanAadharKycFailedState
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.heavyImpact();
-                        ref.read(routerProvider).push(
-                            PersonalNewLoanRequestRouter.new_loan_offers_home);
+                        context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
                       },
                       child: Container(
                         height: 40,
