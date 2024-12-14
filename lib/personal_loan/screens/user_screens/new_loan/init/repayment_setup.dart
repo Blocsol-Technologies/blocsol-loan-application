@@ -69,25 +69,13 @@ class _PCNewLoanRepaymentSetupState
       _verifyingRepaymentSuccess = true;
     });
 
-    bool success = false;
-    int tries = 0;
-
-    while (!success && tries < 5) {
-      var repaymentSetupSuccessResponse = await ref
-          .read(personalNewLoanRequestProvider.notifier)
-          .checkRepaymentSuccess(_cancelToken);
-
-      if (repaymentSetupSuccessResponse.success) {
-        success = true;
-      } else {
-        tries++;
-        await Future.delayed(const Duration(seconds: 15));
-      }
-    }
+    var repaymentSetupSuccessResponse = await ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .checkRepaymentSuccess(_cancelToken);
 
     if (!mounted) return;
 
-    if (!success) {
+    if (!repaymentSetupSuccessResponse.success) {
       ref
           .read(personalNewLoanRequestProvider.notifier)
           .updateCheckingRepaymentSetupSuccess(false);
@@ -114,7 +102,6 @@ class _PCNewLoanRepaymentSetupState
     ref
         .read(personalNewLoanRequestProvider.notifier)
         .updateState(PersonalLoanRequestProgress.repaymentSetup);
-    context.go(PersonalNewLoanRequestRouter.new_loan_process);
   }
 
   void _fetchRepaymentURL() async {
@@ -201,6 +188,7 @@ class _PCNewLoanRepaymentSetupState
 
   @override
   void dispose() {
+    ref.read(personalNewLoanRequestProvider.notifier).updateCheckingRepaymentSetupSuccess(false);
     _cancelToken.cancel();
     super.dispose();
   }

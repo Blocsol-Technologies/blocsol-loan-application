@@ -4,6 +4,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -96,7 +98,7 @@ class _PCLiabilityPrepaymentWebviewState
 
   Future<void> _checkPrepaymentSuccessBackground() async {
     if (!mounted || _prepaymentSuccessTimer == null) return;
-    
+
     if (ref.read(personalLoanLiabilitiesProvider).prepaymentFailed) {
       return;
     }
@@ -168,6 +170,8 @@ class _PCLiabilityPrepaymentWebviewState
     final width = MediaQuery.of(context).size.width;
     final borrowerAccountDetailsRef =
         ref.watch(personalLoanAccountDetailsProvider);
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
 
     final liabilityRef = ref.watch(personalLoanLiabilitiesProvider);
 

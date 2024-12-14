@@ -25,7 +25,6 @@ class PCNewLoanProcessScreen extends ConsumerStatefulWidget {
 
 class _PCNewLoanProcessScreenState
     extends ConsumerState<PCNewLoanProcessScreen> {
-
   void _performLoanAction() async {
     HapticFeedback.heavyImpact();
 
@@ -36,8 +35,8 @@ class _PCNewLoanProcessScreenState
         context.go(PersonalNewLoanRequestRouter.new_loan_data_consent);
         break;
       case PersonalLoanRequestProgress.formGenerated:
-        context
-            .go(PersonalNewLoanRequestRouter.new_loan_generate_offers_and_aa_consent);
+        context.go(PersonalNewLoanRequestRouter
+            .new_loan_generate_offers_and_aa_consent);
         break;
       case PersonalLoanRequestProgress.bankConsent:
         context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);
@@ -59,7 +58,7 @@ class _PCNewLoanProcessScreenState
         context
             .go(PersonalNewLoanRequestRouter.new_loan_final_processing_screen);
         break;
-      case PersonalLoanRequestProgress.monitoringConsent:
+      case PersonalLoanRequestProgress.sanctioned:
         context
             .go(PersonalNewLoanRequestRouter.new_loan_final_disbursed_screen);
         break;
@@ -116,10 +115,9 @@ class _PCNewLoanProcessScreenState
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: RelativeSize.width(30, width)),
-                        child: PersonalNewLoanRequestTopNav(
-                            onBackClick: () {
-                              context.go(PersonalLoanIndexRouter.dashboard);
-                            }),
+                        child: PersonalNewLoanRequestTopNav(onBackClick: () {
+                          context.go(PersonalLoanIndexRouter.dashboard);
+                        }),
                       ),
                       const SpacerWidget(
                         height: 30,
@@ -1165,7 +1163,7 @@ class _LoanAgreement extends StatelessWidget {
     return loanProgressState.index >=
                 PersonalLoanRequestProgress.repaymentSetup.index &&
             loanProgressState.index <
-                PersonalLoanRequestProgress.disbursed.index
+                PersonalLoanRequestProgress.sanctioned.index
         ? Container(
             width: double.infinity,
             padding: EdgeInsets.only(left: RelativeSize.width(20, width)),
@@ -1408,7 +1406,7 @@ class _LoanDisbursed extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return loanProgressState.index ==
-            PersonalLoanRequestProgress.disbursed.index
+            PersonalLoanRequestProgress.sanctioned.index
         ? Container(
             width: double.infinity,
             padding: EdgeInsets.only(left: RelativeSize.width(20, width)),

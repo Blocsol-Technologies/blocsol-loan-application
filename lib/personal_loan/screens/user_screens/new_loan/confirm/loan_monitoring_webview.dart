@@ -115,12 +115,6 @@ class _PCNewLoanMonitoringConsentAAWebviewState
     ref
         .read(personalNewLoanRequestProvider.notifier)
         .updateState(PersonalLoanRequestProgress.monitoringConsent);
-
-    setState(() {
-      _checkingConsentSuccess = false;
-    });
-
-    context.go(PersonalNewLoanRequestRouter.new_loan_process);
   }
 
   @override

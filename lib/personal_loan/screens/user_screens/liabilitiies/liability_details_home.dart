@@ -3,6 +3,8 @@ import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/support_router.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/components/foreclose_bottom_sheet.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/support/support.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -108,6 +110,8 @@ class _PCLiabilityDetailsHomeState
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final oldLoanStateRef = ref.watch(personalLoanLiabilitiesProvider);
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
     final selectedOldOffer = oldLoanStateRef.selectedOldOffer;
 
     return PopScope(

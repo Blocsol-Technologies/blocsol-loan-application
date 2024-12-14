@@ -2,6 +2,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/screens/user_screens/liabilitiies/components/missed_emi_payment_modal_bottom_sheet.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/utils/loan/loan_details.dart';
 import 'package:blocsol_loan_application/utils/lender_utils.dart';
@@ -48,7 +50,9 @@ class _PCLiabilityPaymentDetailsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
         duration: const Duration(seconds: 5),
       );
 
@@ -115,6 +119,8 @@ class _PCLiabilityPaymentDetailsState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
     final oldLoanStateRef = ref.watch(personalLoanLiabilitiesProvider);
     final selectedOldOffer = oldLoanStateRef.selectedOldOffer;
 

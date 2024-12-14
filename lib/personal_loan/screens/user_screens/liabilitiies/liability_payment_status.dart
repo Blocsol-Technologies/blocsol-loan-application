@@ -1,6 +1,8 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
@@ -20,6 +22,8 @@ class PersonalLoanliabilityPaymentStatus extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final liabilityref = ref.watch(personalLoanLiabilitiesProvider);
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
     final selectedPaymentDetails = ref
         .watch(personalLoanLiabilitiesProvider.notifier)
         .getPaymentSuccessDetails();

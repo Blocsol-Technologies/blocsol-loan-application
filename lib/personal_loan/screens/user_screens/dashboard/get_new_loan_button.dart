@@ -4,6 +4,7 @@ import 'package:blocsol_loan_application/personal_loan/constants/routes/profile_
 import 'package:blocsol_loan_application/personal_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
@@ -71,6 +72,7 @@ class _GetNewPersonalLoanButtonState
         if (ref
             .read(personalLoanAccountDetailsProvider)
             .accountAggregatorSetup) {
+          ref.read(personalLoanEventsProvider.notifier).reset();
           context.go(PersonalNewLoanRequestRouter.new_loan_process);
           return;
         } else {
@@ -161,6 +163,9 @@ class _GetNewPersonalLoanButtonState
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.heavyImpact();
+                              ref
+                                  .read(personalLoanEventsProvider.notifier)
+                                  .reset();
                               context.go(PersonalNewLoanRequestRouter
                                   .new_loan_process);
                               return;
@@ -196,6 +201,9 @@ class _GetNewPersonalLoanButtonState
                               if (ref
                                   .read(personalLoanAccountDetailsProvider)
                                   .accountAggregatorSetup) {
+                                ref
+                                    .read(personalLoanEventsProvider.notifier)
+                                    .reset();
                                 context.go(PersonalNewLoanRequestRouter
                                     .new_loan_process);
                                 return;
@@ -324,6 +332,9 @@ class _GetNewPersonalLoanButtonState
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.heavyImpact();
+                              ref
+                                  .read(personalLoanEventsProvider.notifier)
+                                  .reset();
                               context.go(PersonalNewLoanRequestRouter
                                   .new_loan_process);
                               return;

@@ -44,7 +44,7 @@ class _PersonalNewLoanRequestCountdownTimerState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Container(
-      width: RelativeSize.width(170, width),
+      width: RelativeSize.width(185, width),
       padding: const EdgeInsets.symmetric(
         horizontal: 8,
         vertical: 8,

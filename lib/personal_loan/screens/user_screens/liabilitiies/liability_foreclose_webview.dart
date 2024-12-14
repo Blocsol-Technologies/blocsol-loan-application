@@ -4,6 +4,8 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/personal_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/account_details/account_details.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/personal_loan/state/user/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/personal_loan/state/user/old_loan/old_loans.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -95,8 +97,8 @@ class _PCLiabilityForeclosureWebviewState
   }
 
   Future<void> _checkForeclosureSuccessBackground() async {
-     if (!mounted || _foreclosureSuccessTimer == null) return;
-     
+    if (!mounted || _foreclosureSuccessTimer == null) return;
+
     if (ref.read(personalLoanLiabilitiesProvider).loanForeclosureFailed) {
       return;
     }
@@ -160,7 +162,6 @@ class _PCLiabilityForeclosureWebviewState
   void _startPollingForSuccess() {
     _foreclosureSuccessTimer =
         Timer.periodic(Duration(seconds: _interval), (timer) async {
-     
       await _checkForeclosureSuccessBackground();
     });
   }
@@ -191,6 +192,8 @@ class _PCLiabilityForeclosureWebviewState
     final borrowerAccountDetailsRef =
         ref.watch(personalLoanAccountDetailsProvider);
     final liabilityRef = ref.watch(personalLoanLiabilitiesProvider);
+    ref.watch(personalLoanEventsProvider);
+    ref.watch(personalLoanServerSentEventsProvider);
 
     return PopScope(
       canPop: false,

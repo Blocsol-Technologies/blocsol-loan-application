@@ -11,6 +11,7 @@ import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -101,244 +102,252 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
         bottomNavigationBar: const BorrowerBottomNavigationBar(),
         body: Stack(
           children: [
-            SizedBox(
-              height: height,
-              width: width,
-              child: Column(
-                children: <Widget>[
-                  // Hero
-                  SizedBox(
-                    width: width,
-                    height: RelativeSize.height(280, height),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: width,
-                          height: RelativeSize.height(245, height),
-                          padding:
-                              EdgeInsets.all(RelativeSize.width(30, width)),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(40),
-                              bottomRight: Radius.circular(40),
+              LiquidPullToRefresh(
+              color: Theme.of(context).colorScheme.surface,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              showChildOpacityTransition: false,
+              onRefresh: () async {
+                await _fetchBorrowerData();
+              },
+              child: SizedBox(
+                height: height,
+                width: width,
+                child: Column(
+                  children: <Widget>[
+                    // Hero
+                    SizedBox(
+                      width: width,
+                      height: RelativeSize.height(280, height),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: width,
+                            height: RelativeSize.height(245, height),
+                            padding:
+                                EdgeInsets.all(RelativeSize.width(30, width)),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(40),
+                                bottomRight: Radius.circular(40),
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 25,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                      ref.read(routerProvider).push(PersonalLoanIndexRouter.profile_screen);
-                                    },
-                                    child: Container(
-                                      height: 28,
-                                      width: 28,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    IconButton(
+                                      onPressed: () {
+                                        HapticFeedback.mediumImpact();
+                                        _handleNotificationBellPress();
+                                      },
+                                      icon: Icon(
+                                        Icons.notifications_active,
+                                        size: 25,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onPrimary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Image.network(
-                                          borrowerAccountDetailsRef
-                                                  .imageURL.isEmpty
-                                              ? "https://placehold.co/30x30/000000/FFFFFF.png"
-                                              : borrowerAccountDetailsRef
-                                                  .imageURL,
-                                          fit: BoxFit.cover,
-                                        ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              const SpacerWidget(
-                                height: 25,
-                              ),
-                              Text(
-                                "Welcome",
-                                style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h1,
-                                    fontWeight: AppFontWeights.medium,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
-                              ),
-                              const SpacerWidget(
-                                height: 5,
-                              ),
-                              Text(
-                                borrowerAccountDetailsRef.name.isEmpty
-                                    ? "Loading..."
-                                    : borrowerAccountDetailsRef.name,
-                                style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontSize: AppFontSizes.h1,
-                                    fontWeight: AppFontWeights.medium,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          child: SizedBox(
-                            width: width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                GetNewPersonalLoanButton(
-                                    screenHeight: height, screenWidth: width)
+                                    const SpacerWidget(
+                                      width: 25,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        HapticFeedback.mediumImpact();
+                                        ref.read(routerProvider).push(PersonalLoanIndexRouter.profile_screen);
+                                      },
+                                      child: Container(
+                                        height: 28,
+                                        width: 28,
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Center(
+                                          child: Image.network(
+                                            borrowerAccountDetailsRef
+                                                    .imageURL.isEmpty
+                                                ? "https://placehold.co/30x30/000000/FFFFFF.png"
+                                                : borrowerAccountDetailsRef
+                                                    .imageURL,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SpacerWidget(
+                                  height: 25,
+                                ),
+                                Text(
+                                  "Welcome",
+                                  style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.h1,
+                                      fontWeight: AppFontWeights.medium,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                                ),
+                                const SpacerWidget(
+                                  height: 5,
+                                ),
+                                Text(
+                                  borrowerAccountDetailsRef.name.isEmpty
+                                      ? "Loading..."
+                                      : borrowerAccountDetailsRef.name,
+                                  style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: AppFontSizes.h1,
+                                      fontWeight: AppFontWeights.medium,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                                ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            child: SizedBox(
+                              width: width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  GetNewPersonalLoanButton(
+                                      screenHeight: height, screenWidth: width)
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SpacerWidget(
-                    height: 10,
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: RelativeSize.width(50, width)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "My Loans",
-                          style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontSize: AppFontSizes.b1,
-                              fontWeight: AppFontWeights.normal,
-                              color: Theme.of(context).colorScheme.onSurface),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            HapticFeedback.mediumImpact();
-                            ref.read(routerProvider).push(
-                                PersonalLoanIndexRouter.liabilities_screen);
-                          },
-                          child: Text(
-                            "Show All",
+                    const SpacerWidget(
+                      height: 10,
+                    ),
+              
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: RelativeSize.width(50, width)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "My Loans",
                             style: TextStyle(
                                 fontFamily: fontFamily,
                                 fontSize: AppFontSizes.b1,
-                                fontWeight: AppFontWeights.medium,
-                                color: Theme.of(context).colorScheme.primary),
+                                fontWeight: AppFontWeights.normal,
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
-                        )
-                      ],
+                          GestureDetector(
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+                              ref.read(routerProvider).push(
+                                  PersonalLoanIndexRouter.liabilities_screen);
+                            },
+                            child: Text(
+                              "Show All",
+                              style: TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: AppFontSizes.b1,
+                                  fontWeight: AppFontWeights.medium,
+                                  color: Theme.of(context).colorScheme.primary),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  const SpacerWidget(
-                    height: 15,
-                  ),
-                  Expanded(
-                    child: Container(
-                        width: width,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: RelativeSize.width(30, width)),
-                        child: _noOffersFound
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Lottie.asset('assets/animations/empty.json',
-                                      height: 180, width: 180),
-                                  const SpacerWidget(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "No Loan Offers Found!",
-                                    style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontSize: AppFontSizes.h2,
-                                        fontWeight: AppFontWeights.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface),
-                                  ),
-                                ],
-                              )
-                            : oldLoanStateRef.oldLoans.isNotEmpty
-                                ? SingleChildScrollView(
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          oldLoanStateRef.oldLoans.length,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                RelativeSize.width(30, width),
-                                          ),
-                                          child: PersonalLoanLiabilityCard(
-                                            screenHeight: height,
-                                            screenWidth: width,
-                                            oldLoanDetails:
-                                                oldLoanStateRef.oldLoans[index],
-                                          ),
-                                        );
-                                      },
+                    const SpacerWidget(
+                      height: 15,
+                    ),
+                    Expanded(
+                      child: Container(
+                          width: width,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: RelativeSize.width(30, width)),
+                          child: _noOffersFound
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Lottie.asset('assets/animations/empty.json',
+                                        height: 180, width: 180),
+                                    const SpacerWidget(
+                                      height: 20,
                                     ),
-                                  )
-                                : Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Lottie.asset(
-                                          'assets/animations/loading_spinner.json',
-                                          height: 150,
-                                          width: 150),
-                                      const SpacerWidget(
-                                        height: 20,
+                                    Text(
+                                      "No Loan Offers Found!",
+                                      style: TextStyle(
+                                          fontFamily: fontFamily,
+                                          fontSize: AppFontSizes.h2,
+                                          fontWeight: AppFontWeights.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                    ),
+                                  ],
+                                )
+                              : oldLoanStateRef.oldLoans.isNotEmpty
+                                  ? SingleChildScrollView(
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            oldLoanStateRef.oldLoans.length,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  RelativeSize.width(30, width),
+                                            ),
+                                            child: PersonalLoanLiabilityCard(
+                                              screenHeight: height,
+                                              screenWidth: width,
+                                              oldLoanDetails:
+                                                  oldLoanStateRef.oldLoans[index],
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      Text(
-                                        "Fetching Loan Offers!",
-                                        style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: AppFontSizes.h2,
-                                            fontWeight: AppFontWeights.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface),
-                                      ),
-                                    ],
-                                  )),
-                  )
-                ],
+                                    )
+                                  : Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Lottie.asset(
+                                            'assets/animations/loading_spinner.json',
+                                            height: 150,
+                                            width: 150),
+                                        const SpacerWidget(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "Fetching Loan Offers!",
+                                          style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.h2,
+                                              fontWeight: AppFontWeights.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
+                                        ),
+                                      ],
+                                    )),
+                    )
+                  ],
+                ),
               ),
             ),
             Positioned(

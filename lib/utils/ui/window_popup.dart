@@ -13,7 +13,6 @@ class WindowPopup extends StatefulWidget {
 }
 
 class _WindowPopupState extends State<WindowPopup> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,6 +41,27 @@ class _WindowPopupState extends State<WindowPopup> {
               windowId: widget.createWindowAction.windowId,
               onCloseWindow: (controller) {
                 Navigator.pop(context);
+              },
+              onCreateWindow: (controller, createWindowAction) async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return WindowPopup(createWindowAction: createWindowAction);
+                  },
+                );
+                return true;
+              },
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                var url = navigationAction.request.url;
+
+                bool isUrlValid =
+                    url != null && url.hasScheme && url.host.isNotEmpty;
+
+                if (isUrlValid) {
+                  return NavigationActionPolicy.ALLOW;
+                } else {
+                  return NavigationActionPolicy.CANCEL;
+                }
               },
             ),
           ),

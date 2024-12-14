@@ -148,6 +148,7 @@ class _PCNewLoanAgreementWebviewState
 
   @override
   void dispose() {
+    ref.read(personalNewLoanRequestProvider.notifier).setCheckingLoanAgreementSuccess(false);
     _cancelToken.cancel();
     super.dispose();
   }

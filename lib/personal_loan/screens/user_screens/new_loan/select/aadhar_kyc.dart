@@ -68,25 +68,13 @@ class _PCNewLoanAadharKYCWebviewState
       _verifyingAadharKYC = true;
     });
 
-    bool success = false;
-    int tries = 0;
-
-    while (!success && tries < 5) {
-      var form03SubmissionResponse = await ref
-          .read(personalNewLoanRequestProvider.notifier)
-          .checkAadharKYCSuccess(_cancelToken);
-
-      if (form03SubmissionResponse.success) {
-        success = true;
-      } else {
-        tries++;
-        await Future.delayed(const Duration(seconds: 15));
-      }
-    }
+    var form03SubmissionResponse = await ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .checkAadharKYCSuccess(_cancelToken);
 
     if (!mounted) return;
 
-    if (!success) {
+    if (!form03SubmissionResponse.success) {
       ref
           .read(personalNewLoanRequestProvider.notifier)
           .setAadharKYCFailure(true);
@@ -192,6 +180,9 @@ class _PCNewLoanAadharKYCWebviewState
 
   @override
   void dispose() {
+    ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .setVerifyingAadharKYC(false);
     _cancelToken.cancel();
     super.dispose();
   }

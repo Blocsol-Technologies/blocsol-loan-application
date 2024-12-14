@@ -13,7 +13,7 @@ enum PersonalLoanRequestProgress {
   repaymentSetup,
   loanAgreement,
   monitoringConsent,
-  disbursed,
+  sanctioned,
 }
 
 @freezed

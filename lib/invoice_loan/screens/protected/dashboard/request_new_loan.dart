@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/loan_request_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/profile_router.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/loan_request/loan_request.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/user/profile/profile_details.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
@@ -52,6 +53,7 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
         if (ref
             .read(invoiceLoanUserProfileDetailsProvider)
             .accountAggregatorSetup) {
+          ref.read(invoiceLoanEventsProvider.notifier).reset();
           context.go(InvoiceNewLoanRequestRouter.dashboard);
           return;
         } else {
@@ -142,6 +144,9 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.heavyImpact();
+                              ref
+                                  .read(invoiceLoanEventsProvider.notifier)
+                                  .reset();
                               context.go(InvoiceNewLoanRequestRouter.dashboard);
                               return;
                             },
@@ -176,6 +181,9 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                               if (ref
                                   .read(invoiceLoanUserProfileDetailsProvider)
                                   .accountAggregatorSetup) {
+                                ref
+                                    .read(invoiceLoanEventsProvider.notifier)
+                                    .reset();
                                 context
                                     .go(InvoiceNewLoanRequestRouter.dashboard);
                                 return;
@@ -305,6 +313,9 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
                           GestureDetector(
                             onTap: () {
                               HapticFeedback.heavyImpact();
+                              ref
+                                  .read(invoiceLoanEventsProvider.notifier)
+                                  .reset();
                               context.go(InvoiceNewLoanRequestRouter.dashboard);
                               return;
                             },

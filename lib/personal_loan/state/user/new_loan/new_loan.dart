@@ -94,6 +94,10 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
     state = state.copyWith(repaymentSetupFailure: value);
   }
 
+  void setCheckingLoanAgreementSuccess(bool value) {
+    state = state.copyWith(verifyingLoanAgreementSuccess: value);
+  }
+
   void updateLoanAgreementFailure(bool value) {
     state = state.copyWith(loanAgreementFailure: value);
   }
@@ -343,8 +347,6 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
         .checkAadharKYCSuccess(state.transactionId,
             state.selectedOffer.offerProviderId, authToken, cancelToken);
 
-    state = state.copyWith(verifyingAadharKYC: false);
-
     return response;
   }
 
@@ -415,8 +417,6 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
         .checkRepaymentSuccess(state.transactionId,
             state.selectedOffer.offerProviderId, authToken, cancelToken);
 
-    state = state.copyWith(checkingRepaymentSetupSuccess: false);
-
     return response;
   }
 
@@ -456,8 +456,6 @@ class PersonalNewLoanRequest extends _$PersonalNewLoanRequest {
     var response = await PersonalLoanRequestInitController()
         .checkLoanAgreementSuccess(state.transactionId,
             state.selectedOffer.offerProviderId, authToken, cancelToken);
-
-    state = state.copyWith(verifyingLoanAgreementSuccess: false);
 
     return response;
   }

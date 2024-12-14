@@ -3,6 +3,9 @@ import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/utils/top_decoration.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -117,6 +120,10 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    ref.watch(invoiceLoanLiabilitiesProvider);
+    ref.watch(invoiceLoanLiabilityProvider);
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
 
     return PopScope(
       canPop: false,
@@ -473,7 +480,7 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
                                             ),
                                           ),
                                           WebviewTopBar(
-                                          controller: _webViewController),
+                                              controller: _webViewController),
                                           _fetchingURL
                                               ? const LinearProgressIndicator()
                                               : Container(),

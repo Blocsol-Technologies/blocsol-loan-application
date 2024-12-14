@@ -96,8 +96,6 @@ class _PCNewLoanBankAccountDetailsState
       ref
           .read(personalNewLoanRequestProvider.notifier)
           .updateState(PersonalLoanRequestProgress.bankAccountDetails);
-
-      context.go(PersonalNewLoanRequestRouter.new_loan_process);
     }
   }
 

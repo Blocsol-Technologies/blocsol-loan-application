@@ -275,9 +275,9 @@ class OfferPaymentDetails {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
             return payment;
         }
-
-        return OfferPayments.demo();
       }
+
+      return OfferPayments.demo();
     }
 
     if (initiatedAction == InvoiceLoanInitiatedActionType.prepayment) {
@@ -285,9 +285,8 @@ class OfferPaymentDetails {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
             return payment;
         }
-
-        return OfferPayments.demo();
       }
+      return OfferPayments.demo();
     }
 
      if (initiatedAction == InvoiceLoanInitiatedActionType.foreclosure) {
@@ -295,9 +294,8 @@ class OfferPaymentDetails {
         if (payment.timeLabel == "FORECLOSURE" && payment.status == LoanPaymentStatus.success) {
             return payment;
         }
-
-        return OfferPayments.demo();
       }
+      return OfferPayments.demo();
     }
      return OfferPayments.demo();
   }

@@ -35,6 +35,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
   }
 
   void reset() {
+    ref.read(invoiceLoanLiabilityProvider.notifier).reset();
     ref.invalidateSelf();
   }
 
@@ -389,7 +390,17 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
 
         // Loan Sanctioned
         if (stepNumber == 3 || stepNumber == 4) {
-          if (!success) {
+          if (success) {
+            ref
+                .read(invoiceNewLoanRequestProvider.notifier)
+                .updateState(LoanRequestProgress.loanStepsCompleted);
+
+            ref
+                .read(routerProvider)
+                .pushReplacement(InvoiceNewLoanRequestRouter.final_details);
+
+            break;
+          } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
                 extra: InvoiceLoanServiceErrorCodes.confirm_01_failed);
@@ -407,10 +418,12 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
             ref.read(routerProvider).go(
                 InvoiceLoanLiabilitiesRouter.payment_success_overview,
                 extra: true);
+            break;
           } else {
             ref.read(routerProvider).pushReplacement(
                 InvoiceLoanLiabilitiesRouter.payment_success_overview,
                 extra: false);
+            break;
           }
         }
       default:

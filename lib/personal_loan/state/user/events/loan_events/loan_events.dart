@@ -34,6 +34,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
   }
 
   void reset() {
+    ref.read(personalLoanLiabilitiesProvider.notifier).reset();
     ref.invalidateSelf();
   }
 
@@ -51,10 +52,6 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
           .read(personalNewLoanRequestProvider)
           .selectedOffer
           .offerProviderId;
-
-      logger.i("authToken is $authToken");
-      logger.i("transactionId is $transactionId");
-      logger.i("providerId is $providerId");
 
       if (authToken.isEmpty) {
         return;
@@ -92,7 +89,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
       var latestEvent =
           PersonalLoanEvent.fromJson(response.data['data']['event']);
 
-      await consumeEvent(latestEvent);
+      await consumeEvent(latestEvent, authToken);
 
       return;
     } catch (e, stackTrace) {
@@ -105,7 +102,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
     }
   }
 
-  Future<void> consumeEvent(PersonalLoanEvent event) async {
+  Future<void> consumeEvent(PersonalLoanEvent event, String authToken) async {
     final cancelToken = CancelToken();
 
     String context = event.context;
@@ -344,6 +341,46 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             break;
           }
         }
+
+        if (stepNumber == 3) {
+          if (success) {
+            ref
+                .read(personalNewLoanRequestProvider.notifier)
+                .fetchUpdatedLoanOffer(cancelToken);
+
+            ref.read(routerProvider).push(
+                PersonalNewLoanRequestRouter.new_loan_final_processing_screen);
+            break;
+          } else {
+            ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.on_confirm_01_failed,
+                );
+            break;
+          }
+        }
+
+        if (stepNumber == 4 || stepNumber == 5) {
+          if (success) {
+            ref
+                .read(personalNewLoanRequestProvider.notifier)
+                .fetchUpdatedLoanOffer(cancelToken);
+
+            ref
+                .read(personalNewLoanRequestProvider.notifier)
+                .updateState(PersonalLoanRequestProgress.sanctioned);
+            ref
+                .read(routerProvider)
+                .push(PersonalNewLoanRequestRouter.new_loan_process);
+            break;
+          } else {
+            ref.read(routerProvider).push(
+                  PersonalNewLoanRequestRouter.loan_service_error,
+                  extra: PersonalLoanServiceErrorCodes.loan_sanction_failed,
+                );
+            break;
+          }
+        }
         break;
       default:
         break;
@@ -364,24 +401,25 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
             timeStamp: event.timeStamp,
             priority: event.priority));
 
-    await setEventConsumed(event.messageId);
+    await setEventConsumed(
+        event.transactionId, event.providerId, event.messageId, authToken);
     return;
   }
 
-  Future<void> setEventConsumed(String messageId) async {
+  Future<void> setEventConsumed(String transactionId, String providerId,
+      String messageId, String authToken) async {
     final cancelToken = CancelToken();
 
-    var (_, authToken) = ref.read(authProvider.notifier).getAuthTokens();
-
-    var transactionId = ref.read(personalNewLoanRequestProvider).transactionId;
-    var providerId =
-        ref.read(personalNewLoanRequestProvider).selectedOffer.offerProviderId;
+    logger.w(
+        "consumed event with message id: $transactionId $providerId $messageId authToken is $authToken");
 
     if (authToken.isEmpty || transactionId.isEmpty || providerId.isEmpty) {
+      logger.f("return 1");
       return;
     }
 
     try {
+      logger.w("sending http request event with message id: $messageId");
       var httpService = HttpService(service: ServiceType.PersonalLoan);
 
       await httpService.post("/ondc/consume-event", authToken, cancelToken, {
@@ -394,7 +432,7 @@ class PersonalLoanEvents extends _$PersonalLoanEvents {
     } catch (e, stackTrace) {
       ErrorInstance(
         message:
-            "Error occured when fetching latest loan events! Contact Support...",
+            "Error occured when consuming latest loan events! Contact Support...",
         exception: e,
         trace: stackTrace,
       ).reportError();

@@ -39,7 +39,11 @@ class PersonalLoanServerSentEvents extends _$PersonalLoanServerSentEvents {
 
           PersonalLoanEvent loanEvent = PersonalLoanEvent.fromJson(jsonData);
 
-          ref.read(personalLoanEventsProvider.notifier).consumeEvent(loanEvent);
+          var (authToken, _) = ref.read(authProvider.notifier).getAuthTokens();
+
+          ref
+              .read(personalLoanEventsProvider.notifier)
+              .consumeEvent(loanEvent, authToken);
         });
       },
       onError: (e) {

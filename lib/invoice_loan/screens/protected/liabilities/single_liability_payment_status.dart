@@ -1,6 +1,9 @@
 import 'package:blocsol_loan_application/global_state/router/router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
+import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
@@ -23,6 +26,9 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
     final selectedPaymentDetails = ref
         .watch(invoiceLoanLiabilityProvider.notifier)
         .getPaymentSuccessDetails();
+    ref.watch(invoiceLoanLiabilitiesProvider);
+    ref.watch(invoiceLoanEventsProvider);
+    ref.watch(invoiceLoanServerSentEventsProvider);
 
     return PopScope(
       canPop: false,
