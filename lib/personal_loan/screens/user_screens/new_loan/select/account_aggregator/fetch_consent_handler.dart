@@ -7,7 +7,6 @@ import 'package:blocsol_loan_application/personal_loan/state/user/events/server_
 import 'package:blocsol_loan_application/personal_loan/state/user/new_loan/new_loan.dart';
 import 'package:blocsol_loan_application/utils/logger.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
-import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -74,22 +73,6 @@ class _PCNewLoanGenerateOfferConsentState
 
     if (!response.success) {
       _controller.disposeTimer();
-
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Unable to submit personal details to lenders",
-            notifType: SnackbarNotificationType.error),
-        duration: const Duration(seconds: 5),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-
-      await Future.delayed(const Duration(seconds: 5));
 
       if (mounted) {
         context.go(PersonalNewLoanRequestRouter.new_loan_offers_home);

@@ -102,9 +102,9 @@ class _PCNewLoanOfferDetailsState extends ConsumerState<PCNewLoanOfferDetails> {
                                 softWrap: true,
                               ),
                               const SpacerWidget(
-                                height: 10,
+                                height: 5,
                               ),
-                              Row(
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(

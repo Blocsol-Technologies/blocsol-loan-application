@@ -62,7 +62,7 @@ class _PersonalLoanForecloseLoanModalBottomSheet
 
     ref.read(routerProvider).push(
         PersonalLoanLiabilitiesRouter.liability_foreclose_webview,
-        extra: response.data['url']);
+        extra: response.data);
   }
 
   @override
@@ -76,7 +76,8 @@ class _PersonalLoanForecloseLoanModalBottomSheet
     final oldLoanStateRef = ref.watch(personalLoanLiabilitiesProvider);
     final selectedOffer = oldLoanStateRef.selectedOldOffer;
     return Container(
-      height: 450,
+      height:
+          _errorOccured || oldLoanStateRef.initiatingForeclosure ? 400 : 360,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(25, 25, 25, 40),
       color: Theme.of(context).colorScheme.primary,

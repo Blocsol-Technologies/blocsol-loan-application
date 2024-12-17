@@ -160,9 +160,9 @@ class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
 
     var response = await PersonalLoanLiabilitiesHttpController()
         .checkPrepaymentSuccess(
+           state.prepaymentId,
             state.selectedOldOffer.transactionId,
             state.selectedOldOffer.offerProviderId,
-            state.prepaymentId,
             authToken,
             cancelToken);
 
@@ -186,7 +186,7 @@ class PersonalLoanLiabilities extends _$PersonalLoanLiabilities {
 
     state = state.copyWith(
         initiatingMissedEmiPayment: false,
-        missedEmiPaymentId: response.data['missed_emi_id']);
+        missedEmiPaymentId: response.data['missedEmiPaymentId']);
 
     return response;
   }

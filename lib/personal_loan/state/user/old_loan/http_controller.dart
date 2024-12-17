@@ -149,6 +149,8 @@ class PersonalLoanLiabilitiesHttpController {
             success: false, message: response.data['message']);
       }
 
+      await Future.delayed(const Duration(seconds: 10));
+
       response = await httpService
           .post("/ondc/fetch-foreclosure-url", authToken, cancelToken, {
         "transaction_id": transactionId,
@@ -243,6 +245,8 @@ class PersonalLoanLiabilitiesHttpController {
         return ServerResponse(
             success: false, message: response.data['message']);
       }
+
+      await Future.delayed(const Duration(seconds: 10));
 
       response = await httpService
           .post("/ondc/fetch-prepayment-url", authToken, cancelToken, {
@@ -345,6 +349,8 @@ class PersonalLoanLiabilitiesHttpController {
         return ServerResponse(
             success: false, message: response.data['message']);
       }
+
+      await Future.delayed(const Duration(seconds: 10));
 
       response = await httpService.post(
           "/ondc/fetch-missed-emi-repayment-url", authToken, cancelToken, {

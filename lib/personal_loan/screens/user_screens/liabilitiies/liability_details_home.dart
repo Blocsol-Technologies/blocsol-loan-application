@@ -253,7 +253,7 @@ class _PCLiabilityDetailsHomeState
                               height: 10,
                             ),
                             SizedBox(
-                              width: 150,
+                              width: 250,
                               child: Text(
                                 selectedOldOffer.transactionId,
                                 style: TextStyle(

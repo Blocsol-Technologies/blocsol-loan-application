@@ -25,16 +25,18 @@ class PCLiabilityPrepay extends ConsumerStatefulWidget {
 }
 
 class _PCLiabilityPrepayState extends ConsumerState<PCLiabilityPrepay> {
+  final _cancelToken = CancelToken();
+
   num _minPercentage = 0;
   num _amountPercentage = 0;
   num _amountSelected = 0;
-
-  final _cancelToken = CancelToken();
+  num _maxAmount = 0;
 
   void _getAmountSelected() {
-    final selectedOffer =
+    final selectedLiability =
         ref.read(personalLoanLiabilitiesProvider).selectedOldOffer;
-    final maxAmount = num.parse(selectedOffer.getBalanceLeft());
+
+    final maxAmount = num.parse(selectedLiability.getNextPayment());
 
     setState(() {
       _amountSelected = (maxAmount * (_amountPercentage / 100)).round();
@@ -43,6 +45,23 @@ class _PCLiabilityPrepayState extends ConsumerState<PCLiabilityPrepay> {
 
   Future<void> _handlePrepayClick() async {
     if (ref.read(personalLoanLiabilitiesProvider).initiatingPrepayment) return;
+
+    if (_amountSelected < 0.1 * _maxAmount) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Minimum amount to prepay is 10% of the due amount",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      return;
+    }
 
     var response = await ref
         .read(personalLoanLiabilitiesProvider.notifier)
@@ -82,14 +101,16 @@ class _PCLiabilityPrepayState extends ConsumerState<PCLiabilityPrepay> {
 
   @override
   void initState() {
-    final selectedOffer =
+    final selectedLiability =
         ref.read(personalLoanLiabilitiesProvider).selectedOldOffer;
-    final maxAmount = num.parse(selectedOffer.getBalanceLeft());
-    final minAmount = num.parse(selectedOffer.getNextPayment());
+    final maxAmount = num.parse(selectedLiability.getNextPayment());
+    final minAmount = maxAmount * 0.1;
+
     setState(() {
-      _minPercentage = (minAmount / maxAmount) * 100;
+      _minPercentage = 10;
       _amountPercentage = _minPercentage;
       _amountSelected = minAmount;
+      _maxAmount = maxAmount;
     });
 
     super.initState();
@@ -213,7 +234,7 @@ class _PCLiabilityPrepayState extends ConsumerState<PCLiabilityPrepay> {
                       height: 4,
                     ),
                     Text(
-                      "₹ ${selectedOldOffer.getBalanceLeft()}",
+                      "₹ ${selectedOldOffer.getNextPayment()}",
                       style: TextStyle(
                         fontFamily: fontFamily,
                         fontSize: AppFontSizes.b1,

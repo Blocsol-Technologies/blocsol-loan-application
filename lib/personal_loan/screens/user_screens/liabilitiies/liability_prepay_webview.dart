@@ -247,23 +247,7 @@ class _PCLiabilityPrepaymentWebviewState
                                                 HapticFeedback.mediumImpact();
                                                 ref.read(routerProvider).pop();
                                               },
-                                              child: Text('Go Back',
-                                                  style: TextStyle(
-                                                    fontFamily: fontFamily,
-                                                    fontSize: AppFontSizes.h3,
-                                                    fontWeight:
-                                                        AppFontWeights.bold,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                  )),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                HapticFeedback.mediumImpact();
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: Text('No',
+                                              child: Text('Cancel Payment',
                                                   style: TextStyle(
                                                     fontFamily: fontFamily,
                                                     fontSize: AppFontSizes.h3,

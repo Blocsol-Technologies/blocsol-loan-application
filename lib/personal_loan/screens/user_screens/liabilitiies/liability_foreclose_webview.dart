@@ -103,34 +103,13 @@ class _PCLiabilityForeclosureWebviewState
       return;
     }
 
-    bool success = false;
-    int tries = 0;
-    bool hasErrored = false;
-
-    while (!success && tries < 5) {
-      var response = await ref
-          .read(personalLoanLiabilitiesProvider.notifier)
-          .checkForeclosureSuccess(_cancelToken);
-
-      if (response.success) {
-        success = true;
-      } else {
-        if (response.data?['error'] ?? false) {
-          hasErrored = true;
-          break;
-        }
-        tries++;
-        await Future.delayed(const Duration(seconds: 15));
-      }
-    }
+    var response = await ref
+        .read(personalLoanLiabilitiesProvider.notifier)
+        .checkForeclosureSuccess(_cancelToken);
 
     if (!mounted) return;
 
-    if (hasErrored) {
-      _foreclosureSuccessTimer?.cancel();
-    }
-
-    if (!success) {
+    if (!response.success) {
       return;
     }
 
@@ -154,9 +133,9 @@ class _PCLiabilityForeclosureWebviewState
 
     if (!mounted) return;
 
-    ref
-        .read(routerProvider)
-        .pushReplacement(PersonalLoanLiabilitiesRouter.liability_details_home);
+    ref.read(routerProvider).pushReplacement(
+        PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
+        extra: true);
   }
 
   void _startPollingForSuccess() {
