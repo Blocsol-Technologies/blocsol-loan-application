@@ -343,7 +343,6 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
                   extra: InvoiceLoanServiceErrorCodes.loan_agreement_failed);
               break;
             }
-            return;
           } else {
             ref.read(routerProvider).push(
                 InvoiceNewLoanRequestRouter.loan_service_error,
@@ -389,7 +388,7 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
         }
 
         // Loan Sanctioned
-        if (stepNumber == 3 || stepNumber == 4) {
+        if (stepNumber == 3) {
           if (success) {
             ref
                 .read(invoiceNewLoanRequestProvider.notifier)
@@ -417,12 +416,13 @@ class InvoiceLoanEvents extends _$InvoiceLoanEvents {
                 .fetchSingleLiabilityDetails(cancelToken);
             ref.read(routerProvider).go(
                 InvoiceLoanLiabilitiesRouter.payment_success_overview,
-                extra: true);
+                extra: PaymentSuccess(
+                    success: success, message: "Payment Successfull"));
             break;
           } else {
             ref.read(routerProvider).pushReplacement(
                 InvoiceLoanLiabilitiesRouter.payment_success_overview,
-                extra: false);
+                extra: PaymentSuccess(success: success, message: message));
             break;
           }
         }

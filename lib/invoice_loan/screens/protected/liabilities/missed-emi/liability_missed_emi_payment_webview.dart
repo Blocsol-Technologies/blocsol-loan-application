@@ -1,18 +1,19 @@
 import 'dart:async';
+
 import 'package:blocsol_loan_application/global_state/router/router.dart';
-import 'package:blocsol_loan_application/global_state/theme/theme_state.dart';
 import 'package:blocsol_loan_application/invoice_loan/constants/routes/liabilities_router.dart';
 import 'package:blocsol_loan_application/invoice_loan/screens/protected/liabilities/utils/top_decoration.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/loan_events.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
+import 'package:blocsol_loan_application/invoice_loan/constants/theme.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
 import 'package:blocsol_loan_application/utils/ui/snackbar_notifications/util.dart';
 import 'package:blocsol_loan_application/utils/ui/spacer.dart';
-import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:blocsol_loan_application/utils/ui/webview_top_bar.dart';
+import 'package:blocsol_loan_application/utils/ui/window_popup.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -37,6 +38,8 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
     extends ConsumerState<InvoiceLoanLiabilityMissedEmiPaymentWebview> {
   final GlobalKey _missedEmiPaymentWebviewKey = GlobalKey();
   final _cancelToken = CancelToken();
+  final _interval = 15;
+  Timer? _timer;
 
   InAppWebViewController? _webViewController;
   bool _fetchingURL = false;
@@ -56,20 +59,33 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
     if (!mounted) return;
 
     if (!response.success) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(
-            message: "Missed EMI Payment Unsuccessful. Contact Support",
-            notifType: SnackbarNotificationType.error),
-        duration: const Duration(seconds: 5),
-      );
+      if (response.data == "suspend") {
+        _timer?.cancel();
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: getSnackbarNotificationWidget(
+              message: "Payment Unsuccessful. ${response.message}",
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
+        );
 
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-      return;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return;
+      }
+
+      if (response.data == "error") {
+        _timer?.cancel();
+
+        ref.read(routerProvider).pushReplacement(
+            InvoiceLoanLiabilitiesRouter.payment_success_overview,
+            extra: PaymentSuccess(success: false, message: response.message));
+
+        return;
+      }
     }
 
     final snackBar = SnackBar(
@@ -99,19 +115,86 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
     return;
   }
 
-  void _handleNotificationBellPress() {}
+  Future<void> _checkMissedEmiPaymentSuccessBackground() async {
+    if (ref.read(invoiceLoanLiabilityProvider).missedEmiPaymentFailed ||
+        ref
+            .read(invoiceLoanLiabilityProvider)
+            .verifyingMissedEmiPaymentSuccess) {
+      _timer?.cancel();
+      return;
+    }
+
+    var response = await ref
+        .read(invoiceLoanLiabilityProvider.notifier)
+        .checkMissedEMIRepaymentSuccess(_cancelToken);
+
+    if (!mounted) return;
+
+    if (!response.success) {
+      if (response.data == "suspend") {
+        _timer?.cancel();
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: getSnackbarNotificationWidget(
+              message: "Payment Unsuccessful. ${response.message}",
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return;
+      }
+
+      if (response.data == "error") {
+        _timer?.cancel();
+
+        return;
+      }
+
+      return;
+    }
+
+    _timer?.cancel();
+
+    var _ = await ref
+        .read(invoiceLoanLiabilityProvider.notifier)
+        .fetchSingleLiabilityDetails(_cancelToken);
+
+    if (!mounted) return;
+
+    ref.read(routerProvider).pushReplacement(
+        InvoiceLoanLiabilitiesRouter.payment_success_overview,
+        extra: PaymentSuccess(success: true, message: "Payment Successful"));
+
+    return;
+  }
+
+  void startPollingForPaymentSuccess() {
+    _timer = Timer.periodic(Duration(seconds: _interval), (timer) async {
+      await _checkMissedEmiPaymentSuccessBackground();
+    });
+  }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _webViewController?.loadUrl(
           urlRequest: URLRequest(url: WebUri(widget.url)));
+
+      Future.delayed(const Duration(seconds: 10), () {
+        startPollingForPaymentSuccess();
+      });
     });
     super.initState();
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _cancelToken.cancel();
     super.dispose();
   }
@@ -120,6 +203,7 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     ref.watch(invoiceLoanLiabilitiesProvider);
     ref.watch(invoiceLoanLiabilityProvider);
     ref.watch(invoiceLoanEventsProvider);
@@ -242,27 +326,6 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
                                 Icons.arrow_back_ios,
                                 size: 20,
                                 color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ],

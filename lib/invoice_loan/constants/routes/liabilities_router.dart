@@ -89,13 +89,22 @@ List<GoRoute> invoiceLoanLiabilitiesRoutes = [
     },
   ),
 
-   GoRoute(
+  GoRoute(
     path: InvoiceLoanLiabilitiesRouter.payment_success_overview,
     builder: (context, state) {
-      bool ok = state.extra as bool;
+      PaymentSuccess status = state.extra as PaymentSuccess;
 
-      return InvoiceLoanliabilityPaymentStatus(success: ok,);
+      return InvoiceLoanliabilityPaymentStatus(
+        success: status.success,
+        message: status.message,
+      );
     },
   ),
-
 ];
+
+class PaymentSuccess {
+  final bool success;
+  final String message;
+
+  PaymentSuccess({required this.success, required this.message});
+}

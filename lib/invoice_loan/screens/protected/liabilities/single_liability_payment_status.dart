@@ -5,6 +5,7 @@ import 'package:blocsol_loan_application/invoice_loan/state/events/loan_events/l
 import 'package:blocsol_loan_application/invoice_loan/state/events/server_sent_events/sse.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/all/all_liabilities.dart';
 import 'package:blocsol_loan_application/invoice_loan/state/loans/liability/single/liability.dart';
+import 'package:blocsol_loan_application/utils/functions.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:blocsol_loan_application/utils/ui/fonts.dart';
 import 'package:blocsol_loan_application/utils/ui/misc.dart';
@@ -15,8 +16,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
   final bool success;
+  final String message;
 
-  const InvoiceLoanliabilityPaymentStatus({super.key, required this.success});
+  const InvoiceLoanliabilityPaymentStatus(
+      {super.key, required this.success, required this.message});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,6 +29,7 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
     final selectedPaymentDetails = ref
         .watch(invoiceLoanLiabilityProvider.notifier)
         .getPaymentSuccessDetails();
+
     ref.watch(invoiceLoanLiabilitiesProvider);
     ref.watch(invoiceLoanEventsProvider);
     ref.watch(invoiceLoanServerSentEventsProvider);
@@ -93,13 +97,25 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                               color: Color.fromRGBO(190, 190, 190, 1),
                               width: 2))),
                   child: Text(
-                    "Payment ${success ? "Successful" : "Failed"}",
+                    message,
                     style: TextStyle(
                       fontFamily: fontFamily,
                       color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: AppFontWeights.bold,
                       fontSize: AppFontSizes.h2,
                     ),
+                  ),
+                ),
+                const SpacerWidget(
+                  height: 10,
+                ),
+                Text(
+                  getFormattedTime(selectedPaymentDetails.endTime),
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    color: const Color.fromRGBO(100, 100, 100, 1),
+                    fontWeight: AppFontWeights.bold,
+                    fontSize: AppFontSizes.h3,
                   ),
                 ),
                 const SpacerWidget(
@@ -156,7 +172,7 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                                     style: TextStyle(
                                         fontFamily: fontFamily,
                                         fontSize: AppFontSizes.b2,
-                                        fontWeight: AppFontWeights.bold,
+                                        fontWeight: AppFontWeights.medium,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onTertiary),
@@ -212,7 +228,7 @@ class InvoiceLoanliabilityPaymentStatus extends ConsumerWidget {
                     clipper: TopClipper(),
                     child: Container(
                       width: width,
-                      height: 280,
+                      height: 240,
                       padding: EdgeInsets.only(
                           left: RelativeSize.width(25, width),
                           right: RelativeSize.width(25, width),

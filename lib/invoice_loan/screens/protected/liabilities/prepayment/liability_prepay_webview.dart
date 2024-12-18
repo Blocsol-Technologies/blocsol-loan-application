@@ -35,10 +35,12 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
     extends ConsumerState<InvoiceLoanLiabilityPrepaymentWebview> {
   final GlobalKey _prepaymentWebviewKey = GlobalKey();
   final _cancelToken = CancelToken();
+  final _interval = 15;
 
   bool _fetchingURL = false;
   InAppWebViewController? _webViewController;
   String _currentURL = "";
+  Timer? _timer;
 
   Future<void> _checkPrepaymentSuccess() async {
     if (ref.read(invoiceLoanLiabilityProvider).prepaymentFailed ||
@@ -89,26 +91,95 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
 
     if (!mounted) return;
 
-    ref
-        .read(routerProvider)
-        .pushReplacement(InvoiceLoanLiabilitiesRouter.singleLiabilityDetails);
+    ref.read(routerProvider).pushReplacement(
+        InvoiceLoanLiabilitiesRouter.payment_success_overview,
+        extra: PaymentSuccess(success: true, message: "Payment Successful"));
 
     return;
   }
 
-  void _handleNotificationBellPress() {}
+  Future<void> _checkPrepaymentSuccessBackground() async {
+    if (ref.read(invoiceLoanLiabilityProvider).prepaymentFailed ||
+        ref.read(invoiceLoanLiabilityProvider).verifyingPrepaymentSuccess) {
+      _timer?.cancel();
+      return;
+    }
+
+    var response = await ref
+        .read(invoiceLoanLiabilityProvider.notifier)
+        .checkPrepaymentSuccess(_cancelToken);
+
+    if (!mounted) return;
+
+    if (!response.success) {
+      if (response.data == "suspend") {
+        _timer?.cancel();
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: getSnackbarNotificationWidget(
+              message: "Payment Unsuccessful. ${response.message}",
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return;
+      }
+
+      if (response.data == "error") {
+        _timer?.cancel();
+
+        ref.read(routerProvider).pushReplacement(
+            InvoiceLoanLiabilitiesRouter.payment_success_overview,
+            extra: PaymentSuccess(success: false, message: response.message));
+
+        return;
+      }
+
+      return;
+    }
+
+    _timer?.cancel();
+
+    var _ = await ref
+        .read(invoiceLoanLiabilityProvider.notifier)
+        .fetchSingleLiabilityDetails(_cancelToken);
+
+    if (!mounted) return;
+
+    ref.read(routerProvider).pushReplacement(
+        InvoiceLoanLiabilitiesRouter.payment_success_overview,
+        extra: PaymentSuccess(success: true, message: "Payment Successful"));
+
+    return;
+  }
+
+  void startPollingForPaymentSuccess() {
+    _timer = Timer.periodic(Duration(seconds: _interval), (timer) async {
+      await _checkPrepaymentSuccessBackground();
+    });
+  }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _webViewController?.loadUrl(
           urlRequest: URLRequest(url: WebUri(widget.url)));
+
+      Future.delayed(const Duration(seconds: 10), () {
+        startPollingForPaymentSuccess();
+      });
     });
     super.initState();
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _cancelToken.cancel();
     super.dispose();
   }
@@ -117,7 +188,7 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    
+
     ref.watch(invoiceLoanLiabilitiesProvider);
     ref.watch(invoiceLoanLiabilityProvider);
     ref.watch(invoiceLoanEventsProvider);
@@ -250,30 +321,6 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
                                 Icons.arrow_back_ios,
                                 size: 20,
                                 color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact();
-                                      _handleNotificationBellPress();
-                                    },
-                                    icon: Icon(
-                                      Icons.notifications_active,
-                                      size: 25,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  const SpacerWidget(
-                                    width: 15,
-                                  ),
-                                ],
                               ),
                             ),
                           ],
