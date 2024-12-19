@@ -1135,6 +1135,91 @@ class _PCLiabilityFullDetailsState
                             height: 15,
                           ),
                           Text(
+                            "Loan Breakup",
+                            style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: AppFontSizes.b2,
+                                fontWeight: AppFontWeights.medium,
+                                color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          const SpacerWidget(
+                            height: 15,
+                          ),
+                          Container(
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(243, 251, 255, 1),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: RelativeSize.width(25, width),
+                                vertical: RelativeSize.height(18, height)),
+                            child: ListView.builder(
+                              itemCount:
+                                  selectedOldOffer.quoteDetails.breakup.length,
+                              itemBuilder: (ctx, i) {
+                                var selectedQuoteBreakup =
+                                    selectedOldOffer.quoteDetails.breakup[i];
+                                return SizedBox(
+                                  width: width,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            selectedQuoteBreakup.title,
+                                            style: TextStyle(
+                                              fontFamily: fontFamily,
+                                              fontSize: AppFontSizes.b2,
+                                              fontWeight: AppFontWeights.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              selectedQuoteBreakup.value,
+                                              softWrap: true,
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                fontFamily: fontFamily,
+                                                fontSize: AppFontSizes.b2,
+                                                fontWeight: AppFontWeights.bold,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 17),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.15),
+                                        height: 1,
+                                        width: width,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                            ),
+                          ),
+                          const SpacerWidget(
+                            height: 15,
+                          ),
+                          Text(
                             "2. Penalty Details",
                             style: TextStyle(
                                 fontFamily: fontFamily,

@@ -317,7 +317,8 @@ class LoanPaymentDetails {
     );
   }
 
-  PaymentDetails getOfferPaymentDetails(PersonalLoanInitiatedActionType initiatedAction, String id ) {
+  PaymentDetails getOfferPaymentDetails(
+      PersonalLoanInitiatedActionType initiatedAction, String id) {
     if (initiatedAction == PersonalLoanInitiatedActionType.none) {
       return PaymentDetails.demoPayment();
     }
@@ -325,7 +326,7 @@ class LoanPaymentDetails {
     if (initiatedAction == PersonalLoanInitiatedActionType.missedEmi) {
       for (var payment in paymentDetails) {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
-            return payment;
+          return payment;
         }
 
         return PaymentDetails.demoPayment();
@@ -335,26 +336,25 @@ class LoanPaymentDetails {
     if (initiatedAction == PersonalLoanInitiatedActionType.prepayment) {
       for (var payment in paymentDetails) {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
-            return payment;
+          return payment;
         }
 
         return PaymentDetails.demoPayment();
       }
     }
 
-     if (initiatedAction == PersonalLoanInitiatedActionType.foreclosure) {
+    if (initiatedAction == PersonalLoanInitiatedActionType.foreclosure) {
       for (var payment in paymentDetails) {
-        if (payment.timeLabel == "FORECLOSURE" && payment.status == LoanPaymentStatus.success) {
-            return payment;
+        if (payment.timeLabel == "FORECLOSURE" &&
+            payment.status == LoanPaymentStatus.success) {
+          return payment;
         }
 
         return PaymentDetails.demoPayment();
       }
     }
-     return PaymentDetails.demoPayment();
+    return PaymentDetails.demoPayment();
   }
-
-  
 }
 
 enum PersonalLoanInitiatedActionType {
@@ -419,6 +419,7 @@ class PersonalLoanDetails {
   final ContactInfo contactDetails;
   final LSPContactInfo lspContactDetails;
 
+  final QuoteDetails quoteDetails;
   final LoanRepaymentStatus loanStatus;
   final LoanPaymentDetails loanPayments;
 
@@ -462,6 +463,7 @@ class PersonalLoanDetails {
     this.numInstallments = "",
     this.repaymentFrequency = "MONTHLY",
     this.coolOffPeriod = "",
+    required this.quoteDetails,
   });
 
   factory PersonalLoanDetails.fromJson(Map<String, dynamic> json) {
@@ -506,6 +508,8 @@ class PersonalLoanDetails {
       listItems = json['payments_made'] ?? [];
       formattedPaymentsMade =
           listItems.map((item) => PaymentsMade.fromJson(item)).toList();
+
+      final quoteDetails = QuoteDetails.fromJson(json['quote_details']);
 
       return PersonalLoanDetails(
         offerId: json['id'] ?? "",
@@ -554,6 +558,7 @@ class PersonalLoanDetails {
             ? "MONTHLY"
             : json['repaymentFrequency'],
         coolOffPeriod: json['coolOffPeriod'] ?? "",
+        quoteDetails: quoteDetails,
       );
     } catch (e, stackTrace) {
       ErrorInstance(
@@ -684,8 +689,8 @@ class PersonalLoanDetails {
     return amountPaid.toString();
   }
 
-  (DateTime, String) getNextDueDatetime () {
-      try {
+  (DateTime, String) getNextDueDatetime() {
+    try {
       bool isClosed = isLoanClosed();
 
       if (isClosed) {
@@ -939,12 +944,105 @@ class PersonalLoanDetails {
       paymentsMade: [],
       contactDetails: ContactInfo.demoContactInfo(),
       lspContactDetails: LSPContactInfo.demoContactInfo(),
+      quoteDetails: QuoteDetails.demo(),
     );
   }
 }
 
+class QuoteDetails {
+  String id;
+  String price;
+  List<QuoteBreakup> breakup;
+  String ttl;
+
+  QuoteDetails({
+    required this.id,
+    required this.price,
+    required this.breakup,
+    required this.ttl,
+  });
+
+  static QuoteDetails demo() {
+    return QuoteDetails(
+      id: "",
+      price: "",
+      breakup: [],
+      ttl: "",
+    );
+  }
+
+  factory QuoteDetails.fromJson(Map<String, dynamic> json) {
+    try {
+      final id = json['id'] ?? "";
+      final price = json['price']?['value'] ?? "";
+      final ttl = json['ttl'] ?? "";
+
+      final List<QuoteBreakup> breakup = [];
+
+      if (json['breakup'] != null) {
+        final List<dynamic> breakupItems = json['breakup'];
+
+        breakup.addAll(
+          breakupItems.map((item) => QuoteBreakup.fromJson(item)).toList(),
+        );
+      }
+
+      return QuoteDetails(
+        id: id,
+        price: price,
+        breakup: breakup,
+        ttl: ttl,
+      );
+    } catch (e, stackTrace) {
+      ErrorInstance(
+              message: "Err when parsing quote details on the loan details",
+              exception: e,
+              trace: stackTrace)
+          .reportError();
+      return demo();
+    }
+  }
+}
+
+class QuoteBreakup {
+  String title;
+  String value;
+
+  QuoteBreakup({
+    required this.title,
+    required this.value,
+  });
+
+  static QuoteBreakup demo() {
+    return QuoteBreakup(
+      title: "",
+      value: "",
+    );
+  }
+
+  factory QuoteBreakup.fromJson(Map<String, dynamic> json) {
+    try {
+      final title = json['title'] ?? "";
+      final value = json['price']?['value'] ?? "";
+
+      return QuoteBreakup(
+        title: title,
+        value: value,
+      );
+    } catch (e, stackTrace) {
+      ErrorInstance(
+              message: "Err when parsing quote breakup on the loan details",
+              exception: e,
+              trace: stackTrace)
+          .reportError();
+      return demo();
+    }
+  }
+}
+
 DateTime parseDateTimeString(String dateTime) {
-  try {    // Try a normal parse
+  try {
+    // Try a normal parse
     try {
       return DateTime.parse(dateTime);
     } catch (e) {

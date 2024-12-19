@@ -265,7 +265,8 @@ class OfferPaymentDetails {
     );
   }
 
-  OfferPayments getOfferPaymentDetails(InvoiceLoanInitiatedActionType initiatedAction, String id ) {
+  OfferPayments getOfferPaymentDetails(
+      InvoiceLoanInitiatedActionType initiatedAction, String id) {
     if (initiatedAction == InvoiceLoanInitiatedActionType.none) {
       return OfferPayments.demo();
     }
@@ -273,7 +274,7 @@ class OfferPaymentDetails {
     if (initiatedAction == InvoiceLoanInitiatedActionType.missedEmi) {
       for (var payment in paymentDetails) {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
-            return payment;
+          return payment;
         }
       }
 
@@ -283,24 +284,23 @@ class OfferPaymentDetails {
     if (initiatedAction == InvoiceLoanInitiatedActionType.prepayment) {
       for (var payment in paymentDetails) {
         if (payment.id == id && payment.status == LoanPaymentStatus.success) {
-            return payment;
+          return payment;
         }
       }
       return OfferPayments.demo();
     }
 
-     if (initiatedAction == InvoiceLoanInitiatedActionType.foreclosure) {
+    if (initiatedAction == InvoiceLoanInitiatedActionType.foreclosure) {
       for (var payment in paymentDetails) {
-        if (payment.timeLabel == "FORECLOSURE" && payment.status == LoanPaymentStatus.success) {
-            return payment;
+        if (payment.timeLabel == "FORECLOSURE" &&
+            payment.status == LoanPaymentStatus.success) {
+          return payment;
         }
       }
       return OfferPayments.demo();
     }
-     return OfferPayments.demo();
+    return OfferPayments.demo();
   }
-
-  
 }
 
 enum InvoiceLoanInitiatedActionType {
@@ -707,6 +707,7 @@ class OfferDetails {
   final OfferCancellationTerms cancellationTerms;
   final List<OfferPaymentsMade> paymentsMade;
 
+  final QuoteDetails quoteDetails;
   final ContactInfo contactInfo;
   final LSPContactInfo lspContactInfo;
 
@@ -748,6 +749,7 @@ class OfferDetails {
     required this.paymentsMade,
     required this.contactInfo,
     required this.lspContactInfo,
+    required this.quoteDetails,
   });
 
   factory OfferDetails.fromJson(Map<String, dynamic> json, String state) {
@@ -776,6 +778,7 @@ class OfferDetails {
           OfferCancellationTerms.fromJson(json['confirm_cancellation_terms']);
       final contactInfo = ContactInfo.fromJson(json['contact_info']);
       final lspContactInfo = LSPContactInfo.fromJson(json['lsp_contact_info']);
+      final quoteDetails = QuoteDetails.fromJson(json['quote_details']);
 
       return OfferDetails(
         state: state,
@@ -823,6 +826,7 @@ class OfferDetails {
         paymentsMade: paymentsMade,
         contactInfo: contactInfo,
         lspContactInfo: lspContactInfo,
+        quoteDetails: quoteDetails,
       );
     } catch (e, stackTrace) {
       ErrorInstance(
@@ -854,6 +858,7 @@ class OfferDetails {
       paymentsMade: [],
       contactInfo: ContactInfo.demo(),
       lspContactInfo: LSPContactInfo.demo(),
+      quoteDetails: QuoteDetails.demo(),
     );
   }
 
@@ -874,7 +879,9 @@ class OfferDetails {
   }
 
   bool isLoanDisbursed() {
-    return fulfillmentStatus == "DISBURSED" || fulfillmentStatus == "COMPLETED" || fulfillmentStatus == "COMPLETE";
+    return fulfillmentStatus == "DISBURSED" ||
+        fulfillmentStatus == "COMPLETED" ||
+        fulfillmentStatus == "COMPLETE";
   }
 
   bool isLoanClosed() {
@@ -900,7 +907,7 @@ class OfferDetails {
 
   num getLoanPercentOfTotalValue(num invoiceAmount) {
     try {
-      var val =  (((num.parse(deposit) / invoiceAmount) * 10000).round()) / 100;
+      var val = (((num.parse(deposit) / invoiceAmount) * 10000).round()) / 100;
       return val;
     } catch (e, stackTrace) {
       ErrorInstance(
@@ -945,8 +952,8 @@ class OfferDetails {
     }
   }
 
-  (DateTime, String) getNextDueDatetime () {
-      try {
+  (DateTime, String) getNextDueDatetime() {
+    try {
       bool isClosed = isLoanClosed();
 
       if (isClosed) {
@@ -1214,6 +1221,97 @@ class OfferDetails {
   }
 }
 
+class QuoteDetails {
+  String id;
+  String price;
+  List<QuoteBreakup> breakup;
+  String ttl;
+
+  QuoteDetails({
+    required this.id,
+    required this.price,
+    required this.breakup,
+    required this.ttl,
+  });
+
+  static QuoteDetails demo() {
+    return QuoteDetails(
+      id: "",
+      price: "",
+      breakup: [],
+      ttl: "",
+    );
+  }
+
+  factory QuoteDetails.fromJson(Map<String, dynamic> json) {
+    try {
+      final id = json['id'] ?? "";
+      final price = json['price']?['value'] ?? "";
+      final ttl = json['ttl'] ?? "";
+
+      final List<QuoteBreakup> breakup = [];
+
+      if (json['breakup'] != null) {
+        final List<dynamic> breakupItems = json['breakup'];
+
+        breakup.addAll(
+          breakupItems.map((item) => QuoteBreakup.fromJson(item)).toList(),
+        );
+      }
+
+      return QuoteDetails(
+        id: id,
+        price: price,
+        breakup: breakup,
+        ttl: ttl,
+      );
+    } catch (e, stackTrace) {
+      ErrorInstance(
+              message: "Err when parsing quote details on the loan details",
+              exception: e,
+              trace: stackTrace)
+          .reportError();
+      return demo();
+    }
+  }
+}
+
+class QuoteBreakup {
+  String title;
+  String value;
+
+  QuoteBreakup({
+    required this.title,
+    required this.value,
+  });
+
+  static QuoteBreakup demo() {
+    return QuoteBreakup(
+      title: "",
+      value: "",
+    );
+  }
+
+  factory QuoteBreakup.fromJson(Map<String, dynamic> json) {
+    try {
+      final title = json['title'] ?? "";
+      final value = json['price']?['value'] ?? "";
+
+      return QuoteBreakup(
+        title: title,
+        value: value,
+      );
+    } catch (e, stackTrace) {
+      ErrorInstance(
+              message: "Err when parsing quote breakup on the loan details",
+              exception: e,
+              trace: stackTrace)
+          .reportError();
+      return demo();
+    }
+  }
+}
+
 class LoanDetails extends Invoice {
   final OfferDetails offerDetails;
   final List<OfferDetails> offerDetailsList;
@@ -1331,7 +1429,8 @@ class LoanDetails extends Invoice {
 }
 
 DateTime parseDateTimeString(String dateTime) {
-  try {    // Try a normal parse
+  try {
+    // Try a normal parse
     try {
       return DateTime.parse(dateTime);
     } catch (e) {
