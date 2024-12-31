@@ -8,13 +8,13 @@ const String invoiceLoanServerUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
 const String personalLoanServerUrl =
-    "https://f739-2401-4900-1c6e-5c6d-1049-5a06-5387-7877.ngrok-free.app/financial-services/personal-credit";
+    "https://ondc.invoicepe.in/financial-services/personal-credit";
     
 const String invoiceLoanbaseUrl =
     "https://ondc.invoicepe.in/financial-services/invoice-based-credit";
 
 const String personalLoanbaseUrl =
-    "https://f739-2401-4900-1c6e-5c6d-1049-5a06-5387-7877.ngrok-free.app/financial-services/personal-credit";
+    "https://ondc.invoicepe.in/financial-services/personal-credit";
 
 enum ServiceType {
   InvoiceLoan,
