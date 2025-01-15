@@ -88,7 +88,7 @@ class _NewLoanGstInvoicesState extends ConsumerState<NewLoanGstInvoices> {
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchGstInvoices(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -607,6 +607,8 @@ class _InvoiceSearchState extends State<InvoiceSearch> {
                     });
 
                     await widget.onRefrersh();
+
+                    if (!mounted || !context.mounted) return;
 
                     setState(() {
                       refreshingInvoices = false;

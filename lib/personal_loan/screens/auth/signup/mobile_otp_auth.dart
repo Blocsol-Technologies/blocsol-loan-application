@@ -47,7 +47,7 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
         .verifyMobileOTP(ref.read(personalLoanSignupProvider).phoneNumber,
             _otpTextInputController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _verifyingOTP = false;
@@ -98,11 +98,11 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
         .sendMobileOTP(ref.read(personalLoanSignupProvider).phoneNumber,
             _deviceSignature, _cancelToken);
 
+    if (!mounted || !context.mounted) return;
+
     setState(() {
       _resendingOTP = false;
     });
-
-    if (!mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -125,6 +125,7 @@ class _PCSignupMobileOTPAuthState extends ConsumerState<PCSignupMobileOTPAuth> {
 
   void addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     setState(() {
       _deviceSignature = sign;
     });

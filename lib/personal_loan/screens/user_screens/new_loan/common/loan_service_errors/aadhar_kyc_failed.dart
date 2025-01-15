@@ -46,7 +46,7 @@ class _PersonalLoanAadharKycFailedState
         .read(personalNewLoanRequestProvider.notifier)
         .refetchAadharKYCURL(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingAaadharKycUrl = false;

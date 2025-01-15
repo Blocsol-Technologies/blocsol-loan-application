@@ -33,7 +33,7 @@ class _SignupEmailValidationState extends ConsumerState<SignupEmailValidation> {
         .read(invoiceLoanSignupStateProvider.notifier)
         .sendEmailOTP(_textController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "send_email_otp",

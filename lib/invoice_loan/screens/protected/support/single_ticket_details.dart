@@ -40,7 +40,7 @@ class _InvoiceLoanSingleTicketDetailsState
         .read(invoiceLoanSupportProvider.notifier)
         .askForStatusUpdate(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -83,11 +83,9 @@ class _InvoiceLoanSingleTicketDetailsState
       return;
     }
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanSupportProvider.notifier)
         .fetchSingleSupportTicket(_cancelToken);
-
-    if (!mounted) return;
   }
 
   void startPollingForSupportTickets() {
@@ -505,6 +503,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
       try {
         _mediaFileList.clear();
         final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        if (!mounted || !context.mounted) return;
         setState(() {
           _mediaFileList = pickedFileList;
         });

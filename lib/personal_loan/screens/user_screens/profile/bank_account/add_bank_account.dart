@@ -49,7 +49,7 @@ class _MyWidgetState extends ConsumerState<PlProfileAddBankAccount> {
             _accountType == "saving" ? 1 : 0,
             _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_profile", {
       "step": "adding_bank_account_information",

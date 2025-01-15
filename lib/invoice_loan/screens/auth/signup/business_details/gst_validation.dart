@@ -33,7 +33,7 @@ class _SignupGstValidationState extends ConsumerState<SignupGstValidation> {
         .read(invoiceLoanSignupStateProvider.notifier)
         .verifyGstNumber(_textController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "verify_gst_number",

@@ -38,7 +38,7 @@ class _SignupGstUsernameValidationState
         .read(invoiceLoanSignupStateProvider.notifier)
         .sendGSTOTP(_textController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "sending_gst_otp",

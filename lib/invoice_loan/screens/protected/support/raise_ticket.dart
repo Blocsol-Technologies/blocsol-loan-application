@@ -47,6 +47,7 @@ class _InvoiceLoanRaiseNewTicketState
     if (context.mounted) {
       try {
         final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        if (!mounted || !context.mounted) return;
         setState(() {
           _mediaFileList = pickedFileList;
         });
@@ -100,7 +101,7 @@ class _InvoiceLoanRaiseNewTicketState
               cancelToken,
             );
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_liabilities", {
       "step": "raising_support_ticket_request",

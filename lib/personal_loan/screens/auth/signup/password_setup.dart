@@ -68,7 +68,7 @@ class _PCSignupPasswordSetupState extends ConsumerState<PCSignupPasswordSetup> {
         .read(personalLoanSignupProvider.notifier)
         .setPassword(_confirmPasswordController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_signup", {
       "step": "setting_account_password",

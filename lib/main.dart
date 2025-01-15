@@ -46,12 +46,6 @@ Future<void> main() async {
       ),
     ),
   );
-
-  // runApp(
-  //   const ProviderScope(
-  //     child: LoanApplication(),
-  //   ),
-  // );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

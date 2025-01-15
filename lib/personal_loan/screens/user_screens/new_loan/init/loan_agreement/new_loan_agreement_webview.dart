@@ -58,7 +58,7 @@ class _PCNewLoanAgreementWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .checkLoanAgreementSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _verifyingLoanAgreementSuccess = true;
@@ -106,7 +106,7 @@ class _PCNewLoanAgreementWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .refetchLoanAgreementURL(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

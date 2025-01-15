@@ -126,7 +126,7 @@ class PLProfileDashboard extends ConsumerWidget {
                       .read(authProvider.notifier)
                       .logoutPersonalLoanUser();
 
-                  if (!context.mounted) return;
+                  if (!mounted || !context.mounted) return;
 
                   context.go(AppRoutes.entry);
                 },

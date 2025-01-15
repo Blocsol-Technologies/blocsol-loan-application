@@ -34,6 +34,7 @@ class _SignupMobileValidationState
 
   void addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     setState(() {
       _deviceSignature = sign;
     });
@@ -44,6 +45,8 @@ class _SignupMobileValidationState
         .read(invoiceLoanSignupStateProvider.notifier)
         .sendMobileOTP(_textController.text, _deviceSignature, _cancelToken);
 
+    if (!mounted || !context.mounted) return;
+
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "send_mobile_otp",
       "phone": _textController.text,
@@ -51,8 +54,6 @@ class _SignupMobileValidationState
       "message": response.message,
       "data": response.data ?? {},
     });
-
-    if (!mounted) return;
 
     if (response.success) {
       context.go(InvoiceLoanSignupRouter.mobile_otp_verification);

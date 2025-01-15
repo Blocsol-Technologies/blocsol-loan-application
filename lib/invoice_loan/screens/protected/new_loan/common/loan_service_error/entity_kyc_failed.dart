@@ -44,7 +44,7 @@ class _InvoiceLoanEntityKycFailedState
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchEntityKycForm(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingEntityKycUrl = false;

@@ -98,9 +98,7 @@ class _PlProfileChangePasswordState
         .changeAccountPassword(_oldPasswordTextController.text,
             _newPasswordTextController.text, _cancelToken);
 
-    if (!mounted || !context.mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_profile", {
       "step": "chaning_account_password",
@@ -322,9 +320,7 @@ class _PlProfileChangePasswordState
 
                         await _changeAccountPassword();
 
-                        if (!mounted) {
-                          return;
-                        }
+                        if (!mounted || !context.mounted) return;
 
                         setState(() {
                           _changingPassword = false;

@@ -46,7 +46,7 @@ class _InvoiceNewLoanAgreementFailedState
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchLoanAgreementForm(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingLoanAgreementUrl = false;

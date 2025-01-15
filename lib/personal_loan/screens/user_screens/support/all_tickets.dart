@@ -35,7 +35,7 @@ class _PersonalLoanAllSupportTicketsState
   bool _fetchingSupportTickets = false;
 
   Future<void> pollForSupportTicketsBackground() async {
-     if (!mounted || _supportTicktesPollTimer == null) return;
+    if (!mounted || _supportTicktesPollTimer == null) return;
     if (ref.read(personalLoanSupportStateProvider).fetchingAllSupportTickets) {
       return;
     }
@@ -44,7 +44,7 @@ class _PersonalLoanAllSupportTicketsState
         .read(personalLoanSupportStateProvider.notifier)
         .fetchAllSupportTickets(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -81,6 +81,8 @@ class _PersonalLoanAllSupportTicketsState
       await ref
           .read(personalLoanSupportStateProvider.notifier)
           .fetchAllSupportTickets(_cancelToken);
+
+      if (!mounted || !context.mounted) return;
 
       setState(() {
         _fetchingSupportTickets = false;
@@ -148,10 +150,10 @@ class _PersonalLoanAllSupportTicketsState
                         color: Theme.of(context).colorScheme.surface),
                     child: Container(
                       height: RelativeSize.height(600, height),
-                      padding: const EdgeInsets.only(left: 15, right: 15, top: 50),
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 50),
                       child: ListView(
                         shrinkWrap: true,
-
                         children: [
                           const SpacerWidget(
                             height: 20,

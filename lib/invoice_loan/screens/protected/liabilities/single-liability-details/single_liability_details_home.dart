@@ -46,7 +46,7 @@ class _SingleLiabilityDetailsHomeState
         .read(invoiceLoanLiabilityProvider.notifier)
         .performStatusRequest(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       setState(() {
@@ -71,11 +71,13 @@ class _SingleLiabilityDetailsHomeState
 
     await Future.delayed(const Duration(seconds: 10));
 
+    if (!mounted || !context.mounted) return;
+
     response = await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _performingStatusCheck = false;
@@ -456,9 +458,7 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
 
     var eventAdded = await Add2Calendar.addEvent2Cal(event);
 
-    if (!mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     if (eventAdded) {
       final snackBar = SnackBar(

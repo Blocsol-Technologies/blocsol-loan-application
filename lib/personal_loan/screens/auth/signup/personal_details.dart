@@ -61,6 +61,8 @@ class _PCSignupPersonalDetailsState
       textColor: Theme.of(context).colorScheme.surface,
     );
 
+    if (!mounted || !context.mounted) return;
+
     String formattedDate = DateFormat('dd-MM-yyyy').format(datePicked!);
 
     _dobController.text = formattedDate;
@@ -82,7 +84,7 @@ class _PCSignupPersonalDetailsState
         .read(personalLoanSignupProvider.notifier)
         .verifyUdyamNumber(_udyamController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_signup", {
       "step": "validating_personal_details",
@@ -157,27 +159,27 @@ class _PCSignupPersonalDetailsState
               _panController.text,
               _cancelToken);
 
+      if (!mounted || !context.mounted) return;
+
       if (!response.success) {
-        if (mounted) {
-          setState(() {
-            _creatingAccount = false;
-          });
-          final snackBar = SnackBar(
-            elevation: 0,
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.transparent,
-            content: getSnackbarNotificationWidget(
-                message: response.message,
-                notifType: SnackbarNotificationType.error),
-            duration: const Duration(seconds: 5),
-          );
+        setState(() {
+          _creatingAccount = false;
+        });
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: getSnackbarNotificationWidget(
+              message: response.message,
+              notifType: SnackbarNotificationType.error),
+          duration: const Duration(seconds: 5),
+        );
 
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(snackBar);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
 
-          return;
-        }
+        return;
       }
     }
 
@@ -187,11 +189,11 @@ class _PCSignupPersonalDetailsState
         .addAddressDetails(_addressController.text, _cityController.text,
             _selectedState, _pinController.text, _cancelToken);
 
+    if (!mounted || !context.mounted) return;
+
     setState(() {
       _creatingAccount = false;
     });
-
-    if (!mounted) return;
 
     if (response.success) {
       ref.read(routerProvider).push(PersonalLoanSignupRouter.password);

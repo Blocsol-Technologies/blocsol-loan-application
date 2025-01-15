@@ -45,7 +45,8 @@ class _PersonalLoanRepaymentSetupFailedState
     var response = await ref
         .read(personalNewLoanRequestProvider.notifier)
         .refetchRepaymentSetupURL(_cancelToken);
-    if (!mounted) return;
+    
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingRepaymentSetupUrl = false;

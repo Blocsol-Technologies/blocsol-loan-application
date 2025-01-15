@@ -52,7 +52,7 @@ class _InvoiceNewLoanBankAccountDetailsState
         .read(invoiceNewLoanRequestProvider.notifier)
         .submitBankAccountDetails(_ifscCodeReadOnly, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "submitting_bank_account_details",
@@ -96,7 +96,7 @@ class _InvoiceNewLoanBankAccountDetailsState
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchBankAccountFormDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _gettingBankAccountFormDetails = false;

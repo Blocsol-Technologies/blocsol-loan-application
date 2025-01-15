@@ -65,7 +65,7 @@ class _InvoiceNewLoanEntityKycState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkEntityKycFormSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

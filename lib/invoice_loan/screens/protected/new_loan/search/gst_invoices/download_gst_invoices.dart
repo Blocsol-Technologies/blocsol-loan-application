@@ -36,7 +36,7 @@ class _GstDataFetchingScreenState extends ConsumerState<GstDataDownloadScreen> {
         .read(invoiceNewLoanRequestProvider.notifier)
         .downloadGstData(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "downloading_gst_data",

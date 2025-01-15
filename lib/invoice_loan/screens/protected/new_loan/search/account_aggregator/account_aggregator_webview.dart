@@ -84,7 +84,7 @@ class _NewLoanAccountAggregatorWebviewScreenState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkConsentSuccess(ecres!, resdate!, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "checking_account_aggregator_consent_success",

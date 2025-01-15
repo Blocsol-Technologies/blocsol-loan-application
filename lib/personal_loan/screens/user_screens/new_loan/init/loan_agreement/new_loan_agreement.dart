@@ -69,7 +69,7 @@ class _PCNewLoanLoanAgreementState
         .read(personalNewLoanRequestProvider.notifier)
         .submitLoanAgreementAndCheckSuccess(otp, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!submitForm07Response.success) {
       ref
@@ -106,37 +106,37 @@ class _PCNewLoanLoanAgreementState
         .read(personalNewLoanRequestProvider.notifier)
         .fetchLoanAgreementURL(_cancelToken);
 
-    if (mounted) {
-      if (response.success) {
-        if (response.data['redirect_form']) {
-          context.go(PersonalNewLoanRequestRouter.new_loan_agreement_webview,
-              extra: response.data['url']);
-          return;
-        }
+    if (!mounted || !context.mounted) return;
 
-        setState(() {
-          _currentUrl = response.data['url'];
-        });
-
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(url: WebUri(response.data['url'])));
-      } else {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(
-              message: "Unable to fetch loan agreement url",
-              notifType: SnackbarNotificationType.error),
-          duration: const Duration(seconds: 5),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-
+    if (response.success) {
+      if (response.data['redirect_form']) {
+        context.go(PersonalNewLoanRequestRouter.new_loan_agreement_webview,
+            extra: response.data['url']);
         return;
       }
+
+      setState(() {
+        _currentUrl = response.data['url'];
+      });
+
+      _webViewController?.loadUrl(
+          urlRequest: URLRequest(url: WebUri(response.data['url'])));
+    } else {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch loan agreement url",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+      return;
     }
   }
 
@@ -194,10 +194,12 @@ class _PCNewLoanLoanAgreementState
                           padding: EdgeInsets.symmetric(
                               horizontal: RelativeSize.width(30, width)),
                           child: PersonalNewLoanRequestTopNav(
-                          onBackClick: () async {
-                            ref.read(routerProvider).push(PersonalNewLoanRequestRouter.new_loan_process);
-                          },
-                        ),
+                            onBackClick: () async {
+                              ref.read(routerProvider).push(
+                                  PersonalNewLoanRequestRouter
+                                      .new_loan_process);
+                            },
+                          ),
                         ),
                         const SpacerWidget(
                           height: 20,

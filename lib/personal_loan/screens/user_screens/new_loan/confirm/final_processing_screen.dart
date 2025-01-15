@@ -33,7 +33,7 @@ class _PCNewLoanFinalProcessingState
         .read(personalNewLoanRequestProvider.notifier)
         .checkMonitoringConsentRequirement(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (confirmationSuccessResponse.success) {
       monitoringConsentRequired =

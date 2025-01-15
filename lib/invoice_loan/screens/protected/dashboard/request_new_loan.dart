@@ -29,13 +29,11 @@ class _RequestNewLoanButtonState extends ConsumerState<RequestNewLoanButton> {
   Future<void> _handleGetLoanPress() async {
     final cancelToken = CancelToken();
 
-    await HapticFeedback.heavyImpact();
-
     var response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .performGeneralSearch(false, cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "request_new_loan",

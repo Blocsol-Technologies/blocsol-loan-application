@@ -91,7 +91,7 @@ class _InvoiceLoanLiabilitiesHomeState
         .read(invoiceLoanLiabilitiesProvider.notifier)
         .fetchAllLiabilities(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -125,6 +125,14 @@ class _InvoiceLoanLiabilitiesHomeState
       _textInputController.addListener(_onTextChanged);
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textInputController.dispose();
+    _debounce?.cancel();
+    _cancelToken.cancel();
+    super.dispose();
   }
 
   @override
@@ -533,6 +541,8 @@ class _LoanSearchState extends State<LoanSearch> {
                     });
 
                     await widget.onRefrersh();
+
+                    if (!mounted || !context.mounted) return;
 
                     setState(() {
                       refreshingLoans = false;

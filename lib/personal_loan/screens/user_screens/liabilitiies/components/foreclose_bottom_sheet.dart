@@ -41,7 +41,7 @@ class _PersonalLoanForecloseLoanModalBottomSheet
         .read(personalLoanLiabilitiesProvider.notifier)
         .initiateForeclosure(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_liabilities", {
       "step": "sending_foreclose_loan_request",

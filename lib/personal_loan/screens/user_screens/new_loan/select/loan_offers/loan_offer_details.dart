@@ -1876,7 +1876,7 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
         .read(personalNewLoanRequestProvider.notifier)
         .performSelect2(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _performingSelect02 = false;
@@ -1917,7 +1917,7 @@ class _LoanOfferActionsState extends ConsumerState<LoanOfferActions> {
         .read(personalNewLoanRequestProvider.notifier)
         .performNextActionsAfterOfferSelection(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _performingNextActions = false;

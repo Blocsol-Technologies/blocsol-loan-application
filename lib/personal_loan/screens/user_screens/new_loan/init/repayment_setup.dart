@@ -73,7 +73,7 @@ class _PCNewLoanRepaymentSetupState
         .read(personalNewLoanRequestProvider.notifier)
         .checkRepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!repaymentSetupSuccessResponse.success) {
       ref
@@ -115,7 +115,7 @@ class _PCNewLoanRepaymentSetupState
         .read(personalNewLoanRequestProvider.notifier)
         .fetchRepaymentURL(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _fetchingRepaymentURL = false;
@@ -155,26 +155,26 @@ class _PCNewLoanRepaymentSetupState
         .read(personalNewLoanRequestProvider.notifier)
         .refetchRepaymentSetupURL(_cancelToken);
 
-    if (mounted) {
-      if (!response.success) {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(
-              message: "Unable to refetch repayment setup url",
-              notifType: SnackbarNotificationType.error),
-          duration: const Duration(seconds: 15),
-        );
+    if (!mounted || !context.mounted) return;
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        return;
-      } else {
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(url: WebUri(response.data['url'])));
-      }
+    if (!response.success) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to refetch repayment setup url",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 15),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      return;
+    } else {
+      _webViewController?.loadUrl(
+          urlRequest: URLRequest(url: WebUri(response.data['url'])));
     }
   }
 
@@ -188,7 +188,9 @@ class _PCNewLoanRepaymentSetupState
 
   @override
   void dispose() {
-    ref.read(personalNewLoanRequestProvider.notifier).updateCheckingRepaymentSetupSuccess(false);
+    ref
+        .read(personalNewLoanRequestProvider.notifier)
+        .updateCheckingRepaymentSetupSuccess(false);
     _cancelToken.cancel();
     super.dispose();
   }

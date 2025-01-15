@@ -60,7 +60,7 @@ class _NewLoanSubmittingInvoicesForOffersScreenState
         .read(invoiceNewLoanRequestProvider.notifier)
         .submitForms(submitInvoiceCancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "submitting_search_forms",

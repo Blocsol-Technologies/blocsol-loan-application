@@ -43,7 +43,7 @@ class _SignupPasswordCreationState extends ConsumerState<SignupPasswordCreation>
         .read(invoiceLoanSignupStateProvider.notifier)
         .setAccountPassword(_textEditingController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "setting_account_password",

@@ -39,11 +39,13 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
     // Adding slight delay to properly sync data fetch on the dashboard
     await Future.delayed(const Duration(seconds: 2));
 
+    if (!mounted || !context.mounted) return;
+
     var response = await ref
         .read(personalLoanAccountDetailsProvider.notifier)
         .getBorrowerDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -67,7 +69,7 @@ class _PCHomeScreenState extends ConsumerState<PCHomeScreen> {
         .read(personalLoanLiabilitiesProvider.notifier)
         .fetchOffers(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if ((response.data as List<dynamic>).isEmpty) {
       setState(() {

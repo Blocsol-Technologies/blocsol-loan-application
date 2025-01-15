@@ -34,7 +34,7 @@ class _EnableGSTAPIState extends ConsumerState<EnableGSTAPI> {
         .read(invoiceNewLoanRequestProvider.notifier)
         .sendGstOtp(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "sending_gst_otp",

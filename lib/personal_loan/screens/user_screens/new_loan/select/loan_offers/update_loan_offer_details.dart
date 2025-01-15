@@ -72,7 +72,7 @@ class _PCNewLoanUpdateLoanOfferState
         .read(personalNewLoanRequestProvider.notifier)
         .submitLoanOfferChangeForm('$_amountSelected', _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_application_process", {
       "step": "submit_loan_offer_change_form",
@@ -106,8 +106,8 @@ class _PCNewLoanUpdateLoanOfferState
         .read(personalNewLoanRequestProvider.notifier)
         .fetchUpdatedLoanOffer(_cancelToken);
 
-    if (!mounted) return;
-
+    if (!mounted || !context.mounted) return;
+    
     if (!response.success) {
       setState(() {
         submittingForm = false;

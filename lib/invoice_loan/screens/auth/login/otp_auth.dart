@@ -37,6 +37,8 @@ class _LoginMobileOtpValidationState
     var response = await ref
         .read(invoiceLoanLoginProvider.notifier)
         .validateLoginOTP(_textController.text, _cancelToken);
+    
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent(
       "invoice_loan_customer_login",
@@ -47,8 +49,6 @@ class _LoginMobileOtpValidationState
         "data": response.data ?? {},
       },
     );
-
-    if (!mounted) return;
 
     if (response.success) {
       final permissions = [

@@ -43,7 +43,7 @@ class _PCLiabilityPaymentDetailsState
         .read(personalLoanLiabilitiesProvider.notifier)
         .initiateMissedEMIPayment(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

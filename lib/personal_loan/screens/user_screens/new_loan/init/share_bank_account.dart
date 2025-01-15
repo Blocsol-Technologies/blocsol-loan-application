@@ -57,7 +57,7 @@ class _PCNewLoanBankAccountDetailsState
             _bankIFSCController.text,
             _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_application_process", {
       "step": "verify_bank_account_details",

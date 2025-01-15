@@ -43,7 +43,7 @@ class _InvoiceLoanForecloseLoanModalBottomSheet
         .read(invoiceLoanLiabilityProvider.notifier)
         .initiateForeclosure(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_liabilities", {
       "step": "sending_foreclosure_request",

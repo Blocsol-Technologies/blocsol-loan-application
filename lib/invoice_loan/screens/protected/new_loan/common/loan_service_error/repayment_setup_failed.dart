@@ -44,7 +44,8 @@ class _InvoiceLoanRepaymentSetupFailedState
     var response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchRepaymentSetupForm(_cancelToken);
-    if (!mounted) return;
+
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingRepaymentSetupUrl = false;

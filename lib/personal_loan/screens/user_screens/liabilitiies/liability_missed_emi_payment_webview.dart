@@ -62,6 +62,8 @@ class _PCLiabilityMissedEMIPaymentWebviewState
           .read(personalLoanLiabilitiesProvider.notifier)
           .checkMissedEMIRepaymentSuccess(_cancelToken);
 
+      if (!mounted || !context.mounted) return;
+
       if (response.success) {
         success = true;
       } else {
@@ -83,11 +85,12 @@ class _PCLiabilityMissedEMIPaymentWebviewState
       _verifyingMissedEMIPayment = false;
     });
 
-    var _ = await ref
+    await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
+
     ref.read(routerProvider).pushReplacement(
         PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
         extra: true);
@@ -110,6 +113,8 @@ class _PCLiabilityMissedEMIPaymentWebviewState
       var response = await ref
           .read(personalLoanLiabilitiesProvider.notifier)
           .checkMissedEMIRepaymentSuccess(_cancelToken);
+
+      if (!mounted || !context.mounted) return;
 
       if (response.success) {
         success = true;
@@ -147,13 +152,11 @@ class _PCLiabilityMissedEMIPaymentWebviewState
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    var _ = await ref
+    await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    await Future.delayed(const Duration(seconds: 5));
-
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)

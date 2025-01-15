@@ -50,7 +50,7 @@ class _InvoiceLoanLiabilityForeclosureWebviewState
         .read(invoiceLoanLiabilityProvider.notifier)
         .checkForeclosureSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -83,11 +83,11 @@ class _InvoiceLoanLiabilityForeclosureWebviewState
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)

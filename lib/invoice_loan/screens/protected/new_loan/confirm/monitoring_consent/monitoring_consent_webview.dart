@@ -66,9 +66,7 @@ class _InvoiceNewLoanMonitoringConsentWebviewState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkLoanMonitoringConsentSuccess(_cancelToken, ecres, resdate);
 
-    if (!mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "checking_loan_monitoring_consent_success",

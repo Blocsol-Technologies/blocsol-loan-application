@@ -73,7 +73,7 @@ class _LiabilityPrepayState
         .read(invoiceLoanLiabilityProvider.notifier)
         .initiatePartPrepayment('$_amountSelected', _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_liabilities", {
       "step": "sending_prepayment_request",

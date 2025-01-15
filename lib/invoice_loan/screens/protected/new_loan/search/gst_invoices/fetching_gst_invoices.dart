@@ -35,7 +35,7 @@ class _InvoicesFetchingScreenState
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchGstInvoices(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (response.success) {
       if (response.data['refetchData']) {
@@ -43,7 +43,7 @@ class _InvoicesFetchingScreenState
             .read(invoiceNewLoanRequestProvider.notifier)
             .sendGstOtp(_cancelToken);
 
-        if (!mounted) return;
+        if (!mounted || !context.mounted) return;
 
         if (!response.success) {
           context.go(InvoiceNewLoanRequestRouter.enable_gst_api_access);

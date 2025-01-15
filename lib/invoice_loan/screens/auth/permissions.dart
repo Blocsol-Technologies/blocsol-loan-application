@@ -27,6 +27,8 @@ class _InvoiceLoanAppPermissionsState
       Permission.mediaLibrary,
     ].request();
 
+    if (!mounted || !context.mounted) return;
+
     var allGranted = true;
     statuses.forEach((permission, status) {
       if (!status.isGranted) {

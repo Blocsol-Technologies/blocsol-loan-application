@@ -29,7 +29,11 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
     try {
       final googleAccount = await GoogleSignIn().signIn();
 
+      if (!mounted || !context.mounted) return;
+
       final googleAuth = await googleAccount?.authentication;
+
+      if (!mounted || !context.mounted) return;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
@@ -38,6 +42,8 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         credential,
       );
+
+      if (!mounted || !context.mounted) return;
 
       if (userCredential.user == null) {
         throw FirebaseAuthException(code: "operation-not-allowed");
@@ -51,9 +57,12 @@ class _PCSignupHomeState extends ConsumerState<PCSignupHome> {
       }
 
       await FirebaseAuth.instance.signOut();
+
+      if (!mounted || !context.mounted) return;
+
       await GoogleSignIn().signOut();
 
-      if (!mounted) return;
+      if (!mounted || !context.mounted) return;
 
       logFirebaseEvent("personal_loan_signup", {
         "step": "email_validation",

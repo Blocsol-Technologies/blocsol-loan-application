@@ -44,8 +44,7 @@ class _LoginPasswordValidationState
         .validatePassword(ref.read(invoiceLoanLoginProvider).phoneNumber,
             _textController.text, _cancelToken);
 
- 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (response.success) {
       context.go(InvoiceLoanLoginRouter.otp_validation);
@@ -74,6 +73,7 @@ class _LoginPasswordValidationState
 
   void addSignature() async {
     String deviceId = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     ref.read(invoiceLoanLoginProvider.notifier).setDeviceId(deviceId);
   }
 
@@ -422,7 +422,7 @@ class _LoginPasswordValidationState
 
                                               await _verifyPassword();
 
-                                              if (!mounted) return;
+                                              if (!mounted || !context.mounted) return;
 
                                               setState(() {
                                                 _sendingOtp = false;

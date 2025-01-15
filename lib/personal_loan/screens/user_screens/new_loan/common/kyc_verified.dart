@@ -31,9 +31,13 @@ class _PCKycVerifiedScreenState extends ConsumerState<PCKycVerified> {
 
     await Future.delayed(const Duration(seconds: 5));
 
+    if (!mounted || !context.mounted) return;
+
     var response = await ref
         .read(personalNewLoanRequestProvider.notifier)
         .checkAadharKYCSuccess(_cancelToken);
+
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       ref.read(routerProvider).push(

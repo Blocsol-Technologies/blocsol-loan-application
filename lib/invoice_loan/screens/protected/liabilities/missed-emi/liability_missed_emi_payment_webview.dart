@@ -52,11 +52,12 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
             .verifyingMissedEmiPaymentSuccess) {
       return;
     }
+
     var response = await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .checkMissedEMIRepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       if (response.data == "suspend") {
@@ -102,11 +103,11 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)
@@ -128,7 +129,7 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
         .read(invoiceLoanLiabilityProvider.notifier)
         .checkMissedEMIRepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       if (response.data == "suspend") {
@@ -160,11 +161,11 @@ class _InvoiceLoanLiabilityMissedEmiPaymentWebviewState
 
     _timer?.cancel();
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref.read(routerProvider).pushReplacement(
         InvoiceLoanLiabilitiesRouter.payment_success_overview,

@@ -53,9 +53,7 @@ class _PlprofileAASelectState extends ConsumerState<PlProfileAASelect> {
         .read(personalLoanAccountDetailsProvider.notifier)
         .updateAccountAggregator(accountAggregatorName, _cancelToken);
 
-    if (!mounted || !context.mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_profile", {
       "step": "update_account_aggregator",
@@ -227,9 +225,7 @@ class _PlprofileAASelectState extends ConsumerState<PlProfileAASelect> {
 
                         await _updateAccountAggregator();
 
-                        if (!mounted || !context.mounted) {
-                          return;
-                        }
+                        if (!mounted || !context.mounted) return;
 
                         setState(() {
                           _updatingAA = false;

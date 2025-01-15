@@ -79,8 +79,8 @@ class _PCNewLoanMonitoringConsentAAWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .checkLoanMonitoringConsentSuccess(ecres!, resdate!, _cancelToken);
 
-    if (!mounted) return;
-
+    if (!mounted || !context.mounted) return;
+    
     logFirebaseEvent("personal_loan_application_process", {
       "step": "check_loan_monitoring_consent_success",
       "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,

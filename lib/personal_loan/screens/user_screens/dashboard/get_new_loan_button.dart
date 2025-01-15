@@ -50,8 +50,8 @@ class _GetNewPersonalLoanButtonState
         .read(personalNewLoanRequestProvider.notifier)
         .performGeneralSearch(false, cancelToken);
 
-    if (!mounted) return;
-
+    if (!mounted || !context.mounted) return;
+    
     logFirebaseEvent("personal_loan_application_process", {
       "step": "applying_for_loan",
       "phoneNumber": ref.read(personalLoanAccountDetailsProvider).phone,

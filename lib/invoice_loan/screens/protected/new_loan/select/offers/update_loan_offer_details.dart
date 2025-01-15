@@ -70,7 +70,7 @@ class _InvoiceNewLoanUpdateOfferState
         .read(invoiceNewLoanRequestProvider.notifier)
         .submitLoanUpdateForm('$_amountSelected', _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "submitting_loan_update_offer_form",
@@ -109,7 +109,7 @@ class _InvoiceNewLoanUpdateOfferState
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchSelectedOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       setState(() {
@@ -133,7 +133,7 @@ class _InvoiceNewLoanUpdateOfferState
 
     await Future.delayed(const Duration(seconds: 10));
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)

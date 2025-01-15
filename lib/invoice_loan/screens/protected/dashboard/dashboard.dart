@@ -32,7 +32,7 @@ class _InvoiceLoanDashboardState extends ConsumerState<InvoiceLoanDashboard> {
       return;
     }
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanUserProfileDetailsProvider.notifier)
         .getCompanyDetails(_cancelToken);
   }

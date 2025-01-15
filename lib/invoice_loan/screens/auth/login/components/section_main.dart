@@ -64,7 +64,7 @@ class _SectionMainState extends State<SectionMain>
 
     await widget.performAction();
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _performingAction = false;

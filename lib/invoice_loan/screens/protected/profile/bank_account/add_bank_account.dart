@@ -42,7 +42,7 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
         .updateCompanyBankAccountDetails(_accountNumberTextController.text,
             _ifscCodeTextController.text, _setPrimaryBank, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_profile", {
       "step": "adding_bank_details",
@@ -71,7 +71,7 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
 
     await Future.delayed(const Duration(seconds: 3));
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)
@@ -199,9 +199,7 @@ class _MyWidgetState extends ConsumerState<InvoiceLoanProfileAddBankAccount> {
 
                         await _updateBankDetails();
 
-                        if (!mounted) {
-                          return;
-                        }
+                        if (!mounted || !context.mounted) return;
 
                         setState(() {
                           _addingBankDetails = false;

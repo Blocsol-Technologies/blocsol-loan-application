@@ -59,7 +59,7 @@ class _PCNewLoanDataConsentState extends ConsumerState<PCNewLoanDataConsent> {
         .read(personalNewLoanRequestProvider.notifier)
         .provideDataConsent(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _addingConsentArtifact = false;

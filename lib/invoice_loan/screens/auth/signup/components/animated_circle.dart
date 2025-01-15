@@ -25,7 +25,7 @@ class _AnimatedCircleState extends State<AnimatedCircle> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Future.delayed(Duration(milliseconds: widget.delay));
-
+      if (!mounted || !context.mounted) return;
       setState(() {
         _diameter = widget.diameter;
       });

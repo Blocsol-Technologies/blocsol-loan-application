@@ -44,7 +44,7 @@ class _InvoiceLoanAadharKycFailedState
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchAadharKycUrl(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingAaadharKycUrl = false;

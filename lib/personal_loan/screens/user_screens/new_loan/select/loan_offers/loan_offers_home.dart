@@ -49,6 +49,8 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
         .read(personalNewLoanRequestProvider.notifier)
         .fetchOffers(_cancelToken);
 
+    if (!mounted || !context.mounted) return;
+
     setState(() {
       _filteredOffers = response.data;
     });
@@ -57,7 +59,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
   void startFetching() {
     _offerPoll = Timer.periodic(Duration(seconds: _interval), (timer) async {
       if (!mounted || _offerPoll == null) return;
-      
+
       if (_numFeteched >= 3) {
         ref
             .read(personalNewLoanRequestProvider.notifier)
@@ -70,7 +72,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
           .read(personalNewLoanRequestProvider.notifier)
           .fetchOffers(_cancelToken);
 
-      if (!mounted) return;
+      if (!mounted || !context.mounted) return;
 
       if (response.success) {
         setState(() {
@@ -98,6 +100,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
         await ref
             .read(personalNewLoanRequestProvider.notifier)
             .fetchOffers(_cancelToken);
+        if (!mounted || !context.mounted) return;
         _adjustInterval();
       });
     }
@@ -123,7 +126,7 @@ class _NewLoanOfferSelectScreenState extends ConsumerState<PCNewLoanOfferHome> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _onOfferRefresh();
-
+      if (!mounted || !context.mounted) return;
       setState(() {
         _filteredOffers = ref.read(personalNewLoanRequestProvider).offers;
       });

@@ -52,7 +52,7 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
         .read(invoiceLoanLiabilityProvider.notifier)
         .checkPrepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -85,11 +85,11 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref.read(routerProvider).pushReplacement(
         InvoiceLoanLiabilitiesRouter.payment_success_overview,
@@ -109,7 +109,7 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
         .read(invoiceLoanLiabilityProvider.notifier)
         .checkPrepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       if (response.data == "suspend") {
@@ -145,11 +145,11 @@ class _InvoiceLoanLiabilityPrepaymentWebviewState
 
     _timer?.cancel();
 
-    var _ = await ref
+    await ref
         .read(invoiceLoanLiabilityProvider.notifier)
         .fetchSingleLiabilityDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref.read(routerProvider).pushReplacement(
         InvoiceLoanLiabilitiesRouter.payment_success_overview,

@@ -55,9 +55,7 @@ class _InvoiceLoanprofileAASelectState
         .read(invoiceLoanUserProfileDetailsProvider.notifier)
         .updateAccountAggregator(accountAggregatorName, _cancelToken);
 
-    if (!mounted || !context.mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_profile", {
       "step": "updating_account_aggregator",
@@ -229,9 +227,7 @@ class _InvoiceLoanprofileAASelectState
 
                         await _updateAccountAggregator();
 
-                        if (!mounted || !context.mounted) {
-                          return;
-                        }
+                        if (!mounted || !context.mounted) return;
 
                         setState(() {
                           _updatingAA = false;

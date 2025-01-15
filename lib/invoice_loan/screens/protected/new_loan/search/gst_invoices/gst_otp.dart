@@ -53,7 +53,7 @@ class _GstOtpValidationState extends ConsumerState<GstOtpValidation> {
         .read(invoiceNewLoanRequestProvider.notifier)
         .verifyGstOtp(_otpTextController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "verifying_gst_otp",

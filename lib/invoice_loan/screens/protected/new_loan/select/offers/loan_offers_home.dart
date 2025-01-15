@@ -86,9 +86,11 @@ class _InvoiceNewLoanOffersSelectState
   }
 
   Future<void> onInvoiceOffersRefresh() async {
-    var _ = await ref
+    await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchLoanOffers(_cancelToken);
+
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _filteredOffers =
@@ -104,14 +106,18 @@ class _InvoiceNewLoanOffersSelectState
           .read(invoiceNewLoanRequestProvider.notifier)
           .fetchLoanOffers(_cancelToken);
 
-      var invoiceWithOffers = ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
+      if (!mounted || !context.mounted) return;
 
-      if (_textInputController.text.isEmpty && invoiceWithOffers.length != _filteredOffers.length) {
+      var invoiceWithOffers =
+          ref.read(invoiceNewLoanRequestProvider).invoicesWithOffers;
+
+      if (_textInputController.text.isEmpty &&
+          invoiceWithOffers.length != _filteredOffers.length) {
         setState(() {
           _filteredOffers = invoiceWithOffers;
         });
       }
-      
+
       _adjustInterval();
     });
   }
@@ -132,6 +138,8 @@ class _InvoiceNewLoanOffersSelectState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _textInputController.addListener(_onTextChanged);
       await onInvoiceOffersRefresh();
+
+      if (!mounted || !context.mounted) return;
 
       setState(() {
         _filteredOffers =
@@ -680,6 +688,8 @@ class _OfferSearchState extends State<OfferSearch> {
                   });
 
                   await widget.onRefrersh();
+
+                  if (!mounted || !context.mounted) return;
 
                   setState(() {
                     refreshingInvoices = false;

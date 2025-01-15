@@ -68,7 +68,7 @@ class _InvoiceNewLoanAgreementWebviewState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkLoanAgreementSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!loanAgreementSuccessResponse.success) {
       ref.read(routerProvider).push(

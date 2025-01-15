@@ -38,7 +38,7 @@ class _InvoiceNewLoanAgreementState
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchLoanAgreementUrl(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (response.success) {
       if (response.data['redirect_form']) {

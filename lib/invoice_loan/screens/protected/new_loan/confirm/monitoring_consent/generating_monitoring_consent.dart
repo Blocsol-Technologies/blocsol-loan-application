@@ -34,7 +34,7 @@ class _InvoiceNewLoanGenerateMonitroingConsentState
         .read(invoiceNewLoanRequestProvider.notifier)
         .generateLoanMonitoringConsentRequest(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "generating_monitoring_consent",

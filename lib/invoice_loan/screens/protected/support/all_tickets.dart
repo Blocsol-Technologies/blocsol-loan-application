@@ -48,7 +48,7 @@ class _InvoiceLoanAllSupportTicketsState
         .read(invoiceLoanSupportProvider.notifier)
         .fetchAllSupportTickets(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -86,6 +86,8 @@ class _InvoiceLoanAllSupportTicketsState
           .read(invoiceLoanSupportProvider.notifier)
           .fetchAllSupportTickets(_cancelToken);
 
+      if (!mounted || !context.mounted) return;
+      
       setState(() {
         _fetchingSupportTickets = false;
       });

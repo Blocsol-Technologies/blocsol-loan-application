@@ -269,7 +269,7 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
             widget.offer.parentItemId,
             _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_application_process", {
       "step": "selecting_search_offer",
@@ -306,8 +306,8 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
     }
 
     await Future.delayed(const Duration(seconds: 30));
-    if (!mounted) return;
 
+    if (!mounted || !context.mounted) return;
 
     if (ref
             .read(invoiceNewLoanRequestProvider)
@@ -316,13 +316,12 @@ class _InvoiceOfferWidgetState extends ConsumerState<InvoiceOfferWidget> {
         "") {
       return;
     }
-
-
+    
     response = await ref
         .read(invoiceNewLoanRequestProvider.notifier)
         .refetchSelectedOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _selectingOffer = false;

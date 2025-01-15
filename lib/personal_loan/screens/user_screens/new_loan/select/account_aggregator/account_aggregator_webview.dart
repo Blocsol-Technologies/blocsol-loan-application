@@ -76,7 +76,7 @@ class _PCNewLoanAAWebviewState extends ConsumerState<PCNewLoanAAWebview> {
         .read(personalNewLoanRequestProvider.notifier)
         .checkConsentSuccess(ecres!, resdate!, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_application_process", {
       "step": "checking_aa_consent_success",

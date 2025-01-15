@@ -66,7 +66,7 @@ class _InvoiceNewLoanAadharKycState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkAadharKycSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

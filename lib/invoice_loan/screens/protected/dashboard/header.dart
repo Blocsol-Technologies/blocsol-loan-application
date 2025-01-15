@@ -33,7 +33,7 @@ class _DashboardHeaderState extends ConsumerState<DashboardHeader> {
         .read(invoiceLoanUserLiabilityDetailsProvider.notifier)
         .getLiabilityDetails(cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

@@ -72,7 +72,7 @@ class _PCNewLoanAadharKYCWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .checkAadharKYCSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!form03SubmissionResponse.success) {
       ref
@@ -111,30 +111,30 @@ class _PCNewLoanAadharKYCWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .fetchAadharKYCURL(_cancelToken);
 
-    if (mounted) {
-      if (!response.success) {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(
-              message: "Unable to fetch Aadhar KYC Url.",
-              notifType: SnackbarNotificationType.error),
-          duration: const Duration(seconds: 5),
-        );
+    if (!mounted || !context.mounted) return;
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+    if (!response.success) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to fetch Aadhar KYC Url.",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 5),
+      );
 
-        return;
-      } else {
-        setState(() {
-          _currentURL = response.data['url'];
-        });
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(url: WebUri(response.data['url'])));
-      }
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+      return;
+    } else {
+      setState(() {
+        _currentURL = response.data['url'];
+      });
+      _webViewController?.loadUrl(
+          urlRequest: URLRequest(url: WebUri(response.data['url'])));
     }
   }
 
@@ -147,26 +147,26 @@ class _PCNewLoanAadharKYCWebviewState
         .read(personalNewLoanRequestProvider.notifier)
         .refetchAadharKYCURL(_cancelToken);
 
-    if (mounted) {
-      if (!response.success) {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(
-              message: "Unable to refetch Aadhar KYC Url",
-              notifType: SnackbarNotificationType.error),
-          duration: const Duration(seconds: 15),
-        );
+    if (!mounted || !context.mounted) return;
 
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        return;
-      } else {
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(url: WebUri(response.data['url'])));
-      }
+    if (!response.success) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: getSnackbarNotificationWidget(
+            message: "Unable to refetch Aadhar KYC Url",
+            notifType: SnackbarNotificationType.error),
+        duration: const Duration(seconds: 15),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      return;
+    } else {
+      _webViewController?.loadUrl(
+          urlRequest: URLRequest(url: WebUri(response.data['url'])));
     }
   }
 

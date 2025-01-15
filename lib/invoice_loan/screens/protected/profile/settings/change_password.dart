@@ -326,9 +326,7 @@ class _InvoiceLoanProfileChangePasswordState
 
                         await _changeAccountPassword();
 
-                        if (!mounted) {
-                          return;
-                        }
+                        if (!mounted || !context.mounted) return;
 
                         setState(() {
                           _changingPassword = false;

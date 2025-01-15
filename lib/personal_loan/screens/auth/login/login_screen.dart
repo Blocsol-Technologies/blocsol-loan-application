@@ -48,7 +48,7 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
         .verifyPassword(_phoneNumberController.text, _passwordController.text,
             _signature, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _sendingOTP = false;
@@ -101,6 +101,7 @@ class _PCLoginScreenState extends ConsumerState<PCLoginScreen> {
 
   void addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     setState(() {
       _signature = sign;
     });

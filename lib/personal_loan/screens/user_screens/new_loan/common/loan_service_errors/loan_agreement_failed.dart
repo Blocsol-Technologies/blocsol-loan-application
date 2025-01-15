@@ -48,7 +48,7 @@ class _PersonalNewLoanAgreementFailedState
         .read(personalNewLoanRequestProvider.notifier)
         .refetchLoanAgreementURL(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _refetchingLoanAgreementUrl = false;

@@ -67,7 +67,7 @@ class _PCLiabilityPrepayState extends ConsumerState<PCLiabilityPrepay> {
         .read(personalLoanLiabilitiesProvider.notifier)
         .initiatePartPrepayment('$_amountSelected', _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_liabilities", {
       "step": "sending_loan_prepayment_request",

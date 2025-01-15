@@ -36,7 +36,7 @@ class _SignupMobileOtpValidationState
         .read(invoiceLoanSignupStateProvider.notifier)
         .verifyMobileOTP(_textController.text, _cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("invoice_loan_customer_signup", {
       "step": "verify_mobile_otp",

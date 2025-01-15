@@ -61,7 +61,7 @@ class _PCNewLoanGenerateOfferConsentState
         .read(personalNewLoanRequestProvider.notifier)
         .submitFormsAndGenerateAAURL(_generateOffersCancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     logFirebaseEvent("personal_loan_application_process", {
       "step": "submit_form_and_generate_aa_url",

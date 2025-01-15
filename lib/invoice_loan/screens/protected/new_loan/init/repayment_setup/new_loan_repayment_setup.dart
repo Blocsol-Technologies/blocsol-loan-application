@@ -63,7 +63,7 @@ class _InvoiceNewLoanRepaymentSetupState
         .read(invoiceNewLoanRequestProvider.notifier)
         .checkRepaymentSetupSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!checkRepaymentSetupSuccessResponse.success) {
       context.go(InvoiceNewLoanRequestRouter.loan_service_error,
@@ -87,7 +87,7 @@ class _InvoiceNewLoanRepaymentSetupState
         .read(invoiceNewLoanRequestProvider.notifier)
         .fetchRepaymentSetupUrl(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (fetchURLResponse.success) {
       setState(() {

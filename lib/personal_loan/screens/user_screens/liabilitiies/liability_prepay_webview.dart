@@ -62,6 +62,8 @@ class _PCLiabilityPrepaymentWebviewState
           .read(personalLoanLiabilitiesProvider.notifier)
           .checkPrepaymentSuccess(_cancelToken);
 
+      if (!mounted || !context.mounted) return;
+
       if (response.success) {
         success = true;
       } else {
@@ -70,7 +72,7 @@ class _PCLiabilityPrepaymentWebviewState
       }
     }
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!success) {
       ref.read(routerProvider).pushReplacement(
@@ -83,11 +85,11 @@ class _PCLiabilityPrepaymentWebviewState
       _verifyingPrepayment = false;
     });
 
-    var _ = await ref
+    await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref.read(routerProvider).pushReplacement(
         PersonalLoanLiabilitiesRouter.liability_payment_success_overview,
@@ -107,7 +109,7 @@ class _PCLiabilityPrepaymentWebviewState
         .read(personalLoanLiabilitiesProvider.notifier)
         .checkPrepaymentSuccess(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       return;
@@ -127,11 +129,11 @@ class _PCLiabilityPrepaymentWebviewState
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-    var _ = await ref
+    await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     ref
         .read(routerProvider)

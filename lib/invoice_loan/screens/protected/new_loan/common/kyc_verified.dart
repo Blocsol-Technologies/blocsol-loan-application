@@ -35,10 +35,14 @@ class _InvoiceLoanKycVerifiedScreenState
 
     await Future.delayed(const Duration(seconds: 5));
 
+    if (!mounted || !context.mounted) return;
+
     if (widget.kycType == IBCKycType.aadhar) {
       var response = await ref
           .read(invoiceNewLoanRequestProvider.notifier)
           .checkAadharKycSuccess(_cancelToken);
+
+      if (!mounted || !context.mounted) return;
 
       if (!response.success) {
         ref.read(routerProvider).push(
@@ -50,6 +54,8 @@ class _InvoiceLoanKycVerifiedScreenState
       var response = await ref
           .read(invoiceNewLoanRequestProvider.notifier)
           .checkEntityKycFormSuccess(_cancelToken);
+
+      if (!mounted || !context.mounted) return;
 
       if (!response.success) {
         ref.read(routerProvider).push(

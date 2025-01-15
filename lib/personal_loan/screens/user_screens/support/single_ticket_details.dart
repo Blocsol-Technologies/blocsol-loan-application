@@ -40,7 +40,7 @@ class _PersonalLoanSingleTicketDetailsState
         .read(personalLoanSupportStateProvider.notifier)
         .sendStatusRequest(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(
@@ -77,17 +77,17 @@ class _PersonalLoanSingleTicketDetailsState
   final _interval = 10;
 
   Future<void> pollForSupportTicketsBackground() async {
-     if (!mounted || _supportTicktesMessagesPollTimer == null) return;
+    if (!mounted || _supportTicktesMessagesPollTimer == null) return;
 
-    if (ref.read(personalLoanSupportStateProvider).fetchingSingleSupportTicket) {
+    if (ref
+        .read(personalLoanSupportStateProvider)
+        .fetchingSingleSupportTicket) {
       return;
     }
 
-    var _ = await ref
+    await ref
         .read(personalLoanSupportStateProvider.notifier)
         .fetchSingleSupportTicket(_cancelToken);
-
-    if (!mounted) return;
   }
 
   void startPollingForSupportTickets() {
@@ -128,7 +128,10 @@ class _PersonalLoanSingleTicketDetailsState
     var response = await ref
         .read(personalLoanSupportStateProvider.notifier)
         .raiseSupportIssue(
-            ref.read(personalLoanSupportStateProvider).selectedSupportTicket.category,
+            ref
+                .read(personalLoanSupportStateProvider)
+                .selectedSupportTicket
+                .category,
             ref
                 .read(personalLoanSupportStateProvider)
                 .selectedSupportTicket
@@ -138,7 +141,7 @@ class _PersonalLoanSingleTicketDetailsState
             imageBase64,
             _cancelToken);
 
-    if (!context.mounted || !mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _closingTicket = false;
@@ -149,7 +152,9 @@ class _PersonalLoanSingleTicketDetailsState
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error),
+        content: getSnackbarNotificationWidget(
+            message: response.message,
+            notifType: SnackbarNotificationType.error),
       );
 
       ScaffoldMessenger.of(context)
@@ -505,6 +510,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
       try {
         _mediaFileList.clear();
         final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        if (!mounted || !context.mounted) return;
         setState(() {
           _mediaFileList = pickedFileList;
         });
@@ -513,7 +519,9 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          content: getSnackbarNotificationWidget(message: "unable to select images", notifType: SnackbarNotificationType.error),
+          content: getSnackbarNotificationWidget(
+              message: "unable to select images",
+              notifType: SnackbarNotificationType.error),
         );
 
         if (context.mounted) {
@@ -526,7 +534,8 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
   }
 
   Future<void> _sendMessage() async {
-    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket) return;
+    if (ref.read(personalLoanSupportStateProvider).generatingSupportTicket)
+      return;
 
     List<String> imageBase64 = [];
 
@@ -558,7 +567,7 @@ class _NewMessageBarState extends ConsumerState<NewMessageBar> {
         .raiseSupportIssue(widget.category, widget.subCategory, "OPEN",
             _messageController.text, imageBase64, _cancelToken);
 
-    if (!context.mounted || !mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

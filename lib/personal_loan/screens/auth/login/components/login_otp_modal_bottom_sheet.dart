@@ -125,7 +125,7 @@ class _LoginOTPModalBottomSheetState
         .verifyPassword(
             widget.phoneNumber, widget.password, _signature, _otpCancelToken);
 
-    if (!context.mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (response.success) {
       setState(() {
@@ -154,6 +154,7 @@ class _LoginOTPModalBottomSheetState
 
   void _addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     if (Platform.isAndroid) {
       setState(() {
         // _isAndroid = true;

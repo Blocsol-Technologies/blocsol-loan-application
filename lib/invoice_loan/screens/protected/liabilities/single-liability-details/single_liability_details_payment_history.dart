@@ -44,7 +44,7 @@ class _LiabilityPaymentHistoryState
         .read(invoiceLoanLiabilityProvider.notifier)
         .initiateMissedEMIPayment(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       final snackBar = SnackBar(

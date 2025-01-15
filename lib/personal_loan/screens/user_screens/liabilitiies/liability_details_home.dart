@@ -44,7 +44,7 @@ class _PCLiabilityDetailsHomeState
         .read(personalLoanLiabilitiesProvider.notifier)
         .performStatusRequest(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (!response.success) {
       setState(() {
@@ -69,11 +69,13 @@ class _PCLiabilityDetailsHomeState
 
     await Future.delayed(const Duration(seconds: 10));
 
+    if (!mounted || !context.mounted) return;
+
     response = await ref
         .read(personalLoanLiabilitiesProvider.notifier)
         .refetchSelectedLoanOfferDetails(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _performingStatusCheck = false;
@@ -469,9 +471,7 @@ class _DisbursedLoanDetailsState extends ConsumerState<DisbursedLoanDetails> {
 
     var eventAdded = await Add2Calendar.addEvent2Cal(event);
 
-    if (!mounted) {
-      return;
-    }
+    if (!mounted || !context.mounted) return;
 
     if (eventAdded) {
       final snackBar = SnackBar(

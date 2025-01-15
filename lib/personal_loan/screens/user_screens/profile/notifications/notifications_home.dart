@@ -34,12 +34,15 @@ class _PlNotificationsState
 
     if (isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+      if (!mounted || !context.mounted) return;
       deviceId = androidInfo.toString();
     } else if (isIos) {
       IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+      if (!mounted || !context.mounted) return;
       deviceId = iosInfo.toString();
     } else {
       final deviceInfo = await deviceInfoPlugin.deviceInfo;
+      if (!mounted || !context.mounted) return;
       deviceId = deviceInfo.data.toString();
     }
 

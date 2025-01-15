@@ -38,14 +38,16 @@ class _PCSignupMobileAuthState extends ConsumerState<PCSignupMobileAuth> {
       _sendingOTP = true;
     });
 
-    var response = await ref.read(personalLoanSignupProvider.notifier).sendMobileOTP(
-        _phoneTextInputController.text, _deviceSignature, _cancelToken);
+    var response = await ref
+        .read(personalLoanSignupProvider.notifier)
+        .sendMobileOTP(
+            _phoneTextInputController.text, _deviceSignature, _cancelToken);
+
+    if (!mounted || !context.mounted) return;
 
     setState(() {
       _sendingOTP = false;
     });
-
-    if (!mounted) return;
 
     logFirebaseEvent("personal_loan_signup", {
       "step": "sending_mobile_otp",
@@ -68,7 +70,8 @@ class _PCSignupMobileAuthState extends ConsumerState<PCSignupMobileAuth> {
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      content: getSnackbarNotificationWidget(message: response.message, notifType: SnackbarNotificationType.error), 
+      content: getSnackbarNotificationWidget(
+          message: response.message, notifType: SnackbarNotificationType.error),
       duration: const Duration(seconds: 5),
     );
 
@@ -81,6 +84,7 @@ class _PCSignupMobileAuthState extends ConsumerState<PCSignupMobileAuth> {
 
   void addSignature() async {
     String sign = await SmsAutoFill().getAppSignature;
+    if (!mounted || !context.mounted) return;
     setState(() {
       _deviceSignature = sign;
     });
@@ -152,8 +156,7 @@ class _PCSignupMobileAuthState extends ConsumerState<PCSignupMobileAuth> {
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 30,
                       ),
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                     ),
                   ],
                 ),

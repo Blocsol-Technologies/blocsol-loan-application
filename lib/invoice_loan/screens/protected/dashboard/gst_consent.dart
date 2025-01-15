@@ -42,7 +42,7 @@ class _GstConsentSheetState extends ConsumerState<GstConsentSheet> {
         .read(invoiceNewLoanRequestProvider.notifier)
         .provideGstConsent(_cancelToken);
 
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     if (response.success) {
       ref
@@ -280,7 +280,7 @@ class _GstConsentSheetState extends ConsumerState<GstConsentSheet> {
 
                             await _provideGstConsent();
 
-                            if (!mounted) return;
+                            if (!mounted || !context.mounted) return;
 
                             setState(() {
                               _acceptingConsent = false;
